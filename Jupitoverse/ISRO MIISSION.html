@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISRO Mission Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+        :root {
+            --primary-bg: #0a192f;
+            --secondary-bg: #172a45;
+            --text-color: #ccd6f6;
+            --highlight-color: #64ffda;
+            --accent-color: #ff8c00; /* Saffron accent */
+            --light-slate: #8892b0;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            margin: 0;
+            padding: 15px;
+        }
+
+        .container { max-width: 1200px; margin: auto; }
+
+        header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; }
+        header h1 { font-size: clamp(1.8rem, 5vw, 2.5rem); color: var(--highlight-color); margin-bottom: 10px; }
+        header .intro-text { font-size: clamp(1rem, 2.5vw, 1.2rem); color: var(--light-slate); max-width: 800px; margin: 0 auto 20px auto; line-height: 1.6; }
+
+        h2 { text-align: center; color: var(--text-color); margin-top: 40px; margin-bottom: 20px; font-size: clamp(1.5rem, 4vw, 2rem); }
+
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .card { background-color: var(--secondary-bg); padding: 20px; border-radius: 8px; border-left: 4px solid var(--accent-color); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .card h3 { margin-top: 0; font-size: 1.1em; color: var(--highlight-color); }
+        .card p { font-size: 0.9em; line-height: 1.5; }
+        .card .stat { font-size: clamp(2rem, 5vw, 2.5rem); font-weight: 700; color: var(--highlight-color); margin: 5px 0; }
+        .comparison-card .agency { color: var(--highlight-color); font-weight: 700; }
+        .comparison-card .budget { color: var(--accent-color); }
+
+        .charts-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 40px; }
+        .chart-box { background-color: var(--secondary-bg); padding: 20px; border-radius: 8px; }
+
+        #search-box { width: 100%; padding: 12px; margin-bottom: 20px; background-color: #0e203a; border: 1px solid var(--secondary-bg); border-radius: 5px; color: var(--text-color); font-size: 1em; box-sizing: border-box; }
+        .table-wrapper { overflow-x: auto; }
+        #mission-table { width: 100%; border-collapse: collapse; }
+        #mission-table thead th { background-color: var(--secondary-bg); padding: 12px; text-align: left; cursor: pointer; user-select: none; color: var(--highlight-color); white-space: nowrap; }
+        #mission-table tbody td { padding: 12px; border-bottom: 1px solid #172a45; font-size: 0.9em; }
+        #mission-table tbody tr:hover { background-color: #233554; }
+        
+        .outcome-success { color: #64ffda; font-weight: bold; }
+        .outcome-partial-success { color: #ffc107; font-weight: bold; }
+        .outcome-failure { color: #f44336; font-weight: bold; }
+        .outcome-scheduled { color: var(--light-slate); font-style: italic; }
+
+        /* Timeline Styles */
+        .timeline { position: relative; width: 100%; margin: 50px auto; padding: 30px 0; }
+        .timeline::after { content: ''; position: absolute; width: 3px; background-color: var(--secondary-bg); top: 0; bottom: 0; left: 50%; margin-left: -1.5px; }
+        .timeline-item { padding: 10px 40px; position: relative; width: 50%; }
+        .timeline-item.left { left: 0; }
+        .timeline-item.right { left: 50%; }
+        .timeline-item::after { content: ''; position: absolute; width: 20px; height: 20px; right: -11.5px; background-color: var(--primary-bg); border: 4px solid var(--accent-color); top: 30px; border-radius: 50%; z-index: 1; }
+        .timeline-item.right::after { left: -11.5px; }
+        .timeline-content { padding: 20px 30px; background-color: var(--secondary-bg); position: relative; border-radius: 8px; border: 1px solid var(--secondary-bg); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .timeline-content:hover { transform: scale(1.02); box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
+        .timeline-content h3 { margin-top: 0; color: var(--highlight-color); }
+        .timeline-content .year { font-weight: 700; color: var(--accent-color); font-size: 1.2em; }
+        
+        /* Animation Reveal */
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        @media screen and (max-width: 800px) {
+            .timeline::after { left: 31px; }
+            .timeline-item { width: 100%; padding-left: 70px; padding-right: 25px; }
+            .timeline-item.left, .timeline-item.right { left: 0%; }
+            .timeline-item::after { left: 20px; }
+        }
+/* Hides the scrollbar but keeps scrolling functional */
+/* Hides the scrollbar but keeps scrolling functional */
+body {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Ensure there is a space above this line */
+body::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, and Opera */
+}
+.table-wrapper {
+    overflow-x: hidden; /* Hides the horizontal scroll bar for the table */
+}
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>ISRO: A Journey Through The Stars 🚀</h1>
+            <p class="intro-text">Demonstrating remarkable ingenuity, India has emerged as a global space power, achieving complex missions with unparalleled cost-effectiveness. This legacy of innovation continues to inspire the world and drive the future of space exploration.</p>
+        </header>
+        
+        <h2>Upcoming Missions</h2>
+        <div id="upcoming-missions-grid" class="card-grid"></div>
+
+        <h2>ISRO's Global Standing: Efficiency & Success</h2>
+        <div class="card-grid">
+             <div class="card comparison-card">
+                <h3>Success Rate (Modern Era)</h3>
+                <p>ISRO's launch success rate is among the world's best, showcasing incredible reliability.</p>
+                <p class="stat agency">India (ISRO): ~95%</p>
+                <p style="font-size:0.8em;">Comparable to USA (~94%), Europe (~95%), China (~93%)</p>
+            </div>
+             <div class="card comparison-card">
+                <h3>Unmatched Frugal Innovation</h3>
+                <p>ISRO achieves its goals with a budget significantly smaller than other major agencies.</p>
+                <p class="stat agency">ISRO Budget: <span class="budget">~$1.5 Billion</span></p>
+                <p style="font-size:0.8em;">vs. NASA (~$25B), CNSA (~$12B), ESA (~$7B)</p>
+            </div>
+        </div>
+        <div class="charts-container">
+            <div class="chart-box"><canvas id="budgetComparisonChart"></canvas></div>
+        </div>
+
+        <h2>Mission Analytics</h2>
+        <div class="charts-container">
+            <div class="chart-box"><canvas id="launchesByDecadeChart"></canvas></div>
+            <div class="chart-box"><canvas id="vehicleDominanceChart"></canvas></div>
+        </div>
+
+        
+
+        <div class="section-header reveal">
+            <h2>The Evolution of ISRO: A Timeline</h2>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item left reveal"><div class="timeline-content"><h3>The First Step: Aryabhata</h3><p class="year">1975</p><p>India's journey into space began with the launch of its first satellite, Aryabhata. This momentous event marked the dawn of a new era of scientific exploration for the nation.</p></div></div>
+            <div class="timeline-item right reveal"><div class="timeline-content"><h3>Self-Reliance: SLV-3 & Rohini</h3><p class="year">1980</p><p>A major milestone in self-reliance, ISRO successfully launched the Rohini satellite aboard its own launch vehicle, SLV-3, from Indian soil for the first time.</p></div></div>
+            <div class="timeline-item left reveal"><div class="timeline-content"><h3>National Impact: INSAT & IRS Era</h3><p class="year">1990s</p><p>ISRO revolutionized daily life in India with its INSAT (telecom, broadcasting) and IRS (remote sensing) satellite systems, becoming the backbone of national infrastructure.</p></div></div>
+            <div class="timeline-item right reveal"><div class="timeline-content"><h3>The Workhorse: PSLV's Dominance</h3><p class="year">1994 - Today</p><p>The Polar Satellite Launch Vehicle (PSLV) became ISRO's most trusted rocket. Renowned for its reliability, it has launched hundreds of national and international satellites.</p></div></div>
+            <div class="timeline-item left reveal"><div class="timeline-content"><h3>Destination Moon: Chandrayaan-1</h3><p class="year">2008</p><p>India joined the elite club of lunar explorers with Chandrayaan-1. The mission's most significant contribution was the definitive discovery of water molecules on the Moon.</p></div></div>
+            <div class="timeline-item right reveal"><div class="timeline-content"><h3>The Mars Miracle: Mangalyaan</h3><p class="year">2013</p><p>In a historic feat, India became the first nation to reach Mars on its maiden attempt with the Mars Orbiter Mission (Mangalyaan), showcasing its mastery of frugal engineering.</p></div></div>
+            <div class="timeline-item left reveal"><div class="timeline-content"><h3>Heavy Lift Power: The LVM3 Rocket</h3><p class="year">2017</p><p>With the first successful flight of the LVM3 (GSLV MkIII), ISRO gained the capability to launch its heaviest satellites and the foundation for the Gaganyaan human spaceflight mission.</p></div></div>
+            <div class="timeline-item right reveal"><div class="timeline-content"><h3>Touchdown on the South Pole: Chandrayaan-3</h3><p class="year">2023</p><p>A moment of immense national pride. ISRO achieved a flawless soft landing on the lunar south pole, making India the first and only country in the world to do so.</p></div></div>
+            <div class="timeline-item left reveal"><div class="timeline-content"><h3>The Future is Now: Aditya-L1 & Gaganyaan</h3><p class="year">Present & Beyond</p><p>The journey continues with Aditya-L1 studying the Sun, Gaganyaan preparing to send Indians into space, and many more ambitious missions that will continue to push the boundaries of science.</p></div></div>
+        </div>
+    </div>
+
+    <h2>Explore All Missions</h2>
+        <div class="table-wrapper">
+            <input type="text" id="search-box" placeholder="Search for a mission, vehicle, or outcome...">
+            <table id="mission-table">
+                <thead>
+                    <tr>
+                        <th data-column="Mission_Name">Mission Name</th>
+                        <th data-column="Launch_Date">Launch Date</th>
+                        <th data-column="Launch_Vehicle">Launch Vehicle</th>
+                        <th data-column="Mission_Outcome">Outcome</th>
+                        <th data-column="Remarks">Remarks</th>
+                    </tr>
+                </thead>
+                <tbody id="mission-table-body"></tbody>
+            </table>
+        </div>
+
+    <script>
+        const missionData = [
+            {"Mission_Name":"Aryabhata","Launch_Date":"1975-04-19","Launch_Vehicle":"C-1 Intercosmos","Mission_Outcome":"Success","Remarks":"India's first satellite. Power failure halted experiments after 4 days."},
+            {"Mission_Name":"Bhaskara-I","Launch_Date":"1979-06-07","Launch_Vehicle":"C-1 Intercosmos","Mission_Outcome":"Success","Remarks":"TV camera malfunctioned but other instruments worked as intended."},
+            {"Mission_Name":"Rohini Technology Payload (RTP)","Launch_Date":"1979-08-10","Launch_Vehicle":"SLV-3","Mission_Outcome":"Failure","Remarks":"Launch vehicle was unsuccessful; satellite did not achieve orbit."},
+            {"Mission_Name":"Rohini RS-1","Launch_Date":"1980-07-18","Launch_Vehicle":"SLV-3","Mission_Outcome":"Success","Remarks":"First successful launch using India's own launch vehicle (SLV-3)."},
+            {"Mission_Name":"Rohini Satellite RS-D1","Launch_Date":"1981-05-31","Launch_Vehicle":"SLV-3","Mission_Outcome":"Partial Success","Remarks":"Did not achieve the desired altitude, resulting in an orbital life of only 9 days."},
+            {"Mission_Name":"APPLE","Launch_Date":"1981-06-19","Launch_Vehicle":"Ariane-1","Mission_Outcome":"Success","Remarks":"India's first experimental geostationary communication satellite."},
+            {"Mission_Name":"Bhaskara-II","Launch_Date":"1981-11-20","Launch_Vehicle":"C-1 Intercosmos","Mission_Outcome":"Success","Remarks":"Provided valuable remote sensing data."},
+            {"Mission_Name":"INSAT-1A","Launch_Date":"1982-04-10","Launch_Vehicle":"Delta 3910","Mission_Outcome":"Failure","Remarks":"Deactivated after solar sail failed to deploy and control fuel was exhausted."},
+            {"Mission_Name":"Rohini RS-D2","Launch_Date":"1983-04-17","Launch_Vehicle":"SLV-3","Mission_Outcome":"Success","Remarks":"Successfully operated for 17 months with its smart sensor camera."},
+            {"Mission_Name":"INSAT-1B","Launch_Date":"1983-08-30","Launch_Vehicle":"Space Shuttle Challenger","Mission_Outcome":"Success","Remarks":"Served for more than its designed life."},
+            {"Mission_Name":"SROSS-1","Launch_Date":"1987-03-24","Launch_Vehicle":"ASLV","Mission_Outcome":"Failure","Remarks":"First developmental launch of ASLV failed. Did not achieve orbit."},
+            {"Mission_Name":"IRS-1A","Launch_Date":"1988-03-17","Launch_Vehicle":"Vostok-2M","Mission_Outcome":"Success","Remarks":"First operational Indian Remote Sensing satellite."},
+            {"Mission_Name":"SROSS-2","Launch_Date":"1988-07-13","Launch_Vehicle":"ASLV","Mission_Outcome":"Failure","Remarks":"Second developmental launch of ASLV failed."},
+            {"Mission_Name":"INSAT-1C","Launch_Date":"1988-07-22","Launch_Vehicle":"Ariane-3","Mission_Outcome":"Partial Success","Remarks":"A power system failure cut its operational life in half."},
+            {"Mission_Name":"INSAT-1D","Launch_Date":"1990-06-12","Launch_Vehicle":"Delta 4925","Mission_Outcome":"Success","Remarks":"Final satellite of the first-generation INSAT series."},
+            {"Mission_Name":"IRS-1B","Launch_Date":"1991-08-29","Launch_Vehicle":"Vostok-2M","Mission_Outcome":"Success","Remarks":"Identical to IRS-1A; continued the remote sensing program."},
+            {"Mission_Name":"SROSS-C","Launch_Date":"1992-05-20","Launch_Vehicle":"ASLV","Mission_Outcome":"Partial Success","Remarks":"Achieved a lower than planned orbit, reducing its lifespan."},
+            {"Mission_Name":"INSAT-2A","Launch_Date":"1992-07-10","Launch_Vehicle":"Ariane-4","Mission_Outcome":"Success","Remarks":"First satellite of the indigenously built second-generation INSAT series."},
+            {"Mission_Name":"INSAT-2B","Launch_Date":"1993-07-23","Launch_Vehicle":"Ariane-4","Mission_Outcome":"Success","Remarks":"Joined INSAT-2A in orbit."},
+            {"Mission_Name":"IRS-1E","Launch_Date":"1993-09-20","Launch_Vehicle":"PSLV-D1","Mission_Outcome":"Failure","Remarks":"First developmental launch of PSLV failed."},
+            {"Mission_Name":"SROSS-C2","Launch_Date":"1994-05-04","Launch_Vehicle":"ASLV","Mission_Outcome":"Success","Remarks":"First successful launch of the ASLV."},
+            {"Mission_Name":"IRS-P2","Launch_Date":"1994-10-15","Launch_Vehicle":"PSLV-D2","Mission_Outcome":"Success","Remarks":"First successful operational launch of PSLV."},
+            {"Mission_Name":"INSAT-2C","Launch_Date":"1995-12-07","Launch_Vehicle":"Ariane-4","Mission_Outcome":"Success","Remarks":"Enhanced communication capabilities with Ku-band transponders."},
+            {"Mission_Name":"IRS-1C","Launch_Date":"1995-12-28","Launch_Vehicle":"Molniya-M","Mission_Outcome":"Success","Remarks":"Carried advanced remote sensing cameras."},
+            {"Mission_Name":"IRS-P3","Launch_Date":"1996-03-21","Launch_Vehicle":"PSLV-D3","Mission_Outcome":"Success","Remarks":"Carried payloads for earth observation and X-ray astronomy."},
+            {"Mission_Name":"INSAT-2D","Launch_Date":"1997-06-04","Launch_Vehicle":"Ariane-4","Mission_Outcome":"Failure","Remarks":"Lost due to an on-board power bus anomaly shortly after launch."},
+            {"Mission_Name":"IRS-1D","Launch_Date":"1997-09-29","Launch_Vehicle":"PSLV-C1","Mission_Outcome":"Partial Success","Remarks":"Achieved a lower-than-planned orbit but was still partially usable."},
+            {"Mission_Name":"INSAT-2E","Launch_Date":"1999-04-03","Launch_Vehicle":"Ariane-4","Mission_Outcome":"Success","Remarks":"Carried communication and meteorological payloads."},
+            {"Mission_Name":"Oceansat-1 (IRS-P4)","Launch_Date":"1999-05-26","Launch_Vehicle":"PSLV-C2","Mission_Outcome":"Success","Remarks":"First Indian satellite primarily built for oceanographic applications."},
+            {"Mission_Name":"INSAT-3B","Launch_Date":"2000-03-22","Launch_Vehicle":"Ariane-5","Mission_Outcome":"Success","Remarks":"Augmented the communication services of INSAT system."},
+            {"Mission_Name":"GSAT-1","Launch_Date":"2001-04-18","Launch_Vehicle":"GSLV-D1","Mission_Outcome":"Partial Success","Remarks":"Did not reach the intended orbit due to GSLV upper stage underperformance."},
+            {"Mission_Name":"Technology Experiment Satellite (TES)","Launch_Date":"2001-10-22","Launch_Vehicle":"PSLV-C3","Mission_Outcome":"Success","Remarks":"Used to test technologies for future reconnaissance satellites."},
+            {"Mission_Name":"INSAT-3C","Launch_Date":"2002-01-24","Launch_Vehicle":"Ariane-4","Mission_Outcome":"Success","Remarks":"Provided voice, video and digital data services."},
+            {"Mission_Name":"KALPANA-1 (METSAT)","Launch_Date":"2002-09-12","Launch_Vehicle":"PSLV-C4","Mission_Outcome":"Success","Remarks":"First dedicated meteorological satellite built by ISRO."},
+            {"Mission_Name":"INSAT-3A","Launch_Date":"2003-04-10","Launch_Vehicle":"Ariane-5","Mission_Outcome":"Success","Remarks":"Multipurpose satellite for telecom, television, and meteorological services."},
+            {"Mission_Name":"GSAT-2","Launch_Date":"2003-05-08","Launch_Vehicle":"GSLV-D2","Mission_Outcome":"Success","Remarks":"Experimental satellite to test new communication technologies."},
+            {"Mission_Name":"INSAT-3E","Launch_Date":"2003-09-28","Launch_Vehicle":"Ariane-5","Mission_Outcome":"Success","Remarks":"Exclusively for communication services."},
+            {"Mission_Name":"RESOURCESAT-1 (IRS-P6)","Launch_Date":"2003-10-17","Launch_Vehicle":"PSLV-C5","Mission_Outcome":"Success","Remarks":"Provided data for agriculture, disaster management, and land use."},
+            {"Mission_Name":"EDUSAT (GSAT-3)","Launch_Date":"2004-09-20","Launch_Vehicle":"GSLV-F01","Mission_Outcome":"Success","Remarks":"India's first satellite built exclusively to serve the educational sector."},
+            {"Mission_Name":"HAMSAT","Launch_Date":"2005-05-05","Launch_Vehicle":"PSLV-C6","Mission_Outcome":"Success","Remarks":"Microsatellite for providing satellite-based amateur radio services."},
+            {"Mission_Name":"CARTOSAT-1","Launch_Date":"2005-05-05","Launch_Vehicle":"PSLV-C6","Mission_Outcome":"Success","Remarks":"Provided high-resolution, stereo imagery for cartographic applications."},
+            {"Mission_Name":"INSAT-4A","Launch_Date":"2005-12-22","Launch_Vehicle":"Ariane-5","Mission_Outcome":"Success","Remarks":"First in the INSAT-4 series, primarily for DTH television services."},
+            {"Mission_Name":"SRE-1","Launch_Date":"2007-01-10","Launch_Vehicle":"PSLV-C7","Mission_Outcome":"Success","Remarks":"An experimental space capsule which was successfully recovered after 12 days."},
+            {"Mission_Name":"CARTOSAT-2","Launch_Date":"2007-01-10","Launch_Vehicle":"PSLV-C7","Mission_Outcome":"Success","Remarks":"Advanced remote sensing satellite with a panchromatic camera."},
+            {"Mission_Name":"INSAT-4B","Launch_Date":"2007-03-12","Launch_Vehicle":"Ariane-5","Mission_Outcome":"Partial Success","Remarks":"Suffered a power anomaly in 2010, which reduced its capacity."},
+            {"Mission_Name":"INSAT-4CR","Launch_Date":"2007-09-02","Launch_Vehicle":"GSLV-F04","Mission_Outcome":"Partial Success","Remarks":"Placed in a lower orbit than planned, which reduced its expected mission life."},
+            {"Mission_Name":"CARTOSAT-2A","Launch_Date":"2008-04-28","Launch_Vehicle":"PSLV-C9","Mission_Outcome":"Success","Remarks":"Dedicated satellite for the Indian Armed Forces."},
+            {"Mission_Name":"IMS-1","Launch_Date":"2008-04-28","Launch_Vehicle":"PSLV-C9","Mission_Outcome":"Success","Remarks":"A low-cost microsatellite for remote sensing."},
+            {"Mission_Name":"Chandrayaan-1","Launch_Date":"2008-10-22","Launch_Vehicle":"PSLV-C11","Mission_Outcome":"Success","Remarks":"India's first lunar probe. Confirmed the presence of water molecules on the Moon."},
+            {"Mission_Name":"RISAT-2","Launch_Date":"2009-04-20","Launch_Vehicle":"PSLV-C12","Mission_Outcome":"Success","Remarks":"Radar imaging satellite used for surveillance and disaster management."},
+            {"Mission_Name":"Oceansat-2","Launch_Date":"2009-09-23","Launch_Vehicle":"PSLV-C14","Mission_Outcome":"Success","Remarks":"Provided data for oceanography and atmospheric studies."},
+            {"Mission_Name":"GSAT-4","Launch_Date":"2010-04-15","Launch_Vehicle":"GSLV-D3","Mission_Outcome":"Failure","Remarks":"Launch vehicle failed; the indigenous cryogenic upper stage did not ignite."},
+            {"Mission_Name":"CARTOSAT-2B","Launch_Date":"2010-07-12","Launch_Vehicle":"PSLV-C15","Mission_Outcome":"Success","Remarks":"Similar to previous Cartosat satellites for high-resolution imaging."},
+            {"Mission_Name":"GSAT-5P / INSAT-4D","Launch_Date":"2010-12-25","Launch_Vehicle":"GSLV-F06","Mission_Outcome":"Failure","Remarks":"Launch vehicle failed and was destroyed by range safety 63 seconds after liftoff."},
+            {"Mission_Name":"RESOURCESAT-2","Launch_Date":"2011-04-20","Launch_Vehicle":"PSLV-C16","Mission_Outcome":"Success","Remarks":"A follow-on mission to Resourcesat-1 to provide data continuity."},
+            {"Mission_Name":"YOUTHSAT","Launch_Date":"2011-04-20","Launch_Vehicle":"PSLV-C16","Mission_Outcome":"Success","Remarks":"An Indo-Russian satellite for stellar and atmospheric research."},
+            {"Mission_Name":"GSAT-8 (INSAT-4G)","Launch_Date":"2011-05-21","Launch_Vehicle":"Ariane-5","Mission_Outcome":"Success","Remarks":"Carried Ku-band transponders and the GAGAN navigation payload."},
+            {"Mission_Name":"GSAT-12","Launch_Date":"2011-07-15","Launch_Vehicle":"PSLV-C17","Mission_Outcome":"Success","Remarks":"Replaced the services of the aged INSAT-3B satellite."},
+            {"Mission_Name":"Megha-Tropiques","Launch_Date":"2011-10-12","Launch_Vehicle":"PSLV-C18","Mission_Outcome":"Success","Remarks":"An Indo-French joint mission to study the tropical atmosphere and climate."},
+            {"Mission_Name":"RISAT-1","Launch_Date":"2012-04-26","Launch_Vehicle":"PSLV-C19","Mission_Outcome":"Success","Remarks":"India's first indigenous all-weather Radar Imaging Satellite."},
+            {"Mission_Name":"GSAT-10","Launch_Date":"2012-09-29","Launch_Vehicle":"Ariane-5","Mission_Outcome":"Success","Remarks":"Carried communication transponders and the GAGAN payload."},
+            {"Mission_Name":"SARAL","Launch_Date":"2013-02-25","Launch_Vehicle":"PSLV-C20","Mission_Outcome":"Success","Remarks":"A joint Indo-French mission for studying the ocean's surface and sea level."},
+            {"Mission_Name":"IRNSS-1A","Launch_Date":"2013-07-01","Launch_Vehicle":"PSLV-C22","Mission_Outcome":"Partial Success","Remarks":"First satellite in the NAVIC constellation. Its atomic clocks later failed."},
+            {"Mission_Name":"INSAT-3D","Launch_Date":"2013-07-26","Launch_Vehicle":"Ariane-5","Mission_Outcome":"Success","Remarks":"Advanced meteorological satellite with improved imaging and an atmospheric sounder."},
+            {"Mission_Name":"GSAT-7 (INSAT-4F)","Launch_Date":"2013-08-30","Launch_Vehicle":"Ariane-5","Mission_Outcome":"Success","Remarks":"India's first dedicated military communications satellite."},
+            {"Mission_Name":"Mars Orbiter Mission","Launch_Date":"2013-11-05","Launch_Vehicle":"PSLV-C25","Mission_Outcome":"Success","Remarks":"India's first interplanetary mission. Made ISRO the fourth agency to reach Mars."},
+            {"Mission_Name":"GSAT-14","Launch_Date":"2014-01-05","Launch_Vehicle":"GSLV-D5","Mission_Outcome":"Success","Remarks":"First successful flight of GSLV with an indigenous cryogenic upper stage."},
+            {"Mission_Name":"IRNSS-1B","Launch_Date":"2014-04-04","Launch_Vehicle":"PSLV-C24","Mission_Outcome":"Success","Remarks":"Second satellite of the NAVIC navigation system."},
+            {"Mission_Name":"IRNSS-1C","Launch_Date":"2014-10-16","Launch_Vehicle":"PSLV-C26","Mission_Outcome":"Success","Remarks":"Third satellite of the NAVIC navigation system."},
+            {"Mission_Name":"GSAT-16","Launch_Date":"2014-12-07","Launch_Vehicle":"Ariane-5","Mission_Outcome":"Success","Remarks":"A multi-band telecom satellite to augment communication services."},
+            {"Mission_Name":"CARE","Launch_Date":"2014-12-18","Launch_Vehicle":"LVM3-X","Mission_Outcome":"Success","Remarks":"Crew module Atmospheric Re-entry Experiment on the first test flight of LVM3."},
+            {"Mission_Name":"IRNSS-1D","Launch_Date":"2015-03-28","Launch_Vehicle":"PSLV-C27","Mission_Outcome":"Success","Remarks":"Fourth satellite of the NAVIC navigation system."},
+            {"Mission_Name":"GSAT-6","Launch_Date":"2015-08-27","Launch_Vehicle":"GSLV-D6","Mission_Outcome":"Success","Remarks":"Featured a large 6-meter unfurlable antenna for S-band communication."},
+            {"Mission_Name":"Astrosat","Launch_Date":"2015-09-28","Launch_Vehicle":"PSLV-C30","Mission_Outcome":"Success","Remarks":"India's first multi-wavelength space observatory."},
+            {"Mission_Name":"GSAT-15","Launch_Date":"2015-11-11","Launch_Vehicle":"Ariane-5","Mission_Outcome":"Success","Remarks":"Carried Ku-band transponders and the GAGAN payload."},
+            {"Mission_Name":"IRNSS-1E","Launch_Date":"2016-01-20","Launch_Vehicle":"PSLV-C31","Mission_Outcome":"Success","Remarks":"Fifth satellite of the NAVIC navigation system."},
+            {"Mission_Name":"IRNSS-1F","Launch_Date":"2016-03-10","Launch_Vehicle":"PSLV-C32","Mission_Outcome":"Success","Remarks":"Sixth satellite of the NAVIC navigation system."},
+            {"Mission_Name":"IRNSS-1G","Launch_Date":"2016-04-28","Launch_Vehicle":"PSLV-C33","Mission_Outcome":"Success","Remarks":"Seventh and final satellite to complete the initial NAVIC constellation."},
+            {"Mission_Name":"RLV-TD","Launch_Date":"2016-05-23","Launch_Vehicle":"H9 Booster","Mission_Outcome":"Success","Remarks":"Hypersonic flight experiment of the Reusable Launch Vehicle Technology Demonstrator."},
+            {"Mission_Name":"Cartosat-2 Series Satellite (2C)","Launch_Date":"2016-06-22","Launch_Vehicle":"PSLV-C34","Mission_Outcome":"Success","Remarks":"Launched along with 19 co-passenger satellites."},
+            {"Mission_Name":"INSAT-3DR","Launch_Date":"2016-09-08","Launch_Vehicle":"GSLV-F05","Mission_Outcome":"Success","Remarks":"An advanced meteorological satellite, a follow-on to INSAT-3D."},
+            {"Mission_Name":"SCATSAT-1","Launch_Date":"2016-09-26","Launch_Vehicle":"PSLV-C35","Mission_Outcome":"Success","Remarks":"Continuity mission for Oceansat-2 scatterometer to provide wind vector data."},
+            {"Mission_Name":"GSAT-18","Launch_Date":"2016-10-06","Launch_Vehicle":"Ariane-5","Mission_Outcome":"Success","Remarks":"Carried C-band and Ku-band transponders."},
+            {"Mission_Name":"Resourcesat-2A","Launch_Date":"2016-12-07","Launch_Vehicle":"PSLV-C36","Mission_Outcome":"Success","Remarks":"Provided data continuity for the Resourcesat series."},
+            {"Mission_Name":"Cartosat-2 Series Satellite (2D)","Launch_Date":"2017-02-15","Launch_Vehicle":"PSLV-C37","Mission_Outcome":"Success","Remarks":"Primary satellite in a record-setting launch of 104 satellites."},
+            {"Mission_Name":"GSAT-9 / South Asia Satellite","Launch_Date":"2017-05-05","Launch_Vehicle":"GSLV-F09","Mission_Outcome":"Success","Remarks":"A communications satellite gifted by India for use by SAARC nations."},
+            {"Mission_Name":"GSAT-19","Launch_Date":"2017-06-05","Launch_Vehicle":"GSLV MkIII-D1","Mission_Outcome":"Success","Remarks":"First developmental flight of the GSLV MkIII launch vehicle."},
+            {"Mission_Name":"Cartosat-2 Series Satellite (2E)","Launch_Date":"2017-06-23","Launch_Vehicle":"PSLV-C38","Mission_Outcome":"Success","Remarks":"High-resolution earth observation satellite."},
+            {"Mission_Name":"GSAT-17","Launch_Date":"2017-06-29","Launch_Vehicle":"Ariane-5","Mission_Outcome":"Success","Remarks":"Carried communication payloads and satellite-aided search and rescue equipment."},
+            {"Mission_Name":"IRNSS-1H","Launch_Date":"2017-08-31","Launch_Vehicle":"PSLV-C39","Mission_Outcome":"Failure","Remarks":"The payload fairing failed to separate, trapping the satellite inside."},
+            {"Mission_Name":"GSAT-6A","Launch_Date":"2018-03-29","Launch_Vehicle":"GSLV-F08","Mission_Outcome":"Partial Success","Remarks":"Communication was lost with the satellite two days after launch."},
+            {"Mission_Name":"IRNSS-1I","Launch_Date":"2018-04-12","Launch_Vehicle":"PSLV-C41","Mission_Outcome":"Success","Remarks":"Replacement satellite for the failed IRNSS-1A."},
+            {"Mission_Name":"GSAT-29","Launch_Date":"2018-11-14","Launch_Vehicle":"GSLV MkIII-D2","Mission_Outcome":"Success","Remarks":"High-throughput satellite for remote area connectivity."},
+            {"Mission_Name":"HysIS","Launch_Date":"2018-11-29","Launch_Vehicle":"PSLV-C43","Mission_Outcome":"Success","Remarks":"Hyperspectral Imaging Satellite for advanced Earth observation."},
+            {"Mission_Name":"GSAT-11","Launch_Date":"2018-12-05","Launch_Vehicle":"Ariane-5","Mission_Outcome":"Success","Remarks":"Heaviest satellite built by ISRO, providing high-speed internet connectivity."},
+            {"Mission_Name":"GSAT-7A","Launch_Date":"2018-12-19","Launch_Vehicle":"GSLV-F11","Mission_Outcome":"Success","Remarks":"A military communications satellite for the Indian Air Force."},
+            {"Mission_Name":"Microsat-R","Launch_Date":"2019-01-24","Launch_Vehicle":"PSLV-C44","Mission_Outcome":"Success","Remarks":"An imaging satellite that later served as the target for an anti-satellite (ASAT) missile test."},
+            {"Mission_Name":"GSAT-31","Launch_Date":"2019-02-06","Launch_Vehicle":"Ariane-5","Mission_Outcome":"Success","Remarks":"A telecommunications satellite to provide continuity to INSAT-4CR services."},
+            {"Mission_Name":"EMISAT","Launch_Date":"2019-04-01","Launch_Vehicle":"PSLV-C45","Mission_Outcome":"Success","Remarks":"An electronic intelligence satellite for the Defence Research and Development Organisation (DRDO)."},
+            {"Mission_Name":"RISAT-2B","Launch_Date":"2019-05-22","Launch_Vehicle":"PSLV-C46","Mission_Outcome":"Success","Remarks":"A radar imaging satellite for all-weather surveillance."},
+            {"Mission_Name":"Chandrayaan-2","Launch_Date":"2019-07-22","Launch_Vehicle":"GSLV MkIII-M1","Mission_Outcome":"Partial Success","Remarks":"Orbiter remains operational, but the lander (Vikram) and rover (Pragyan) failed during the landing attempt."},
+            {"Mission_Name":"Cartosat-3","Launch_Date":"2019-11-27","Launch_Vehicle":"PSLV-C47","Mission_Outcome":"Success","Remarks":"Advanced high-resolution earth observation satellite."},
+            {"Mission_Name":"RISAT-2BR1","Launch_Date":"2019-12-11","Launch_Vehicle":"PSLV-C48","Mission_Outcome":"Success","Remarks":"Radar imaging satellite for surveillance."},
+            {"Mission_Name":"GSAT-30","Launch_Date":"2020-01-17","Launch_Vehicle":"Ariane-5","Mission_Outcome":"Success","Remarks":"Replacement for INSAT-4A."},
+            {"Mission_Name":"EOS-01","Launch_Date":"2020-11-07","Launch_Vehicle":"PSLV-C49","Mission_Outcome":"Success","Remarks":"An all-weather Radar Imaging Satellite, also known as RISAT-2BR2."},
+            {"Mission_Name":"CMS-01","Launch_Date":"2020-12-17","Launch_Vehicle":"PSLV-C50","Mission_Outcome":"Success","Remarks":"A communications satellite intended to replace GSAT-12."},
+            {"Mission_Name":"Amazonia-1","Launch_Date":"2021-02-28","Launch_Vehicle":"PSLV-C51","Mission_Outcome":"Success","Remarks":"Primary payload from Brazil. First dedicated commercial mission for NSIL."},
+            {"Mission_Name":"EOS-03","Launch_Date":"2021-08-12","Launch_Vehicle":"GSLV-F10","Mission_Outcome":"Failure","Remarks":"Launch failed due to a technical anomaly in the cryogenic upper stage."},
+            {"Mission_Name":"EOS-04 (RISAT-1A)","Launch_Date":"2022-02-14","Launch_Vehicle":"PSLV-C52","Mission_Outcome":"Success","Remarks":"Radar Imaging Satellite to provide high-quality images under all weather conditions."},
+            {"Mission_Name":"INS-2TD","Launch_Date":"2022-02-14","Launch_Vehicle":"PSLV-C52","Mission_Outcome":"Success","Remarks":"Co-passenger with EOS-04, a precursor to the India-Bhutan joint satellite."},
+            {"Mission_Name":"InspireSat-1","Launch_Date":"2022-02-14","Launch_Vehicle":"PSLV-C52","Mission_Outcome":"Success","Remarks":"Co-passenger with EOS-04, a student satellite."},
+            {"Mission_Name":"GSAT-24","Launch_Date":"2022-06-23","Launch_Vehicle":"Ariane-5","Mission_Outcome":"Success","Remarks":"A dedicated satellite for DTH services; launched by Arianespace for NSIL."},
+            {"Mission_Name":"DS-EO","Launch_Date":"2022-06-30","Launch_Vehicle":"PSLV-C53","Mission_Outcome":"Success","Remarks":"Primary commercial payload from Singapore for NSIL."},
+            {"Mission_Name":"EOS-02","Launch_Date":"2022-08-07","Launch_Vehicle":"SSLV-D1","Mission_Outcome":"Failure","Remarks":"Maiden developmental flight of the SSLV failed to place the satellite into a usable orbit."},
+            {"Mission_Name":"Vikram-S","Launch_Date":"2022-11-18","Launch_Vehicle":"Vikram-S","Mission_Outcome":"Success","Remarks":"Mission 'Prarambh'. First launch of a privately developed rocket in India by Skyroot Aerospace."},
+            {"Mission_Name":"EOS-06 (Oceansat-3)","Launch_Date":"2022-11-26","Launch_Vehicle":"PSLV-C54","Mission_Outcome":"Success","Remarks":"Provides continuity services for the Oceansat series with enhanced payload capabilities."},
+            {"Mission_Name":"INS-2B","Launch_Date":"2022-11-26","Launch_Vehicle":"PSLV-C54","Mission_Outcome":"Success","Remarks":"Co-passenger with EOS-06; A joint satellite with Bhutan."},
+            {"Mission_Name":"Anand","Launch_Date":"2022-11-26","Launch_Vehicle":"PSLV-C54","Mission_Outcome":"Success","Remarks":"Co-passenger with EOS-06; A hyperspectral nanosatellite from startup Pixxel."},
+            {"Mission_Name":"Thybolt (1 & 2)","Launch_Date":"2022-11-26","Launch_Vehicle":"PSLV-C54","Mission_Outcome":"Success","Remarks":"Co-passengers with EOS-06; Nanosatellites for amateur radio from Dhruva Space."},
+            {"Mission_Name":"EOS-07","Launch_Date":"2023-02-10","Launch_Vehicle":"SSLV-D2","Mission_Outcome":"Success","Remarks":"Second developmental flight and first successful flight of the SSLV."},
+            {"Mission_Name":"NVS-01","Launch_Date":"2023-05-29","Launch_Vehicle":"GSLV-F12","Mission_Outcome":"Success","Remarks":"First of the second-generation NavIC satellites with an indigenous atomic clock."},
+            {"Mission_Name":"Chandrayaan-3","Launch_Date":"2023-07-14","Launch_Vehicle":"LVM3-M4","Mission_Outcome":"Success","Remarks":"Achieved a historic successful soft landing on the lunar south pole."},
+            {"Mission_Name":"Aditya-L1","Launch_Date":"2023-09-02","Launch_Vehicle":"PSLV-C57","Mission_Outcome":"Success","Remarks":"India's first dedicated solar observatory; successfully entered halo orbit in Jan 2024."},
+            {"Mission_Name":"GSAT-N2 (GSAT-20)","Launch_Date":"2024-11-19","Launch_Vehicle":"Falcon 9","Mission_Outcome":"Success","Remarks":"High-throughput satellite for broadband services; launched by SpaceX for NSIL."},
+            {"Mission_Name":"Proba-3","Launch_Date":"2024-12-05","Launch_Vehicle":"PSLV-XL","Mission_Outcome":"Success","Remarks":"An ESA mission launched by ISRO to demonstrate precision formation flying."},
+            {"Mission_Name":"SPADEX-A & SPADEX-B","Launch_Date":"2024-12-30","Launch_Vehicle":"PSLV","Mission_Outcome":"Success","Remarks":"Twin satellite mission to demonstrate autonomous rendezvous and docking technology."},
+            {"Mission_Name":"NVS-02","Launch_Date":"2025-01-29","Launch_Vehicle":"GSLV","Mission_Outcome":"Scheduled","Remarks":"Second satellite in the second-generation NavIC constellation."},
+            {"Mission_Name":"EOS-09","Launch_Date":"2025-05-18","Launch_Vehicle":"SSLV","Mission_Outcome":"Scheduled","Remarks":"An advanced Earth observation microsatellite."},
+            {"Mission_Name":"NISAR","Launch_Date":"2025-07-30","Launch_Vehicle":"GSLV MkII","Mission_Outcome":"Scheduled","Remarks":"A joint NASA-ISRO Synthetic Aperture Radar mission for Earth science."},
+            {"Mission_Name":"Shukrayaan-1","Launch_Date":"2025-12-31","Launch_Vehicle":"LVM3","Mission_Outcome":"Scheduled","Remarks":"India's first orbiter mission to Venus to study its atmosphere."},
+            {"Mission_Name":"Mangalyaan-2 (MOM 2)","Launch_Date":"2026-08-01","Launch_Vehicle":"LVM3","Mission_Outcome":"Scheduled","Remarks":"Follow-up to the Mars Orbiter Mission, expected to include a lander and rover."},
+            {"Mission_Name":"Gaganyaan-3 (Crewed)","Launch_Date":"2026-12-15","Launch_Vehicle":"LVM3","Mission_Outcome":"Scheduled","Remarks":"ISRO's first crewed orbital spaceflight mission."}
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // This robust version calls the main function to render content.
+            // All data is embedded in the script for reliability.
+            try {
+                initializeApp();
+            } catch (e) {
+                console.error("Error initializing dashboard:", e);
+            }
+        });
+
+        function initializeApp() {
+            populateUpcomingMissions(missionData);
+            populateTable(missionData); // Initial table population
+            createCharts(missionData);
+
+            document.getElementById('search-box').addEventListener('keyup', () => filterTable(missionData));
+            
+            let sortState = {};
+            document.querySelectorAll('#mission-table thead th').forEach(headerCell => {
+                headerCell.addEventListener('click', () => {
+                    const column = headerCell.dataset.column;
+                    const isAsc = sortState[column] = !sortState[column];
+                    sortTable(missionData, column, isAsc);
+                });
+            });
+
+            // On-scroll reveal animation setup
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        // --- All the other functions (populateUpcomingMissions, populateTable, sortTable, filterTable, createCharts) go here ---
+        // (Copied from the previous working version)
+        
+        function populateUpcomingMissions(data) {
+            const grid = document.getElementById('upcoming-missions-grid');
+            grid.innerHTML = '';
+            const today = new Date();
+            const upcoming = data
+                .filter(m => new Date(m.Launch_Date) > today)
+                .sort((a, b) => new Date(a.Launch_Date) - new Date(b.Launch_Date))
+                .slice(0, 3);
+            if (upcoming.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1 / -1;">No upcoming missions currently listed.</p>'; return;
+            }
+            upcoming.forEach(mission => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `<h3>${mission.Mission_Name}</h3><p><strong>Date:</strong> ${mission.Launch_Date}</p><p>${mission.Remarks}</p>`;
+                grid.appendChild(card);
+            });
+        }
+
+        function populateTable(data) {
+            const tableBody = document.getElementById("mission-table-body");
+            tableBody.innerHTML = ''; // Clear table
+            data.forEach(mission => {
+                const row = document.createElement('tr');
+                const outcomeClass = `outcome-${mission.Mission_Outcome.toLowerCase().replace(/\s+/g, '-')}`;
+                row.innerHTML = `
+                    <td>${mission.Mission_Name}</td>
+                    <td>${mission.Launch_Date}</td>
+                    <td>${mission.Launch_Vehicle}</td>
+                    <td class="${outcomeClass}">${mission.Mission_Outcome}</td>
+                    <td>${mission.Remarks}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+        
+        function filterTable(fullData) {
+            const filter = document.getElementById('search-box').value.toUpperCase();
+            const filteredData = fullData.filter(mission => Object.values(mission).some(val => String(val).toUpperCase().includes(filter)));
+            populateTable(filteredData);
+        }
+
+        function sortTable(fullData, column, isAsc) {
+            const sortedData = [...fullData].sort((a, b) => {
+                let valA = a[column];
+                let valB = b[column];
+                if (column === 'Launch_Date') {
+                    valA = new Date(valA); valB = new Date(valB);
+                }
+                if (valA < valB) return isAsc ? -1 : 1;
+                if (valA > valB) return isAsc ? 1 : -1;
+                return 0;
+            });
+            populateTable(sortedData);
+        }
+
+        function createCharts(data) {
+            const chartFontColor = 'rgba(204, 214, 246, 0.8)';
+            Chart.defaults.color = chartFontColor;
+
+            const pastMissions = data.filter(m => m.Mission_Outcome !== 'Scheduled');
+
+            new Chart(document.getElementById('budgetComparisonChart').getContext('2d'), {type: 'bar', data: {labels: ['ISRO (India)', 'Roscosmos (Russia)', 'ESA (Europe)', 'CNSA (China)', 'NASA (USA)'], datasets: [{label: 'Approx. Annual Budget (in Billion USD)', data: [1.5, 2, 7, 12, 25], backgroundColor: ['#ff8c00', '#ccd6f6', '#ccd6f6', '#ccd6f6', '#ccd6f6']}]}, options: {indexAxis: 'y', responsive: true, plugins: {legend: { display: false }, title: { display: true, text: 'Global Space Agency Budgets (Approx.)' }}}});
+
+            const decades = [...new Set(pastMissions.map(m => (Math.floor(new Date(m.Launch_Date).getFullYear() / 10) * 10) + 's'))].sort();
+            const decadeCounts = decades.map(decade => pastMissions.filter(m => (Math.floor(new Date(m.Launch_Date).getFullYear() / 10) * 10) + 's' === decade).length);
+            new Chart(document.getElementById('launchesByDecadeChart').getContext('2d'), {type: 'bar', data: {labels: decades, datasets: [{label: 'Number of Launches', data: decadeCounts, backgroundColor: 'rgba(100, 255, 218, 0.6)'}]}, options: {responsive: true, plugins: { legend: { display: false }, title: { display: true, text: 'Launches per Decade' } }}});
+
+            const vehicleFamily = {};
+            pastMissions.forEach(m => {
+                let family = 'Foreign / Other';
+                if(m.Launch_Vehicle.includes('PSLV')) family = 'PSLV';
+                else if(m.Launch_Vehicle.includes('GSLV') || m.Launch_Vehicle.includes('LVM3')) family = 'GSLV / LVM3';
+                else if(m.Launch_Vehicle.includes('SLV')) family = 'SLV';
+                else if(m.Launch_Vehicle.includes('ASLV')) family = 'ASLV';
+                else if(m.Launch_Vehicle.includes('SSLV')) family = 'SSLV';
+                vehicleFamily[family] = (vehicleFamily[family] || 0) + 1;
+            });
+            new Chart(document.getElementById('vehicleDominanceChart').getContext('2d'), {type: 'doughnut', data: {labels: Object.keys(vehicleFamily), datasets: [{data: Object.values(vehicleFamily), backgroundColor: ['#64ffda', '#ff8c00', '#36a2eb', '#ff6384', '#cc65fe', '#ffce56']}]}, options: {responsive: true, plugins: { legend: { position: 'top' }, title: { display: true, text: 'Launch Vehicle Dominance' } }}});
+        }
+
+    </script>
+</body>
+</html>

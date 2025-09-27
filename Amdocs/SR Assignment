@@ -1,0 +1,182 @@
+import pandas as pd
+import numpy as np
+import datetime
+
+# Define the priority of areas
+# area_priority = ['Decomposition', 'Scheduling', 'Provisioning', 'ONI', 'Shipping', 'CPM Assignment', 'Construction', 'Sync Point', 'PMD', 'Billing', 'Serviceability','Activation Controller']
+
+# Define the team members and their areas of specialization
+team_specialization = {
+    'Ishan': ['Decomposition', 'Scheduling','PMD'],
+    'Shivangi': ['Provisioning', 'ONI', 'PMD'],  
+    'Prateek':['Billing','Decomposition','PMD'],
+    'Abhishek':['Billing','Shipping','Sync Point'],
+    'Gurliv':['CPM Assignment','Scheduling','Activation Controller','Construction'],
+    'Smitesh':['Provisioning','Shipping', 'ONI'],
+    'Rishabh':['Sync Point','Activation Controller'],
+    'Varnika':['CPM Assignment', 'Construction','Serviceability']                                                                                                                                                                                                                                      
+    # Add more members as needed
+}
+
+area_keywords = {
+    'Decomposition':['Decompose to CFS','Decompose to RFS','Decompose to Single CFS'],
+    'Scheduling':['Scheduling', 'Technician', 'Schedule Techician', 'Time Frames', 'Work Order', 'Create Work Order'], 
+    'Provisioning':['Activation Controller','swap','EVC EP','UNI Solution','Hotcut','Solution Leg Data Setup','IP Cache','Bandwidth','validate reserve EVC', 'create or identify EVC', 'Apply MTU', 'Management IP', 'Assign IP','Apply CoS','Connectivity','UNI ID','EVC ID'], 
+    'ONI':['Service in Inventory'], 
+    'Shipping':['shipping'], 
+    'CPM Assignment':['CPM assignment','CPM', 'Office Track'],
+    'Construction':['Job in P2','Job In P2','Ready to Install','Survey','Job Notification','Permit','Headend','Addressing','ISP Construction'], 
+    'Sync Point':['Sync Point'], 
+    'PMD':['PMD','Dashboard'], 
+    'Billing':['Billing']
+}
+
+# Create a list of team members
+team_members = list(team_specialization.keys())
+
+# Read the Excel file
+df = pd.read_excel('C:\Automation\AutoAssignment\Automatic SR Assignment Report (1).xls')
+
+# Delete the rows where Status_Reason_Hidden = 'Workaround Given' and QC Defect ID is not empty
+df = df[~((df['Status_Reason_Hidden'] == 'Workaround Given') & (df['QC Defect ID'].notna()))]
+df = df[df['Call ID'].notna() & df['Call ID'].str.startswith('SR')]
+
+# Add new columns
+df['Assigned'] = np.nan
+df['SR_status'] = np.nan
+df['Comments'] = np.nan
+
+assigned_call_ids_set = set()
+
+# If Status_Reason_Hidden = 'Workaround Given' and QC Defect ID is empty, put "SmartOPS OSO" in 'Assigned'
+df.loc[(df['Status_Reason_Hidden'] == 'Workaround Given') & (df['QC Defect ID'].isna() | (df['QC Defect ID'].astype(str).str.strip() != '')), 'Assigned'] = 'SmartOPS OSO'
+smartops_oso_ids = df.loc[(df['Status_Reason_Hidden'] == 'Workaround Given') & (df['QC Defect ID'].isna() | (df['QC Defect ID'].astype(str).str.strip() != '')), 'Call ID']
+for call_id in smartops_oso_ids:
+    if call_id not in assigned_call_ids_set:
+        assigned_call_ids_set.add(call_id)
+
+pd.set_option('display.max_columns', None)
+# print(df)
+# Calculate the maximum number of rows a member should be assigned
+df_remaining = df[df['Assigned'] != 'SmartOPS OSO']
+min_rows_per_member = (len(df_remaining) // len(team_members)) 
+count = len(df_remaining)
+# print(count)
+# Initialize an empty dictionary to store the mapping
+area_call_map = {}
+
+# Initialize a set to keep track of Call IDs that match any area
+matched_call_ids = set()
+
+# Iterate through each row
+for index, row in df.iterrows():
+    notes = row['Notes']
+    call_id = row['Call ID']
+    if row['Assigned'] == 'SmartOPS OSO':
+        continue
+    # Check if any area keyword matches the notes
+    matched_area = None
+    for area, keywords in area_keywords.items():
+        for keyword in keywords:
+            if notes is not None :
+                if keyword.lower() in str(notes).lower():
+                    # print(keyword, notes, call_id)
+                    # print('\br')
+                    matched_area = area
+                    matched_call_ids.add(call_id)
+                    break  # Break out of the inner loop once a match is found
+        if matched_area:
+            break  # Break out of the outer loop once a match is found
+    
+    # Associate the Call ID with the area or 'anonymous'
+    if matched_area:
+        if matched_area not in area_call_map:
+            area_call_map[matched_area] = []
+        area_call_map[matched_area].append(call_id)
+    else:
+        if 'anonymous' not in area_call_map:
+            area_call_map['anonymous'] = []
+        area_call_map['anonymous'].append(call_id)
+
+
+print(area_call_map)
+
+# Initialize an empty dictionary for assignment
+team_assignment = {}
+
+# Initialize a set to keep track of assigned Call IDs
+
+
+# Assign based on specialization
+for member, areas in team_specialization.items():
+    assigned_call_ids = []
+    for area in areas:
+        if area in area_call_map:
+            # Assign Call IDs from the area
+            area_ids = area_call_map[area]
+            for call_id in area_ids:
+                if(len(assigned_call_ids) < min_rows_per_member):
+                    if call_id not in assigned_call_ids_set:
+                        assigned_call_ids.append(call_id)
+                        assigned_call_ids_set.add(call_id)
+                        area_ids.remove(call_id)  # Mark as assigned
+                        df.loc[df['Call ID'] == call_id, 'Assigned'] = member
+                        count-=1
+    # Store the assignment for this member
+    team_assignment[member] = assigned_call_ids
+
+# print(team_assignment)
+# print('/br')
+# after assigned as per specialization, assign till min assignement is reached
+for member, areas in team_specialization.items():
+    remaining_call_ids = min_rows_per_member - len(team_assignment[member])
+    if remaining_call_ids > 0:
+        for area, area_ids in area_call_map.items():
+            for call_id in area_ids:
+                if call_id not in assigned_call_ids_set:
+                    team_assignment[member].append(call_id)
+                    assigned_call_ids_set.add(call_id)
+                    area_ids.remove(call_id)
+                    # Update the 'Assigned' column in the DataFrame
+                    df.loc[df['Call ID'] == call_id, 'Assigned'] = member
+                    count-=1
+                    remaining_call_ids -= 1
+                    if remaining_call_ids == 0:
+                        break
+            if remaining_call_ids == 0:
+                break
+
+# print(area_call_map)
+# print('/br')
+# Distribute remaining Call IDs evenly among all team members
+# remaining_call_ids = count
+
+# if remaining_call_ids > 0:
+#     for i in range(remaining_call_ids):
+#         member = team_members[i % len(team_members)]
+#         for area, area_ids in area_call_map.items():
+#             for call_id in area_ids:
+#                 if call_id not in assigned_call_ids_set:
+#                     team_assignment[member].append(call_id)
+#                     assigned_call_ids_set.add(call_id)
+
+if count > 0:
+    i = 0
+    for index, row in df.iterrows():
+        call_id = row['Call ID']
+        if call_id not in assigned_call_ids_set:
+            member = team_members[i % len(team_members)]
+            i+=1
+            team_assignment[member].append(call_id)
+            assigned_call_ids_set.add(call_id)
+            df.loc[df['Call ID'] == call_id, 'Assigned'] = member
+    
+    
+
+# Now team_assignment contains the desired assignment
+print(team_assignment)
+
+
+
+with pd.ExcelWriter(f"C:\\Automation\\AutoAssignment\\Assigned_SR_Report_{datetime.date.today().strftime('%Y%m%d')}.xlsx", engine='openpyxl') as writer:
+    df.to_excel(writer, sheet_name='New Sheet', index = False)

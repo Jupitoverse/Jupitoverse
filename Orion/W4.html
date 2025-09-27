@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comcast Orion Team Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <style>
+        /* CSS styles remain the same */
+        :root {
+            --bg-primary: #0a0a12;
+            --bg-secondary: #1a1822;
+            --border-primary: #2c2a3a;
+            --text-primary: #f0f0f5;
+            --text-secondary: #a09cb0;
+            --accent-primary: #8B5CF6;
+            --accent-secondary: #a78bfa;
+            --accent-glow: rgba(139, 92, 246, 0.5);
+            --accent-gradient: linear-gradient(90deg, #8B5CF6, #c084fc);
+            --shadow-color: rgba(0, 0, 0, 0.6);
+            --success-color: #2dd4bf;
+            --error-color: #f43f5e;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes backgroundPan { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-primary); color: var(--text-primary); line-height: 1.6; background: linear-gradient(125deg, #0a0a12, #1a1822, #0a0a12, #2c2a3a); background-size: 400% 400%; animation: backgroundPan 30s ease infinite; }
+        .app-header { background-color: rgba(16, 15, 20, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-primary); padding: 0 40px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; height: 64px; }
+        .header-nav { display: flex; align-items: center; overflow-x: auto; scrollbar-width: none; }
+        .header-nav::-webkit-scrollbar { display: none; }
+        .header-nav a { color: var(--text-secondary); text-decoration: none; padding: 0 16px; height: 64px; line-height: 64px; font-weight: 600; transition: color 0.3s, background-color 0.3s; display: inline-block; white-space: nowrap; position: relative; }
+        .header-nav a::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--accent-gradient); transform: scaleX(0); transform-origin: center; transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1); }
+        .header-nav a:hover { color: var(--text-primary); }
+        .header-nav a:hover::after, .header-nav a.active::after { transform: scaleX(1); }
+        .header-nav a.active { color: var(--text-primary); }
+        .search-container { position: relative; margin-left: 24px; }
+        .search-input { background-color: var(--bg-secondary); border: 1px solid var(--border-primary); border-radius: 8px; color: var(--text-primary); padding: 8px 16px; width: 250px; transition: all 0.3s ease; }
+        .search-input:focus { outline: none; width: 350px; background-color: var(--bg-secondary); border-color: var(--accent-primary); box-shadow: 0 0 0 4px var(--accent-glow); }
+        #search-results { position: absolute; top: 120%; right: 0; width: 350px; background-color: var(--bg-secondary); border: 1px solid var(--border-primary); border-radius: 8px; box-shadow: 0 12px 32px var(--shadow-color); max-height: 400px; overflow-y: auto; z-index: 1001; backdrop-filter: blur(10px); }
+        #search-results a { display: block; padding: 12px 16px; color: var(--text-primary); text-decoration: none; border-bottom: 1px solid var(--border-primary); transition: background-color 0.2s; }
+        #search-results a:last-child { border-bottom: none; }
+        #search-results a:hover { background: var(--accent-gradient); color: #fff; }
+        .result-path { font-size: 0.8em; color: var(--text-secondary); }
+        #search-results a:hover .result-path { color: rgba(255,255,255,0.8); }
+        .app-content { padding: 40px; max-width: 1400px; margin: 0 auto; }
+        .page { animation: fadeIn 0.6s cubic-bezier(0.19, 1, 0.22, 1); }
+        h1, h2, h3 { color: var(--text-primary); margin-bottom: 20px; font-weight: 800; letter-spacing: -0.5px; }
+        h1 { font-size: 2.8rem; }
+        h2 { font-size: 2.2rem; border-bottom: 1px solid var(--border-primary); padding-bottom: 15px; }
+        h3 { font-size: 1.5rem; }
+        .search-anything-container { display: flex; flex-direction: column; gap: 40px; }
+        .sa-header { text-align: center; }
+        .sa-search-engine { background: var(--bg-secondary); border: 1px solid var(--border-primary); border-radius: 12px; padding: 24px; box-shadow: 0 8px 30px var(--shadow-color); }
+        .sa-search-engine h3 { margin-top: 0; margin-bottom: 16px; text-align: center; }
+        .sa-search-filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+        .sa-search-filters input { width: 100%; background-color: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary); padding: 12px; border-radius: 8px; font-size: 1rem; }
+        .sa-search-filters input:focus { outline: none; border-color: var(--accent-primary); }
+        .sa-inventory-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
+        .sa-btn { background: var(--accent-gradient); border: none; color: white; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        .sa-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px var(--accent-glow); }
+        .sa-blog-posts { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .sa-post { background: var(--bg-secondary); border: 1px solid var(--border-primary); border-radius: 12px; padding: 24px; transition: transform 0.3s, box-shadow 0.3s; }
+        .sa-post:hover { transform: translateY(-5px); box-shadow: 0 8px 25px var(--shadow-color); border-color: var(--accent-primary); }
+        .sa-post-header { border-bottom: 1px solid var(--border-primary); padding-bottom: 12px; margin-bottom: 16px; }
+        .sa-post-title { font-size: 1.4rem; font-weight: 700; color: var(--accent-secondary); }
+        .sa-post-meta { font-size: 0.9rem; color: var(--text-secondary); margin-top: 4px; }
+        .sa-post-content p { margin-bottom: 10px; }
+        .sa-post-content img { max-width: 100%; height: auto; border-radius: 8px; margin-top: 10px; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 18, 0.8); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 2000; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; }
+        .modal-overlay.visible { opacity: 1; visibility: visible; }
+        .modal-content { background: var(--bg-secondary); padding: 30px; border-radius: 12px; border: 1px solid var(--border-primary); width: 90%; max-width: 800px; max-height: 90vh; overflow-y: auto; box-shadow: 0 15px 40px var(--shadow-color); transform: scale(0.95); transition: transform 0.3s; }
+        .modal-overlay.visible .modal-content { transform: scale(1); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-close-btn { background: none; border: none; color: var(--text-secondary); font-size: 1.8rem; cursor: pointer; line-height: 1; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-secondary); }
+        .form-group input { width: 100%; padding: 12px; background: var(--bg-primary); border: 1px solid var(--border-primary); border-radius: 8px; color: var(--text-primary); font-size: 1rem; }
+        #editor-container { height: 250px; background: #fff; color: #111; border-radius: 8px; }
+        .ql-toolbar { border-radius: 8px 8px 0 0; }
+        .ql-container { border-radius: 0 0 8px 8px; }
+        .modal-footer { margin-top: 24px; text-align: right; }
+        .audio-player { position: fixed; bottom: 20px; right: 20px; background-color: rgba(26, 24, 34, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--border-primary); border-radius: 12px; padding: 12px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 20px var(--shadow-color); z-index: 2000; }
+        .audio-player button { background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer; transition: color 0.2s, transform 0.2s; padding: 5px; }
+        .audio-player button:hover { color: var(--accent-secondary); transform: scale(1.1); }
+        .volume-container { display: flex; align-items: center; gap: 8px; }
+        .volume-slider { -webkit-appearance: none; appearance: none; width: 80px; height: 5px; background: var(--border-primary); border-radius: 5px; outline: none; transition: opacity 0.2s; }
+        .volume-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 15px; height: 15px; background: var(--accent-primary); cursor: pointer; border-radius: 50%; transition: box-shadow 0.2s; }
+        .volume-slider::-moz-range-thumb { width: 15px; height: 15px; background: var(--accent-primary); cursor: pointer; border-radius: 50%; }
+        .volume-slider:hover::-webkit-slider-thumb { box-shadow: 0 0 0 4px var(--accent-glow); }
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <nav class="header-nav" id="main-nav"></nav>
+        <div class="search-container">
+            <input type="search" id="search-input" class="search-input" placeholder="Search...">
+            <div id="search-results" style="display: none;"></div>
+        </div>
+    </header>
+
+    <main class="app-content" id="app-content"></main>
+    
+    <div class="audio-player">
+        <button id="prev-track">⏪</button>
+        <button id="play-pause">▶️</button>
+        <button id="next-track">⏩</button>
+        <div class="volume-container">
+            <span>🔊</span>
+            <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.01" value="0.5">
+        </div>
+    </div>
+    
+    <div id="workaround-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>New Workaround Details</h2>
+                <button class="modal-close-btn" id="close-modal-btn">&times;</button>
+            </div>
+            <form id="workaround-form">
+                <div class="form-group"><label for="wa-name">Name</label><input type="text" id="wa-name" required></div>
+                <div class="form-group"><label for="wa-issue">Issue</label><input type="text" id="wa-issue" required></div>
+                <div class="form-group"><label for="wa-category">Category</label><input type="text" id="wa-category" required></div>
+                <div class="form-group"><label>Description</label><div id="editor-container"></div></div>
+                <div class="modal-footer"><button type="submit" class="sa-btn">Save Workaround</button></div>
+            </form>
+        </div>
+    </div>
+    
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script>
+    (function() {
+        'use strict';
+        // =================================================================================
+        // [1] CONFIGURATION: Central place for all settings and data.
+        // =================================================================================
+        const CONFIG = {
+            NAV_LINKS: [
+                { id: 'home', text: 'Home' },
+                { id: 'search-anything', text: 'Search Anything' },
+                { id: 'billing', text: 'BILLING' }, 
+                { id: 'som-wa', text: 'SOM WA' },
+                { id: 'training', text: 'TRAINING' }, 
+                { id: 'automation', text: 'Automation' }, 
+                { id: 'release', text: 'Release' },
+                { id: 'welcome-kit', text: 'Welcome Kit' }, 
+                { id: 'applications', text: 'Applications' }, 
+                { id: 'abbreviation', text: 'Abbreviation' },
+                { id: 'teams', text: 'Teams' }, 
+                { id: 'imp-links', text: 'Imp Links' }, 
+                { id: 'database', text: 'DataBase' },
+                { id: 'events', text: 'Events' }, 
+                { id: 'assignments', text: 'Assignments' }
+            ],
+            SOM_WA_URL: "https://amdocs.sharepoint.com/sites/ORIONHUNTER/_layouts/15/embed.aspx?sourcedoc={f13a2a63-00d2-4b7f-955f-0c0026ebbaa5}&wd=target%28Welcome%20Kit.one%7C5774c277-0619-4017-8796-7be8140f46f3%2FKT%20Links%7C4b0032c1-50f6-4b99-9d13-60fd7f2de1e9%2F%29",
+            MUSIC_TRACKS: [
+                "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+                "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+                "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
+            ],
+            MOCK_DATA: {
+                home: [{ title: 'About This Site', content: 'This website is a single-file web application for internal use within the Comcast Orion team at Amdocs.' }],
+                billing: [{ title: 'Billing Dashboard', content: 'Placeholder for billing dashboard and automation lists.' }],
+                training: [{ title: 'Telecom Basics', content: 'Tutorials on the basics of the telecom industry.' }]
+                // Add more mock data for other pages if needed for the global search
+            }
+        };
+
+        // =================================================================================
+        // [2] WORKAROUND_MODULE: Manages the "Search Anything" page.
+        // =================================================================================
+// =================================================================================
+        // [2] WORKAROUND_MODULE: Manages the "Search Anything" page.
+        // --- UPDATED with Save & Load functionality ---
+        // =================================================================================
+        const WORKAROUND_MODULE = {
+            workarounds: [], // Start with an empty array; data will be loaded.
+            quill: null,
+
+            /**
+             * --- NEW ---
+             * Saves the current 'workarounds' array to the browser's local storage.
+             */
+            saveData: function() {
+                localStorage.setItem('workaroundInventory', JSON.stringify(this.workarounds));
+                console.log("Data saved to Local Storage.");
+            },
+
+            /**
+             * --- NEW ---
+             * Loads data from local storage. If none is found, it loads default examples.
+             */
+            loadData: function() {
+                const savedData = localStorage.getItem('workaroundInventory');
+                if (savedData) {
+                    this.workarounds = JSON.parse(savedData);
+                    console.log("Data loaded from Local Storage.");
+                } else {
+                    // If no data is saved, load some default examples.
+                    this.workarounds = [
+                        { id: 1, name: 'Fix Stuck Order in Amdocs', issue: 'Order not progressing', category: 'Amdocs OMS', description: '<p>When an order is stuck, first check the <b>fallout manager</b>. If there is no fallout, you need to query the `ORDER_STATUS` table using the customer ID. Often, a manual kickstart of the workflow is required.</p>' },
+                        { id: 2, name: 'Resolve Billing Discrepancy', issue: 'Incorrect monthly charge', category: 'Billing', description: '<p>To resolve a billing discrepancy, pull the customer\'s invoice history from the Billing Center. Compare the charges against their active service plan. Any prorated charges from recent changes should be noted. Escalate to Tier 2 if a system credit is needed.</p>' }
+                    ];
+                    console.log("No saved data found. Loading default examples.");
+                }
+            },
+
+            /**
+             * --- MODIFIED ---
+             * Now loads data first, then renders the page.
+             */
+            initialize: function(container) {
+                this.loadData(); // Load data on initialization
+                this.render(container);
+                this.attachEventListeners();
+            },
+
+            render: function(container) {
+                container.innerHTML = `
+                    <div class="search-anything-container">
+                        <header class="sa-header"><h1>Workaround & Knowledge Inventory</h1><p style="color: var(--text-secondary);">Your central hub for solutions and troubleshooting guides.</p></header>
+                        <section class="sa-search-engine">
+                            <h3>Advanced Search</h3>
+                            <div class="sa-search-filters">
+                                <input type="text" id="sa-search-name" placeholder="Search by Name..."><input type="text" id="sa-search-issue" placeholder="Search by Issue..."><input type="text" id="sa-search-category" placeholder="Search by Category..."><input type="text" id="sa-search-description" placeholder="Search in Description...">
+                            </div>
+                        </section>
+                        <section class="sa-inventory">
+                            <div class="sa-inventory-header"><h2>All Workarounds</h2><button class="sa-btn" id="add-workaround-btn">New Workaround Details</button></div>
+                            <div class="sa-blog-posts" id="sa-blog-posts-container"></div>
+                        </section>
+                    </div>`;
+                this.renderBlogPosts(this.workarounds);
+            },
+            
+            renderBlogPosts: function(posts) {
+                const container = document.getElementById('sa-blog-posts-container');
+                if (!posts || posts.length === 0) { container.innerHTML = '<p>No workarounds found. Click "New Workaround Details" to add one!</p>'; return; }
+                container.innerHTML = posts.map(post => `<article class="sa-post" data-id="${post.id}"><div class="sa-post-header"><h3 class="sa-post-title">${post.name}</h3><div class="sa-post-meta"><strong>Issue:</strong> ${post.issue} | <strong>Category:</strong> ${post.category}</div></div><div class="sa-post-content">${post.description}</div></article>`).join('');
+            },
+
+            attachEventListeners: function() {
+                // We must ensure the elements exist before adding listeners.
+                // Best practice is to attach listeners after rendering the specific view.
+                const addBtn = document.getElementById('add-workaround-btn');
+                if (addBtn) addBtn.addEventListener('click', () => this.showModal());
+
+                const closeBtn = document.getElementById('close-modal-btn');
+                if (closeBtn) closeBtn.addEventListener('click', () => this.hideModal());
+
+                const modal = document.getElementById('workaround-modal');
+                if (modal) modal.addEventListener('click', (e) => { if (e.target.id === 'workaround-modal') this.hideModal(); });
+
+                const form = document.getElementById('workaround-form');
+                if (form) form.addEventListener('submit', (e) => this.handleSubmit(e));
+
+                ['sa-search-name', 'sa-search-issue', 'sa-search-category', 'sa-search-description'].forEach(id => { 
+                    const searchInput = document.getElementById(id);
+                    if (searchInput) searchInput.addEventListener('keyup', () => this.filterPosts()); 
+                });
+            },
+
+            showModal: function() {
+                document.getElementById('workaround-modal').classList.add('visible');
+                if (!this.quill) { this.quill = new Quill('#editor-container', { theme: 'snow', modules: { toolbar: [[{ 'header': [1, 2, false] }], ['bold', 'italic', 'underline'], ['image', 'code-block'], [{'list': 'ordered'}, {'list': 'bullet'}]] } }); }
+                document.getElementById('workaround-form').reset();
+                this.quill.root.innerHTML = '';
+            },
+            
+            hideModal: function() { document.getElementById('workaround-modal').classList.remove('visible'); },
+
+            /**
+             * --- MODIFIED ---
+             * Now saves the data after adding a new workaround.
+             */
+            handleSubmit: function(e) {
+                e.preventDefault();
+                const newWorkaround = { id: Date.now(), name: document.getElementById('wa-name').value, issue: document.getElementById('wa-issue').value, category: document.getElementById('wa-category').value, description: this.quill.root.innerHTML };
+                this.workarounds.push(newWorkaround);
+                this.saveData(); // Save the updated list
+                this.renderBlogPosts(this.workarounds);
+                this.hideModal();
+            },
+
+            filterPosts: function() {
+                const queries = { name: document.getElementById('sa-search-name').value.toLowerCase(), issue: document.getElementById('sa-search-issue').value.toLowerCase(), category: document.getElementById('sa-search-category').value.toLowerCase(), description: document.getElementById('sa-search-description').value.toLowerCase() };
+                const filtered = this.workarounds.filter(post => {
+                    const descText = new DOMParser().parseFromString(post.description, "text/html").documentElement.textContent.toLowerCase();
+                    return post.name.toLowerCase().includes(queries.name) && post.issue.toLowerCase().includes(queries.issue) && post.category.toLowerCase().includes(queries.category) && descText.includes(queries.description);
+                });
+                this.renderBlogPosts(filtered);
+            }
+        };
+
+        // =================================================================================
+        // [3] UI_MODULE: Responsible for rendering all HTML content to the page.
+        // =================================================================================
+        const UI_MODULE = {
+            appContentEl: document.getElementById('app-content'),
+            mainNavEl: document.getElementById('main-nav'),
+            
+            // --- RENDER FUNCTIONS FOR EACH TAB ---
+            renderHomePage: function() { return `<div class="page"><h1>Welcome to the Comcast Orion Team Hub</h1><p>This website is designed to organize our team's and project's data in an efficient way.</p><br><h2>About This Site</h2><p>This is a single-file web application created for internal use within the <strong>Comcast Orion</strong> team at <strong>Amdocs</strong>.</p></div>`; },
+            renderBillingPage: function() { const pageTitle = 'BILLING'; return `<div class="page"><h2>${pageTitle}</h2><p>Content for ${pageTitle} goes here.</p></div>`; },
+            renderTrainingPage: function() { const pageTitle = 'TRAINING'; return `<div class="page"><h2>${pageTitle}</h2><p>Content for ${pageTitle} goes here.</p></div>`; },
+            renderAutomationPage: function() { const pageTitle = 'Automation'; return `<div class="page"><h2>${pageTitle}</h2><p>Content for ${pageTitle} goes here.</p></div>`; },
+            renderReleasePage: function() { const pageTitle = 'Release'; return `<div class="page"><h2>${pageTitle}</h2><p>Content for ${pageTitle} goes here.</p></div>`; },
+            renderWelcomeKitPage: function() { const pageTitle = 'Welcome Kit'; return `<div class="page"><h2>${pageTitle}</h2><p>Content for ${pageTitle} goes here.</p></div>`; },
+            renderApplicationsPage: function() { const pageTitle = 'Applications'; return `<div class="page"><h2>${pageTitle}</h2><p>Content for ${pageTitle} goes here.</p></div>`; },
+            renderAbbreviationPage: function() { const pageTitle = 'Abbreviation'; return `<div class="page"><h2>${pageTitle}</h2><p>Content for ${pageTitle} goes here.</p></div>`; },
+            renderTeamsPage: function() { const pageTitle = 'Teams'; return `<div class="page"><h2>${pageTitle}</h2><p>Content for ${pageTitle} goes here.</p></div>`; },
+            renderImpLinksPage: function() { const pageTitle = 'Imp Links'; return `<div class="page"><h2>${pageTitle}</h2><p>Content for ${pageTitle} goes here.</p></div>`; },
+            renderDatabasePage: function() { const pageTitle = 'DataBase'; return `<div class="page"><h2>${pageTitle}</h2><p>Content for ${pageTitle} goes here.</p></div>`; },
+            renderEventsPage: function() { const pageTitle = 'Events'; return `<div class="page"><h2>${pageTitle}</h2><p>Content for ${pageTitle} goes here.</p></div>`; },
+            renderAssignmentsPage: function() { const pageTitle = 'Assignments'; return `<div class="page"><h2>${pageTitle}</h2><p>Content for ${pageTitle} goes here.</p></div>`; },
+
+            // --- MAIN RENDERER & NAVIGATION ---
+            renderNav: function(activeRoute) { this.mainNavEl.innerHTML = CONFIG.NAV_LINKS.map(link => `<a href="#${link.id}" class="${link.id === activeRoute ? 'active' : ''}">${link.text}</a>`).join(''); },
+            renderPage: function(pageId) {
+                this.appContentEl.innerHTML = '';
+                if (pageId === 'search-anything') { WORKAROUND_MODULE.initialize(this.appContentEl); return; }
+                let pageHTML = '';
+                const pageTitle = CONFIG.NAV_LINKS.find(link => link.id === pageId)?.text || 'Page';
+                switch (pageId) {
+                    case 'home':           pageHTML = this.renderHomePage(); break;
+                    case 'billing':        pageHTML = this.renderBillingPage(); break;
+                    case 'training':       pageHTML = this.renderTrainingPage(); break;
+                    case 'automation':     pageHTML = this.renderAutomationPage(); break;
+                    case 'release':        pageHTML = this.renderReleasePage(); break;
+                    case 'welcome-kit':    pageHTML = this.renderWelcomeKitPage(); break;
+                    case 'applications':   pageHTML = this.renderApplicationsPage(); break;
+                    case 'abbreviation':   pageHTML = this.renderAbbreviationPage(); break;
+                    case 'teams':          pageHTML = this.renderTeamsPage(); break;
+                    case 'imp-links':      pageHTML = this.renderImpLinksPage(); break;
+                    case 'database':       pageHTML = this.renderDatabasePage(); break;
+                    case 'events':         pageHTML = this.renderEventsPage(); break;
+                    case 'assignments':    pageHTML = this.renderAssignmentsPage(); break;
+                    default: pageHTML = `<div class="page"><h2>${pageTitle}</h2><p>This page is under construction.</p></div>`; break;
+                }
+                this.appContentEl.innerHTML = pageHTML;
+            }
+        };
+
+        // =================================================================================
+        // [4] SEARCH_MODULE: Handles the global top-right search functionality.
+        // --- FIX: Restored the full module code ---
+        // =================================================================================
+        const SEARCH_MODULE = {
+            searchIndex: [],
+            searchInputEl: document.getElementById('search-input'),
+            searchResultsEl: document.getElementById('search-results'),
+            buildIndex: function() {
+                const allContent = [];
+                for (const pageKey in CONFIG.MOCK_DATA) {
+                    const pageTitle = CONFIG.NAV_LINKS.find(link => link.id === pageKey)?.text || pageKey;
+                    CONFIG.MOCK_DATA[pageKey].forEach(item => {
+                        allContent.push({ title: item.title, content: item.content, path: pageTitle, link: `#${pageKey}` });
+                    });
+                }
+                this.searchIndex = allContent;
+            },
+            performSearch: function(query) {
+                if (!query || query.length < 2) { this.searchResultsEl.style.display = 'none'; return; }
+                const lowerCaseQuery = query.toLowerCase();
+                const results = this.searchIndex.filter(item => item.title.toLowerCase().includes(lowerCaseQuery) || item.content.toLowerCase().includes(lowerCaseQuery));
+                this.renderResults(results);
+            },
+            renderResults: function(results) {
+                if (results.length === 0) { this.searchResultsEl.innerHTML = '<div style="padding: 12px; color: var(--text-secondary);">No results found.</div>'; } 
+                else { this.searchResultsEl.innerHTML = results.map(r => `<a href="${r.link}"><div>${r.title}</div><div class="result-path">${r.path}</div></a>`).join(''); }
+                this.searchResultsEl.style.display = 'block';
+            },
+            initialize: function() {
+                this.searchInputEl.addEventListener('keyup', (e) => this.performSearch(e.target.value));
+                document.addEventListener('click', (e) => { if (!this.searchInputEl.contains(e.target)) { this.searchResultsEl.style.display = 'none'; } });
+            }
+        };
+
+        // =================================================================================
+        // [5] AUDIO_PLAYER_MODULE: Handles background music playback.
+        // --- FIX: Restored the full module code ---
+        // =================================================================================
+        const AUDIO_PLAYER_MODULE = {
+            audio: new Audio(),
+            currentTrackIndex: 0,
+            playPauseBtn: document.getElementById('play-pause'),
+            nextBtn: document.getElementById('next-track'),
+            prevBtn: document.getElementById('prev-track'),
+            volumeSlider: document.getElementById('volume-slider'),
+            playTrack: function(trackIndex) { this.currentTrackIndex = trackIndex; this.audio.src = CONFIG.MUSIC_TRACKS[this.currentTrackIndex]; this.audio.play().catch(e => console.error("Audio play failed:", e)); this.playPauseBtn.textContent = '⏸️'; },
+            togglePlayPause: function() {
+                if (this.audio.src && !this.audio.paused) { this.audio.pause(); this.playPauseBtn.textContent = '▶️'; } 
+                else { if (!this.audio.src) { this.playTrack(this.currentTrackIndex); } else { this.audio.play().catch(e => console.error("Audio play failed:", e)); } this.playPauseBtn.textContent = '⏸️'; }
+            },
+            nextTrack: function() { const newIndex = (this.currentTrackIndex + 1) % CONFIG.MUSIC_TRACKS.length; this.playTrack(newIndex); },
+            prevTrack: function() { const newIndex = (this.currentTrackIndex - 1 + CONFIG.MUSIC_TRACKS.length) % CONFIG.MUSIC_TRACKS.length; this.playTrack(newIndex); },
+            setVolume: function(volume) { this.audio.volume = volume; },
+            initialize: function() {
+                this.audio.volume = this.volumeSlider.value;
+                this.playPauseBtn.addEventListener('click', () => this.togglePlayPause());
+                this.nextBtn.addEventListener('click', () => this.nextTrack());
+                this.prevBtn.addEventListener('click', () => this.prevTrack());
+                this.volumeSlider.addEventListener('input', (e) => this.setVolume(e.target.value));
+                this.audio.addEventListener('ended', () => this.nextTrack());
+            }
+        };
+
+        // =================================================================================
+        // [6] ROUTER_MODULE: Handles navigation and calls the UI to render pages.
+        // =================================================================================
+        const ROUTER_MODULE = {
+            previousHash: '',
+            navigate: function() {
+                const hash = window.location.hash.substring(1) || 'home';
+                if (hash === 'som-wa') { window.open(CONFIG.SOM_WA_URL, '_blank'); window.location.hash = this.previousHash || 'home'; return; }
+                UI_MODULE.renderPage(hash);
+                UI_MODULE.renderNav(hash);
+                this.previousHash = hash;
+            },
+            initialize: function() {
+                this.previousHash = window.location.hash.substring(1) || 'home';
+                window.addEventListener('hashchange', this.navigate.bind(this));
+                this.navigate();
+            }
+        };
+
+        // =================================================================================
+        // [7] APP_INITIALIZATION: Kicks everything off when the script loads.
+        // =================================================================================
+        function initializeApplication() {
+            document.addEventListener('DOMContentLoaded', () => {
+                console.log("Initializing Comcast Orion Team Hub...");
+                SEARCH_MODULE.buildIndex();
+                SEARCH_MODULE.initialize();
+                AUDIO_PLAYER_MODULE.initialize();
+                ROUTER_MODULE.initialize();
+                console.log("Application Initialized Successfully.");
+            });
+        }
+        initializeApplication();
+    })();
+    </script>
+</body>
+</html>

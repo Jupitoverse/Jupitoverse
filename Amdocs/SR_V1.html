@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SR Search</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h2 class="text-center">SR Search</h2>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <input type="text" id="customerIdInput" class="form-control" placeholder="Search by Customer ID">
+            </div>
+            <div class="col-md-6">
+                <input type="text" id="srIdInput" class="form-control" placeholder="Search by SR ID">
+            </div>
+        </div>
+        <button class="btn btn-primary mb-3" onclick="filterTable()">Search</button>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>SR_ID</th>
+                    <th>Create Date</th>
+                    <th>Day of Restored</th>
+                    <th>Close Date</th>
+                    <th>LBGUPS Subcategory</th>
+                    <th>DETAILS</th>
+                    <th>REQUEST_FOR_NAME</th>
+                    <th>UPDATE_DETAILS</th>
+                    <th>RCA</th>
+                    <th>CUSTOMER_ID</th>
+                    <th>CUSTOMER_NAME</th>
+                </tr>
+            </thead>
+            <tbody id="dataTable">
+                <!-- Data will be populated here -->
+            </tbody>
+        </table>
+        <div class="mb-3">
+            <label for="fileInput" class="form-label">Upload Excel File:</label>
+            <input type="file" id="fileInput" class="form-control" accept=".xlsx, .xls">
+        </div>
+        <h3 class="mt-4">All Data from Excel:</h3>
+        <pre id="allData" class="bg-light p-3 border"></pre>
+    </div>
+
+    <script>
+        let rawData = [
+        {
+  "SR_ID" : "CAS2570812",
+  "Create Date" : "5/2/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "",
+  "DETAILS" : "This account OSite_939926_1 getting incorrect edgeview device MAC address \"54:39:68:11:E4:3F\", and attached OMW request and response. Endpoint - https://api.orion.comcast.com/product/v4/servicedetails \"deviceName\": \"e54396811E43F\", \"ownedBy\": \"Unspecified\", \"serialNumber\": \"54396811E43E\", \"isWifiDevice\": \"\", \"deviceFQDN\": \"e54396811e43f.bcdv-ve.central.comcast.net\", \"deviceCLLI\": \"\", \"deviceIP\": \"\", \"macAddress\": \"54:39:68:11:E4:3F\", \"deviceOperationalRole\": \"VOICE_GATEWAY\", \"deviceType\": \"ESG\", \"make\": \"Edgewater Networks\", \"model\": \"Edgewater EdgeMarc 4550\", \"deviceManufacturer\": \"Edgewater Networks\", \"deviceMarket\": \"\", \"serviceID\": \"EQP_535_4250893\", \"status\": \"Active\", \"deviceFunctionalStatus\": \"In Service\", \"siteUNQID\": \"11853530\", \"portUNQID\": \"79325586\", \"deviceAction\": \"\", \"characteristics\": [",
+  "REQUEST_FOR_NAME" : "Selvam Dhanasekar (sdhana995)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "131232072",
+  "CUSTOMER_NAME" : "ALL CREATURES ANIMAL HOSPI"
+},
+{
+  "SR_ID" : "CAS2570715",
+  "Create Date" : "5/2/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Project Review",
+  "DETAILS" : "Fallout Team Update: Send Strait to Triage OSO to check Customer name: house of flavors Customer ID: 130989522 Flow: Activation_Controller Activity: Activate or Update Security Edge Service Site ID: OSite_866039_1 Error: Failed to send request to URL CONTRACT_VALIDATION_ERROR : # - Failed to send request -Failed to send request to URL CONTRACT_VALIDATION_ERROR : #/service/0: required key [dependentServiceId] not found with the following error: https://api.orion.comcast.com/onp/v1/sendNotification Defect is Re-opened. Defect id: 2779668 Please check for following customers also having same issue. Customer Tracking_ID Customer_Name 130989522 0196680A91F073139A096CB620C2A172 house of flavors 130987828 019662C3A5697EC3B12776A0F55F9846 HEALDSBURG LIQUOR & MARKET 130524230 019600A44B3D759AA92AC0916A5CE9B3 Orion Simple Packages External POC 130975718 0195AE92F64D7800BC52141BCDF48E77 Five Star Septic, Inc 130978870 0195AE8E626E7B5FB492847239B776F4 Nazar Financial",
+  "REQUEST_FOR_NAME" : "Shreyas Kulkarni (skulka836)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130989522",
+  "CUSTOMER_NAME" : "house of flavors"
+},
+{
+  "SR_ID" : "CAS2570574",
+  "Create Date" : "5/2/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Install and Activation",
+  "DETAILS" : "Fallout Team Update: Send Strait to Triage OSO to check Customer name: Illinois State Bar Association Customer ID: 130398033 Flow: Site_Delivery_Flow Activity: Solution Delivery Groups Site ID: OSite_632731_1 Error: DECOMPOSITION_FAILED - Exception Raised,",
+  "REQUEST_FOR_NAME" : "Shreyas Kulkarni (skulka836)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130398033",
+  "CUSTOMER_NAME" : "Illinois State Bar Association"
+},
+{
+  "SR_ID" : "CAS2570571",
+  "Create Date" : "5/2/25",
+  "Day of Restored" : "5/2/2025",
+  "Close Date" : "5/2/2025",
+  "LBGUPS Subcategory" : "Amdocs Reporting",
+  "DETAILS" : "This is a test SR",
+  "REQUEST_FOR_NAME" : "Vipin Kumar (vkumar121)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "NA",
+  "CUSTOMER_NAME" : "NA"
+},
+{
+  "SR_ID" : "CAS2570552",
+  "Create Date" : "5/2/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "System Performance",
+  "DETAILS" : "CUSTOMER NAME: State Street Truck Stop CUSTOMER ID: 131228600 Proposal ID: IProposalDTO_715004 Issue: Processing a renewal and getting validation error because SA is stuck in running even though Availability check has completed in icon bell, Please assist in getting this through validation.",
+  "REQUEST_FOR_NAME" : "Baldomero Luevanos Jr (blueva200)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : 131228600,
+  "CUSTOMER_NAME" : "State Street Truck Stop"
+},
+{
+  "SR_ID" : "CAS2570498",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Project Review",
+  "DETAILS" : "DCP to check Provision BVE MACD Equipment in Broadsoft Error Tracking ID :**Rover CARE MACD**Broadsoft Equipment provisioning has failed. I reviewed this order and the Equipment provisioning is not started because the Service side provisioning never happened. This order is to add 2 seats and 2 VVX 250's and the service provisioning flow completed the Create Orderpath Native TN's and then skipped every provisioning task after that. The issue on this one is that all the provisioning tasks have skipped, why did they all skip instead of doing the provisioning when we are adding 2 seats. We can't fix the Equipment fallout until the 2 seats are provisioned through all the systems. Can you please assist? Application: Business_VoiceEdge_Equipment_(Modify) Activity: Provision BVE MACD Equipment in Broadsoft Task Status: Failed-Fallout Cust Name: MidSouth Steel Inc Cust ID: 131222201 Site: Project Name: Business VoiceEdge Equipment (Modify) - 811209 - MidSouth Steel Inc - IFrameworkAgreement_746741 - 4301 Roosevelt Hwy - OSite_938481_1 - EQP_535_4226232 - CH Project ID: Project5393522 Plan ID: 0196838CDD9C7A4BA06A9A6EF5C92CA51745963769 Activity ID: 0196838CDD967F2FA72EF581B81B5D98 Frontline Tracker Update / Charitha Dama DCP to check updating priority to high based on Rover CARE MACD",
+  "REQUEST_FOR_NAME" : "Tina Garcia (KGarci007)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "131222201",
+  "CUSTOMER_NAME" : "MidSouth Steel Inc"
+},
+{
+  "SR_ID" : "CAS2570482",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Project Review",
+  "DETAILS" : "Hi Team, This order has skipped \"Schedule Technician\". Please assist in opening schedule technician task and bringing it \"In Progress\" Application: Order(Site_Level) Activity: Schedule Technician Task Status: Skipped Cust Name: Sassetti LLC Cust ID: 130410279 Site: Project Name: Order(Site Level) - 584266 - Sassetti LLC - IFrameworkAgreement_560662 - Sassetti LLC - OSite_647448_1 - Modify Project ID: Project3886836 Plan ID: 24437AE9C2FD481880C9F1974ECEA7061723247463 Activity ID: 31A240774D2E472AAB900482AC10178E",
+  "REQUEST_FOR_NAME" : "Lennox Hylton (lhylto200)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130410279",
+  "CUSTOMER_NAME" : "Sassetti LLC"
+},
+{
+  "SR_ID" : "CAS2570464",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Provisioning and Configuration",
+  "DETAILS" : "Request response Log Timestamp : 30-04-2025 21:49:01 UTCCan you please assist with the fallout on the Notify DCP task? The order is a coupled hotcut but the disconnect seems to have flowed through OSO Completely which seems like it is causing this issue, however we need to be able to get the design so we can move this customer with all their information to the new location. Application: Business_VoiceEdge_Service_(Provide) Activity: Notify DCP of Start of Voice Service Product Design Task Status: Failed-Fallout Cust Name: C AND S RAIN GUTTERS Cust ID: 131153175 Site: Project Name: Business VoiceEdge Service (Provide) - 803913 - C AND S RAIN GUTTERS - IFrameworkAgreement_677685 - 2970 29th Ste 17 - OSite_958374_1 - BVE4384385 - PR Project ID: Project5351538 Plan ID: 01966866F9907464B45B428E35997C831745508301 Activity ID: 01966866F9727256B87D436947EFC8D0",
+  "REQUEST_FOR_NAME" : "Tina Garcia (KGarci007)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "131153175",
+  "CUSTOMER_NAME" : "C AND S RAIN GUTTERS"
+},
+{
+  "SR_ID" : "CAS2570434",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Scheduling",
+  "DETAILS" : "This order is a new EDI install and Construction is completed. But the schedule technician task is not opening for this customer. Can you please assist in getting that opened? Everything should have this ready for scheduling. Application: Order(Site_Level) Activity: Schedule Technician Task Status: Skipped Cust Name: Humanity United Cust ID: 131193627 Site: Project Name: Order(Site Level) - 729343 - Humanity United - IFrameworkAgreement_722552 - 1875_K ST NW_STE_750_WASHINGTON_DC_20006 - OSite_916011_1 - Provide Project ID: Project4915736 Plan ID: 01953EF428A975498D945CE383639B631740517943 Activity ID: 01953EF4289A778F984E196F85AFD5C9",
+  "REQUEST_FOR_NAME" : "Tina Garcia (KGarci007)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "131193627",
+  "CUSTOMER_NAME" : "Humanity United"
+},
+{
+  "SR_ID" : "CAS2570431",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Provisioning and Configuration",
+  "DETAILS" : "DCP to check Notify DCP of Start of Voice Service Product Design for Modify Error Tracking ID :**PTD is past due or within 5 days** [5/1/2025, 8:26:58 PM ET]: Notify DCP of Start of Voice Service Product Design for Modify DCP fallout: TRACKING_ID-16748010-- NPI_DESIGN_INPROGRESS cafe Non Price Impacting Design 28611007 is IN PROGRESS owned by bbushn200, Please complete the INPROGRESS design to proceed tried to cancel design - getting error: \"errors\":[{\"code\":\"400 BAD_REQUEST\",\"message\":\"BAD_REQUEST\"}]} TraceID: 7ad3f857a26146ae70c57d81b28f4063 Design cancellation failed. Please reach out to DCP COMPS support team. please help clear NPI design Application: Business_VoiceEdge_Service_(Modify) Activity: Notify DCP of Start of Voice Service Product Design for Modify Task Status: Stuck Cust Name: CENTRO VIDA Cust ID: 130610543 Site: Project Name: Business VoiceEdge Service (Modify) - 810566 - CENTRO VIDA - IFrameworkAgreement_534239 - 2295 E FREMONT ST_VIDA,CENTRO - OSite_738727_1 - BVE_291_3022045 - CH Project ID: Project5389859 Plan ID: 019682B66912744FBE40C497BEB041661745949714 Activity ID: 019682B66905744EBE36E7E565BA855B",
+  "REQUEST_FOR_NAME" : "Leanna Cavazos (lcavaz200)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130610543",
+  "CUSTOMER_NAME" : "CENTRO VIDA"
+},
+{
+  "SR_ID" : "CAS2570307",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Scheduling",
+  "DETAILS" : "EDI Install was failed by the technician and the job was cancelled. Verified cancelled job in WFM Notification Details and the Project Flow went into Rollback and cancelled. The \"Schedule Technician\" task did not open as expected for a new job to be built and scheduled. Created CAS to reopen \"Schedule Technician\" so that the EDI install can be scheduled. Application: Order(Site_Level) Activity: Schedule Technician Task Status: Skipped Cust Name: JOHNSONCITRONBERG LAW FIRM Cust ID: 131206792 Site: Project Name: Order(Site Level) - 749740 - JOHNSONCITRONBERG LAW FIRM - IFrameworkAgreement_738668 - 421_KING ST_STE_505_ALEXANDRIA_VA_22314 - OSite_924603_1 - Provide Project ID: Project5034142 Plan ID: 0195A4AC5CB4762089CEAE0AA7FC3CB01742224514 Activity ID: 0195A4AC5CB27E57B4A91DB7581F584A",
+  "REQUEST_FOR_NAME" : "Brian Semmler (bsemml200)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "131206792",
+  "CUSTOMER_NAME" : "JOHNSONCITRONBERG LAW FIRM"
+},
+{
+  "SR_ID" : "CAS2570291",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Design and BOM",
+  "DETAILS" : "DCP to check Notify DCP of Start of Voice Service Product Design Error Tracking ID :BVE Service Provide Rollback Plan is stalled at the \"Notify DCP of Start of Voice Service Product Design\" task In Progress. Unable to apply workaround to progress as workflow is in Rollback. Created CAS to resolve stall so Rollback can complete. Application: Business_VoiceEdge_Service_(Provide) Activity: Notify DCP of Start of Voice Service Product Design Task Status: Stuck Cust Name: Bridgewater Pediatrics Cust ID: 100145569 Site: Project Name: Business VoiceEdge Service (Provide) - 309415 - Bridgewater Pediatrics - IFrameworkAgreement_62075 - 1029 PLEASANT ST_BRIDGEWATER PEDIATRICS - OSite_146236_1 - BVE1610869 - PR Project ID: Project2023111 Plan ID: CEE214DBC6014432A9E1FDEC9DD1E3CA1736483773 Activity ID: 654CFFEB9F09483B9C50945F03C2BF70",
+  "REQUEST_FOR_NAME" : "Brian Semmler (bsemml200)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "100145569",
+  "CUSTOMER_NAME" : "Bridgewater Pediatrics"
+},
+{
+  "SR_ID" : "CAS2570270",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Serviceability and Site Survey",
+  "DETAILS" : "CUSTOMER NAME: CENTRAL PRINTING CUSTOMER ID: 130461314 Proposal ID: IProposalDTO_709254 Issue: proposal validation stating the site has to be next gen to use speed sales is selling. ELOC ID 239058481 already shows this as next gen, but SQO is not showing it as next gen.",
+  "REQUEST_FOR_NAME" : "Paul Collom (pcollo249)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130461314",
+  "CUSTOMER_NAME" : "CENTRAL PRINTING"
+},
+{
+  "SR_ID" : "CAS2570246",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Project Review",
+  "DETAILS" : "**PTD is past due or within 5 days** [5/1/2025, 6:36:50 PM ET]: BV design has not been updated. There are only 4 lines on the account - submit a new proposal and it flowed through OSO for the 4 lines only CUSTOMER NAME: Felician Villa Apartments CUSTOMER ID: 131186663 Proposal ID: IProposalDTO_715019 FWA ID: IFrameworkAgreement_783767 Status: Signed Open a new NPI to check the account and DCP shows 5 lines - not 4 Needs DCP corrected, please Application: Equipment_Group Activity: Activate Services via Activation Controller Task Status: Stuck Cust Name: Felician Villa Apartments Cust ID: 131186663 Site: Project Name: Equipment Group - 019625EE45EB7DB2A65C200EDC032DD2 - Felician Villa Apartments - IFrameworkAgreement_716296 - null - OSite_911461_1 - CH Project ID: Project5229428 Plan ID: 019625EE498E7E7A8022F3973FD306DB1744393095 Activity ID: 019625EE49897AD79A9371235D367730",
+  "REQUEST_FOR_NAME" : "Leanna Cavazos (lcavaz200)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : 131186663,
+  "CUSTOMER_NAME" : "Felician Villa Apartments"
+},
+{
+  "SR_ID" : "CAS2570234",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Serviceability and Site Survey",
+  "DETAILS" : "CUSTOMER NAME: NASSAU VETERINARY SPECIALIST CUSTOMER ID: 131253323 Proposal ID: IProposalDTO_714391 Issue: Proposal validation for site showing OOFP when it's not.",
+  "REQUEST_FOR_NAME" : "Paul Collom (pcollo249)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "131253323",
+  "CUSTOMER_NAME" : "NASSAU VETERINARY SPECIALIST"
+},
+{
+  "SR_ID" : "CAS2570227",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Serviceability and Site Survey",
+  "DETAILS" : "CUSTOMER NAME: HYCU, Inc. CUSTOMER ID: 130412806 Proposal ID: IProposalDTO_707606 Issue: off-net quote for renewal is auto completing in Oasis as sent to sales, but SQO does not update from the quote.",
+  "REQUEST_FOR_NAME" : "Paul Collom (pcollo249)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130412806",
+  "CUSTOMER_NAME" : "HYCU, Inc."
+},
+{
+  "SR_ID" : "CAS2570207",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Project Review",
+  "DETAILS" : "There was an inflight change order submitted and it is in error in the rollback plan. Can you correct the error and progress the rollback plan please? Thank you. Application: Order(Site_Level) Activity: Decompose to CFS Task Status: Failed-Fallout Cust Name: The WOW Center Cust ID: 130829511 Site: Project Name: Order(Site Level) - 793042 - The WOW Center - IFrameworkAgreement_767822 - 11450_79TH ST__MIAMI_FL_33173 - OSite_807773_1 - Provide Project ID: Project5282192 Plan ID: 019682EC00E1731499934F55EDDCF7A01745953226 Activity ID: 019649BE10557D989903866469A7DF09 Frontline SOM Update / Supreet Kangokar Som to check There was an inflight change order submitted and it is in error in the rollback plan Can you correct the error and progress the rollback plan please Thank you Application Order Site Level Activity Decompose to CFS Task Status Failed Fallout Cust Name The WOW Center Cust ID 130829511 Site Project Name Order Site Level 793042 The WOW Center IFrameworkAgreement 767822 11450 79TH ST MIAMI FL 33173 OSite 807773 1 Provide Project ID Project5282192 Plan ID 019682EC00E1731499934F55EDDCF7A01745953226 Activity ID 019649BE10557D989903866469A7DF09",
+  "REQUEST_FOR_NAME" : "Desiree Lucero (dlucer456)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130829511",
+  "CUSTOMER_NAME" : "The WOW Center"
+},
+{
+  "SR_ID" : "CAS2570152",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Project Review",
+  "DETAILS" : "IProposalDTO_690253 was submitted by LNP to port out PRI and disconnect the service. Proposal progressed to \"Signed\" status and finalized and the OPE GT opened and was completed. OSO did not generate a Disconnect order for OSite_828611_1. Created CAS to resolve progression issue. Application: SQO Activity: Proposal issue Task Status: System Issue Cust Name: Eagle Alloy Inc. Cust ID: 130942049 Site:",
+  "REQUEST_FOR_NAME" : "Brian Semmler (bsemml200)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130942049",
+  "CUSTOMER_NAME" : "Eagle Alloy Inc."
+},
+{
+  "SR_ID" : "CAS2570094",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Serviceability and Site Survey",
+  "DETAILS" : "CUSTOMER NAME: YELLOW GREEN FARMERS MARKET CUSTOMER ID: 131252261 Proposal ID: IProposalDTO_713603 Issue: Proposal validation error for site showing OOFP when it's not.",
+  "REQUEST_FOR_NAME" : "Paul Collom (pcollo249)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "131252261",
+  "CUSTOMER_NAME" : "YELLOW GREEN FARMERS MARKET"
+},
+{
+  "SR_ID" : "CAS2570034",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Account Change",
+  "DETAILS" : "This is a TOFR request for CHATHAM VILLAGE MARKET. A signed Service Takeover form is attached. CR197772118",
+  "REQUEST_FOR_NAME" : "Seth Colgan (scolga200)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "131223799",
+  "CUSTOMER_NAME" : "CHATHAM VILLAGE MARKET"
+},
+{
+  "SR_ID" : "CAS2570017",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "System Performance",
+  "DETAILS" : "CUSTOMER NAME: Free Speech TV CUSTOMER ID: 130130900 Proposal ID: IProposalDTO_702924 Issue: Processing a renewal and getting validation error because SA is stuck in running even though Availability check has completed in icon bell, Please assist in getting this through validation.",
+  "REQUEST_FOR_NAME" : "Baldomero Luevanos Jr (blueva200)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130130900",
+  "CUSTOMER_NAME" : "Free Speech TV"
+},
+{
+  "SR_ID" : "CAS2570014",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Serviceability and Site Survey",
+  "DETAILS" : "CUSTOMER NAME: Sankofa Wellness Center CUSTOMER ID: 131243775 Proposal ID: IProposalDTO_713967 Issue: Voice serviceability shows red. Insite shows this location is voice serviceable. ELOC ID shows non serviceable because site needs construction.",
+  "REQUEST_FOR_NAME" : "Paul Collom (pcollo249)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "131243775",
+  "CUSTOMER_NAME" : "Sankofa Wellness Center"
+},
+{
+  "SR_ID" : "CAS2569945",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "5/1/2025",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Install and Activation",
+  "DETAILS" : "Unable to adjust a MACD that is set for 5/20 needs to be 5/1 ***** Amdocs Categorization Update Automation ***** This is a TOS/Customer Down SR. T2/SmartOps - Pls DO NOT close this without Comcast Approval.",
+  "REQUEST_FOR_NAME" : "Christopher Tarlton (ctarlt721)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130611616",
+  "CUSTOMER_NAME" : "Crossroads Carrier"
+},
+{
+  "SR_ID" : "CAS2569906",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "5/1/2025",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Tech Onsite",
+  "DETAILS" : "PM Eugene Ricchio submitted to add tn 7737540224 to account and did not process - created a cos but no tn rates for tech to activate - looking at amdocs found a 'Submit Workorder Request' In Error - I do not have details to this so can some one please help close out this error so the work order for the TN can be built in Amdocs",
+  "REQUEST_FOR_NAME" : "Carol Duffy (cduffy0098k)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130988344",
+  "CUSTOMER_NAME" : "Chi Tea"
+},
+{
+  "SR_ID" : "CAS2569885",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Project Review",
+  "DETAILS" : "Hi Team, This was previously submitted under SR019576346. with the following unsatisfied ask. \"Hi Team, The Schedule Technician task is showing \"In Progress\" in OSO but is not populating on the Task list. The CPM needed to reschedule and canceled but it never reopened the Schedule Technician task so they Adhoc'd it which caused the activity to be stuck. Please assist in resolving this issue.\" The RCA provided stated that it was stuck in the flow due to multiple ad-hocs done by the CPM. Though we understand the route cause, we still need it resolved. The \"Schedule Technician\" task needs to be placed \"In Progress\" in the \"Task List\" so that the CPM can work it. The task shows \"Rework In Progress\" in OSO. This has not been resolved. Please assist. Application: Order(Site_Level) Activity: Schedule Technician Task Status: Stuck Cust Name: AD MEDIA LLC Cust ID: 130986210 Site: Project Name: Order(Site Level) - 655511 - AD MEDIA LLC - IFrameworkAgreement_664485 - 146_LAWRENCEVILLE PENNINGTON RD__LAWRENCEVILLE_NJ_08648 - OSite_864010_1 - Provide Project ID: Project4414080 Plan ID: 81EDC6EDA6D046D8B2CB8F9E474CD1BF1732313213 Activity ID: 4C6AEF7540C6474CB9911CF4B2877617 Frontline SOM Update / Supreet Kangokar SOM to check, issue: This was previously submitted under SR019576346. with the following unsatisfied ask. \"Hi Team, The Schedule Technician task is showing \"In Progress\" in OSO but is not populating on the Task list. The CPM needed to reschedule and canceled but it never reopened the Schedule Technician task so they Adhoc'd it which caused the activity to be stuck. Please assist in resolving this issue.\" The RCA provided stated that it was stuck in the flow due to multiple ad-hocs done by the CPM. Though we understand the route cause, we still need it resolved. The \"Schedule Technician\" task needs to be placed \"In Progress\" in the \"Task List\" so that the CPM can work it. The task shows \"Rework In Progress\" in OSO. This has not been resolved. Please assist. Application: Order(Site_Level) Activity: Schedule Technician Task Status: Stuck Cust Name: AD MEDIA LLC Cust ID: 130986210 Site: Project Name: Order(Site Level) - 655511 - AD MEDIA LLC - IFrameworkAgreement_664485 - 146_LAWRENCEVILLE PENNINGTON RD__LAWRENCEVILLE_NJ_08648 - OSite_864010_1 - Provide Project ID: Project4414080 Plan ID: 81EDC6EDA6D046D8B2CB8F9E474CD1BF1732313213 Activity ID: 4C6AEF7540C6474CB9911CF4B2877617",
+  "REQUEST_FOR_NAME" : "Lennox Hylton (lhylto200)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130986210",
+  "CUSTOMER_NAME" : "AD MEDIA LLC"
+},
+{
+  "SR_ID" : "CAS2569868",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Project Review",
+  "DETAILS" : "DCP to check Notify DCP of Start of BVE Equipment Design for Modify Error Tracking ID :**PTD is past due or within 5 days** Notify DCP of Start of BVE Equipment Design for Modify is stalled now, please flow order Application: Business_VoiceEdge_Equipment_(Modify) Activity: Notify DCP of Start of BVE Equipment Design for Modify Task Status: Stuck Cust Name: Homail Incorporated Cust ID: 131228951 Site: Project Name: Business VoiceEdge Equipment (Modify) - 782452 - Homail Incorporated - IFrameworkAgreement_752871 - 824 BROADWAY ST_INCORPORATED,HOMAIL - OSite_932582_1 - EQP_535_4276265 - CH Project ID: Project5224022 Plan ID: 0196218A278B73E1A1ED782D8C7E38BB1744319424 Activity ID: 0196218A278572CE860E607BC02D2564",
+  "REQUEST_FOR_NAME" : "Haley Hobert (hhober200)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "131228951",
+  "CUSTOMER_NAME" : "Homail Incorporated"
+},
+{
+  "SR_ID" : "CAS2569832",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Lead Opportunity and Creation",
+  "DETAILS" : "Phillip Flenoid is receiving attached error when trying to qualify a lead. https://myorionsales.crm.dynamics.com/main.aspx?appid=c699f864-0e5e-ea11-a811-000d3a17b4eb&newWindow=true&pagetype=entityrecord&etn=lead&id=8f3911aa-a90a-43be-a1a8-87c7666a00a4&formid=3d93c2ef-20b4-40a8-ab4e-3f7fef95f0e8 Address: 1428 CONTRA COSTA BLVD PLEASANT HILL, CA 94523",
+  "REQUEST_FOR_NAME" : "Steve Montagno (smonta00)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "No customer ID available, this is a new lead",
+  "CUSTOMER_NAME" : "Yaedam"
+},
+{
+  "SR_ID" : "CAS2569830",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Project Review",
+  "DETAILS" : "DCP to check BVE Equipment Design for Modify Error Tracking ID :**Rover CARE MACD**[5/1/2025, 4:23:20 PM ET]: agent checked equipment count- dcp is matching BroadSoft - submitting support ticket Design ID: 28610389 Application: Business_VoiceEdge_Equipment_(Modify) Activity: BVE Equipment Design for Modify Task Status: Other Cust Name: Taps and Associates Cust ID: 130326372 Site: Project Name: Business VoiceEdge Equipment (Modify) - 544830 - Taps and Associates - IFrameworkAgreement_329372 - 1900 CENTURY PL NE STE 100_& ASSOCIATES,TAPS - OSite_575569_1 - EQP_115_1817459 - CH Project ID: Project3616343 Plan ID: 1F7F05B086E945FF85482D7E94ADA78F1717696609 Activity ID: 8E5241A5136A478FBB487766353CA774 Enrichment Update / Sravani Jagarlamudi DCP to check Priority updated to HIGH Based on the ROVER CARE MACD Issue: BVE Equipment Design for Modify Error Tracking ID :**Rover CARE MACD**[5/1/2025, 4:23:20 PM ET]: agent checked equipment count- dcp is matching BroadSoft - submitting support ticket Design ID: 28610389 Application: Business_VoiceEdge_Equipment_(Modify) Activity: BVE Equipment Design for Modify Task Status: Other Cust Name: Taps and Associates Cust ID: 130326372 Site: Project Name: Business VoiceEdge Equipment (Modify) - 544830 - Taps and Associates - IFrameworkAgreement_329372 - 1900 CENTURY PL NE STE 100_and ASSOCIATES,TAPS - OSite_575569_1 - EQP_115_1817459 - CH Project ID: Project3616343 Plan ID: 1F7F05B086E945FF85482D7E94ADA78F1717696609 Activity ID: 8E5241A5136A478FBB487766353CA774",
+  "REQUEST_FOR_NAME" : "Leanna Cavazos (lcavaz200)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130326372",
+  "CUSTOMER_NAME" : "Taps and Associates"
+},
+{
+  "SR_ID" : "CAS2569771",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Project Review",
+  "DETAILS" : "Hi Team, The \"DOI CFD Notification for SDE\" Task is in error. After a retry OSO presents the following: MISSING_MANDATORY_EXEC_PARAMS - Mandatory Parameter(s)[siteDivision, siteRegion] are invalid Can someone please assist? Application: Business_VoiceEdge_Service_(Provide) Activity: DOI CFD Notification for SDE Task Status: Failed-Fallout Cust Name: FIXCO LLC DBA MIDAS Cust ID: 131196824 Site: Project Name: Business VoiceEdge Service (Provide) - 784841 - FIXCO LLC DBA MIDAS - IFrameworkAgreement_727353 - 44 Plaistow Rd - OSite_918104_1 - BVE4317170 - PR Project ID: Project5238122 Plan ID: 01963563706C78B19A9214D8530A4CE71744652431 Activity ID: 019635637067779CA652E50C91DB7548 Frontline SOM Update / Devendra Patil DOI CFD Notification for SDE is failing Mandatory Parameter(s)[siteDivision, siteRegion] are invalid Business VoiceEdge Service (Provide) - 784841 - FIXCO LLC DBA MIDAS - IFrameworkAgreement_727353 - 44 Plaistow Rd - OSite_918104_1 - BVE4317170 - PR",
+  "REQUEST_FOR_NAME" : "Brandon Celesna (aceles200)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "131196824",
+  "CUSTOMER_NAME" : "FIXCO LLC DBA MIDAS"
+},
+{
+  "SR_ID" : "CAS2569753",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "System Performance",
+  "DETAILS" : "multiple proposals created stuck at Status: Initiating Amendment Proposal - CUSTOMER NAME: The RealReal CUSTOMER ID: 130675672 Proposal ID: IProposalDTO_714894 FWA ID: IFrameworkAgreement_783630 Status: Initiating Amendment Proposal Base Agreement: FrameWork112234541 CUSTOMER NAME: The RealReal CUSTOMER ID: 130675672 Proposal ID: IProposalDTO_714733 FWA ID: IFrameworkAgreement_783479 Status: Initiating Amendment Proposal Base Agreement: FrameWork112234541",
+  "REQUEST_FOR_NAME" : "Altamese Kelley (AKelle010)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130675672",
+  "CUSTOMER_NAME" : "The RealReal"
+},
+{
+  "SR_ID" : "CAS2569717",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Serviceability and Site Survey",
+  "DETAILS" : "CUSTOMER NAME: PACIFICA PERSONNEL CUSTOMER ID: 131229038 Proposal ID: IProposalDTO_714529 Issue: Processing a renewal and getting validation error because SA is stuck in running even thought Availability check has completed in icon bell, Please assist in getting this through validation.",
+  "REQUEST_FOR_NAME" : "Baldomero Luevanos Jr (blueva200)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "131229038",
+  "CUSTOMER_NAME" : "PACIFICA PERSONNEL"
+},
+{
+  "SR_ID" : "CAS2569713",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Account Change",
+  "DETAILS" : "Finance to check ErrorPlease change name from Better Home Inc. to Home City Development Inc. - New Billing Address: 261 Oak Grove Ave. Springfield MA 01109. Please see attached letter.",
+  "REQUEST_FOR_NAME" : "Mary Girouard (mgirou201)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "Other",
+  "CUSTOMER_ID" : "131229057",
+  "CUSTOMER_NAME" : "Better Home Inc."
+},
+{
+  "SR_ID" : "CAS2569701",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "5/1/2025",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Account Change",
+  "DETAILS" : "Request response Log Timestamp : 29-01-2025 09:50:07 UTCOsite info OSite_865280_1 Enrichment Update / Sravani Jagarlamudi",
+  "REQUEST_FOR_NAME" : "Latarah Myers (lmyers209)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130988344",
+  "CUSTOMER_NAME" : "Chi Tea"
+},
+{
+  "SR_ID" : "CAS2569697",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "5/1/2025",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Install and Activation",
+  "DETAILS" : "b85e710944ae-cbr2 Serial #348968232403000775 003044bb852a-connection pro ga2429ba001023-battery This equipment needs to be added to this account in AMDOC and rework will not allow equipment to be added. ***** Amdocs Categorization Update Automation ***** This is a TOS/Customer Down SR. T2/SmartOps - Pls DO NOT close this without Comcast Approval.",
+  "REQUEST_FOR_NAME" : "Brent Knobel (BKnobe3689e)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "131246274",
+  "CUSTOMER_NAME" : "ATOMIC PROVISIONS LLC"
+},
+{
+  "SR_ID" : "CAS2569638",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "5/1/2025",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Provisioning and Configuration",
+  "DETAILS" : "**PTD is past due or within 5 days** The PI Service Provide is stalled at the \"Business Internet Service Design Completion\" task in error. Attempted a retry in the fallout GT but was unable to move the workflow forward. Created CAS to resolve error and progress workflow. Application: Business_Internet_Service_Provide_Logical Activity: Business Internet Service Design Completion Task Status: Failed-Fallout Cust Name: T&T SUPERMARKET US INC Cust ID: 130533791 Site: Project Name: Business Internet Service Provide Logical - 019669D36D747EA4830516159D75EFB9 - T&T SUPERMARKET US INC - IFrameworkAgreement_771890 - 1600 Saratoga Ave San Jose CA 95129 - OSite_956146_1 - BI4363342 - Project ID: Project5361728 Plan ID: 019669D370DB74D09A89F162CB335DD31745532186 Activity ID: 019669D370D170F4AED6C959936FD456 Frontline SOM Update / Devendra Patil Business Internet Service Design Completion is failing Failed to Update DMD Resource Parameters Business Internet Service Provide Logical - 019669D36D747EA4830516159D75EFB9 - TandT SUPERMARKET US INC - IFrameworkAgreement_771890 - 1600 Saratoga Ave San Jose CA 95129 - OSite_956146_1 - BI4363342 -",
+  "REQUEST_FOR_NAME" : "Brian Semmler (bsemml200)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130533791",
+  "CUSTOMER_NAME" : "T&T SUPERMARKET US INC"
+},
+{
+  "SR_ID" : "CAS2569542",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Serviceability and Site Survey",
+  "DETAILS" : "CUSTOMER NAME: Strategic Law CUSTOMER ID: 131222101 Proposal ID: IProposalDTO_714561 Issue: SA stuck running in progress when sales add legacy account number",
+  "REQUEST_FOR_NAME" : "Angel Alexander (AAlexa001)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "131222101",
+  "CUSTOMER_NAME" : "Strategic Law"
+},
+{
+  "SR_ID" : "CAS2569531",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Pricing and Discounting",
+  "DETAILS" : "CUSTOMER NAME: Crossroads Financial Group CUSTOMER ID: 130966635 Proposal ID: IProposalDTO_713027 Issue: We have BVE order with 12 communication seats and should be able to use promo ($20 MRC Discount off 5+ Business VoiceEdge Seats (Data Required in Legacy)) but SQO is not providing us with that option.",
+  "REQUEST_FOR_NAME" : "Baldomero Luevanos Jr (blueva200)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130966635",
+  "CUSTOMER_NAME" : "Crossroads Financial Group"
+},
+{
+  "SR_ID" : "CAS2569522",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Project Review",
+  "DETAILS" : "**PTD is past due or within 5 days** Hi Team, Whenever Gaurangkumar Mandali (ActiveCore Engineer) tries to close this task it throws and error. Error: 400 : \"Failed to send email.\" Please assist in resolving this error so the task can be completed and the order progress. Application: OTT_Service Activity: Activate OTT Service Task Status: Stuck Cust Name: BERGER MCDERMOTT Cust ID: 130986950 Site: Project Name: OTT Service - Advanced Security - 657651 - New - IFrameworkAgreement_664327 - OSite_864413_1 Project ID: Project4429241 Plan ID: 4FFFA6EA45154126ABB666C83BF2E3CE1732720834 Activity ID: 16D246FE7E1B49B0BE23C523A7DB58C3 Frontline SOM Update / Devendra Patil Activate OTT Service is failing OTT Service - Advanced Security - 657651 - New - IFrameworkAgreement_664327 - OSite_864413_1",
+  "REQUEST_FOR_NAME" : "Lennox Hylton (lhylto200)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130986950",
+  "CUSTOMER_NAME" : "BERGER MCDERMOTT"
+},
+{
+  "SR_ID" : "CAS2569521",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "5/1/2025",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Install and Activation",
+  "DETAILS" : "HOTCUT TASKS HAVE NOT POPULATED FOR TTU TO COMPLETE HOTCUT ***** Amdocs Categorization Update Automation ***** This is a TOS/Customer Down SR. T2/SmartOps - Pls DO NOT close this without Comcast Approval.",
+  "REQUEST_FOR_NAME" : "Dametria Rosenthal (drosen206)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130824132",
+  "CUSTOMER_NAME" : "TTL USA"
+},
+{
+  "SR_ID" : "CAS2569476",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Provisioning and Configuration",
+  "DETAILS" : "DCP to check Acquire TN Card Error Tracking ID :The CPM submitted a request to get 11 OOF OTT numbers. They opened a Jira ticket TNADMIN-1277 to make native OOF TNs 4696805565-5575 available. The ticket has been completed and TNs are in CNMS now. Can you submit the ticket so we are able to pull the TNs in to the DCP design please? Thank you. Application: DCP Activity: Acquire TN Card Task Status: Other Cust Name: SPS North America Inc Cust ID: 130346074 Site:",
+  "REQUEST_FOR_NAME" : "Desiree Lucero (dlucer456)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130346074",
+  "CUSTOMER_NAME" : "SPS North America Inc"
+},
+{
+  "SR_ID" : "CAS2569451",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "System Performance",
+  "DETAILS" : "CUSTOMER NAME: Latex Construction Co. CUSTOMER ID: 131224317 Proposal ID: IProposalDTO_714585 FWA ID: IFrameworkAgreement_783328 Issue: Serviceability is stuck in progress on site access.",
+  "REQUEST_FOR_NAME" : "Talib Bethel (tbethe710)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "131224317",
+  "CUSTOMER_NAME" : "Latex Construction Co."
+},
+{
+  "SR_ID" : "CAS2569422",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "5/1/2025",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Install and Activation",
+  "DETAILS" : "can you please assist. This is a move and customer flowed all the way through the disconnect already and ignored all PTD rules. Order is a coupled hotcut, but the OSite_958374_1 is failing at Notify DCP of Start of Voice Service Product Design task so we can't even build it on the new site to get them back up and get it scheduled quickly. can you please assist getting this fixed so we can try to get the customer back in service as soon as possible? Disconnect is OSite_958374_1 ***** Amdocs Categorization Update Automation ***** This is a TOS/Customer Down SR. T2/SmartOps - Pls DO NOT close this without Comcast Approval.",
+  "REQUEST_FOR_NAME" : "Tina Garcia (KGarci007)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "131153175",
+  "CUSTOMER_NAME" : "C AND S RAIN GUTTERS"
+},
+{
+  "SR_ID" : "CAS2569408",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Project Review",
+  "DETAILS" : "**PTD is past due or within 5 days** Solution Within Site workflow is stalled at the \"Set Point of No Reestablish\" task in error. Attempted a retry in the fallout GT but was unable to move the workflow forward. Created CAS to resolve error and progress the workflow. Application: solution_within_site_Disconnect Activity: Set Point of No Reestablish Task Status: Failed-Fallout Cust Name: Trinity Broadcasting Network Cust ID: 130340390 Site: Project Name: Solution Within Site (Disconnect) - 730150 - Trinity Broadcasting Network - IFrameworkAgreement_343589 - 2880 VISION CT_STE 100_TRINITY BROADCASTING NETWOR - OSite_593580_1 - EDI - 1169631331 - CE Project ID: Project4920537 Plan ID: 0195433DDDC9773888BA082F2BA533C11740589882 Activity ID: 0195433DDDC87B109AAB1442365223C6 Frontline SOM Update / Devendra Patil Set Point of No Reestablish is failing Cannot invoke \"com.amdocs.oss.xml.order.v1.OrderItemValue.getRootOrderLine()\" because \"orderItemValue\" is null Solution Within Site (Disconnect) - 730150 - Trinity Broadcasting Network - IFrameworkAgreement_343589 - 2880 VISION CT_STE 100_TRINITY BROADCASTING NETWOR - OSite_593580_1 - EDI - 1169631331 - CE",
+  "REQUEST_FOR_NAME" : "Brian Semmler (bsemml200)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130340390",
+  "CUSTOMER_NAME" : "Trinity Broadcasting Network"
+},
+{
+  "SR_ID" : "CAS2569397",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Project Review",
+  "DETAILS" : "**PTD is past due or within 5 days** Hi Team, The \"Notify DCP of Start of Business VoiceEdge Equipment Disconnection\" Task is in error. After a retry OSO presents the following: BUS_AMIL_ERR - TRACKING_ID-16699917-- VMS-DATA_SERVICE_ERROR ?VMS-VMSData Service Exception, Invoking URl https://vmsdata-prd.ch2-g1.cf.comcast.net:443/vmsdata/v1/design/updateAssociatedDesignId/designId/{designId}/associatedDesignId/{associatedDesignId}{\"timestamp\":1746032635508,\"status\":404,\"error\":\"Not Found\",\"path\":\"/vmsdata/v1/design/updateAssociatedDesignId/designId/28615627/associatedDesignId/\"}; Can someone please assist? Application: Business_VoiceEdge_Equipment_Disconnect Activity: Notify DCP of Start of Business VoiceEdge Equipment Disconnection Task Status: Failed-Fallout Cust Name: O'Loughlin Trade Shows Cust ID: 130945659 Site: Project Name: Business VoiceEdge Equipment Disconnect - 782428 - O'Loughlin Trade Shows - IFrameworkAgreement_617318 - 10975 SW 11TH ST STE 150_TRADE SHOWS,O'LOUGHLIN - OSite_832271_1 - EQP_451_3421428 - CE Project ID: Project5223889 Plan ID: 0196218440AA7B85A0BF2770954145C01744319037 Activity ID: 0196218440A2724C8ADE95F73AC31C58",
+  "REQUEST_FOR_NAME" : "Brandon Celesna (aceles200)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130945659",
+  "CUSTOMER_NAME" : "O'Loughlin Trade Shows"
+},
+{
+  "SR_ID" : "CAS2569388",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Project Review",
+  "DETAILS" : "Request response Log Timestamp : 01-05-2025 18:46:13 UTC**PTD is past due or within 5 days** Hi Team, A fallout has been identified on the \"Disconnect Solution Service Design\" activity. Please assist in resolving this issue. Application: solution_within_site_Disconnect Activity: Disconnect Solution Service Design Task Status: Failed-Fallout Cust Name: Bob Popp Building Services, INC. Cust ID: 130286675 Site: Project Name: Solution Within Site (Disconnect) - 789867 - Bob Popp Building Services, INC. - IFrameworkAgreement_290607 - 2100 S VALENTIA ST_BOB POPP BUILDING - OSite_532820_1 - SIP - 1169480248 - CE Project ID: Project5265759 Plan ID: 019640ED6E5674A5A8B12872E9FA92EC1744846024 Activity ID: 019640ED6E4D79BCAAD6B567A882938C",
+  "REQUEST_FOR_NAME" : "Lennox Hylton (lhylto200)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130286675",
+  "CUSTOMER_NAME" : "Bob Popp Building Services, INC."
+},
+{
+  "SR_ID" : "CAS2569373",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "5/2/2025",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Project Assignment",
+  "DETAILS" : "**PTD is past due or within 5 days** Order is a BVE Straight Renewal and should not have been assigned to a CPM. The expected behavior was for this order to complete in automation. Created CAS to determine RCA for CPM assignment. Application: Site_Delivery_Flow Activity: Create Agreement in OT and Assign Primary CPM Task Status: Other Cust Name: Jeff A Shaffer Real Estate Inc Cust ID: 130609860 Site: Project Name: Agreement - 758928 - 0 - IFrameworkAgreement_534024 - Jeff A Shaffer Real Estate Inc Project ID: Project5085878 Plan ID: 0195C87C35F570ECA8222A5D3D9089531742825338 Activity ID: 0195C87C35EE76D68E176244E52EBC63 Enrichment Update / Sravani Jagarlamudi SQO to check issue: Order is a BVE Straight Renewal and should not have been assigned to a CPM. The expected behavior was for this order to complete in automation. Created CAS to determine RCA for CPM assignment. Application: Site_Delivery_Flow Activity: Create Agreement in OT and Assign Primary CPM Task Status: Other Cust Name: Jeff A Shaffer Real Estate Inc Cust ID: 130609860 Site: Project Name: Agreement - 758928 - 0 - IFrameworkAgreement_534024 - Jeff A Shaffer Real Estate Inc Project ID: Project5085878 Plan ID: 0195C87C35F570ECA8222A5D3D9089531742825338 Activity ID: 0195C87C35EE76D68E176244E52EBC63",
+  "REQUEST_FOR_NAME" : "Brian Semmler (bsemml200)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130609860",
+  "CUSTOMER_NAME" : "Jeff A Shaffer Real Estate Inc"
+},
+{
+  "SR_ID" : "CAS2569357",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Scheduling",
+  "DETAILS" : "Request response Log Timestamp : 30-04-2025 19:48:12 UTCHi Team, The \"Create Work Order Request\" Task is in error. After a retry OSO presents the following: CONTRACT_VALIDATION_ERROR - Business Error (BUS_AMIL_ERR) , Error code : CONTRACT_VALIDATION_ERROR , Error message : jobProductList - Mandatory Field is missing in the request; Can someone please assist? Application: Schedule_Technician_WO_Linked_Plan Activity: Create Work Order Request Task Status: Failed-Fallout Cust Name: Midland Terrace 3581 Cust ID: 131246038 Site: Project Name: Schedule Technician - WO Linked Plan-3581_OWASSO ST__SAINT_PAUL_MN_55126-OSite_957159_1-Business Voice-066081-ORION-00000000057367-01968833B1277C2DA5FDF65B13706822 Project ID: Project5400426 Plan ID: 01968833B280753F8FA60D46ADABB7991746041811 Activity ID: 01968833B2747552A7E786E6205C4DFB Frontline OMW Update / Srisanthi Tarlada Create Work Order Request is failing CONTRACT_VALIDATION_ERROR?jobProductList - Mandatory Field is missing in the request; https://api.orion.comcast.com/workorder/v2/createworkorder/ORION-00000000057367 tracking id 16708261 timestamp 2025-04-30 14:48:16.01 OMW Update - Amil to check why mandatory field \"jobproductlist\" is missing in the request Inboundrequest - {\"CreateWorkorderRequest\":{\"jobEquipmentList\":[{\"serialNum\":\"placeholder\",\"equipTypeCd\":\"TFC01\",\"actionCd\":\"ADD\",\"ownerCd\":\"R\"}],\"wfxDispatchLogin\":\"ORION\",\"resourceType\":\"COMCAST_TECHNICIAN\",\"job\":{\"orderMgtSystem\":\"ORION\",\"jobNum\":\"066081\",\"jobTypeCd\":\"P5\",\"scheduleDate\":\"2025-05-08\",\"timeSlotCd\":\"2\",\"jobUnits\":\"20\",\"dispatcherStatusCd\":\"O\",\"jobComment\":\"POC: Max Segler @ 6514841112// 1 MOB W/4LN EMTA // CUSTOMER ID: 131246038 // SITE ID: OSite_957159_1\",\"orderComment\":\"\\nDOCSIS_CPE_OSite_957159_1_18149268::EMTA::4ports::Installation|\",\"noScheduleIndicator\":false},\"jobCustomer\":{\"customerId\":\"131246038\",\"firstName\":\"Max\",\"lastName\":\"Segler\",\"workPhoneNum\":\"6514841112\",\"emailAddr\":\"max@tyconco.com\",\"siteId\":\"OSite_957159_1\"},\"jobLocation\":{\"addrId\":\"318543177\",\"address\":{\"addrLine1\":\"3581 OWASSO ST\",\"city\":\"SAINT PAUL\",\"state\":\"MN\",\"zipCode\":\"55126\",\"country\":\"US\"}}}} Outboundresponse - {\"errors\":[{\"code\":\"CONTRACT_VALIDATION_ERROR\",\"message\":\"jobProductList - Mandatory Field is missing in the request\"}],\"status\":\"FAILURE\"}",
+  "REQUEST_FOR_NAME" : "Brandon Celesna (aceles200)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "131246038",
+  "CUSTOMER_NAME" : "Midland Terrace 3581"
+},
+{
+  "SR_ID" : "CAS2569345",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "System Performance",
+  "DETAILS" : "TraceID : Trace ID: 6807b7c76dfce160CUSTOMER NAME: West U Orthodontics CUSTOMER ID: 131244838 Proposal ID: IProposalDTO_703632 FWA ID: IFrameworkAgreement_772393 Issue: Serviceability in progress error. It shows under the serviceability tab and it says \"refresh updates: In Progress\" . The process monitoring shows offnet serviceability still running but the quote came back and is applied to the site. Please do workaround and if you could push past the validations, that would be good too.",
+  "REQUEST_FOR_NAME" : "Talib Bethel (tbethe710)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "131244838",
+  "CUSTOMER_NAME" : "West U Orthodontics"
+},
+{
+  "SR_ID" : "CAS2569281",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "5/1/2025",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Project Review",
+  "DETAILS" : "**PTD is past due or within 5 days** Both Sites of EPL Disconnect are stalled at the \"Pre Service Assign Sync Point\" task In Progress. Both workflows should have progressed when the sync points met. Created CAS to resolve stall so both Sites can complete the Disconnect order. Application: solution_within_site_Disconnect Activity: Pre Service Assign Sync Point Task Status: Stuck Cust Name: Anexinet Corp Cust ID: 130822537 Site: Project Name: Solution Within Site (Disconnect) - 685568 - Anexinet Corp - IFrameworkAgreement_597139 - 21111 RIDGETOP CIR_ANEXINET CORP - OSite_802013_1 - EPL - 1169819297 - CE Project ID: Project4622501 Plan ID: 2652FE127D5F4792B151EF8A77DAB0DE1736445736 Activity ID: EFABED68F2C84456BCAEE9091F1BEE9E Frontline SOM Update / Devendra Patil Status : Issue resolved Issue : Pre Service Assign Sync Point is stuck Theme : Project review WA Details: Reexecuted sync engine activities RCA Category : Data Manual WA fallout RCA Details : Data Sync registration was not in sync Impacted Product : NA Next Action : NA SS : NA ***** Amdocs Categorization Update Automation ***** This is a Frontline SOM Assistance Provided SR. The Ticket was restored on 2025-05-01 16:19:00 ET. Initial RCA : Data: Manual WA Fallout FRONTLINE RCA Owner : Frontline SOM",
+  "REQUEST_FOR_NAME" : "Brian Semmler (bsemml200)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130822537",
+  "CUSTOMER_NAME" : "Anexinet Corp"
+},
+{
+  "SR_ID" : "CAS2569277",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "5/1/2025",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Approvals",
+  "DETAILS" : "Request response Log Timestamp : 01-05-2025 17:51:05 UTCHi Team, While working on below order I am getting an issue , Kindly help to resolve issue asap service type : EDI Project ID :- Solution within Site (Provide) - 762636 - Phase 5 Tactical - IFrameworkAgreement_737219 - 501_GIUSEPPE CT_STE_D_ROSEVILLE_CA_95678 - OSite_725843_1 - EDI - 1169918562 - PR Cust:-Phase 5 Tactical ID:-130538536 UNI - 64.KRGS.061195..CBCL.. acr16.sacramento.ca.ccal.comcast.net soag03.sacramento.ca.ccal.comcast.net Frontline CLIPS Update / Hiral Patel RCA: Issue was due to few unwanted links between acr and RUR devices created back in 2020. WA: Removed those unwanted links and order progressed on retry. Task: Lookup Devices For Management IP-plan Error: Exception while creating pvlan Range Project: EVC Endpoint Service Design - 813727 - Phase 5 Tactical - IFrameworkAgreement_737219 - 501_GIUSEPPE CT_STE_D_ROSEVILLE_CA_95678 - OSite_725843_1 - EDI - 1169918562 - EVCEndpoint - EVCE4150897 - PR",
+  "REQUEST_FOR_NAME" : "Rahul Prajapati (rpraja341)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130538536",
+  "CUSTOMER_NAME" : "Phase 5 Tactical"
+},
+{
+  "SR_ID" : "CAS2569269",
+  "Create Date" : "5/1/25",
+  "Day of Restored" : "",
+  "Close Date" : "",
+  "LBGUPS Subcategory" : "Serviceability and Site Survey",
+  "DETAILS" : "TraceID : Trace ID: f2d44e1e9cbb6d4bd4ce36ee988de639CUSTOMER NAME: Womble Bond Dickinson CUSTOMER ID: 130293726 Proposal ID: IProposalDTO_713743 Issue: CPM can not complete ELOC task due to zip code being incorrect. The zip code should be 30309. Instead it scrubbed as 30309-2809. Please update zip to reflect 30309-2809. The fields are greyed out for sales to change.",
+  "REQUEST_FOR_NAME" : "Angel Alexander (AAlexa001)",
+  "UPDATE_DETAILS" : "",
+  "RCA" : "TBD",
+  "CUSTOMER_ID" : "130293726",
+  "CUSTOMER_NAME" : "Womble Bond Dickinson"
+}
+        ];
+        // Read Excel file and convert to JSON
+        document.getElementById('fileInput').addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const sheetName = workbook.SheetNames[0];
+                const sheet = workbook.Sheets[sheetName];
+                const jsonData = XLSX.utils.sheet_to_json(sheet);
+                rawData = jsonData; // Update rawData with the new JSON data
+                populateTable(rawData); // Populate the table with new data
+                displayAllData(rawData); // Display all data below the table
+            };
+            reader.readAsArrayBuffer(file);
+            }
+        });
+        // Populate the table with data
+        function populateTable(data) {
+            const tableBody = document.getElementById('dataTable');
+            tableBody.innerHTML = '';
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                Object.values(row).forEach(value => {
+                    const td = document.createElement('td');
+                    td.textContent = value;
+                    tr.appendChild(td);
+                });
+                tableBody.appendChild(tr);
+            });
+        }
+
+        // Display all data below the table
+        function displayAllData(data) {
+            const allDataElement = document.getElementById('allData');
+            allDataElement.textContent = JSON.stringify(data, null, 2);
+        }
+
+        // Filter the table based on inputs
+        function filterTable() {
+            const customerId = document.getElementById('customerIdInput').value.trim();
+            const srId = document.getElementById('srIdInput').value.trim();
+            const filteredData = rawData.filter(row => {
+                return (!customerId || row['CUSTOMER_ID'] == customerId) &&
+                       (!srId || row['SR_ID'] == srId);
+            });
+            populateTable(filteredData);
+        }
+
+        // Initialize the table with predefined data
+        document.addEventListener('DOMContentLoaded', () => {
+            populateTable(rawData);
+            displayAllData(rawData);
+        });
+    </script>
+</body>
+</html>

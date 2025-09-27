@@ -1,0 +1,26 @@
+import pandas as pd
+import json
+
+# Path to the Excel file
+excel_file_path = r"C:\Users\abhisha3\Desktop\SR\All_SR_V1.xlsx"
+
+# Read the Excel file
+try:
+    # Load the Excel file into a pandas DataFrame
+    df = pd.read_excel(excel_file_path)
+
+    # Convert the DataFrame to a JSON object
+    json_data = df.to_json(orient='records', indent=4)
+
+    # Print the JSON data
+    print(json_data)
+
+    # Optionally, save the JSON data to a file
+    output_json_path = r"C:\Users\abhisha3\Desktop\SR\All_SR_V1.json"
+    with open(output_json_path, 'w') as json_file:
+        json_file.write(json_data)
+
+    print(f"JSON data has been saved to {output_json_path}")
+
+except Exception as e:
+    print(f"An error occurred: {e}")

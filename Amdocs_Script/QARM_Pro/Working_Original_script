@@ -1,0 +1,415 @@
+#!/bin/bash
+#############################################################################
+#NAME   :      ORION QARM automation
+#AUTHOR :      Arpan
+#DATE   :     
+#DESCRIPTION: 
+#CASE   :
+#HISTORY:
+#       CHANGED BY:  DATE:03/03/2022 CHANGE MADE
+#----------------------------------------------------------------------------
+#----------------------------------------------------------------------------
+#############################################################################
+. ./common_functions_PLAB.sh
+
+#############################################################################
+# function  : pull_data
+# parameters: none
+# purpose   : overview if files have been sent or not
+#############################################################################
+
+
+
+
+
+function check_countReports
+{
+QRYTEMP=`echo ${QUERY_STRING//;/}`
+QUERY4COUNTER="with record as ("$QRYTEMP") select count(*) from record;"
+count=(`psql $CONN_STR -t -c "$QUERY4COUNTER"`)
+#count=(`psql "postgresql://ossdb01uams:ossdb01uams@oso-pstgr-rd.orion.comcast.com:6432/prodossdb" -t -c "$QUERY4COUNTER"`)
+echo "Counter for reports : ===== " $count
+TEMPCOUNTER=$count
+}
+
+
+function pull_data_CSV
+{
+echo 'Query for alert is  == ': $QUERY_STRING
+typeset SqlOut
+SqlOut=(`psql $CONN_STR -t -A -F"," -c "$QUERY_STRING" -o $CSV_FILE`)
+#SqlOut=(`psql "postgresql://ossdb01uams:ossdb01uams@oso-pstgr-rd.orion.comcast.com:6432/prodossdb" -t -A -F"," -c "$QUERY_STRING" -o $CSV_FILE`)
+if (( $? != SUCCESS ))
+then
+cat <<-EOF >> $LOG_FILE
+Error in function $0 at line $LINENO
+$SqlOut
+EOF
+return $FAILURE
+fi
+
+echo 'sql part completed for CSV'
+return $SUCCESS
+}
+
+
+
+
+function pull_data_HTML
+{
+echo 'Query for alert is  == ': $QUERY_STRING
+
+
+echo """
+    <html>
+    <head>
+   
+   <style>
+   
+   h3 {font-family:verdana;color:#7d3456;}
+    h4 {font-family:verdana;color:SlateGray;background-color:powderblue;}
+     h5 {font-family:verdana;color:MidnightBlue;}
+      h6 {font-family:verdana;color:MidnightBlue;}
+   
+   table, th,td {
+     border: 1px solid black;
+     border-collapse: collapse;
+   }
+   th {
+     background-color: #454545;
+     color: white;
+   }
+   tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+   
+   </style>
+   
+   </head>""" > $HTML_FILE
+   
+psql $CONN_STR -H -c "$QUERY_STRING" \o  >> $HTML_FILE
+#psql "postgresql://ossdb01uams:ossdb01uams@oso-pstgr-rd.orion.comcast.com:6432/prodossdb" -H -c "$QUERY_STRING" \o  >> $HTML_FILE
+echo $HTML_FILE
+echo 'sql part completed for HTML'
+
+return $SUCCESS
+
+}
+
+
+
+#############################################################################
+# function  : cleanup 
+# parameters: none 
+# purpose   : Cleanup temp files. 
+#############################################################################
+function cleanup
+{
+mv $LOG_FILE QarmJdevLogs/ 2>/dev/null
+mv $HTML_FILE QarmJdevLogs/ 2>/dev/null
+mv $CSV_FILE QarmJdevLogs/ 2>/dev/null
+
+return $SUCCESS
+}
+
+
+function Initialcleanup
+{
+
+mv ORION_QARMPro_Script_*.html QarmJdevLogs/
+mv ORION_QARMPro_Script_*.log QarmJdevLogs/
+
+return $SUCCESS
+}
+
+
+
+
+
+function email_individual_reportCSV
+{
+
+echo "Sample mail for CSV " | mailx -r $EMAIL_FROM -s "QARM for $ENV - $ADOPTER - $APPLICATION For $TDATE - $LOGICAL_NAME"  -a $CSV_FILE $EMAIL_RECIP
+
+echo 'mail sent success'
+
+cat $LOG_FILE | mailx -s "FAILURE - $AREA $CLIENT $SCRIPT_NAME" "$ERR_RECIP"
+
+cleanup
+
+}
+
+
+function email_individual_reportHTML
+{
+		
+cat <<-EOF | /usr/sbin/sendmail -t 
+To: $EMAIL_RECIP
+From: $EMAIL_FROM
+Content-type: text/html;
+Subject: QARM for $ENV - $ADOPTER - $APPLICATION-  For $TDATE - $LOGICAL_NAME - $MODE_OPS -
+$(cat $HTML_FILE)
+</br>
+<h5>ITEM SUMMARY :  $STATIC_MESSAGE</h5>
+<h5>Extrenal Tracker ID (if any): $EXT_TRACKER_NO</h5>
+<h5 style=color:MidnightBlue;background-color:powderblue;>ACTION ITEM OR WA (if any): $DESCRIPTION</h5>
+</b>
+</br>
+
+<h6><i>Alert was requested by ${CREATOR} on ${CREATED_DATE}.</i><h6>
+ <hr>
+<footer>
+  <h7><p>Author: Prateek Jain</p><h7>
+  <h7><p><a href="mailto:prateek.jain5@amdocs.com">prateek.jain5@amdocs.com</a></p><h7>
+</footer>
+
+EOF
+
+echo 'mail sent success'
+
+#cat $LOG_FILE | mailx -s "FAILURE - $AREA $CLIENT $SCRIPT_NAME" "$ERR_RECIP"
+#cleanup
+
+return $SUCCESS
+
+
+cleanup
+}
+
+
+
+
+
+
+
+
+
+
+
+
+#############################################################################
+# function  : exit_process 
+# parameters: 1. Exit code. 
+# purpose   : Send email with log file. 
+#############################################################################
+function exit_process
+{
+typeset ExitCode=$1
+
+printf "\nEnd $(date)\n">>$LOG_FILE
+
+#case $ExitCode in
+
+#	$SUCCESS)
+
+		
+#echo "QARM MAIL " | mailx -r $EMAIL_FROM  -s "QARM Automation Data for $TDATE" -a $CSV_FILE $EMAIL_RECIP
+#echo 'mail sent success'
+
+#		;;
+
+#	$FAILURE) 
+
+#		cat $LOG_FILE | mailx -s "FAILURE - $AREA $CLIENT $SCRIPT_NAME" "$ERR_RECIP"
+#		;;
+#esac
+
+cleanup
+exit $ExitCode
+
+}
+
+#############################################################################
+# function  : main 
+# parameters: none 
+# purpose   : Setup globals, call functions. 
+#############################################################################
+# main()
+
+Initialcleanup
+
+PARAM1=$1
+PARAM2=$2
+
+
+typeset -r ADOPTER='ORION'
+typeset -r ENV='PROD'
+typeset -r TDATE=$(date --date="today" +"%m/%d/%Y")
+typeset hdrtxt='Sample Mail Variable'
+typeset MODE_OPS='ACTIVE'
+TEMPCOUNTER=0
+echo "=============QARM [QUALITY ALERT REMEDIATION MANAGEMENT - " $ENV " - " $ADOPTER " For " $TDATE" ] Starting ============" 
+typeset -r CONN_STR=$(awk '{ if(/^OSO/) { print $2 } }' ogs_db_connect.dat)
+
+
+
+if [[ $# -eq 0 ]]; then
+printf "\n"
+echo "Executing Default Mode"
+echo "#############  Post Script in Default mode  #####################"
+MODE_HANDLE=''
+printf "\n"
+fi
+
+### Single execution Mode
+if [[ $PARAM1 -eq 1 ]]; then
+echo $PARAM2
+MODE_HANDLE=$(echo " and s_id='"$PARAM2"'" )
+MODE_OPS='ACTIVE'
+echo $MODE_HANDLE
+fi
+
+### Full Test execution Mode for Active Alerts
+
+if [[ $PARAM1 -eq 2 ]]; then
+DEF_TEST_MAIL='arpanm@amdocs.com'
+MODE_OPS='TEST'
+echo $DEF_TEST_MAIL
+fi
+
+MAIN_QUERY="Select * from ossdb01db.QARM_UTILITY qu where environment='"$ENV"' and ignore_flag!='Y' "$MODE_HANDLE" order by S_ID"
+MAIN_QUERY_CNT="Select count(S_ID) from QARM_UTILITY qu where environment='"$ENV"' and ignore_flag!='Y'" $MODE_HANDLE
+
+#### Execute teh Inactive alerts to test if they are fine.
+if [[ $PARAM1 -eq 3 ]]; then
+MODE_OPS='INACTIVE'
+DEF_TEST_MAIL='arpanm@amdocs.com'
+MAIN_QUERY="Select * from QARM_UTILITY qu where environment='"$ENV"' and ignore_flag='Y' "$MODE_HANDLE" order by S_ID"
+MAIN_QUERY_CNT="Select count(S_ID) from QARM_UTILITY qu where environment='"$ENV"' and ignore_flag='Y'" $MODE_HANDLE
+echo $MODE_OPS
+echo $DEF_TEST_MAIL
+fi
+
+
+
+
+
+countAlert=0
+countAlert=(`psql $CONN_STR -At -c "$MAIN_QUERY_CNT"`) 
+#countAlert=(`psql "postgresql://ossdb01uams:ossdb01uams@oso-pstgr-rd.orion.comcast.com:6432/prodossdb" -At -c "$MAIN_QUERY_CNT"`)
+
+echo "#########There are "$countAlert" items {Alerts/Reports/Remedies} in "$ENV" today.#######"
+printf "#########There are "$countAlert" items {Alerts/Reports/Remedies} in "$ENV" today.#######"  >> $LOG_FILE
+
+
+COUNTER=-1
+psql $CONN_STR -At -c "$MAIN_QUERY" \
+| while read Record ; 
+do
+
+  COUNTER=0  
+      row=${Record[COUNTER]}
+    
+echo "row entry number : "${COUNTER}
+
+S_ID=$(echo "${row}" | awk -F'|' '{ print $1;}')
+APPLICATION=$(echo "${row}" | awk -F'|' '{ print $2;}')
+LOGICAL_NAME=$(echo "${row}" | awk -F'|' '{ print $3;}')
+RTYPE=$(echo "${row}" | awk -F'|' '{ print $4;}')
+STATIC_MESSAGE=$(echo "${row}" | awk -F'|' '{ print $5;}')
+DESCRIPTION=$(echo "${row}" | awk -F'|' '{ print $6;}')
+QUERY_STRING=$(echo "${row}" | awk -F'|' '{ print $7;}')
+THRESHOLD=$(echo "${row}" | awk -F'|' '{ print $8;}')
+ESCALATION=$(echo "${row}" | awk -F'|' '{ print $9;}')
+EXT_TRACKER_NO=$(echo "${row}" | awk -F'|' '{ print $10;}')
+IGNORE_FLAG=$(echo "${row}" | awk -F'|' '{ print $11;}')
+EMAIL_SENDER=$(echo "${row}" | awk -F'|' '{ print $12;}')
+EMAIL_RECIEVER=$(echo "${row}" | awk -F'|' '{ print $13;}')
+ERR_RECEIVER=$(echo "${row}" | awk -F'|' '{ print $14;}')
+NumCount=$(echo "${row}" | awk -F'|' '{ print $15;}')
+CREATED_DATE=$(echo "${row}" | awk -F'|' '{ print $16;}')
+Environment=$(echo "${row}" | awk -F'|' '{ print $17;}')
+FORMAT=$(echo "${row}" | awk -F'|' '{ print $18;}')
+NATURE=$(echo "${row}" | awk -F'|' '{ print $19;}')
+CREATOR=$(echo "${row}" | awk -F'|' '{ print $20;}')
+
+echo '=======================================================' 
+echo ${S_ID}
+echo ${APPLICATION}
+echo ${LOGICAL_NAME}
+echo ${RTYPE}
+echo ${STATIC_MESSAGE}
+echo ${DESCRIPTION}
+echo ${QUERY_STRING}
+echo ${THRESHOLD}
+echo ${ESCALATION}
+echo ${EXT_TRACKER_NO}
+echo ${IGNORE_FLAG}
+echo ${EMAIL_SENDER}
+echo ${EMAIL_RECIEVER}
+echo ${ERR_RECEIVER}
+echo ${NumCount}
+echo ${CREATED_DATE}
+echo ${Environment}
+echo ${FORMAT}
+echo ${NATURE}
+echo ${CREATOR}
+
+echo 'Completed runners module  -  Query Alert Fetch done' 
+
+LOG_FILE=${SCRIPT_NAME}_${LOGICAL_NAME}_${TS}.log
+CSV_FILE=${SCRIPT_NAME}_${LOGICAL_NAME}_${TS}.csv
+HTML_FILE=${SCRIPT_NAME}_${LOGICAL_NAME}_${TS}.html
+EMAIL_RECIP=${EMAIL_RECIEVER}
+ERR_RECIP=${ERR_RECEIVER}
+EMAIL_FROM=${EMAIL_SENDER}
+static_mesg=${STATIC_MESSAGE}
+
+if [[ $MODE_OPS = "TEST" ]]; then
+EMAIL_RECIP=$DEF_TEST_MAIL
+fi
+
+if [[ "$MODE_OPS" = "INACTIVE" ]]; then
+EMAIL_RECIP=$DEF_TEST_MAIL
+fi
+
+echo '======Final recip:==&&&&&&&&&=='
+echo $EMAIL_RECIP
+
+
+
+#EMAIL_RECIP='arpanm@amdocs.com'
+
+
+if ((${COUNTER}>=0))
+        then
+        	printf "Run : "$Environment". Running for :: " $LOGICAL_NAME  >> $LOG_FILE
+        	
+        
+           check_countReports
+           
+   if((${TEMPCOUNTER}>0)) 
+   then 
+           if(("${FORMAT}" == "HTML"))
+              then
+              printf "Format Selected: "$FORMAT
+              pull_data_HTML
+              email_individual_reportHTML
+           
+            elif(("${FORMAT}" == "CSV"))
+              then
+              printf "Format Selected: "$FORMAT
+              pull_data_CSV
+              email_individual_reportCSV
+           else
+           printf "Format Selected: "$FORMAT is Unsupported
+           fi
+   fi
+            
+        else
+        	printf "There are "$COUNTER" records today." >> $LOG_FILE
+		      cat $LOG_FILE | mailx -r $EMAIL_FROM -s "OSO Projects QARM DATA - Nothing More To Run" "$EMAIL_RECIP"
+        	cleanup
+        	exit 0
+        fi
+
+
+
+let COUNTER=COUNTER+1
+sleep 1
+done
+echo 'Completed runners module'
+
+cleanup
+
+exit_process $SUCCESS

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orion Knowledge Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /*
+        ===================================================================================
+        NEW STYLES: Dark "Vintage Tech" Theme inspired by n8n.io
+        ===================================================================================
+        */
+
+        :root {
+            --background-color: #0c0a1a;
+            --primary-text: #e0e0e0;
+            --secondary-text: #a0a0b0;
+            --glow-color: #8a2be2; /* A nice purple for the glow */
+            --box-bg: rgba(22, 18, 44, 0.6); /* Semi-transparent box background */
+        }
+
+        /* General Body & Font Styles */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--background-color);
+            background-image: radial-gradient(circle at top right, rgba(121, 68, 201, 0.15), transparent 30%),
+                              radial-gradient(circle at bottom left, rgba(45, 91, 224, 0.15), transparent 40%);
+            margin: 0;
+            padding: 24px;
+            color: var(--primary-text);
+            min-height: 100vh;
+        }
+
+        /* Main App Container */
+        #app {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Page Header Styles */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            /* Create a subtle gradient for the main title */
+            background: linear-gradient(90deg, #fdfbfb, #ebedee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .header p {
+            font-size: 1.15rem;
+            color: var(--secondary-text);
+            max-width: 600px;
+            margin: 10px auto;
+            line-height: 1.6;
+        }
+        .header .byline {
+            font-size: 0.9rem;
+            color: var(--secondary-text);
+            opacity: 0.7;
+            margin-top: 15px;
+        }
+
+        /* Back Button */
+        .back-button {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 18px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--primary-text);
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .back-button:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        /* Grid Container for the Boxes */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        /* Individual Box Styles */
+        .box {
+            background-color: var(--box-bg);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--primary-text);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 140px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
+        }
+
+        /* Glow effect on hover */
+        .box:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, var(--glow-color), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 1;
+        }
+        .box:hover:before {
+            opacity: 0.15;
+        }
+
+        .box:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .box h2 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin: 0;
+            position: relative;
+            z-index: 2; /* Keep text above the glow */
+        }
+
+        /* Iframe styles are no longer used but kept for reference if needed */
+        .iframe-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            background-color: #fff;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- The main container where all content will be dynamically rendered -->
+    <div id="app"></div>
+
+    <script>
+        // ===================================================================================
+        // SCRIPT CONFIGURATION
+        // ===================================================================================
+
+        const hubData = [
+            // --- Main Topic 1 (UPDATED) ---
+            {
+                topic: "Welcome Kit",
+                subTopics: [
+                    { name: "Issue Reproduciable Steps", url: "https://amdocs.sharepoint.com/sites/ORIONHUNTER/_layouts/15/Doc.aspx?sourcedoc={f13a2a63-00d2-4b7f-955f-0c0026ebbaa5}&action=edit&wd=target%28Welcome%20Kit.one%7C5774c277-0619-4017-8796-7be8140f46f3%2Fissue%20Reproduce%20step%7C32a70e67-d581-4e02-807f-877584864606%2F%29" },
+                    { name: "OSO Fun Poem", url: "https://amdocs.sharepoint.com/sites/ORIONHUNTER/_layouts/15/Doc.aspx?sourcedoc={f13a2a63-00d2-4b7f-955f-0c0026ebbaa5}&action=edit&wd=target%28Welcome%20Kit.one%7C5774c277-0619-4017-8796-7be8140f46f3%2FOSO%20POEM%20ABHISHEK%7Ce5654f33-de36-4ee8-9ecd-c9212ead456d%2F%29" },
+                    { name: "All Imp Link", url: "https://amdocs.sharepoint.com/sites/ORIONHUNTER/_layouts/15/Doc.aspx?sourcedoc={f13a2a63-00d2-4b7f-955f-0c0026ebbaa5}&action=edit&wd=target%28Welcome%20Kit.one%7C5774c277-0619-4017-8796-7be8140f46f3%2FImp%20link%7C82baede3-c090-4223-8073-8fece697f5d7%2F%29" },
+                    { name: "UTS Access", url: "https://amdocs.sharepoint.com/sites/ORIONHUNTER/_layouts/15/Doc.aspx?sourcedoc={f13a2a63-00d2-4b7f-955f-0c0026ebbaa5}&action=edit&wd=target%28Welcome%20Kit.one%7C5774c277-0619-4017-8796-7be8140f46f3%2FUTS%20Access%7C66b50cdb-9f59-40b4-8b6a-7e10fc1d7e52%2F%29" },
+                    { name: "Octane Access", url: "https://amdocs.sharepoint.com/sites/ORIONHUNTER/_layouts/15/Doc.aspx?sourcedoc={f13a2a63-00d2-4b7f-955f-0c0026ebbaa5}&action=edit&wd=target%28Welcome%20Kit.one%7C5774c277-0619-4017-8796-7be8140f46f3%2FOctane%20Access%7Cef422b01-82bc-431a-a8e7-61c2a5b75eba%2F%29" },
+                    { name: "DB Credential", url: "https://amdocs.sharepoint.com/sites/ORIONHUNTER/_layouts/15/Doc.aspx?sourcedoc={f13a2a63-00d2-4b7f-955f-0c0026ebbaa5}&action=edit&wd=target%28Welcome%20Kit.one%7C5774c277-0619-4017-8796-7be8140f46f3%2FDB%7C20fadc03-6994-4d67-a13c-671b8d77310c%2F%29" },
+                    { name: "KT link", url: "https://amdocs.sharepoint.com/sites/ORIONHUNTER/_layouts/15/Doc.aspx?sourcedoc={f13a2a63-00d2-4b7f-955f-0c0026ebbaa5}&action=edit&wd=target%28Welcome%20Kit.one%7C5774c277-0619-4017-8796-7be8140f46f3%2FKT%20Links%7C4b0032c1-50f6-4b99-9d13-60fd7f2de1e9%2F%29" },
+                    { name: "Sub-Topic 1.8", url: "YOUR_ONENOTE_EMBED_LINK_HERE" },
+                    { name: "Sub-Topic 1.9", url: "YOUR_ONENOTE_EMBED_LINK_HERE" },
+                    { name: "Sub-Topic 1.10", url: "YOUR_ONENOTE_EMBED_LINK_HERE" },
+                ]
+            },
+            // --- Other Topics ---
+            { topic: "Workaround Details", subTopics: Array(10).fill(null).map((_, i) => ({ name: `Sub-Topic 2.${i + 1}`, url: "YOUR_ONENOTE_EMBED_LINK_HERE" })) },
+            { topic: "Release Documents", subTopics: Array(10).fill(null).map((_, i) => ({ name: `Sub-Topic 3.${i + 1}`, url: "YOUR_ONENOTE_EMBED_LINK_HERE" })) },
+            { topic: "Technical Specs", subTopics: Array(10).fill(null).map((_, i) => ({ name: `Sub-Topic 4.${i + 1}`, url: "YOUR_ONENOTE_EMBED_LINK_HERE" })) },
+            { topic: "Main Topic 5", subTopics: Array(10).fill(null).map((_, i) => ({ name: `Sub-Topic 5.${i + 1}`, url: "YOUR_ONENOTE_EMBED_LINK_HERE" })) },
+            { topic: "Main Topic 6", subTopics: Array(10).fill(null).map((_, i) => ({ name: `Sub-Topic 6.${i + 1}`, url: "YOUR_ONENOTE_EMBED_LINK_HERE" })) },
+            { topic: "Main Topic 7", subTopics: Array(10).fill(null).map((_, i) => ({ name: `Sub-Topic 7.${i + 1}`, url: "YOUR_ONENOTE_EMBED_LINK_HERE" })) },
+            { topic: "Main Topic 8", subTopics: Array(10).fill(null).map((_, i) => ({ name: `Sub-Topic 8.${i + 1}`, url: "YOUR_ONENOTE_EMBED_LINK_HERE" })) },
+        ];
+        
+        // ===================================================================================
+        // SCRIPT LOGIC (UPDATED)
+        // ===================================================================================
+
+        const app = document.getElementById('app');
+
+        function renderHomePage() {
+            app.innerHTML = `
+                <div class="header">
+                    <h1>Welcome to Orion</h1>
+                    <p>Get all required setup details, workaround details, release documents at one place</p>
+                    <p class="byline">By - [Your Name]</p>
+                </div>
+                <div class="grid-container">
+                    ${hubData.map((topic, index) => `
+                        <div class="box" data-topic-index="${index}">
+                            <h2>${topic.topic}</h2>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function renderSubTopicPage(topicIndex) {
+            const topic = hubData[topicIndex];
+            app.innerHTML = `
+                <div class="header">
+                    <a class="back-button" data-action="home">‹ Back to Home</a>
+                    <h1>${topic.topic}</h1>
+                    <p>Choose a sub-topic to view the note.</p>
+                </div>
+                <div class="grid-container">
+                    ${topic.subTopics.map((subTopic, subIndex) => `
+                        <div class="box" data-note-url="${subTopic.url}">
+                            <h2>${subTopic.name}</h2>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // --- Event Listener (UPDATED) ---
+
+        app.addEventListener('click', function(e) {
+            const box = e.target.closest('.box');
+            const backButton = e.target.closest('.back-button');
+
+            if (box) {
+                const noteUrl = box.dataset.noteUrl;
+                const topicIndex = box.dataset.topicIndex;
+                
+                if (noteUrl) {
+                    // It's a sub-topic box. Open the URL in a new tab.
+                    if (noteUrl === "YOUR_ONENOTE_EMBED_LINK_HERE") {
+                        alert("Please update the OneNote link in the hubData configuration first.");
+                    } else {
+                        // **CHANGE IS HERE: Use window.open instead of rendering a viewer**
+                        window.open(noteUrl, '_blank');
+                    }
+                } else if (topicIndex) {
+                    // It's a main topic box, render the sub-topic page.
+                    renderSubTopicPage(topicIndex);
+                }
+            }
+
+            if (backButton) {
+                const action = backButton.dataset.action;
+                if (action === 'home') {
+                    renderHomePage();
+                }
+            }
+        });
+
+        // --- Initial Load ---
+        renderHomePage();
+
+    </script>
+</body>
+</html>

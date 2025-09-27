@@ -1,0 +1,37 @@
+<div class="page" id="search-anything-page">
+    <header class="sa-header">
+        <h1>Amdocs Support Search Engine</h1>
+        <p class="subtitle">Search across Service Requests, Defects, and Workarounds simultaneously.</p>
+    </header>
+
+    <section class="sa-search-engine">
+        <div class="form-group">
+            <input type="text" id="search-anything-input" class="search-input global-search" placeholder="🔎 Search Anything (SR Details, Defect Names, WA Content...). Press Enter to search.">
+        </div>
+        
+        <div class="sa-search-filters">
+            <input type="text" id="customer-id-input" class="search-input" placeholder="Customer ID...">
+            <input type="text" id="osite-id-input" class="search-input" placeholder="OSite ID...">
+            <input type="text" id="sr-id-input" class="search-input" placeholder="SR ID...">
+            <input type="text" id="id-input" class="search-input" placeholder="Defect ID...">
+            <button id="filter-btn" class="primary-btn">Search / Filter</button>
+        </div>
+    </section>
+
+    <div id="search-loader" class="loader" style="display: none;"></div>
+
+    <div id="results-container" style="margin-top: 40px;">
+        <section id="wa-results-section">
+            <h2>Workaround Inventory Results</h2>
+            <div id="sa-blog-posts-container" class="sa-blog-posts"></div>
+        </section>
+        <section id="sr-results-section" style="margin-top: 40px;">
+            <h2>SR Sheet Results</h2>
+            <table id="sr-results-table" class="display" style="width:100%"></table>
+        </section>
+        <section id="defect-results-section" style="margin-top: 40px;">
+            <h2>Defect Sheet Results</h2>
+            <table id="defect-results-table" class="display" style="width:100%"></table>
+        </section>
+    </div>
+</div>

@@ -1,0 +1,491 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comcast Orion Team Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* * [ ] CSS_THEME: This block controls the entire visual theme.
+         * The palette is inspired by modern tech UIs like n8n, using a deep space background,
+         * glassmorphism, and vibrant violet accents for a professional, impressive look.
+        */
+        :root {
+            --bg-primary: #0a0a12;
+            --bg-secondary: #1a1822;
+            --border-primary: #2c2a3a;
+            --text-primary: #f0f0f5;
+            --text-secondary: #a09cb0;
+            --accent-primary: #8B5CF6; /* Main Violet Accent */
+            --accent-secondary: #a78bfa;
+            --accent-glow: rgba(139, 92, 246, 0.5);
+            --accent-gradient: linear-gradient(90deg, #8B5CF6, #c084fc);
+            --shadow-color: rgba(0, 0, 0, 0.6);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes backgroundPan {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            /* n8n-style animated aurora background */
+            background: linear-gradient(125deg, #0a0a12, #1a1822, #0a0a12, #2c2a3a);
+            background-size: 400% 400%;
+            animation: backgroundPan 30s ease infinite;
+        }
+        /* * [ ] CSS_HEADER: Styles for the main header and navigation bar.
+         * Implements a "glassmorphism" effect, making it float above the content.
+        */
+        .app-header {
+            background-color: rgba(16, 15, 20, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-primary);
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            height: 64px;
+        }
+        .header-nav {
+            display: flex;
+            align-items: center;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .header-nav::-webkit-scrollbar { display: none; }
+        .header-nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0 16px;
+            height: 64px;
+            line-height: 64px;
+            font-weight: 600;
+            transition: color 0.3s, background-color 0.3s;
+            display: inline-block;
+            white-space: nowrap;
+            position: relative;
+        }
+        
+        .header-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent-gradient);
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .header-nav a:hover {
+            color: var(--text-primary);
+        }
+        
+        .header-nav a:hover::after,
+        .header-nav a.active::after {
+            transform: scaleX(1);
+        }
+        .header-nav a.active {
+            color: var(--text-primary);
+        }
+        /* * [ ] CSS_SEARCH_BAR: Styles for the search bar and its results dropdown.
+        */
+        .search-container {
+            position: relative;
+            margin-left: 24px;
+        }
+        .search-input {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            color: var(--text-primary);
+            padding: 8px 16px;
+            width: 250px;
+            transition: all 0.3s ease;
+        }
+        .search-input:focus {
+            outline: none;
+            width: 350px;
+            background-color: var(--bg-secondary);
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 4px var(--accent-glow);
+        }
+        
+        #search-results {
+            position: absolute;
+            top: 120%;
+            right: 0;
+            width: 350px;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            box-shadow: 0 12px 32px var(--shadow-color);
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1001;
+            backdrop-filter: blur(10px);
+        }
+        #search-results a {
+            display: block;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border-primary);
+            transition: background-color 0.2s;
+        }
+        #search-results a:last-child { border-bottom: none; }
+        #search-results a:hover { background: var(--accent-gradient); color: #fff; }
+        .result-path { font-size: 0.8em; color: var(--text-secondary); }
+        #search-results a:hover .result-path { color: rgba(255,255,255,0.8); }
+
+        /* * [ ] CSS_MAIN_CONTENT: General styles for the main content area.
+        */
+        .app-content {
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .page {
+            animation: fadeIn 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        h1, h2, h3 {
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        h1 { font-size: 2.8rem; }
+        h2 { font-size: 2.2rem; border-bottom: 1px solid var(--border-primary); padding-bottom: 15px; }
+        h3 { font-size: 1.5rem; }
+        /* * [ ] CSS_MUSIC_PLAYER: Styles for the fixed audio player.
+        */
+        .audio-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(26, 24, 34, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 20px var(--shadow-color);
+            z-index: 2000;
+        }
+        .audio-player button {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.2s, transform 0.2s;
+            padding: 5px;
+        }
+        .audio-player button:hover {
+            color: var(--accent-secondary);
+            transform: scale(1.1);
+        }
+        .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .volume-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 80px;
+            height: 5px;
+            background: var(--border-primary);
+            border-radius: 5px;
+            outline: none;
+            transition: opacity 0.2s;
+        }
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            background: var(--accent-primary);
+            cursor: pointer;
+            border-radius: 50%;
+            transition: box-shadow 0.2s;
+        }
+        .volume-slider::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            background: var(--accent-primary);
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        .volume-slider:hover::-webkit-slider-thumb {
+            box-shadow: 0 0 0 4px var(--accent-glow);
+        }
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <nav class="header-nav" id="main-nav"></nav>
+        <div class="search-container">
+            <input type="search" id="search-input" class="search-input" placeholder="Search...">
+            <div id="search-results" style="display: none;"></div>
+        </div>
+    </header>
+    <main class="app-content" id="app-content"></main>
+    
+    <div class="audio-player">
+        <button id="prev-track">⏪</button>
+        <button id="play-pause">▶️</button>
+        <button id="next-track">⏩</button>
+        <div class="volume-container">
+            <span>🔊</span>
+            <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.01" value="0.5">
+        </div>
+    </div>
+    
+    <script>
+    // This script uses an IIFE (Immediately Invoked Function Expression) to encapsulate all code,
+    // preventing global scope pollution and creating a modular structure.
+    (function() {
+        'use strict';
+        // =================================================================================
+        // [ ] CONFIGURATION: Central place for all settings and data.
+        // =================================================================================
+        const CONFIG = {
+            NAV_LINKS: [
+                { id: 'home', text: 'Home' }, { id: 'billing', text: 'BILLING' }, { id: 'som-wa', text: 'SOM WA' },
+                { id: 'training', text: 'TRAINING' }, { id: 'automation', text: 'Automation' }, { id: 'release', text: 'Release' },
+                { id: 'welcome-kit', text: 'Welcome Kit' }, { id: 'applications', text: 'Applications' }, { id: 'abbreviation', text: 'Abbreviation' },
+                { id: 'teams', text: 'Teams' }, { id: 'imp-links', text: 'Imp Links' }, { id: 'database', text: 'DataBase' },
+                { id: 'events', text: 'Events' }, { id: 'assignments', text: 'Assignments' }
+            ],
+            SOM_WA_URL: "https://amdocs.sharepoint.com/sites/ORIONHUNTER/_layouts/15/embed.aspx?sourcedoc={f13a2a63-00d2-4b7f-955f-0c0026ebbaa5}&wd=target%28Welcome%20Kit.one%7C5774c277-0619-4017-8796-7be8140f46f3%2FKT%20Links%7C4b0032c1-50f6-4b99-9d13-60fd7f2de1e9%2F%29",
+            /* * [ ] MUSIC_TRACKS: Add direct links to your music files here.
+             * IMPORTANT: Standard OneDrive/SharePoint "share" links will NOT work.
+             * You must get a direct download link. One way to do this is to replace 'embed.aspx'
+             * in your URL with 'download.aspx', or use a tool to generate a permanent direct link.
+             * For now, these are placeholders.
+            */
+            MUSIC_TRACKS: [
+                "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", // Placeholder 1
+                "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", // Placeholder 2
+                "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"  // Placeholder 3
+            ],
+            MOCK_DATA: {
+                home: [{ title: 'About This Site', content: 'This website is a single-file web application for internal use within the Comcast Orion team at Amdocs.' }],
+                billing: [{ title: 'Billing Dashboard', content: 'Placeholder for billing dashboard and automation lists.' }],
+                training: [{ title: 'Telecom Basics', content: 'Tutorials on the basics of the telecom industry.' }],
+                automation: [{ title: 'Automation Overview', content: 'Details about our automation initiatives.' }],
+                release: [{ title: 'Release Steps', content: 'A checklist of steps to follow during a release.' }],
+                'welcome-kit': [{ title: 'Getting Access', content: 'How to raise access requests for various applications.' }],
+                applications: [{ title: 'Application List', content: 'Placeholder for a list of team applications.' }],
+                abbreviation: [{ title: 'Abbreviation Guide', content: 'A searchable list of common project abbreviations.' }],
+                teams: [{ title: 'Team Directory', content: 'Information about team members, roles, and focals.' }],
+                'imp-links': [{ title: 'Important Links', content: 'A curated collection of essential URLs.' }],
+                database: [{ title: 'Database Information', content: 'Details about database schemas and access.' }],
+                events: [{ title: 'Team Events Calendar', content: 'A calendar for upcoming leaves and milestones.' }],
+                assignments: [{ title: 'Current Assignments', content: 'A tracker for current team assignments.' }]
+            }
+        };
+        // =================================================================================
+        // [ ] UI_MODULE: Responsible for rendering all HTML content to the page.
+        // =================================================================================
+        const UI_MODULE = {
+            appContentEl: document.getElementById('app-content'),
+            mainNavEl: document.getElementById('main-nav'),
+            renderNav: function(activeRoute) {
+                this.mainNavEl.innerHTML = CONFIG.NAV_LINKS.map(link => `
+                    <a href="#${link.id}" class="${link.id === activeRoute ? 'active' : ''}">${link.text}</a>
+                `).join('');
+            },
+            renderPage: function(pageId) {
+                this.appContentEl.innerHTML = '';
+                const pageContainer = document.createElement('div');
+                pageContainer.className = 'page';
+                const pageTitle = CONFIG.NAV_LINKS.find(link => link.id === pageId)?.text || 'Page';
+                pageContainer.innerHTML = `
+                    <h2>${pageTitle}</h2>
+                    <p>This is the placeholder content for the ${pageTitle} page.</p>
+                    <p>Future components like slideshows, tables, and cards will be rendered here.</p>
+                `;
+                if (pageId === 'home') {
+                    pageContainer.innerHTML = `
+                        <h1>Welcome to the Comcast Orion Team Hub</h1>
+                        <p>This website is designed to organize our team's and project's data in an efficient way.</p>
+                        <br>
+                        <h2>About This Site</h2>
+                        <p>This is a single-file web application created for internal use within the <strong>Comcast Orion</strong> team at <strong>Amdocs</strong>.</p>
+                        <p>All navigation and search functionalities are active. The content is currently using placeholder data defined in the script.</p>
+                    `;
+                }
+                this.appContentEl.appendChild(pageContainer);
+            }
+        };
+        // =================================================================================
+        // [ ] SEARCH_MODULE: Handles client-side search functionality.
+        // =================================================================================
+        const SEARCH_MODULE = {
+            searchIndex: [],
+            searchInputEl: document.getElementById('search-input'),
+            searchResultsEl: document.getElementById('search-results'),
+            buildIndex: function() {
+                const allContent = [];
+                for (const pageKey in CONFIG.MOCK_DATA) {
+                    const pageTitle = CONFIG.NAV_LINKS.find(link => link.id === pageKey)?.text || pageKey;
+                    CONFIG.MOCK_DATA[pageKey].forEach(item => {
+                        allContent.push({
+                            title: item.title,
+                            content: item.content,
+                            path: pageTitle,
+                            link: `#${pageKey}`
+                        });
+                    });
+                }
+                this.searchIndex = allContent;
+            },
+            performSearch: function(query) {
+                if (!query || query.length < 2) {
+                    this.searchResultsEl.style.display = 'none';
+                    return;
+                }
+                const lowerCaseQuery = query.toLowerCase();
+                const results = this.searchIndex.filter(item => 
+                    item.title.toLowerCase().includes(lowerCaseQuery) || 
+                    item.content.toLowerCase().includes(lowerCaseQuery)
+                );
+                this.renderResults(results);
+            },
+            
+            renderResults: function(results) {
+                if (results.length === 0) {
+                    this.searchResultsEl.innerHTML = '<div style="padding: 12px; color: var(--text-secondary);">No results found.</div>';
+                } else {
+                    this.searchResultsEl.innerHTML = results.map(r => `
+                        <a href="${r.link}">
+                            <div>${r.title}</div>
+                            <div class="result-path">${r.path}</div>
+                        </a>
+                    `).join('');
+                }
+                this.searchResultsEl.style.display = 'block';
+            },
+            initialize: function() {
+                this.searchInputEl.addEventListener('keyup', (e) => this.performSearch(e.target.value));
+                document.addEventListener('click', (e) => {
+                    if (!this.searchInputEl.contains(e.target)) {
+                        this.searchResultsEl.style.display = 'none';
+                    }
+                });
+            }
+        };
+        // =================================================================================
+        // [ ] AUDIO_PLAYER_MODULE: Handles background music playback.
+        // =================================================================================
+        const AUDIO_PLAYER_MODULE = {
+            audio: new Audio(),
+            currentTrackIndex: 0,
+            playPauseBtn: document.getElementById('play-pause'),
+            nextBtn: document.getElementById('next-track'),
+            prevBtn: document.getElementById('prev-track'),
+            volumeSlider: document.getElementById('volume-slider'),
+            playTrack: function(trackIndex) {
+                this.currentTrackIndex = trackIndex;
+                this.audio.src = CONFIG.MUSIC_TRACKS[this.currentTrackIndex];
+                this.audio.play().catch(e => console.error("Audio play failed:", e));
+                this.playPauseBtn.textContent = '⏸️';
+            },
+            togglePlayPause: function() {
+                if (this.audio.src && !this.audio.paused) {
+                    this.audio.pause();
+                    this.playPauseBtn.textContent = '▶️';
+                } else {
+                    if (!this.audio.src) {
+                        this.playTrack(this.currentTrackIndex);
+                    } else {
+                        this.audio.play().catch(e => console.error("Audio play failed:", e));
+                    }
+                    this.playPauseBtn.textContent = '⏸️';
+                }
+            },
+            nextTrack: function() {
+                const newIndex = (this.currentTrackIndex + 1) % CONFIG.MUSIC_TRACKS.length;
+                this.playTrack(newIndex);
+            },
+            prevTrack: function() {
+                const newIndex = (this.currentTrackIndex - 1 + CONFIG.MUSIC_TRACKS.length) % CONFIG.MUSIC_TRACKS.length;
+                this.playTrack(newIndex);
+            },
+            setVolume: function(volume) {
+                this.audio.volume = volume;
+            },
+            initialize: function() {
+                this.audio.volume = this.volumeSlider.value;
+                this.playPauseBtn.addEventListener('click', () => this.togglePlayPause());
+                this.nextBtn.addEventListener('click', () => this.nextTrack());
+                this.prevBtn.addEventListener('click', () => this.prevTrack());
+                this.volumeSlider.addEventListener('input', (e) => this.setVolume(e.target.value));
+                this.audio.addEventListener('ended', () => this.nextTrack());
+            }
+        };
+        // =================================================================================
+        // [ ] ROUTER_MODULE: Handles navigation and calls the UI to render pages.
+        // =================================================================================
+        const ROUTER_MODULE = {
+            navigate: function() {
+                const hash = window.location.hash.substring(1) || 'home';
+                if (hash === 'som-wa') {
+                    window.open(CONFIG.SOM_WA_URL, '_blank');
+                    window.location.hash = this.previousHash || 'home';
+                    return;
+                }
+                UI_MODULE.renderPage(hash);
+                UI_MODULE.renderNav(hash);
+                this.previousHash = hash;
+            },
+            initialize: function() {
+                this.previousHash = window.location.hash.substring(1) || 'home';
+                window.addEventListener('hashchange', this.navigate.bind(this));
+                this.navigate();
+            }
+        };
+        // =================================================================================
+        // [ ] APP_INITIALIZATION: Kicks everything off when the script loads.
+        // =================================================================================
+        function initializeApplication() {
+            document.addEventListener('DOMContentLoaded', () => {
+                console.log("Initializing Comcast Orion Team Hub...");
+                SEARCH_MODULE.buildIndex();
+                SEARCH_MODULE.initialize();
+                AUDIO_PLAYER_MODULE.initialize();
+                ROUTER_MODULE.initialize();
+                console.log("Application Initialized Successfully.");
+            });
+        }
+        initializeApplication();
+    })();
+    </script>
+</body>
+</html>

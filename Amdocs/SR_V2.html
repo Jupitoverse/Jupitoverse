@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel Data Viewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .search-container {
+            margin-bottom: 20px;
+        }
+        .search-container input {
+            padding: 8px;
+            margin-right: 10px;
+            width: 200px;
+        }
+        .search-container button {
+            padding: 8px 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Excel Data Viewer</h1>
+    <div class="search-container">
+        <input type="text" id="searchCustomerId" placeholder="Search by CUSTOMER_ID">
+        <input type="text" id="searchSrId" placeholder="Search by SR_ID">
+        <input type="text" id="searchKeywords" placeholder="Search by Keywords (DETAILS/UPDATE_DETAILS)">
+        <button onclick="applyFilters()">Search</button>
+    </div>
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>SR_ID</th>
+                <th>Customer ID</th>
+                <th>RCA</th>
+                <th>Details</th>
+                <th>Update Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be dynamically inserted here -->
+        </tbody>
+    </table>
+
+    <script>
+        const excelFilePath = "C:/Users/abhisha3/Desktop/SR/All_SR_V1.xlsx";
+        let excelData = [];
+
+        // Function to fetch and display Excel data
+        async function fetchExcelData() {
+            try {
+                const response = await fetch(excelFilePath);
+                const arrayBuffer = await response.arrayBuffer();
+                const workbook = XLSX.read(arrayBuffer, { type: "array" });
+                const sheetName = workbook.SheetNames[0];
+                const sheet = workbook.Sheets[sheetName];
+                excelData = XLSX.utils.sheet_to_json(sheet);
+
+                displayData(excelData);
+            } catch (error) {
+                console.error("Error reading Excel file:", error);
+            }
+        }
+
+        // Function to display data in the table
+        function displayData(data) {
+            const tableBody = document.querySelector("#dataTable tbody");
+            tableBody.innerHTML = ""; // Clear existing rows
+
+            data.forEach(row => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${row["SR_ID"] || ""}</td>
+                    <td>${row["CUSTOMER_ID"] || ""}</td>
+                    <td>${row["RCA"] || ""}</td>
+                    <td>${row["DETAILS"] || ""}</td>
+                    <td>${row["UPDATE_DETAILS"] || ""}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        // Function to apply filters
+        function applyFilters() {
+            const customerIdFilter = document.getElementById("searchCustomerId").value.toLowerCase();
+            const srIdFilter = document.getElementById("searchSrId").value.toLowerCase();
+            const keywordsFilter = document.getElementById("searchKeywords").value.toLowerCase();
+
+            const filteredData = excelData.filter(row => {
+                const customerId = (row["CUSTOMER_ID"] || "").toString().toLowerCase();
+                const srId = (row["SR_ID"] || "").toString().toLowerCase();
+                const details = (row["DETAILS"] || "").toLowerCase();
+                const updateDetails = (row["UPDATE_DETAILS"] || "").toLowerCase();
+
+                return (
+                    (!customerIdFilter || customerId.includes(customerIdFilter)) &&
+                    (!srIdFilter || srId.includes(srIdFilter)) &&
+                    (!keywordsFilter || details.includes(keywordsFilter) || updateDetails.includes(keywordsFilter))
+                );
+            });
+
+            displayData(filteredData);
+        }
+
+        // Fetch and display data on page load
+        fetchExcelData();
+    </script>
+</body>
+</html></div>

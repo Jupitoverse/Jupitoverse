@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Chosen Palette: Vintage Tech Dark Theme -->
+    <!-- Application Structure Plan: The application uses a two-level hierarchical Single Page Application (SPA) structure. The home page displays main categories as interactive cards. Clicking a card dynamically renders a new view within the same page, showing the sub-categories for the selected topic. This drill-down navigation pattern was chosen for its simplicity and intuitive user flow, making it easy for users to browse from broad topics to specific content without leaving the application's context. -->
+    <!-- Visualization & Content Choices: The source report's content is a hierarchical list of links. The goal is to provide clear navigation. The chosen presentation method is a responsive grid of interactive cards ('boxes'). This was selected over a simple text list to create a more modern, visually engaging, and dashboard-like user experience. The primary interaction is a click, which either navigates to a sub-category view or opens the final OneNote link in a new tab. This is justified by its directness and universal user understanding. No charts are needed as the content is purely navigational. Method: HTML/CSS/JS. Library: None. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orion Knowledge Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background-color: #0c0a1a;
+            --primary-text: #e8e6e3;
+            --secondary-text: #a0a0b0;
+            --glow-color: #9f7aea;
+            --box-bg: rgba(22, 18, 44, 0.65);
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--background-color);
+            background-image: radial-gradient(circle at top right, rgba(121, 68, 201, 0.2), transparent 40%),
+                              radial-gradient(circle at bottom left, rgba(45, 91, 224, 0.2), transparent 50%);
+            margin: 0;
+            padding: 24px;
+            color: var(--primary-text);
+            min-height: 100vh;
+        }
+
+        #app {
+            max-width: 1400px;
+            margin: 0 auto;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .header h1 {
+            font-size: 3.25rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #ffffff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+        }
+        .header p {
+            font-size: 1.15rem;
+            color: var(--secondary-text);
+            max-width: 600px;
+            margin: 10px auto;
+            line-height: 1.6;
+        }
+        .header .byline {
+            font-size: 0.9rem;
+            color: var(--secondary-text);
+            opacity: 0.6;
+            margin-top: 20px;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-bottom: 25px;
+            padding: 10px 20px;
+            background-color: rgba(255, 255, 255, 0.08);
+            color: var(--primary-text);
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+        .back-button:hover {
+            background-color: rgba(255, 255, 255, 0.12);
+            transform: scale(1.05);
+        }
+        
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 28px;
+        }
+
+        .box {
+            background-color: var(--box-bg);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--primary-text);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 140px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .box:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150%;
+            padding-bottom: 150%;
+            background: radial-gradient(circle at center, var(--glow-color), transparent 50%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 1;
+        }
+        .box:hover:before {
+            opacity: 0.2;
+        }
+
+        .box:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(159, 122, 234, 0.5);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+        }
+
+        .box h2 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin: 0;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .box h2::after {
+            content: '→';
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            color: var(--glow-color);
+            font-size: 1.5rem;
+        }
+        
+        .box:hover h2::after {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script>
+        const hubData = [
+  {
+    "topic": "Welcome Kit",
+    "subTopics": [
+      {
+        "name": "Issue Reproduciable Steps",
+        "url": "https://amdocs.sharepoint.com/sites/ORIONHUNTER/_layouts/15/Doc.aspx?sourcedoc={f13a2a63-00d2-4b7f-955f-0c0026ebbaa5}&action=embedview&wd=target(Welcome%20Kit.one|5774c277-0619-4d17-8796-7be8140f46f3/Issue%20Reproduce%20step|32a70e67-d581-4e02-807f-877584864606/)&wdHideHeaders=1&wdHideGridlines=1&wdPrint=0&wdDownloadButton=0&wdInConfigurator=1&wdtheme=dark"
+      },
+      {
+        "name": "OSO Fun Poem",
+        "url": "https://amdocs.sharepoint.com/sites/ORIONHUNTER/_layouts/15/Doc.aspx?sourcedoc={f13a2a63-00d2-4b7f-955f-0c0026ebbaa5}&action=embedview&wd=target(Welcome%20Kit.one|5774c277-0619-4d17-8796-7be8140f46f3/OSO%20POEM%20ABHISHEK|e5654f33-de36-4ee8-9ecd-c9212ead456d/)&wdHideHeaders=1&wdHideGridlines=1&wdPrint=0&wdDownloadButton=0&wdInConfigurator=1&wdtheme=dark"
+      },
+      {
+        "name": "All Imp Link",
+        "url": "https://amdocs.sharepoint.com/sites/ORIONHUNTER/_layouts/15/Doc.aspx?sourcedoc={f13a2a63-00d2-4b7f-955f-0c0026ebbaa5}&action=embedview&wd=target(Welcome%20Kit.one|5774c277-0619-4d17-8796-7be8140f46f3/Imp%20link|82baede3-c090-42e3-8073-8fece697f5d7/)&wdHideHeaders=1&wdHideGridlines=1&wdPrint=0&wdDownloadButton=0&wdInConfigurator=1&wdtheme=dark"
+      },
+      {
+        "name": "UTS Access",
+        "url": "https://amdocs.sharepoint.com/sites/ORIONHUNTER/_layouts/15/Doc.aspx?sourcedoc={f13a2a63-00d2-4b7f-955f-0c0026ebbaa5}&action=embedview&wd=target(Welcome%20Kit.one|5774c277-0619-4d17-8796-7be8140f46f3/UTS%20Access|66b50cdb-9f59-40b4-8b6a-7e10fc1d7e52/)&wdHideHeaders=1&wdHideGridlines=1&wdPrint=0&wdDownloadButton=0&wdInConfigurator=1&wdtheme=dark"
+      },
+      {
+        "name": "Octane Access",
+        "url": "https://amdocs.sharepoint.com/sites/ORIONHUNTER/_layouts/15/Doc.aspx?sourcedoc={f13a2a63-00d2-4b7f-955f-0c0026ebbaa5}&action=embedview&wd=target(Welcome%20Kit.one|5774c277-0619-4d17-8796-7be8140f46f3/Octane%20Access|ef422b01-82bc-431a-a8e7-61c2a5b75eba/)&wdHideHeaders=1&wdHideGridlines=1&wdPrint=0&wdDownloadButton=0&wdInConfigurator=1&wdtheme=dark"
+      },
+      {
+        "name": "DB Credential",
+        "url": "https://amdocs.sharepoint.com/sites/ORIONHUNTER/_layouts/15/Doc.aspx?sourcedoc={f13a2a63-00d2-4b7f-955f-0c0026ebbaa5}&action=embedview&wd=target(Welcome%20Kit.one|5774c277-0619-4d17-8796-7be8140f46f3/DB|20fadc03-b994-4d67-a13c-671b8d77310c/)&wdHideHeaders=1&wdHideGridlines=1&wdPrint=0&wdDownloadButton=0&wdInConfigurator=1&wdtheme=dark"
+      },
+      {
+        "name": "KT link",
+        "url": "https://amdocs.sharepoint.com/sites/ORIONHUNTER/_layouts/15/Doc.aspx?sourcedoc={f13a2a63-00d2-4b7f-955f-0c0026ebbaa5}&action=embedview&wd=target(Welcome%20Kit.one|5774c277-0619-4d17-8796-7be8140f46f3/KT%20Links|4b0032c1-50f6-4b99-9d13-60fd7f2de1e9/)&wdHideHeaders=1&wdHideGridlines=1&wdPrint=0&wdDownloadButton=0&wdInConfigurator=1&wdtheme=dark"
+      }
+    ]
+  }
+];
+
+        const app = document.getElementById('app');
+
+        function renderHomePage() {
+            app.style.animation = 'none';
+            app.offsetHeight; /* trigger reflow */
+            app.style.animation = null; 
+            app.innerHTML = `
+                <div class="header">
+                    <h1>Welcome to Orion</h1>
+                    <p>Get all required setup details, workaround details, release documents at one place</p>
+                    <p class="byline">By - [Your Name]</p>
+                </div>
+                <div class="grid-container">
+                    ${hubData.map((topic, index) => `
+                        <div class="box" data-topic-index="${index}">
+                            <h2>${topic.topic}</h2>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function renderSubTopicPage(topicIndex) {
+            const topic = hubData[topicIndex];
+            app.style.animation = 'none';
+            app.offsetHeight; /* trigger reflow */
+            app.style.animation = null; 
+            app.innerHTML = `
+                <div class="header">
+                    <a class="back-button" data-action="home">‹ Back to Home</a>
+                    <h1>${topic.topic}</h1>
+                    <p>Choose a sub-topic to view the note.</p>
+                </div>
+                <div class="grid-container">
+                    ${topic.subTopics.map((subTopic) => `
+                        <div class="box" data-note-url="${subTopic.url}">
+                            <h2>${subTopic.name}</h2>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        app.addEventListener('click', function(e) {
+            const box = e.target.closest('.box');
+            const backButton = e.target.closest('.back-button');
+
+            if (box) {
+                const noteUrl = box.dataset.noteUrl;
+                const topicIndex = box.dataset.topicIndex;
+                
+                if (noteUrl) {
+                    if (noteUrl === "YOUR_ONENOTE_EMBED_LINK_HERE") {
+                        alert("Please update the OneNote link in the hubData configuration first.");
+                    } else {
+                        window.open(noteUrl, '_blank');
+                    }
+                } else if (topicIndex) {
+                    renderSubTopicPage(topicIndex);
+                }
+            }
+
+            if (backButton) {
+                const action = backButton.dataset.action;
+                if (action === 'home') {
+                    renderHomePage();
+                }
+            }
+        });
+
+        renderHomePage();
+    </script>
+</body>
+</html>
