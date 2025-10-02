@@ -57,6 +57,8 @@ class Config:
     
     # Performance Configuration
     PART_ID_BATCH_SIZE = 5  # Smaller batches for reduced DB load
+    PART_ID_START = 1       # Starting part_id value (easily configurable)
+    PART_ID_END = 99        # Ending part_id value (easily configurable)
     CONNECTION_TIMEOUT = 30
     QUERY_TIMEOUT = 300  # 5 minutes max per query
     
@@ -124,7 +126,7 @@ def get_db_connection():
             conn.close()
             logger.info("Database connection closed")
 
-# CTE-based optimized query - designed for minimal DB load
+# CTE-based optimized query with part_id filtering in ALL CTEs for minimal DB load
 OPTIMIZED_CTE_QUERY = """
 WITH eligible_projects AS (
     -- First CTE: Get eligible projects from spoi table
@@ -142,24 +144,26 @@ WITH eligible_projects AS (
       AND spoi.is_latest_version = 1
 ),
 completed_activities AS (
-    -- Second CTE: Get completed activities (oai2 conditions)
+    -- Second CTE: Get completed activities (oai2 conditions) with part_id filter
     SELECT DISTINCT 
         oai2.plan_id, 
         oai2.last_update_date, 
         oai2.complete_date
     FROM ossdb01db.oss_activity_instance oai2
     INNER JOIN eligible_projects ep ON oai2.plan_id = ep.plan_id
-    WHERE oai2.spec_ver_id = '91757a68-692f-4246-91e1-7e2280a659d8'
+    WHERE oai2.part_id BETWEEN %s AND %s
+      AND oai2.spec_ver_id = '91757a68-692f-4246-91e1-7e2280a659d8'
       AND oai2.state = 'Completed'
       AND oai2.is_latest_version = 1
       AND oai2.complete_date < CURRENT_DATE - INTERVAL '10 days'
 ),
 blocking_activities AS (
-    -- Third CTE: Get blocking activities (oai3 conditions)
+    -- Third CTE: Get blocking activities (oai3 conditions) with part_id filter
     SELECT DISTINCT oai3.plan_id
     FROM ossdb01db.oss_activity_instance oai3
     INNER JOIN completed_activities ca ON oai3.plan_id = ca.plan_id
-    WHERE oai3.spec_ver_id = '88f0860f-e647-41cd-aaac-1930adea8a3c'
+    WHERE oai3.part_id BETWEEN %s AND %s
+      AND oai3.spec_ver_id = '88f0860f-e647-41cd-aaac-1930adea8a3c'
       AND oai3.state NOT IN ('In Progress')
       AND oai3.is_latest_version = 1
 ),
@@ -194,15 +198,17 @@ INNER JOIN in_progress_activities ipa ON ep.plan_id = ipa.plan_id;
 """
 
 def execute_optimized_query(cursor, start, end):
-    """Execute the CTE-based optimized query"""
+    """Execute the CTE-based optimized query with part_id filtering in all CTEs"""
     try:
         logger.info(f"Executing CTE-based optimized query for part_id {start}-{end}")
+        logger.info("Part_id filtering applied to ALL activity CTEs for maximum DB load reduction")
         
         # Set query timeout
         cursor.execute(f"SET statement_timeout = '{Config.QUERY_TIMEOUT}s'")
         
-        # Execute CTE query
-        cursor.execute(OPTIMIZED_CTE_QUERY, (start, end))
+        # Execute CTE query with part_id parameters for all three activity CTEs
+        # Parameters: (start, end, start, end, start, end) for oai2, oai3, oai respectively
+        cursor.execute(OPTIMIZED_CTE_QUERY, (start, end, start, end, start, end))
         results = cursor.fetchall()
         
         logger.info(f"CTE Query completed: Found {len(results)} records for part_id {start}-{end}")
@@ -216,12 +222,39 @@ def execute_optimized_query(cursor, start, end):
         return []
 
 def generate_part_id_ranges():
-    """Generate optimized part_id ranges for minimal DB load"""
-    # Using smaller, more efficient ranges
+    """Generate configurable part_id ranges for minimal DB load"""
+    logger.info(f"Generating part_id ranges: {Config.PART_ID_START} to {Config.PART_ID_END} with batch size {Config.PART_ID_BATCH_SIZE}")
+    
     ranges = []
-    for start in range(1, 100, Config.PART_ID_BATCH_SIZE):
-        end = min(start + Config.PART_ID_BATCH_SIZE - 1, 99)
+    for start in range(Config.PART_ID_START, Config.PART_ID_END + 1, Config.PART_ID_BATCH_SIZE):
+        end = min(start + Config.PART_ID_BATCH_SIZE - 1, Config.PART_ID_END)
         ranges.append((start, end))
+    
+    logger.info(f"Generated {len(ranges)} part_id ranges for processing")
+    return ranges
+
+def create_reusable_part_id_ranges(start_value, end_value, batch_size):
+    """
+    Reusable function to generate part_id ranges for any query
+    
+    Args:
+        start_value (int): Starting part_id value
+        end_value (int): Ending part_id value  
+        batch_size (int): Batch size for each range
+        
+    Returns:
+        list: List of (start, end) tuples for part_id ranges
+        
+    Example:
+        ranges = create_reusable_part_id_ranges(1, 50, 5)
+        # Returns: [(1, 5), (6, 10), (11, 15), ..., (46, 50)]
+    """
+    ranges = []
+    for start in range(start_value, end_value + 1, batch_size):
+        end = min(start + batch_size - 1, end_value)
+        ranges.append((start, end))
+    
+    logger.info(f"Reusable ranges generated: {start_value}-{end_value} in {len(ranges)} batches of {batch_size}")
     return ranges
 
 def main():
