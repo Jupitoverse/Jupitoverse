@@ -206,19 +206,33 @@ def execute_optimized_query(cursor, start, end):
         # Set query timeout
         cursor.execute(f"SET statement_timeout = '{Config.QUERY_TIMEOUT}s'")
         
+        # Debug: Log the parameters being passed
+        params = (start, end, start, end, start, end)
+        logger.info(f"Query parameters: {params}")
+        
         # Execute CTE query with part_id parameters for all three activity CTEs
         # Parameters: (start, end, start, end, start, end) for oai2, oai3, oai respectively
-        cursor.execute(OPTIMIZED_CTE_QUERY, (start, end, start, end, start, end))
+        cursor.execute(OPTIMIZED_CTE_QUERY, params)
         results = cursor.fetchall()
         
         logger.info(f"CTE Query completed: Found {len(results)} records for part_id {start}-{end}")
+        
+        # Debug: Log first few results if any
+        if results:
+            logger.info(f"Sample result structure: {len(results[0])} columns")
+            logger.info(f"First result: {results[0] if results else 'No results'}")
+        
         return results
         
     except psycopg2.Error as e:
         logger.error(f"Database CTE query error for part_id {start}-{end}: {e}")
+        logger.error(f"Query: {OPTIMIZED_CTE_QUERY}")
         return []
     except Exception as e:
         logger.error(f"Unexpected CTE query error for part_id {start}-{end}: {e}")
+        logger.error(f"Error type: {type(e).__name__}")
+        import traceback
+        logger.error(f"Traceback: {traceback.format_exc()}")
         return []
 
 def generate_part_id_ranges():
@@ -281,6 +295,13 @@ def main():
                     logger.info(f"Processing batch {i}/{len(part_id_ranges)}: part_id {start}-{end}")
                     
                     batch_results = execute_optimized_query(cursor, start, end)
+                    
+                    # Debug: Check batch results structure
+                    if batch_results:
+                        logger.info(f"Batch {i} returned {len(batch_results)} results")
+                        if len(batch_results) > 0:
+                            logger.info(f"Batch {i} first result structure: {len(batch_results[0])} columns")
+                    
                     results.extend(batch_results)
                     total_processed += len(batch_results)
                     
@@ -289,6 +310,9 @@ def main():
                 except Exception as e:
                     failed_batches += 1
                     logger.error(f"✗ Batch {i} failed: {e}")
+                    logger.error(f"Error type: {type(e).__name__}")
+                    import traceback
+                    logger.error(f"Batch {i} traceback: {traceback.format_exc()}")
                     continue
             
             cursor.close()
@@ -308,20 +332,38 @@ def main():
     return results
 
 def generate_reports(results):
-    """Generate Excel and HTML reports"""
+    """Generate Excel and HTML reports with enhanced error handling"""
     try:
         logger.info("Generating reports...")
+        logger.info(f"Processing {len(results)} result records")
         
-        # Create DataFrame
+        # Debug: Check result structure
+        if results:
+            logger.info(f"First result length: {len(results[0])}")
+            logger.info(f"First result sample: {results[0]}")
+        
+        # Create DataFrame with proper error handling
         columns = ["projectid", "version", "activity_status", "project_status", 
                   "activity_id", "name", "last_update_date", "create_date"]
+        
+        # Validate results structure before creating DataFrame
+        if results:
+            expected_columns = len(columns)
+            actual_columns = len(results[0]) if results else 0
+            
+            if actual_columns != expected_columns:
+                logger.error(f"Column mismatch: Expected {expected_columns}, got {actual_columns}")
+                logger.error(f"Expected columns: {columns}")
+                logger.error(f"Sample result: {results[0] if results else 'No results'}")
+                return f"<p><strong>Error: Column structure mismatch in query results</strong></p>", None
+        
         df = pd.DataFrame(results, columns=columns)
         
         if df.empty:
             logger.warning("No data found! DataFrame is empty.")
             html_table = "<p><strong>No PONR issues found in the current analysis.</strong></p>"
         else:
-            logger.info(f"Generated DataFrame with {len(df)} rows")
+            logger.info(f"Generated DataFrame with {len(df)} rows and {len(df.columns)} columns")
             html_table = df.to_html(index=False, classes='styled-table')
         
         # Save Excel file
@@ -333,6 +375,9 @@ def generate_reports(results):
         
     except Exception as e:
         logger.error(f"Error generating reports: {e}")
+        logger.error(f"Error type: {type(e).__name__}")
+        import traceback
+        logger.error(f"Traceback: {traceback.format_exc()}")
         return f"<p><strong>Error generating report: {e}</strong></p>", None
 
 class EmailManager:
