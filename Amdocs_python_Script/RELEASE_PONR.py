@@ -70,9 +70,9 @@ class Config:
     # Database Configuration - Write access for table operations
     DB_CONFIG_WRITE = {
         'database': "prodossdb",
-        'user': 'prod_ossdb01oss',
-        'password': 'Pr0d_ossdb01oss',
-        'host': 'prodoss-postgres-west-dr.cy6c1wvf3ag2.us-west-2.rds.amazonaws.com',
+        'user': 'ossdb01db',
+        'password': 'Pr0d_ossdb01db',
+        'host': 'OSS-PROD1-PGRDS-NLB-1fe6fa4eb2c6ea3.elb.us-east-2.amazonaws.com',
         'port': '6432'
     }
     
@@ -920,4 +920,4 @@ if __name__ == "__main__":
         
     except Exception as e:
         logger.error(f"Script execution failed: {e}")
-        sys.exit(1)
+        sys.exit(1)                                                                                                                                                                                                                                                     
