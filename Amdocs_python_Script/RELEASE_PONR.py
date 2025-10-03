@@ -6,18 +6,28 @@ even though the mandatory wait period associated with the Registered Timed Actio
 
 OPTIMIZATION STRATEGY:
 =====================
-- Single optimized query with proper indexing
+- Cascading CTE approach with progressive filtering for maximum efficiency
 - Smart part_id batching to minimize database load
 - Efficient memory management with streaming results
 - Comprehensive logging and cleanup
 
+CASCADING FILTER APPROACH:
+=========================
+1. eligible_projects: Base dataset from spoi table
+2. projects_with_completed_activities: Filter projects with completed activities (reduces dataset)
+3. projects_with_in_progress_activities: Filter projects with in-progress activities (further reduces)
+4. final_filtered_projects: Final filter with blocking activities (smallest dataset)
+
+This approach dramatically reduces the number of rows processed at each step, minimizing database load.
+
 PERFORMANCE FEATURES:
 ====================
-1. Optimized query with proper JOIN order
-2. Dynamic part_id range adjustment based on data density
-3. Memory-efficient result processing
-4. Automatic cleanup of temporary files and logs
-5. Comprehensive error handling and retry logic
+1. Progressive filtering reduces dataset size at each CTE step
+2. Part_id filtering applied at each activity filter level
+3. Dynamic part_id range adjustment based on data density
+4. Memory-efficient result processing
+5. Automatic cleanup of temporary files and logs
+6. Comprehensive error handling and retry logic
 
 REQUIRED INDEXES:
 ================
@@ -126,10 +136,10 @@ def get_db_connection():
             conn.close()
             logger.info("Database connection closed")
 
-# CTE-based optimized query with part_id filtering in ALL CTEs for minimal DB load
+# Cascading CTE-based optimized query - Progressive filtering for maximum efficiency
 OPTIMIZED_CTE_QUERY = """
 WITH eligible_projects AS (
-    -- First CTE: Get eligible projects from spoi table
+    -- Step 1: Get eligible projects from spoi table (Base dataset)
     SELECT DISTINCT 
         spoi.id, 
         spoi.plan_id, 
@@ -143,79 +153,93 @@ WITH eligible_projects AS (
       AND spoi.manager IS DISTINCT FROM 'ProductionSanity'
       AND spoi.is_latest_version = 1
 ),
-completed_activities AS (
-    -- Second CTE: Get completed activities (oai2 conditions) with part_id filter
+projects_with_completed_activities AS (
+    -- Step 2: Filter projects that have completed activities (Reduces dataset)
     SELECT DISTINCT 
-        oai2.plan_id, 
+        ep.id,
+        ep.plan_id, 
+        ep.version, 
+        ep.status, 
+        ep.name,
         oai2.last_update_date, 
         oai2.complete_date
-    FROM ossdb01db.oss_activity_instance oai2
-    INNER JOIN eligible_projects ep ON oai2.plan_id = ep.plan_id
+    FROM eligible_projects ep
+    INNER JOIN ossdb01db.oss_activity_instance oai2 ON ep.plan_id = oai2.plan_id
     WHERE oai2.part_id BETWEEN %s AND %s
       AND oai2.spec_ver_id = '91757a68-692f-4246-91e1-7e2280a659d8'
       AND oai2.state = 'Completed'
       AND oai2.is_latest_version = 1
       AND oai2.complete_date < CURRENT_DATE - INTERVAL '10 days'
 ),
-blocking_activities AS (
-    -- Third CTE: Get blocking activities (oai3 conditions) with part_id filter
-    SELECT DISTINCT oai3.plan_id
-    FROM ossdb01db.oss_activity_instance oai3
-    INNER JOIN completed_activities ca ON oai3.plan_id = ca.plan_id
-    WHERE oai3.part_id BETWEEN %s AND %s
-      AND oai3.spec_ver_id = '88f0860f-e647-41cd-aaac-1930adea8a3c'
-      AND oai3.state NOT IN ('In Progress')
-      AND oai3.is_latest_version = 1
-),
-in_progress_activities AS (
-    -- Fourth CTE: Get in-progress activities with part_id filter
-    SELECT 
-        oai.plan_id,
-        oai.id,
-        oai.status,
+projects_with_in_progress_activities AS (
+    -- Step 3: Filter projects that have in-progress activities (Further reduces dataset)
+    SELECT DISTINCT 
+        pwca.id,
+        pwca.plan_id, 
+        pwca.version, 
+        pwca.status, 
+        pwca.name,
+        pwca.last_update_date,
+        oai.id AS activity_id,
+        oai.status AS activity_status,
         oai.create_date
-    FROM ossdb01db.oss_activity_instance oai
-    INNER JOIN blocking_activities ba ON oai.plan_id = ba.plan_id
+    FROM projects_with_completed_activities pwca
+    INNER JOIN ossdb01db.oss_activity_instance oai ON pwca.plan_id = oai.plan_id
     WHERE oai.part_id BETWEEN %s AND %s
       AND oai.spec_ver_id = '03acd7f1-557a-4727-ba2e-8d44f6245047'
       AND oai.state IN ('In Progress', 'Optional')
       AND oai.is_latest_version = 1
+),
+final_filtered_projects AS (
+    -- Step 4: Final filter - projects with blocking activities (Final dataset)
+    SELECT DISTINCT 
+        pwipa.id AS projectid,
+        pwipa.version,
+        pwipa.activity_status,
+        pwipa.status AS project_status,
+        pwipa.activity_id,
+        pwipa.name,
+        pwipa.last_update_date,
+        pwipa.create_date
+    FROM projects_with_in_progress_activities pwipa
+    INNER JOIN ossdb01db.oss_activity_instance oai3 ON pwipa.plan_id = oai3.plan_id
+    WHERE oai3.part_id BETWEEN %s AND %s
+      AND oai3.spec_ver_id = '88f0860f-e647-41cd-aaac-1930adea8a3c'
+      AND oai3.state NOT IN ('In Progress')
+      AND oai3.is_latest_version = 1
 )
--- Final SELECT: Join all CTEs together
+-- Final SELECT: Return the progressively filtered results
 SELECT 
-    ep.id AS projectid,
-    ep.version,
-    ipa.status AS activity_status,
-    ep.status AS project_status,
-    ipa.id AS activity_id,
-    ep.name,
-    ca.last_update_date,
-    ipa.create_date
-FROM eligible_projects ep
-INNER JOIN completed_activities ca ON ep.plan_id = ca.plan_id
-INNER JOIN blocking_activities ba ON ep.plan_id = ba.plan_id
-INNER JOIN in_progress_activities ipa ON ep.plan_id = ipa.plan_id;
+    projectid,
+    version,
+    activity_status,
+    project_status,
+    activity_id,
+    name,
+    last_update_date,
+    create_date
+FROM final_filtered_projects;
 """
 
 def execute_optimized_query(cursor, start, end):
-    """Execute the CTE-based optimized query with part_id filtering in all CTEs"""
+    """Execute the cascading CTE-based optimized query with progressive filtering"""
     try:
-        logger.info(f"Executing CTE-based optimized query for part_id {start}-{end}")
-        logger.info("Part_id filtering applied to ALL activity CTEs for maximum DB load reduction")
+        logger.info(f"Executing cascading CTE query for part_id {start}-{end}")
+        logger.info("Progressive filtering: eligible_projects -> completed_activities -> in_progress_activities -> blocking_activities")
         
         # Set query timeout
         cursor.execute(f"SET statement_timeout = '{Config.QUERY_TIMEOUT}s'")
         
         # Debug: Log the parameters being passed
         params = (start, end, start, end, start, end)
-        logger.info(f"Query parameters: {params}")
+        logger.info(f"Query parameters (3 part_id ranges): {params}")
         
-        # Execute CTE query with part_id parameters for all three activity CTEs
-        # Parameters: (start, end, start, end, start, end) for oai2, oai3, oai respectively
+        # Execute cascading CTE query with part_id parameters for all three activity filters
+        # Parameters: (start, end, start, end, start, end) for oai2, oai, oai3 respectively
         cursor.execute(OPTIMIZED_CTE_QUERY, params)
         results = cursor.fetchall()
         
-        logger.info(f"CTE Query completed: Found {len(results)} records for part_id {start}-{end}")
+        logger.info(f"Cascading CTE Query completed: Found {len(results)} records for part_id {start}-{end}")
         
         # Debug: Log first few results if any
         if results:
@@ -225,11 +249,11 @@ def execute_optimized_query(cursor, start, end):
         return results
         
     except psycopg2.Error as e:
-        logger.error(f"Database CTE query error for part_id {start}-{end}: {e}")
+        logger.error(f"Database cascading CTE query error for part_id {start}-{end}: {e}")
         logger.error(f"Query: {OPTIMIZED_CTE_QUERY}")
         return []
     except Exception as e:
-        logger.error(f"Unexpected CTE query error for part_id {start}-{end}: {e}")
+        logger.error(f"Unexpected cascading CTE query error for part_id {start}-{end}: {e}")
         logger.error(f"Error type: {type(e).__name__}")
         import traceback
         logger.error(f"Traceback: {traceback.format_exc()}")
