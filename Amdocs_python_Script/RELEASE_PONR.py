@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 RELEASE PONR (Point of No Return) Analysis Script
 
@@ -424,11 +426,11 @@ def main():
                     results.extend(batch_results)
                     total_processed += len(batch_results)
                     
-                    logger.info(f"✓ Batch {start}-{end}: Found {len(batch_results)} records")
+                    logger.info(f"SUCCESS Batch {start}-{end}: Found {len(batch_results)} records")
                     
                 except Exception as e:
                     failed_batches += 1
-                    logger.error(f"✗ Batch {start}-{end} FAILED: {e}")
+                    logger.error(f"FAILED Batch {start}-{end} FAILED: {e}")
                     logger.error(f"Error type: {type(e).__name__}")
                     import traceback
                     logger.error(f"Batch {i} traceback: {traceback.format_exc()}")
@@ -546,11 +548,11 @@ class EmailManager:
                 all_recipients = recipients + cc_recipients
                 server.sendmail(from_email, all_recipients, message.as_string())
             
-            logger.info("✓ Email sent successfully!")
+            logger.info("SUCCESS Email sent successfully!")
             return True
             
         except Exception as e:
-            logger.error(f"✗ Failed to send email: {e}")
+            logger.error(f"FAILED Failed to send email: {e}")
             return False
     
     def attach_file(self, message, file_path):
@@ -667,24 +669,24 @@ class EmailManager:
     <p>Please find below the list of orders where the <strong>RELEASE PONR</strong> flag was not triggered by the system, even though the mandatory wait period associated with the Registered Timed Action has been completed.</p>
 
     <div class="summary">
-        <strong>📊 Report Summary:</strong><br>
-        • This report includes all PONR issues identified today with enhanced tracking<br>
-        • <strong>Age Days</strong>: Number of days since last update<br>
-        • <strong>Handling Status</strong>: Current resolution status (PENDING/IN_PROGRESS/RESOLVED)<br>
-        • <strong>RCA</strong>: Root Cause Analysis (to be filled manually in database)<br>
-        • Records are stored in database for historical tracking and follow-up
+        <strong>Report Summary:</strong><br>
+        - This report includes all PONR issues identified today with enhanced tracking<br>
+        - <strong>Age Days</strong>: Number of days since last update<br>
+        - <strong>Handling Status</strong>: Current resolution status (PENDING/IN_PROGRESS/RESOLVED)<br>
+        - <strong>RCA</strong>: Root Cause Analysis (to be filled manually in database)<br>
+        - Records are stored in database for historical tracking and follow-up
     </div>
 
     <p>This report fetches the data based on the activity states/status, not on the basis of the <code>qrtz</code> table.</p>
 
     <p>So any order where the flag has been released but the activity is still not marked completed would be part of this report, which also needs handling.</p>
 
-    <p><strong>⚠️ Priority Action Required:</strong> Kindly review these orders and take the necessary corrective actions. This issue is impacting the business, as services have already been ceased at the customer sites, but billing continues to be active.</p>
+    <p><strong>Priority Action Required:</strong> Kindly review these orders and take the necessary corrective actions. This issue is impacting the business, as services have already been ceased at the customer sites, but billing continues to be active.</p>
 
     {self.html_content}
  
     <div class="note">
-        <strong>📝 Database Tracking:</strong> All records are now stored in the production database (ossdb01db.billing_flag_tracking) for better tracking and follow-up. 
+        <strong>Database Tracking:</strong> All records are now stored in the production database (ossdb01db.billing_flag_tracking) for better tracking and follow-up. 
         You can update the RCA and Handling Status directly in the database.<br><br>
         <strong>For any changes in the report:</strong> Please reach out to Abhishek Agrahari
     </div>
@@ -726,10 +728,10 @@ def cleanup_files():
                 except Exception as e:
                     logger.warning(f"Failed to clean up {file_path}: {e}")
         
-        logger.info(f"✓ Cleanup completed: {cleaned_count} files removed")
+        logger.info(f"SUCCESS Cleanup completed: {cleaned_count} files removed")
         
     except Exception as e:
-        logger.error(f"✗ Cleanup failed: {e}")
+        logger.error(f"FAILED Cleanup failed: {e}")
 
 if __name__ == "__main__":
     try:
@@ -744,7 +746,7 @@ if __name__ == "__main__":
         email_sent = email_manager.send_mail()
         
         if email_sent:
-            logger.info("✓ Email sent successfully, starting cleanup...")
+            logger.info("SUCCESS Email sent successfully, starting cleanup...")
             # Clean up files only after successful email
             cleanup_files()
         else:
