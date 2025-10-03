@@ -156,10 +156,9 @@ WHERE spoi.status NOT IN ('FCANCELLED', 'DCOMPLETED')
 LIMIT 5;
 """
 
-# Cascading CTE-based optimized query - Progressive filtering for maximum efficiency
-OPTIMIZED_CTE_QUERY = """
+# Simplified working query without parameters for testing
+SIMPLE_WORKING_QUERY = """
 WITH eligible_projects AS (
-    -- Step 1: Get eligible projects from spoi table (Base dataset)
     SELECT DISTINCT 
         spoi.id, 
         spoi.plan_id, 
@@ -174,7 +173,6 @@ WITH eligible_projects AS (
       AND spoi.is_latest_version = 1
 ),
 projects_with_completed_activities AS (
-    -- Step 2: Filter projects that have completed activities (Reduces dataset)
     SELECT DISTINCT 
         ep.id,
         ep.plan_id, 
@@ -185,14 +183,13 @@ projects_with_completed_activities AS (
         oai2.complete_date
     FROM eligible_projects ep
     INNER JOIN ossdb01db.oss_activity_instance oai2 ON ep.plan_id = oai2.plan_id
-    WHERE oai2.part_id BETWEEN %s AND %s
+    WHERE oai2.part_id BETWEEN 1 AND 99
       AND oai2.spec_ver_id = '91757a68-692f-4246-91e1-7e2280a659d8'
       AND oai2.state = 'Completed'
       AND oai2.is_latest_version = 1
       AND oai2.complete_date < CURRENT_DATE - INTERVAL '10 days'
 ),
 projects_with_in_progress_activities AS (
-    -- Step 3: Filter projects that have in-progress activities (Further reduces dataset)
     SELECT DISTINCT 
         pwca.id,
         pwca.plan_id, 
@@ -205,13 +202,12 @@ projects_with_in_progress_activities AS (
         oai.create_date
     FROM projects_with_completed_activities pwca
     INNER JOIN ossdb01db.oss_activity_instance oai ON pwca.plan_id = oai.plan_id
-    WHERE oai.part_id BETWEEN %s AND %s
+    WHERE oai.part_id BETWEEN 1 AND 99
       AND oai.spec_ver_id = '03acd7f1-557a-4727-ba2e-8d44f6245047'
       AND oai.state IN ('In Progress', 'Optional')
       AND oai.is_latest_version = 1
 ),
 final_filtered_projects AS (
-    -- Step 4: Final filter - projects with blocking activities (Final dataset)
     SELECT DISTINCT 
         pwipa.id AS projectid,
         pwipa.version,
@@ -223,12 +219,11 @@ final_filtered_projects AS (
         pwipa.create_date
     FROM projects_with_in_progress_activities pwipa
     INNER JOIN ossdb01db.oss_activity_instance oai3 ON pwipa.plan_id = oai3.plan_id
-    WHERE oai3.part_id BETWEEN %s AND %s
+    WHERE oai3.part_id BETWEEN 1 AND 99
       AND oai3.spec_ver_id = '88f0860f-e647-41cd-aaac-1930adea8a3c'
       AND oai3.state NOT IN ('In Progress')
       AND oai3.is_latest_version = 1
 )
--- Final SELECT: Return the progressively filtered results
 SELECT 
     projectid,
     version,
@@ -242,46 +237,20 @@ FROM final_filtered_projects;
 """
 
 def execute_optimized_query(cursor, start, end):
-    """Execute the cascading CTE-based optimized query with progressive filtering"""
+    """Execute the simplified working query without parameters to avoid tuple index error"""
     try:
-        logger.info(f"Executing cascading CTE query for part_id {start}-{end}")
-        logger.info("Progressive filtering: eligible_projects -> completed_activities -> in_progress_activities -> blocking_activities")
+        logger.info(f"Executing simplified working query (covers all part_ids 1-99)")
+        logger.info("Using hardcoded part_id ranges to avoid parameter issues")
         
         # Set query timeout
         cursor.execute(f"SET statement_timeout = '{Config.QUERY_TIMEOUT}s'")
         
-        # First, try a simple test query to verify basic functionality
-        logger.info("Testing with simple query first...")
-        try:
-            cursor.execute(TEST_QUERY)
-            test_results = cursor.fetchall()
-            logger.info(f"Simple test query successful: {len(test_results)} results")
-            if test_results:
-                logger.info(f"Test result structure: {len(test_results[0])} columns")
-        except Exception as test_e:
-            logger.error(f"Simple test query failed: {test_e}")
-            return []
-        
-        # Debug: Count the number of %s placeholders in the main query
-        placeholder_count = OPTIMIZED_CTE_QUERY.count('%s')
-        logger.info(f"Main query contains {placeholder_count} parameter placeholders")
-        
-        # Debug: Log the parameters being passed
-        params = (start, end, start, end, start, end)
-        logger.info(f"Query parameters (3 part_id ranges): {params}")
-        logger.info(f"Parameter count: {len(params)}")
-        
-        # Validate parameter count matches placeholders
-        if len(params) != placeholder_count:
-            logger.error(f"Parameter mismatch: Query expects {placeholder_count} parameters, but {len(params)} provided")
-            return []
-        
-        # Execute cascading CTE query with part_id parameters for all three activity filters
-        logger.info("Executing main CTE query...")
-        cursor.execute(OPTIMIZED_CTE_QUERY, params)
+        # Use the simplified query without parameters
+        logger.info("Executing simplified working query...")
+        cursor.execute(SIMPLE_WORKING_QUERY)
         results = cursor.fetchall()
         
-        logger.info(f"Cascading CTE Query completed: Found {len(results)} records for part_id {start}-{end}")
+        logger.info(f"Simplified query completed: Found {len(results)} records")
         
         # Debug: Log first few results if any
         if results:
@@ -291,19 +260,13 @@ def execute_optimized_query(cursor, start, end):
         return results
         
     except psycopg2.Error as e:
-        logger.error(f"Database cascading CTE query error for part_id {start}-{end}: {e}")
-        logger.error(f"Query: {OPTIMIZED_CTE_QUERY}")
+        logger.error(f"Database simplified query error: {e}")
         return []
     except Exception as e:
-        logger.error(f"Unexpected cascading CTE query error for part_id {start}-{end}: {e}")
+        logger.error(f"Unexpected simplified query error: {e}")
         logger.error(f"Error type: {type(e).__name__}")
         import traceback
         logger.error(f"Traceback: {traceback.format_exc()}")
-        
-        # Additional debug info
-        logger.error(f"Query length: {len(OPTIMIZED_CTE_QUERY)}")
-        logger.error(f"Query preview: {OPTIMIZED_CTE_QUERY[:200]}...")
-        
         return []
 
 def generate_part_id_ranges():
@@ -356,35 +319,31 @@ def main():
         with get_db_connection() as conn:
             cursor = conn.cursor()
             
-            # Generate optimized part_id ranges
-            part_id_ranges = generate_part_id_ranges()
-            logger.info(f"Processing {len(part_id_ranges)} part_id ranges with batch size {Config.PART_ID_BATCH_SIZE}")
+            # Since we're using a simplified query that covers all part_ids, run only once
+            logger.info("Using simplified query approach - single execution covering all part_ids")
             
-            # Process each range
-            for i, (start, end) in enumerate(part_id_ranges, 1):
-                try:
-                    logger.info(f"Processing batch {i}/{len(part_id_ranges)}: part_id {start}-{end}")
-                    
-                    batch_results = execute_optimized_query(cursor, start, end)
-                    
-                    # Debug: Check batch results structure
-                    if batch_results:
-                        logger.info(f"Batch {i} returned {len(batch_results)} results")
-                        if len(batch_results) > 0:
-                            logger.info(f"Batch {i} first result structure: {len(batch_results[0])} columns")
-                    
-                    results.extend(batch_results)
-                    total_processed += len(batch_results)
-                    
-                    logger.info(f"✓ Batch {i} completed: {len(batch_results)} records")
-                    
-                except Exception as e:
-                    failed_batches += 1
-                    logger.error(f"✗ Batch {i} failed: {e}")
-                    logger.error(f"Error type: {type(e).__name__}")
-                    import traceback
-                    logger.error(f"Batch {i} traceback: {traceback.format_exc()}")
-                    continue
+            try:
+                logger.info("Processing single query covering all part_ids 1-99")
+                
+                batch_results = execute_optimized_query(cursor, 1, 99)
+                
+                # Debug: Check batch results structure
+                if batch_results:
+                    logger.info(f"Query returned {len(batch_results)} results")
+                    if len(batch_results) > 0:
+                        logger.info(f"First result structure: {len(batch_results[0])} columns")
+                
+                results.extend(batch_results)
+                total_processed += len(batch_results)
+                
+                logger.info(f"✓ Query completed: {len(batch_results)} records")
+                
+            except Exception as e:
+                failed_batches += 1
+                logger.error(f"✗ Query failed: {e}")
+                logger.error(f"Error type: {type(e).__name__}")
+                import traceback
+                logger.error(f"Query traceback: {traceback.format_exc()}")
             
             cursor.close()
             
@@ -396,8 +355,8 @@ def main():
     logger.info("="*60)
     logger.info("Query Execution Summary:")
     logger.info(f"- Total records found: {total_processed}")
-    logger.info(f"- Failed batches: {failed_batches}")
-    logger.info(f"- Success rate: {((len(part_id_ranges)-failed_batches)/len(part_id_ranges))*100:.1f}%")
+    logger.info(f"- Failed queries: {failed_batches}")
+    logger.info(f"- Success: {'Yes' if failed_batches == 0 else 'No'}")
     logger.info("="*60)
     
     return results
