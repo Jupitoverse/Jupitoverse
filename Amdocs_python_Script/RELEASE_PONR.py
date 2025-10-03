@@ -77,7 +77,7 @@ class Config:
     CLEANUP_ENABLED = True
     
     # Database Storage Configuration
-    PONR_TABLE = "ossdb01db.ponr_tracking"
+    PONR_TABLE = "ossdb01db.billing_flag_tracking"
     TAG_NAME = "RELEASE_PONR"
 
 # Setup logging
@@ -684,7 +684,7 @@ class EmailManager:
     {self.html_content}
  
     <div class="note">
-        <strong>📝 Database Tracking:</strong> All records are now stored in the production database (ossdb01db.ponr_tracking) for better tracking and follow-up. 
+        <strong>📝 Database Tracking:</strong> All records are now stored in the production database (ossdb01db.billing_flag_tracking) for better tracking and follow-up. 
         You can update the RCA and Handling Status directly in the database.<br><br>
         <strong>For any changes in the report:</strong> Please reach out to Abhishek Agrahari
     </div>
