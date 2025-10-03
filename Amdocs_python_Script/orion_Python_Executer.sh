@@ -3,11 +3,8 @@
 #############################################################################
 # NAME   : Orion Python Script Executor
 # AUTHOR : Abhishek Agrahari
-# DATE   : 10/02/2025
-# DESCRIPTION: Simple script executor with individual scheduling per script in order to execute the python script at a provided location
-# SCRIPT1_ENABLED="true" this will enable any scripot execution here
-# DELAY_MINUTES=1 this will be the time gap between any two script in order to avoid load on production at the same time
-# for now i have added templates for 5 script
+# DATE   : 05/30/2025
+# DESCRIPTION: Simple script executor with individual scheduling per script
 #############################################################################
 
 #############################################################################
@@ -15,22 +12,17 @@
 #############################################################################
 
 # Delay between scripts (in minutes)
-DELAY_MINUTES=0
-
-# Log and temp file cleanup settings
-CLEANUP_ENABLED="true"                    # true/false - Enable cleanup of temp files
-LOG_RETENTION_DAYS=7                      # Keep log files for this many days
-TEMP_FILE_PATTERNS="*.tmp *.temp *.log.*" # Patterns for temp files to clean
+DELAY_MINUTES=5
 
 # Script 1 Configuration
-SCRIPT1_ENABLED="false"                    # true/false
-SCRIPT1_SCHEDULE="MON,TUE,WED,THU,FRI"       # Multiple inputs: For DATE: comma-separated numbers | For DAY: comma-separated days (MON,TUE,WED,THU,FRI,SAT,SUN)
-SCRIPT1_PATH="/fs_ogs/operogs/scriptbin/ogs_monitors/Jupitoverse/Script1_Outage_Report_Scheduled.py"
+SCRIPT1_ENABLED="true"                    # true/false
+SCRIPT1_SCHEDULE="5,10,15,20,25,30"       # Multiple inputs: For DATE: comma-separated numbers | For DAY: comma-separated days (MON,TUE,WED,THU,FRI,SAT,SUN)
+SCRIPT1_PATH="/fs_ogs/operogs/scriptbin/ogs_monitors/Jupitoverse/outage_Report.py"
 
 # Script 2 Configuration  
-SCRIPT2_ENABLED="true"                   # true/false
-SCRIPT2_SCHEDULE="2,15"            # Multiple inputs: For DATE: comma-separated numbers | For DAY: comma-separated days
-SCRIPT2_PATH="/fs_ogs/operogs/scriptbin/ogs_monitors/Jupitoverse/Script2_RELEASE_PONR_Scheduled.py"
+SCRIPT2_ENABLED="false"                   # true/false
+SCRIPT2_SCHEDULE="MON,WED,FRI"            # Multiple inputs: For DATE: comma-separated numbers | For DAY: comma-separated days
+SCRIPT2_PATH="/fs_ogs/operogs/scriptbin/ogs_monitors/Jupitoverse/script2.py"
 
 # Script 3 Configuration
 SCRIPT3_ENABLED="false"                   # true/false
@@ -55,52 +47,27 @@ SCRIPT5_PATH="/fs_ogs/operogs/scriptbin/ogs_monitors/Jupitoverse/script5.py"
 CURRENT_DATE=$(date +%d | sed 's/^0*//')  # Remove leading zeros
 CURRENT_DAY=$(date +%a | tr '[:lower:]' '[:upper:]')
 
-# Convert abbreviated day to full day name for better matching
-case $CURRENT_DAY in
-    "MON") CURRENT_DAY="MON" ;;
-    "TUE") CURRENT_DAY="TUE" ;;
-    "WED") CURRENT_DAY="WED" ;;
-    "THU") CURRENT_DAY="THU" ;;
-    "FRI") CURRENT_DAY="FRI" ;;
-    "SAT") CURRENT_DAY="SAT" ;;
-    "SUN") CURRENT_DAY="SUN" ;;
-esac
-
-# Create execution log
-EXECUTION_LOG="/tmp/orion_executor_$(date +%Y%m%d_%H%M%S).log"
-exec > >(tee -a "$EXECUTION_LOG") 2>&1
-
 echo "============================================================"
 echo "Orion Python Script Executor Started: $(date)"
 echo "Current Date: $CURRENT_DATE | Current Day: $CURRENT_DAY"
-echo "Execution Log: $EXECUTION_LOG"
 echo "============================================================"
 
 # Function to check if script should run
 should_run() {
     local schedule="$1"
     
-    # Split schedule by comma and check each value
-    IFS=',' read -ra SCHEDULE_ARRAY <<< "$schedule"
-    
-    for item in "${SCHEDULE_ARRAY[@]}"; do
-        # Trim whitespace
-        item=$(echo "$item" | xargs)
-        
-        # Check if it's a number (DATE mode) or text (DAY mode)
-        if [[ "$item" =~ ^[0-9]+$ ]]; then
-            # DATE mode: check if current date matches exactly
-            if [ "$CURRENT_DATE" -eq "$item" ]; then
-                return 0  # Should run
-            fi
-        else
-            # DAY mode: check if current day matches
-            if [ "$CURRENT_DAY" = "$item" ]; then
-                return 0  # Should run
-            fi
+    # Check if it's a number (DATE mode) or text (DAY mode)
+    if [[ "$schedule" =~ ^[0-9]+$ ]]; then
+        # DATE mode: check if current date is divisible by schedule value
+        if [ $((CURRENT_DATE % schedule)) -eq 0 ]; then
+            return 0  # Should run
         fi
-    done
-    
+    else
+        # DAY mode: check if current day matches
+        if [ "$CURRENT_DAY" = "$schedule" ]; then
+            return 0  # Should run
+        fi
+    fi
     return 1  # Should not run
 }
 
@@ -140,43 +107,6 @@ run_script() {
     echo "------------------------------------------------------------"
     
     return $exit_code
-}
-
-# Function to cleanup temp files and old logs
-cleanup_files() {
-    if [ "$CLEANUP_ENABLED" != "true" ]; then
-        echo "[CLEANUP] SKIPPED - Cleanup disabled"
-        return 0
-    fi
-    
-    echo "[CLEANUP] Starting cleanup process..."
-    
-    # Clean up temp files in current directory and /tmp
-    for pattern in $TEMP_FILE_PATTERNS; do
-        if ls $pattern 1> /dev/null 2>&1; then
-            echo "[CLEANUP] Removing temp files: $pattern"
-            rm -f $pattern
-        fi
-        
-        if ls /tmp/$pattern 1> /dev/null 2>&1; then
-            echo "[CLEANUP] Removing temp files from /tmp: $pattern"
-            rm -f /tmp/$pattern
-        fi
-    done
-    
-    # Clean up old execution logs (keep only recent ones)
-    if [ -d "/tmp" ]; then
-        echo "[CLEANUP] Removing old execution logs (older than $LOG_RETENTION_DAYS days)"
-        find /tmp -name "orion_executor_*.log" -type f -mtime +$LOG_RETENTION_DAYS -delete 2>/dev/null || true
-    fi
-    
-    # Clean up Python cache files
-    if [ -d "__pycache__" ]; then
-        echo "[CLEANUP] Removing Python cache files"
-        rm -rf __pycache__
-    fi
-    
-    echo "[CLEANUP] Cleanup completed"
 }
 
 # Execute all scripts
@@ -237,31 +167,15 @@ elif [ $? -ne 0 ]; then
     TOTAL_EXECUTED=$((TOTAL_EXECUTED + 1))
 fi
 
-# Run cleanup
-cleanup_files
-
 # Final Summary
 echo "============================================================"
 echo "EXECUTION COMPLETED: $(date)"
 echo "Scripts Executed: $TOTAL_EXECUTED"
 echo "Errors: $TOTAL_ERRORS"
-echo "Execution Log: $EXECUTION_LOG"
-
 if [ $TOTAL_ERRORS -eq 0 ]; then
     echo "Status: SUCCESS"
-    SUCCESS=0
+    exit 0
 else
     echo "Status: COMPLETED WITH ERRORS"
-    SUCCESS=1
+    exit 1
 fi
-
-echo "============================================================"
-
-# Copy log to permanent location if needed
-if [ -n "$EXECUTION_LOG" ] && [ -f "$EXECUTION_LOG" ]; then
-    PERMANENT_LOG="./execution_log_$(date +%Y%m%d_%H%M%S).log"
-    cp "$EXECUTION_LOG" "$PERMANENT_LOG" 2>/dev/null || true
-    echo "Permanent log saved: $PERMANENT_LOG"
-fi
-
-exit $SUCCESS

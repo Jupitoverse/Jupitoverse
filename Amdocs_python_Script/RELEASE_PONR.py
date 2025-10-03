@@ -75,6 +75,10 @@ class Config:
     # File Configuration
     OUTPUT_DIR = "."
     CLEANUP_ENABLED = True
+    
+    # Database Storage Configuration
+    PONR_TABLE = "ossdb01db.ponr_tracking"
+    TAG_NAME = "RELEASE_PONR"
 
 # Setup logging
 def setup_logging():
@@ -198,6 +202,155 @@ def execute_optimized_query(cursor, start, end):
         logger.error(f"Traceback: {traceback.format_exc()}")
         return []
 
+def process_and_store_results(results, cursor):
+    """Process results, check for duplicates, and store new records in database"""
+    try:
+        logger.info("Processing results for database storage...")
+        
+        if not results:
+            logger.info("No results to process")
+            return []
+        
+        # Convert results to DataFrame for easier processing
+        columns = ["projectid", "version", "activity_status", "project_status", 
+                  "activity_id", "name", "last_update_date", "create_date"]
+        df = pd.DataFrame(results, columns=columns)
+        
+        logger.info(f"Processing {len(df)} records for database storage")
+        
+        # Add calculated columns
+        current_date = dt.datetime.now().date()
+        df['identified_date'] = current_date
+        df['tag'] = Config.TAG_NAME
+        df['rca'] = None  # To be filled manually
+        df['handling_status'] = 'PENDING'
+        
+        # Calculate age in days (current_date - last_update_date)
+        df['last_update_date'] = pd.to_datetime(df['last_update_date'])
+        df['age_days'] = (pd.Timestamp(current_date) - df['last_update_date']).dt.days
+        
+        # Generate unique_id: RP_projectid_age_days
+        df['unique_id'] = df.apply(lambda row: f"RP_{row['projectid']}_{row['age_days']}", axis=1)
+        
+        logger.info(f"Generated unique IDs for {len(df)} records")
+        
+        # Check for existing records
+        existing_ids = check_existing_records(cursor, df['unique_id'].tolist())
+        logger.info(f"Found {len(existing_ids)} existing records in database")
+        
+        # Filter out existing records
+        new_records_df = df[~df['unique_id'].isin(existing_ids)]
+        logger.info(f"Identified {len(new_records_df)} new records to insert")
+        
+        # Insert new records
+        if not new_records_df.empty:
+            insert_new_records(cursor, new_records_df)
+            logger.info(f"Successfully inserted {len(new_records_df)} new records")
+        else:
+            logger.info("No new records to insert - all records already exist")
+        
+        # Get all records for today's email (including existing ones)
+        all_todays_records = get_todays_records(cursor)
+        logger.info(f"Retrieved {len(all_todays_records)} total records for today's email")
+        
+        return all_todays_records
+        
+    except Exception as e:
+        logger.error(f"Error processing and storing results: {e}")
+        import traceback
+        logger.error(f"Traceback: {traceback.format_exc()}")
+        return results  # Return original results if processing fails
+
+def check_existing_records(cursor, unique_ids):
+    """Check which records already exist in the database"""
+    try:
+        if not unique_ids:
+            return []
+        
+        # Create placeholders for the IN clause
+        placeholders = ','.join(['%s'] * len(unique_ids))
+        query = f"""
+        SELECT unique_id 
+        FROM {Config.PONR_TABLE} 
+        WHERE unique_id IN ({placeholders})
+        """
+        
+        cursor.execute(query, unique_ids)
+        existing_records = cursor.fetchall()
+        existing_ids = [record[0] for record in existing_records]
+        
+        logger.info(f"Checked {len(unique_ids)} IDs, found {len(existing_ids)} existing records")
+        return existing_ids
+        
+    except Exception as e:
+        logger.error(f"Error checking existing records: {e}")
+        return []
+
+def insert_new_records(cursor, df):
+    """Insert new records into the database"""
+    try:
+        insert_query = f"""
+        INSERT INTO {Config.PONR_TABLE} (
+            unique_id, projectid, version, activity_status, project_status,
+            activity_id, name, last_update_date, create_date, identified_date,
+            tag, rca, handling_status, age_days
+        ) VALUES (
+            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+        )
+        """
+        
+        # Prepare data for insertion
+        records_to_insert = []
+        for _, row in df.iterrows():
+            record = (
+                row['unique_id'],
+                int(row['projectid']),
+                int(row['version']) if pd.notna(row['version']) else None,
+                row['activity_status'],
+                row['project_status'],
+                int(row['activity_id']) if pd.notna(row['activity_id']) else None,
+                row['name'],
+                row['last_update_date'],
+                row['create_date'],
+                row['identified_date'],
+                row['tag'],
+                row['rca'],
+                row['handling_status'],
+                int(row['age_days'])
+            )
+            records_to_insert.append(record)
+        
+        # Execute batch insert
+        cursor.executemany(insert_query, records_to_insert)
+        logger.info(f"Batch inserted {len(records_to_insert)} records")
+        
+    except Exception as e:
+        logger.error(f"Error inserting new records: {e}")
+        raise
+
+def get_todays_records(cursor):
+    """Get all records identified today for email reporting"""
+    try:
+        query = f"""
+        SELECT unique_id, projectid, version, activity_status, project_status,
+               activity_id, name, last_update_date, create_date, identified_date,
+               tag, rca, handling_status, age_days
+        FROM {Config.PONR_TABLE}
+        WHERE identified_date = CURRENT_DATE
+          AND tag = %s
+        ORDER BY age_days DESC, projectid
+        """
+        
+        cursor.execute(query, (Config.TAG_NAME,))
+        records = cursor.fetchall()
+        
+        logger.info(f"Retrieved {len(records)} records for today's email")
+        return records
+        
+    except Exception as e:
+        logger.error(f"Error retrieving today's records: {e}")
+        return []
+
 def generate_part_id_ranges():
     """Generate configurable part_id ranges for minimal DB load"""
     logger.info(f"Generating part_id ranges: {Config.PART_ID_START} to {Config.PART_ID_END} with batch size {Config.PART_ID_BATCH_SIZE}")
@@ -281,6 +434,10 @@ def main():
                     logger.error(f"Batch {i} traceback: {traceback.format_exc()}")
                     continue
             
+            # Process and store results in database
+            logger.info("Processing results for database storage...")
+            final_results = process_and_store_results(results, cursor)
+            
             cursor.close()
             
     except Exception as e:
@@ -293,9 +450,10 @@ def main():
     logger.info(f"- Total records found: {total_processed}")
     logger.info(f"- Failed batches: {failed_batches}")
     logger.info(f"- Success rate: {((len(part_id_ranges)-failed_batches)/len(part_id_ranges))*100:.1f}%")
+    logger.info(f"- Final records for email: {len(final_results) if 'final_results' in locals() else 0}")
     logger.info("="*60)
     
-    return results
+    return final_results if 'final_results' in locals() else results
 
 def generate_reports(results):
     """Generate Excel and HTML reports with enhanced error handling"""
@@ -308,9 +466,14 @@ def generate_reports(results):
             logger.info(f"First result length: {len(results[0])}")
             logger.info(f"First result sample: {results[0]}")
         
-        # Create DataFrame with proper error handling
-        columns = ["projectid", "version", "activity_status", "project_status", 
-                  "activity_id", "name", "last_update_date", "create_date"]
+        # Create DataFrame with proper error handling - updated for database records
+        if results and len(results[0]) > 8:  # Database records with additional columns
+            columns = ["unique_id", "projectid", "version", "activity_status", "project_status", 
+                      "activity_id", "name", "last_update_date", "create_date", "identified_date",
+                      "tag", "rca", "handling_status", "age_days"]
+        else:  # Original query results
+            columns = ["projectid", "version", "activity_status", "project_status", 
+                      "activity_id", "name", "last_update_date", "create_date"]
         
         # Validate results structure before creating DataFrame
         if results:
@@ -411,7 +574,7 @@ class EmailManager:
             logger.error(f"Failed to attach file {file_path}: {e}")
     
     def get_mail_content(self):
-        """Generate email HTML content - KEEPING ORIGINAL FORMAT"""
+        """Generate email HTML content with enhanced tracking information"""
         return f"""
         <html>
   <head>
@@ -431,20 +594,37 @@ class EmailManager:
         .styled-table {{
             border-collapse: collapse;
             margin: 20px 0;
-            font-size: 0.95em;
-            min-width: 600px;
+            font-size: 0.9em;
+            min-width: 800px;
             border: 1px solid #dddddd;
         }}
 
         .styled-table th,
         .styled-table td {{
             border: 1px solid #dddddd;
-            padding: 8px 12px;
+            padding: 6px 10px;
             text-align: left;
         }}
 
         .styled-table th {{
             background-color: #f4f4f4;
+            font-weight: bold;
+            font-size: 0.85em;
+        }}
+
+        .status-pending {{
+            background-color: #fff3cd;
+            color: #856404;
+        }}
+
+        .status-resolved {{
+            background-color: #d4edda;
+            color: #155724;
+        }}
+
+        .age-high {{
+            background-color: #f8d7da;
+            color: #721c24;
             font-weight: bold;
         }}
 
@@ -464,6 +644,13 @@ class EmailManager:
             color: #444;
         }}
 
+        .summary {{
+            background-color: #e7f3ff;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }}
+
         a {{
             color: #0078D4;
             text-decoration: none;
@@ -479,17 +666,27 @@ class EmailManager:
 
     <p>Please find below the list of orders where the <strong>RELEASE PONR</strong> flag was not triggered by the system, even though the mandatory wait period associated with the Registered Timed Action has been completed.</p>
 
+    <div class="summary">
+        <strong>📊 Report Summary:</strong><br>
+        • This report includes all PONR issues identified today with enhanced tracking<br>
+        • <strong>Age Days</strong>: Number of days since last update<br>
+        • <strong>Handling Status</strong>: Current resolution status (PENDING/IN_PROGRESS/RESOLVED)<br>
+        • <strong>RCA</strong>: Root Cause Analysis (to be filled manually in database)<br>
+        • Records are stored in database for historical tracking and follow-up
+    </div>
+
     <p>This report fetches the data based on the activity states/status, not on the basis of the <code>qrtz</code> table.</p>
 
     <p>So any order where the flag has been released but the activity is still not marked completed would be part of this report, which also needs handling.</p>
 
-    <p>Kindly review these orders and take the necessary corrective actions. This issue is impacting the business, as services have already been ceased at the customer sites, but billing continues to be active.</p>
+    <p><strong>⚠️ Priority Action Required:</strong> Kindly review these orders and take the necessary corrective actions. This issue is impacting the business, as services have already been ceased at the customer sites, but billing continues to be active.</p>
 
     {self.html_content}
  
     <div class="note">
-        For any changes in the report: Please reach out to Abhishek Agrahari
-          </a>
+        <strong>📝 Database Tracking:</strong> All records are now stored in the production database (ossdb01db.ponr_tracking) for better tracking and follow-up. 
+        You can update the RCA and Handling Status directly in the database.<br><br>
+        <strong>For any changes in the report:</strong> Please reach out to Abhishek Agrahari
     </div>
 
     <div class="footer">
