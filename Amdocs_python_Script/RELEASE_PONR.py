@@ -136,6 +136,26 @@ def get_db_connection():
             conn.close()
             logger.info("Database connection closed")
 
+# Simple test query to debug the parameter issue
+TEST_QUERY = """
+SELECT 
+    spoi.id AS projectid,
+    spoi.version,
+    'test' AS activity_status,
+    spoi.status AS project_status,
+    1 AS activity_id,
+    spoi.name,
+    CURRENT_DATE AS last_update_date,
+    CURRENT_DATE AS create_date
+FROM ossdb01db.sc_project_order_instance spoi
+WHERE spoi.status NOT IN ('FCANCELLED', 'DCOMPLETED')
+  AND spoi.name NOT LIKE '%MM_PROD_TEST%'
+  AND spoi.name NOT LIKE '%MM_Prod_Test%'
+  AND spoi.manager IS DISTINCT FROM 'ProductionSanity'
+  AND spoi.is_latest_version = 1
+LIMIT 5;
+"""
+
 # Cascading CTE-based optimized query - Progressive filtering for maximum efficiency
 OPTIMIZED_CTE_QUERY = """
 WITH eligible_projects AS (
@@ -230,12 +250,34 @@ def execute_optimized_query(cursor, start, end):
         # Set query timeout
         cursor.execute(f"SET statement_timeout = '{Config.QUERY_TIMEOUT}s'")
         
+        # First, try a simple test query to verify basic functionality
+        logger.info("Testing with simple query first...")
+        try:
+            cursor.execute(TEST_QUERY)
+            test_results = cursor.fetchall()
+            logger.info(f"Simple test query successful: {len(test_results)} results")
+            if test_results:
+                logger.info(f"Test result structure: {len(test_results[0])} columns")
+        except Exception as test_e:
+            logger.error(f"Simple test query failed: {test_e}")
+            return []
+        
+        # Debug: Count the number of %s placeholders in the main query
+        placeholder_count = OPTIMIZED_CTE_QUERY.count('%s')
+        logger.info(f"Main query contains {placeholder_count} parameter placeholders")
+        
         # Debug: Log the parameters being passed
         params = (start, end, start, end, start, end)
         logger.info(f"Query parameters (3 part_id ranges): {params}")
+        logger.info(f"Parameter count: {len(params)}")
+        
+        # Validate parameter count matches placeholders
+        if len(params) != placeholder_count:
+            logger.error(f"Parameter mismatch: Query expects {placeholder_count} parameters, but {len(params)} provided")
+            return []
         
         # Execute cascading CTE query with part_id parameters for all three activity filters
-        # Parameters: (start, end, start, end, start, end) for oai2, oai, oai3 respectively
+        logger.info("Executing main CTE query...")
         cursor.execute(OPTIMIZED_CTE_QUERY, params)
         results = cursor.fetchall()
         
@@ -257,6 +299,11 @@ def execute_optimized_query(cursor, start, end):
         logger.error(f"Error type: {type(e).__name__}")
         import traceback
         logger.error(f"Traceback: {traceback.format_exc()}")
+        
+        # Additional debug info
+        logger.error(f"Query length: {len(OPTIMIZED_CTE_QUERY)}")
+        logger.error(f"Query preview: {OPTIMIZED_CTE_QUERY[:200]}...")
+        
         return []
 
 def generate_part_id_ranges():
