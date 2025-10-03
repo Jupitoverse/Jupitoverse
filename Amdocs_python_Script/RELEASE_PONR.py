@@ -58,12 +58,21 @@ from contextlib import contextmanager
 class Config:
     """Centralized configuration"""
     
-    # Database Configuration
-    DB_CONFIG = {
+    # Database Configuration - Read-only for main queries
+    DB_CONFIG_READ = {
         'database': "prodossdb",
         'user': 'ossdb01uams',
         'password': 'Pr0d_ossdb01uams',
         'host': 'oso-pstgr-rd.orion.comcast.com',
+        'port': '6432'
+    }
+    
+    # Database Configuration - Write access for table operations
+    DB_CONFIG_WRITE = {
+        'database': "prodossdb",
+        'user': 'prod_ossdb01oss',
+        'password': 'Pr0d_ossdb01oss',
+        'host': 'prodoss-postgres-west-dr.cy6c1wvf3ag2.us-west-2.rds.amazonaws.com',
         'port': '6432'
     }
     
@@ -119,28 +128,52 @@ logger, log_file = setup_logging()
 
 # Database connection manager
 @contextmanager
-def get_db_connection():
-    """Context manager for database connections with proper cleanup"""
+def get_read_db_connection():
+    """Context manager for read-only database connections"""
     conn = None
     try:
-        logger.info("Establishing database connection...")
+        logger.info("Establishing read-only database connection...")
         conn = psycopg2.connect(
-            **Config.DB_CONFIG,
+            **Config.DB_CONFIG_READ,
             connect_timeout=Config.CONNECTION_TIMEOUT
         )
-        conn.autocommit = True
-        logger.info("Database connection established successfully")
+        conn.autocommit = True  # For read-only operations
+        logger.info("Read-only database connection established successfully")
         yield conn
     except psycopg2.Error as e:
-        logger.error(f"Database connection error: {e}")
+        logger.error(f"Read-only database connection error: {e}")
         raise
     except Exception as e:
-        logger.error(f"Unexpected database error: {e}")
+        logger.error(f"Unexpected read-only database error: {e}")
         raise
     finally:
         if conn:
             conn.close()
-            logger.info("Database connection closed")
+            logger.info("Read-only database connection closed")
+
+@contextmanager
+def get_write_db_connection():
+    """Context manager for write database connections"""
+    conn = None
+    try:
+        logger.info("Establishing write database connection...")
+        conn = psycopg2.connect(
+            **Config.DB_CONFIG_WRITE,
+            connect_timeout=Config.CONNECTION_TIMEOUT
+        )
+        conn.autocommit = False  # For write operations with transaction control
+        logger.info("Write database connection established successfully")
+        yield conn
+    except psycopg2.Error as e:
+        logger.error(f"Write database connection error: {e}")
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected write database error: {e}")
+        raise
+    finally:
+        if conn:
+            conn.close()
+            logger.info("Write database connection closed")
 
 # Working query from original script - Simple approach with string formatting
 WORKING_SIMPLE_QUERY = """
@@ -204,8 +237,8 @@ def execute_optimized_query(cursor, start, end):
         logger.error(f"Traceback: {traceback.format_exc()}")
         return []
 
-def process_and_store_results(results, cursor):
-    """Process results, check for duplicates, and store new records in database"""
+def process_and_store_results(results):
+    """Process results, check for duplicates, and store new records in database using write connection"""
     try:
         logger.info("Processing results for database storage...")
         
@@ -236,31 +269,38 @@ def process_and_store_results(results, cursor):
         
         logger.info(f"Generated unique IDs for {len(df)} records")
         
-        # Check for existing records
-        existing_ids = check_existing_records(cursor, df['unique_id'].tolist())
-        logger.info(f"Found {len(existing_ids)} existing records in database")
-        
-        # Filter out existing records
-        new_records_df = df[~df['unique_id'].isin(existing_ids)]
-        logger.info(f"Identified {len(new_records_df)} new records to insert")
-        
-        # Insert new records
-        if not new_records_df.empty:
-            insert_new_records(cursor, new_records_df)
-            logger.info(f"Successfully inserted {len(new_records_df)} new records")
-        else:
-            logger.info("No new records to insert - all records already exist")
-        
-        # Get all records for today's email (including existing ones)
-        all_todays_records = get_todays_records(cursor)
-        logger.info(f"Retrieved {len(all_todays_records)} total records for today's email")
-        
-        return all_todays_records
+        # Use write database connection for all database operations
+        with get_write_db_connection() as write_conn:
+            write_cursor = write_conn.cursor()
+            
+            # Check for existing records
+            existing_ids = check_existing_records(write_cursor, df['unique_id'].tolist())
+            logger.info(f"Found {len(existing_ids)} existing records in database")
+            
+            # Filter out existing records
+            new_records_df = df[~df['unique_id'].isin(existing_ids)]
+            logger.info(f"Identified {len(new_records_df)} new records to insert")
+            
+            # Insert new records
+            if not new_records_df.empty:
+                insert_new_records(write_cursor, new_records_df)
+                write_conn.commit()  # Commit the transaction
+                logger.info(f"Successfully inserted {len(new_records_df)} new records")
+            else:
+                logger.info("No new records to insert - all records already exist")
+            
+            # Get all records for today's email (including existing ones)
+            all_todays_records = get_todays_records(write_cursor)
+            logger.info(f"Retrieved {len(all_todays_records)} total records for today's email")
+            
+            write_cursor.close()
+            return all_todays_records
         
     except Exception as e:
         logger.error(f"Error processing and storing results: {e}")
         import traceback
         logger.error(f"Traceback: {traceback.format_exc()}")
+        logger.warning("Database storage failed, but continuing with email using original results")
         return results  # Return original results if processing fails
 
 def check_existing_records(cursor, unique_ids):
@@ -405,7 +445,7 @@ def main():
                       (51, 60), (61, 70), (71, 80), (81, 90), (91, 99)]
     
     try:
-        with get_db_connection() as conn:
+        with get_read_db_connection() as conn:
             cursor = conn.cursor()
             
             logger.info(f"Processing {len(part_id_ranges)} part_id ranges (same as original script)")
@@ -438,7 +478,7 @@ def main():
             
             # Process and store results in database
             logger.info("Processing results for database storage...")
-            final_results = process_and_store_results(results, cursor)
+            final_results = process_and_store_results(results)
             
             cursor.close()
             
