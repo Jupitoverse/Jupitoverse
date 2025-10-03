@@ -126,6 +126,69 @@ def setup_logging():
 # Initialize logging
 logger, log_file = setup_logging()
 
+def test_write_database_connection():
+    """Test function to verify write database connection and table access"""
+    try:
+        logger.info("=" * 60)
+        logger.info("TESTING WRITE DATABASE CONNECTION")
+        logger.info("=" * 60)
+        
+        with get_write_db_connection() as write_conn:
+            write_cursor = write_conn.cursor()
+            
+            # Test 1: Basic connection
+            logger.info("Test 1: Basic connection - SUCCESS")
+            
+            # Test 2: Table exists and accessible
+            write_cursor.execute(f"SELECT COUNT(*) FROM {Config.PONR_TABLE}")
+            count = write_cursor.fetchone()[0]
+            logger.info(f"Test 2: Table access - SUCCESS. {Config.PONR_TABLE} has {count} records")
+            
+            # Test 3: Insert permissions (try a test insert and rollback)
+            test_unique_id = f"TEST_CONNECTION_{dt.datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            test_insert = f"""
+            INSERT INTO {Config.PONR_TABLE} (
+                unique_id, projectid, version, activity_status, project_status,
+                activity_id, name, last_update_date, create_date, identified_date,
+                tag, rca, handling_status, age_days
+            ) VALUES (
+                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+            )
+            """
+            
+            write_cursor.execute(test_insert, (
+                test_unique_id, 999999, 1, 'TEST', 'TEST', 999999, 'TEST_CONNECTION',
+                dt.datetime.now(), dt.datetime.now(), dt.date.today(),
+                'TEST', None, 'PENDING', 0
+            ))
+            
+            # Verify insert worked
+            write_cursor.execute(f"SELECT COUNT(*) FROM {Config.PONR_TABLE} WHERE unique_id = %s", (test_unique_id,))
+            test_count = write_cursor.fetchone()[0]
+            
+            if test_count == 1:
+                logger.info("Test 3: Insert permissions - SUCCESS")
+                # Clean up test record
+                write_cursor.execute(f"DELETE FROM {Config.PONR_TABLE} WHERE unique_id = %s", (test_unique_id,))
+                write_conn.commit()
+                logger.info("Test cleanup: Test record removed")
+            else:
+                logger.error("Test 3: Insert permissions - FAILED")
+                
+            write_cursor.close()
+            
+        logger.info("=" * 60)
+        logger.info("WRITE DATABASE CONNECTION TEST COMPLETED SUCCESSFULLY")
+        logger.info("=" * 60)
+        return True
+        
+    except Exception as e:
+        logger.error(f"WRITE DATABASE CONNECTION TEST FAILED: {e}")
+        import traceback
+        logger.error(f"Test error traceback: {traceback.format_exc()}")
+        logger.info("=" * 60)
+        return False
+
 # Database connection manager
 @contextmanager
 def get_read_db_connection():
@@ -270,31 +333,65 @@ def process_and_store_results(results):
         logger.info(f"Generated unique IDs for {len(df)} records")
         
         # Use write database connection for all database operations
-        with get_write_db_connection() as write_conn:
-            write_cursor = write_conn.cursor()
-            
-            # Check for existing records
-            existing_ids = check_existing_records(write_cursor, df['unique_id'].tolist())
-            logger.info(f"Found {len(existing_ids)} existing records in database")
-            
-            # Filter out existing records
-            new_records_df = df[~df['unique_id'].isin(existing_ids)]
-            logger.info(f"Identified {len(new_records_df)} new records to insert")
-            
-            # Insert new records
-            if not new_records_df.empty:
-                insert_new_records(write_cursor, new_records_df)
-                write_conn.commit()  # Commit the transaction
-                logger.info(f"Successfully inserted {len(new_records_df)} new records")
-            else:
-                logger.info("No new records to insert - all records already exist")
-            
-            # Get all records for today's email (including existing ones)
-            all_todays_records = get_todays_records(write_cursor)
-            logger.info(f"Retrieved {len(all_todays_records)} total records for today's email")
-            
-            write_cursor.close()
-            return all_todays_records
+        logger.info("Attempting to establish write database connection...")
+        try:
+            with get_write_db_connection() as write_conn:
+                write_cursor = write_conn.cursor()
+                
+                # Test the connection and table access
+                logger.info("Testing write database connection and table access...")
+                try:
+                    write_cursor.execute(f"SELECT COUNT(*) FROM {Config.PONR_TABLE}")
+                    table_count = write_cursor.fetchone()[0]
+                    logger.info(f"Successfully connected to write database. Table {Config.PONR_TABLE} has {table_count} existing records")
+                except Exception as table_error:
+                    logger.error(f"Failed to access table {Config.PONR_TABLE}: {table_error}")
+                    raise
+                
+                # Check for existing records
+                logger.info(f"Checking for existing records among {len(df['unique_id'])} unique IDs...")
+                existing_ids = check_existing_records(write_cursor, df['unique_id'].tolist())
+                logger.info(f"Found {len(existing_ids)} existing records in database")
+                
+                # Debug: Log some sample unique IDs
+                sample_ids = df['unique_id'].head(5).tolist()
+                logger.info(f"Sample unique IDs being processed: {sample_ids}")
+                
+                # Filter out existing records
+                new_records_df = df[~df['unique_id'].isin(existing_ids)]
+                logger.info(f"Identified {len(new_records_df)} new records to insert")
+                
+                # Debug: Log sample new records if any
+                if not new_records_df.empty:
+                    logger.info(f"Sample new record unique IDs: {new_records_df['unique_id'].head(3).tolist()}")
+                
+                # Insert new records
+                if not new_records_df.empty:
+                    logger.info(f"Attempting to insert {len(new_records_df)} new records...")
+                    insert_new_records(write_cursor, new_records_df)
+                    write_conn.commit()  # Commit the transaction
+                    logger.info(f"SUCCESS: Committed {len(new_records_df)} new records to database")
+                    
+                    # Verify insertion
+                    write_cursor.execute(f"SELECT COUNT(*) FROM {Config.PONR_TABLE} WHERE identified_date = CURRENT_DATE AND tag = %s", (Config.TAG_NAME,))
+                    todays_count = write_cursor.fetchone()[0]
+                    logger.info(f"Verification: {todays_count} records now exist for today with tag {Config.TAG_NAME}")
+                else:
+                    logger.info("No new records to insert - all records already exist")
+                
+                # Get all records for today's email (including existing ones)
+                logger.info("Retrieving all today's records for email...")
+                all_todays_records = get_todays_records(write_cursor)
+                logger.info(f"Retrieved {len(all_todays_records)} total records for today's email")
+                
+                write_cursor.close()
+                return all_todays_records
+                
+        except Exception as db_error:
+            logger.error(f"Write database connection or operation failed: {db_error}")
+            import traceback
+            logger.error(f"Database error traceback: {traceback.format_exc()}")
+            raise
         
     except Exception as e:
         logger.error(f"Error processing and storing results: {e}")
@@ -341,30 +438,49 @@ def insert_new_records(cursor, df):
         )
         """
         
+        logger.info(f"Starting insertion of {len(df)} records into {Config.PONR_TABLE}")
+        logger.info(f"Insert query: {insert_query}")
+        
         # Prepare data for insertion
         records_to_insert = []
-        for _, row in df.iterrows():
-            record = (
-                row['unique_id'],
-                int(row['projectid']),
-                int(row['version']) if pd.notna(row['version']) else None,
-                row['activity_status'],
-                row['project_status'],
-                int(row['activity_id']) if pd.notna(row['activity_id']) else None,
-                row['name'],
-                row['last_update_date'],
-                row['create_date'],
-                row['identified_date'],
-                row['tag'],
-                row['rca'],
-                row['handling_status'],
-                int(row['age_days'])
-            )
-            records_to_insert.append(record)
+        for index, row in df.iterrows():
+            try:
+                record = (
+                    row['unique_id'],
+                    int(row['projectid']),
+                    int(row['version']) if pd.notna(row['version']) else None,
+                    row['activity_status'],
+                    row['project_status'],
+                    int(row['activity_id']) if pd.notna(row['activity_id']) else None,
+                    row['name'],
+                    row['last_update_date'],
+                    row['create_date'],
+                    row['identified_date'],
+                    row['tag'],
+                    row['rca'],
+                    row['handling_status'],
+                    int(row['age_days'])
+                )
+                records_to_insert.append(record)
+                
+                # Log first few records for debugging
+                if index < 3:
+                    logger.info(f"Sample record {index + 1}: unique_id={record[0]}, projectid={record[1]}, tag={record[10]}")
+                    
+            except Exception as row_error:
+                logger.error(f"Error preparing record at index {index}: {row_error}")
+                logger.error(f"Problematic row data: {row.to_dict()}")
+                raise
+        
+        logger.info(f"Prepared {len(records_to_insert)} records for insertion")
         
         # Execute batch insert
+        logger.info("Executing batch insert...")
         cursor.executemany(insert_query, records_to_insert)
-        logger.info(f"Batch inserted {len(records_to_insert)} records")
+        logger.info(f"SUCCESS: Batch insert completed for {len(records_to_insert)} records")
+        
+        # Log affected rows
+        logger.info(f"Database reports {cursor.rowcount} rows affected by insert operation")
         
     except Exception as e:
         logger.error(f"Error inserting new records: {e}")
@@ -435,6 +551,12 @@ def main():
     logger.info("PONR Analysis Script Started")
     logger.info("Using original working script's query and batching approach")
     logger.info("="*60)
+    
+    # Test write database connection first
+    logger.info("Testing write database connection before proceeding...")
+    if not test_write_database_connection():
+        logger.error("Write database connection test failed. Proceeding with read-only mode.")
+        logger.error("Data will NOT be stored in database, but email will still be sent.")
     
     results = []
     total_processed = 0
