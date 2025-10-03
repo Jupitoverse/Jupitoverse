@@ -136,121 +136,50 @@ def get_db_connection():
             conn.close()
             logger.info("Database connection closed")
 
-# Simple test query to debug the parameter issue
-TEST_QUERY = """
-SELECT 
-    spoi.id AS projectid,
-    spoi.version,
-    'test' AS activity_status,
-    spoi.status AS project_status,
-    1 AS activity_id,
-    spoi.name,
-    CURRENT_DATE AS last_update_date,
-    CURRENT_DATE AS create_date
+# Working query from original script - Simple approach with string formatting
+WORKING_SIMPLE_QUERY = """
+SELECT spoi.id AS projectid, spoi.version, oai.status AS activity_status, 
+       spoi.status AS project_status, oai.id AS activity_id,
+       spoi.name, oai2.last_update_date, oai.create_date
 FROM ossdb01db.sc_project_order_instance spoi
+INNER JOIN ossdb01db.oss_activity_instance oai ON spoi.plan_id = oai.plan_id
+INNER JOIN ossdb01db.oss_activity_instance oai2 ON oai.plan_id = oai2.plan_id
+INNER JOIN ossdb01db.oss_activity_instance oai3 ON oai.plan_id = oai3.plan_id
 WHERE spoi.status NOT IN ('FCANCELLED', 'DCOMPLETED')
   AND spoi.name NOT LIKE '%MM_PROD_TEST%'
   AND spoi.name NOT LIKE '%MM_Prod_Test%'
   AND spoi.manager IS DISTINCT FROM 'ProductionSanity'
   AND spoi.is_latest_version = 1
-LIMIT 5;
-"""
-
-# Simplified working query without parameters for testing
-SIMPLE_WORKING_QUERY = """
-WITH eligible_projects AS (
-    SELECT DISTINCT 
-        spoi.id, 
-        spoi.plan_id, 
-        spoi.version, 
-        spoi.status, 
-        spoi.name
-    FROM ossdb01db.sc_project_order_instance spoi
-    WHERE spoi.status NOT IN ('FCANCELLED', 'DCOMPLETED')
-      AND spoi.name NOT LIKE '%MM_PROD_TEST%'
-      AND spoi.name NOT LIKE '%MM_Prod_Test%'
-      AND spoi.manager IS DISTINCT FROM 'ProductionSanity'
-      AND spoi.is_latest_version = 1
-),
-projects_with_completed_activities AS (
-    SELECT DISTINCT 
-        ep.id,
-        ep.plan_id, 
-        ep.version, 
-        ep.status, 
-        ep.name,
-        oai2.last_update_date, 
-        oai2.complete_date
-    FROM eligible_projects ep
-    INNER JOIN ossdb01db.oss_activity_instance oai2 ON ep.plan_id = oai2.plan_id
-    WHERE oai2.part_id BETWEEN 1 AND 99
-      AND oai2.spec_ver_id = '91757a68-692f-4246-91e1-7e2280a659d8'
-      AND oai2.state = 'Completed'
-      AND oai2.is_latest_version = 1
-      AND oai2.complete_date < CURRENT_DATE - INTERVAL '10 days'
-),
-projects_with_in_progress_activities AS (
-    SELECT DISTINCT 
-        pwca.id,
-        pwca.plan_id, 
-        pwca.version, 
-        pwca.status, 
-        pwca.name,
-        pwca.last_update_date,
-        oai.id AS activity_id,
-        oai.status AS activity_status,
-        oai.create_date
-    FROM projects_with_completed_activities pwca
-    INNER JOIN ossdb01db.oss_activity_instance oai ON pwca.plan_id = oai.plan_id
-    WHERE oai.part_id BETWEEN 1 AND 99
-      AND oai.spec_ver_id = '03acd7f1-557a-4727-ba2e-8d44f6245047'
-      AND oai.state IN ('In Progress', 'Optional')
-      AND oai.is_latest_version = 1
-),
-final_filtered_projects AS (
-    SELECT DISTINCT 
-        pwipa.id AS projectid,
-        pwipa.version,
-        pwipa.activity_status,
-        pwipa.status AS project_status,
-        pwipa.activity_id,
-        pwipa.name,
-        pwipa.last_update_date,
-        pwipa.create_date
-    FROM projects_with_in_progress_activities pwipa
-    INNER JOIN ossdb01db.oss_activity_instance oai3 ON pwipa.plan_id = oai3.plan_id
-    WHERE oai3.part_id BETWEEN 1 AND 99
-      AND oai3.spec_ver_id = '88f0860f-e647-41cd-aaac-1930adea8a3c'
-      AND oai3.state NOT IN ('In Progress')
-      AND oai3.is_latest_version = 1
-)
-SELECT 
-    projectid,
-    version,
-    activity_status,
-    project_status,
-    activity_id,
-    name,
-    last_update_date,
-    create_date
-FROM final_filtered_projects;
+  AND oai2.spec_ver_id = '91757a68-692f-4246-91e1-7e2280a659d8'
+  AND oai2.state = 'Completed'
+  AND oai2.is_latest_version = 1
+  AND oai2.complete_date < CURRENT_DATE - INTERVAL '10 days'
+  AND oai.spec_ver_id = '03acd7f1-557a-4727-ba2e-8d44f6245047'
+  AND oai.state IN ('In Progress', 'Optional')
+  AND oai.is_latest_version = 1
+  AND oai3.spec_ver_id = '88f0860f-e647-41cd-aaac-1930adea8a3c'
+  AND oai3.state NOT IN ('In Progress')
+  AND oai3.is_latest_version = 1
+  AND oai.part_id BETWEEN {start} AND {end};
 """
 
 def execute_optimized_query(cursor, start, end):
-    """Execute the simplified working query without parameters to avoid tuple index error"""
+    """Execute the working simple query using string formatting (from original script)"""
     try:
-        logger.info(f"Executing simplified working query (covers all part_ids 1-99)")
-        logger.info("Using hardcoded part_id ranges to avoid parameter issues")
+        logger.info(f"Executing working simple query for part_id {start}-{end}")
+        logger.info("Using proven query approach from original working script")
         
         # Set query timeout
         cursor.execute(f"SET statement_timeout = '{Config.QUERY_TIMEOUT}s'")
         
-        # Use the simplified query without parameters
-        logger.info("Executing simplified working query...")
-        cursor.execute(SIMPLE_WORKING_QUERY)
+        # Use string formatting like the original working script
+        query = WORKING_SIMPLE_QUERY.format(start=start, end=end)
+        logger.info(f"Executing query for part_id range {start}-{end}")
+        
+        cursor.execute(query)
         results = cursor.fetchall()
         
-        logger.info(f"Simplified query completed: Found {len(results)} records")
+        logger.info(f"Working query completed: Found {len(results)} records for part_id {start}-{end}")
         
         # Debug: Log first few results if any
         if results:
@@ -260,10 +189,10 @@ def execute_optimized_query(cursor, start, end):
         return results
         
     except psycopg2.Error as e:
-        logger.error(f"Database simplified query error: {e}")
+        logger.error(f"Database working query error for part_id {start}-{end}: {e}")
         return []
     except Exception as e:
-        logger.error(f"Unexpected simplified query error: {e}")
+        logger.error(f"Unexpected working query error for part_id {start}-{end}: {e}")
         logger.error(f"Error type: {type(e).__name__}")
         import traceback
         logger.error(f"Traceback: {traceback.format_exc()}")
@@ -306,44 +235,51 @@ def create_reusable_part_id_ranges(start_value, end_value, batch_size):
     return ranges
 
 def main():
-    """Main execution function"""
+    """Main execution function using original script's batching approach"""
     logger.info("="*60)
     logger.info("PONR Analysis Script Started")
+    logger.info("Using original working script's query and batching approach")
     logger.info("="*60)
     
     results = []
     total_processed = 0
     failed_batches = 0
     
+    # Use the same part_id ranges as the original working script
+    part_id_ranges = [(1, 10), (11, 20), (21, 30), (31, 40), (41, 50), 
+                      (51, 60), (61, 70), (71, 80), (81, 90), (91, 99)]
+    
     try:
         with get_db_connection() as conn:
             cursor = conn.cursor()
             
-            # Since we're using a simplified query that covers all part_ids, run only once
-            logger.info("Using simplified query approach - single execution covering all part_ids")
+            logger.info(f"Processing {len(part_id_ranges)} part_id ranges (same as original script)")
             
-            try:
-                logger.info("Processing single query covering all part_ids 1-99")
-                
-                batch_results = execute_optimized_query(cursor, 1, 99)
-                
-                # Debug: Check batch results structure
-                if batch_results:
-                    logger.info(f"Query returned {len(batch_results)} results")
-                    if len(batch_results) > 0:
-                        logger.info(f"First result structure: {len(batch_results[0])} columns")
-                
-                results.extend(batch_results)
-                total_processed += len(batch_results)
-                
-                logger.info(f"✓ Query completed: {len(batch_results)} records")
-                
-            except Exception as e:
-                failed_batches += 1
-                logger.error(f"✗ Query failed: {e}")
-                logger.error(f"Error type: {type(e).__name__}")
-                import traceback
-                logger.error(f"Query traceback: {traceback.format_exc()}")
+            # Process each range exactly like the original script
+            for i, (start, end) in enumerate(part_id_ranges, 1):
+                try:
+                    logger.info(f"Processing batch {i}/{len(part_id_ranges)}: part_id BETWEEN {start} AND {end}")
+                    
+                    batch_results = execute_optimized_query(cursor, start, end)
+                    
+                    # Debug: Check batch results structure
+                    if batch_results:
+                        logger.info(f"Batch {i} returned {len(batch_results)} results")
+                        if len(batch_results) > 0:
+                            logger.info(f"Batch {i} first result structure: {len(batch_results[0])} columns")
+                    
+                    results.extend(batch_results)
+                    total_processed += len(batch_results)
+                    
+                    logger.info(f"✓ Batch {start}-{end}: Found {len(batch_results)} records")
+                    
+                except Exception as e:
+                    failed_batches += 1
+                    logger.error(f"✗ Batch {start}-{end} FAILED: {e}")
+                    logger.error(f"Error type: {type(e).__name__}")
+                    import traceback
+                    logger.error(f"Batch {i} traceback: {traceback.format_exc()}")
+                    continue
             
             cursor.close()
             
@@ -355,8 +291,8 @@ def main():
     logger.info("="*60)
     logger.info("Query Execution Summary:")
     logger.info(f"- Total records found: {total_processed}")
-    logger.info(f"- Failed queries: {failed_batches}")
-    logger.info(f"- Success: {'Yes' if failed_batches == 0 else 'No'}")
+    logger.info(f"- Failed batches: {failed_batches}")
+    logger.info(f"- Success rate: {((len(part_id_ranges)-failed_batches)/len(part_id_ranges))*100:.1f}%")
     logger.info("="*60)
     
     return results
