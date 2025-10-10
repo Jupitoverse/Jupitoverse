@@ -253,9 +253,9 @@ def delete_workaround(id):
         return False
     
     try:
-    cur = conn.cursor()
-    cur.execute("DELETE FROM workarounds WHERE id = %s", (id,))
-    conn.commit()
+        cur = conn.cursor()
+        cur.execute("DELETE FROM workarounds WHERE id = %s", (id,))
+        conn.commit()
         success = cur.rowcount > 0
         cur.close()
         conn.close()
@@ -315,8 +315,8 @@ def test_connection():
         try:
             cur = conn.cursor()
             cur.execute("SELECT 1")
-    cur.close()
-    conn.close()
+            cur.close()
+            conn.close()
             print("✅ Database connection successful!")
             return True
         except psycopg2.Error as e:
