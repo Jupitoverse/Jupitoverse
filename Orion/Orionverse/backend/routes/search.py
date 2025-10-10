@@ -49,35 +49,140 @@ def get_all_data():
 def filter_data():
     """
     Performs a complex, multi-source search and returns ALL matching results.
+    Supports multiple filter criteria:
+    - search_anything: Free text search across multiple fields
+    - customer_id: Exact or partial match on Customer ID
+    - osite_id: Site ID in format OSite_%_1
+    - sr_id: Service Request ID
+    - id: Defect ID
     """
-    # ... (The filter logic remains the same as before) ...
     filters = request.get_json()
+    print(f"🔍 Filtering with: {filters}")
     
+    # Start with all data
     filtered_sr = sr_data
     filtered_defect = defect_data
     
-    customer_id = filters.get('customer_id', '').lower()
+    # Extract filter values
+    search_anything = filters.get('search_anything', '').strip().lower()
+    customer_id = filters.get('customer_id', '').strip()
+    osite_id = filters.get('osite_id', '').strip().lower()
+    sr_id = filters.get('sr_id', '').strip().upper()
+    defect_id = filters.get('id', '').strip()
+    
+    # Filter 1: Customer ID
+    # SR → CUSTOMER_ID | Defect → Name, Description
     if customer_id:
-        filtered_sr = [r for r in filtered_sr if str(r.get('CUSTOMER_ID', '')).lower() == customer_id]
-
-    # ... (Add all other filter logic here exactly as before) ...
+        print(f"  Filtering by Customer ID: {customer_id}")
+        filtered_sr = [
+            r for r in filtered_sr 
+            if str(r.get('CUSTOMER_ID', '')).lower().find(customer_id.lower()) != -1
+        ]
+        filtered_defect = [
+            d for d in filtered_defect 
+            if customer_id.lower() in str(d.get('Name', '')).lower() 
+            or customer_id.lower() in str(d.get('Description', '')).lower()
+        ]
+    
+    # Filter 2: OSite ID (format: OSite_%_1)
+    # SR → DETAILS, UPDATE_DETAILS | Defect → Name, Description
+    if osite_id:
+        print(f"  Filtering by OSite ID: {osite_id}")
+        filtered_sr = [
+            r for r in filtered_sr 
+            if osite_id in str(r.get('DETAILS', '')).lower() 
+            or osite_id in str(r.get('UPDATE_DETAILS', '')).lower()
+        ]
+        filtered_defect = [
+            d for d in filtered_defect 
+            if osite_id in str(d.get('Name', '')).lower() 
+            or osite_id in str(d.get('Description', '')).lower()
+        ]
+    
+    # Filter 3: SR ID
+    # SR → SR_ID | Defect → Name, Description
+    if sr_id:
+        print(f"  Filtering by SR ID: {sr_id}")
+        filtered_sr = [
+            r for r in filtered_sr 
+            if sr_id in str(r.get('SR_ID', '')).upper()
+        ]
+        filtered_defect = [
+            d for d in filtered_defect 
+            if sr_id in str(d.get('Name', '')).upper() 
+            or sr_id in str(d.get('Description', '')).upper()
+        ]
+    
+    # Filter 4: Defect ID
+    # SR → DETAILS, UPDATE_DETAILS | Defect → ID
+    if defect_id:
+        print(f"  Filtering by Defect ID: {defect_id}")
+        filtered_sr = [
+            r for r in filtered_sr 
+            if defect_id in str(r.get('DETAILS', '')) 
+            or defect_id in str(r.get('UPDATE_DETAILS', ''))
+        ]
+        filtered_defect = [
+            d for d in filtered_defect 
+            if str(d.get('ID', '')) == defect_id
+        ]
+    
+    # Filter 5: Search Anything (free text)
+    # SR → DETAILS, UPDATE_DETAILS | Defect → Name, Description
+    if search_anything:
+        print(f"  Filtering by Search Anything: {search_anything}")
+        filtered_sr = [
+            r for r in filtered_sr 
+            if search_anything in str(r.get('DETAILS', '')).lower() 
+            or search_anything in str(r.get('UPDATE_DETAILS', '')).lower()
+        ]
+        filtered_defect = [
+            d for d in filtered_defect 
+            if search_anything in str(d.get('Name', '')).lower() 
+            or search_anything in str(d.get('Description', '')).lower()
+        ]
     
     # Fetch and filter WA data from the database
     wa_data = []
     try:
         conn = database.get_db_connection()
-        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        search_anything = filters.get('search_anything', '').lower()
-        if search_anything:
-            query = "SELECT * FROM workarounds WHERE category ILIKE %s OR issue ILIKE %s OR description ILIKE %s ORDER BY created_date DESC;"
-            cur.execute(query, (f'%{search_anything}%', f'%{search_anything}%', f'%{search_anything}%'))
+        if not conn:
+            print("❌ Database connection failed for WA data")
+            wa_data = []
         else:
-            cur.execute('SELECT * FROM workarounds ORDER BY created_date DESC;')
-        wa_data = cur.fetchall()
-        cur.close()
-        conn.close()
+            cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+            
+            # If search_anything is provided, search in all WA fields
+            if search_anything:
+                query = """
+                    SELECT * FROM workarounds 
+                    WHERE LOWER(category) LIKE %s 
+                       OR LOWER(issue) LIKE %s 
+                       OR LOWER(description) LIKE %s 
+                       OR LOWER(created_by) LIKE %s
+                    ORDER BY created_date DESC;
+                """
+                search_pattern = f'%{search_anything}%'
+                cur.execute(query, (search_pattern, search_pattern, search_pattern, search_pattern))
+            else:
+                # Return all workarounds if no search term
+                cur.execute('SELECT * FROM workarounds ORDER BY created_date DESC;')
+            
+            wa_data = cur.fetchall()
+            cur.close()
+            conn.close()
+            print(f"  Found {len(wa_data)} workarounds")
+            
     except Exception as e:
-        print(f"Database error in filter_data: {e}")
+        print(f"❌ Database error in filter_data: {e}")
+        wa_data = []
+
+    result_counts = {
+        "sr_count": len(filtered_sr),
+        "defect_count": len(filtered_defect),
+        "wa_count": len(wa_data)
+    }
+    print(f"✅ Filter complete: {result_counts}")
 
     return jsonify({
         "sr_data": filtered_sr,
