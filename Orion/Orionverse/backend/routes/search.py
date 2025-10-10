@@ -39,10 +39,11 @@ def get_all_data():
         print(f"Database error in get_all_data: {e}")
     
     print(f"📊 Initial load: {len(sr_data)} total SRs, {len(defect_data)} total defects, {len(wa_data)} WAs")
+    print(f"📊 Returning 5 SRs, 5 Defects for initial display")
     
     return jsonify({
-        "sr_data": sr_data[:10],
-        "defect_data": defect_data[:10],
+        "sr_data": sr_data[:5],  # Latest 5 SRs
+        "defect_data": defect_data[:5],  # Latest 5 Defects
         "wa_data": wa_data,
         # Add total counts for statistics
         "total_counts": {
@@ -64,7 +65,11 @@ def filter_data():
     - id: Defect ID
     """
     filters = request.get_json()
-    print(f"🔍 Filtering with: {filters}")
+    print(f"\n{'='*60}")
+    print(f"🔍 NEW SEARCH REQUEST")
+    print(f"{'='*60}")
+    print(f"Filters received: {filters}")
+    print(f"Starting with {len(sr_data)} SRs and {len(defect_data)} Defects")
     
     # Start with all data
     filtered_sr = sr_data
@@ -189,7 +194,15 @@ def filter_data():
         "defect_count": len(filtered_defect),
         "wa_count": len(wa_data)
     }
-    print(f"✅ Filter complete: {result_counts}")
+    print(f"{'='*60}")
+    print(f"✅ SEARCH COMPLETE")
+    print(f"{'='*60}")
+    print(f"Results: {result_counts}")
+    if len(filtered_defect) > 0:
+        print(f"Sample defect found: {filtered_defect[0].get('ID')} - {filtered_defect[0].get('Name')[:50]}...")
+    else:
+        print(f"⚠️ No defects found! Original defect_data had {len(defect_data)} records")
+    print(f"{'='*60}\n")
 
     return jsonify({
         "sr_data": filtered_sr,

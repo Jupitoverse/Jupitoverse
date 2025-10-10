@@ -231,6 +231,8 @@ const SearchAnything = {
             this.currentData.wa = this.allData.wa;
             
             console.log(`✅ Data loaded: ${this.allData.sr.length} SRs (of ${this.totalCounts.sr_total}), ${this.allData.defect.length} Defects (of ${this.totalCounts.defect_total}), ${this.allData.wa.length} WAs`);
+            console.log(`SR Data sample:`, this.allData.sr[0]);
+            console.log(`Defect Data sample:`, this.allData.defect[0]);
             
             // Update stats with total counts
             this.updateStats();
@@ -238,8 +240,9 @@ const SearchAnything = {
             // Render all results
             this.renderAllResults();
             
-            // Show navigation tabs
+            // Show all sections by default (no tabs needed initially)
             document.getElementById('sa-nav-tabs').style.display = 'flex';
+            this.switchTab('all'); // Show all sections by default
             
         } catch (error) {
             console.error('❌ Error fetching data:', error);
@@ -507,9 +510,18 @@ const SearchAnything = {
             this.currentData.wa = data.wa_data || [];
 
             console.log(`✅ Search complete: ${this.currentData.sr.length} SRs, ${this.currentData.defect.length} Defects, ${this.currentData.wa.length} WAs`);
+            
+            if (this.currentData.defect.length > 0) {
+                console.log(`Sample defect result:`, this.currentData.defect[0]);
+            } else {
+                console.log(`⚠️ No defects found in current results!`);
+            }
 
             // Render results
             this.renderAllResults();
+            
+            // Show all sections after search
+            this.switchTab('all');
 
         } catch (error) {
             console.error('❌ Search error:', error);
@@ -541,7 +553,7 @@ const SearchAnything = {
     },
 
     /**
-     * Switch between tabs
+     * Switch between tabs (or show all)
      */
     switchTab(tab) {
         this.currentTab = tab;
@@ -554,16 +566,26 @@ const SearchAnything = {
             }
         });
 
-        // Show/hide sections
-        document.getElementById('wa-results-section').style.display = tab === 'wa' ? 'block' : 'none';
-        document.getElementById('sr-results-section').style.display = tab === 'sr' ? 'block' : 'none';
-        document.getElementById('defect-results-section').style.display = tab === 'defect' ? 'block' : 'none';
-
-        // Redraw tables if switched to them (for responsive sizing)
-        if (tab === 'sr') {
+        if (tab === 'all') {
+            // Show all sections
+            document.getElementById('wa-results-section').style.display = 'block';
+            document.getElementById('sr-results-section').style.display = 'block';
+            document.getElementById('defect-results-section').style.display = 'block';
+            // Redraw both tables
             this.srTable.columns.adjust().draw();
-        } else if (tab === 'defect') {
             this.defectTable.columns.adjust().draw();
+        } else {
+            // Show only selected tab
+            document.getElementById('wa-results-section').style.display = tab === 'wa' ? 'block' : 'none';
+            document.getElementById('sr-results-section').style.display = tab === 'sr' ? 'block' : 'none';
+            document.getElementById('defect-results-section').style.display = tab === 'defect' ? 'block' : 'none';
+
+            // Redraw tables if switched to them
+            if (tab === 'sr') {
+                this.srTable.columns.adjust().draw();
+            } else if (tab === 'defect') {
+                this.defectTable.columns.adjust().draw();
+            }
         }
 
         console.log(`📑 Switched to ${tab} tab`);
