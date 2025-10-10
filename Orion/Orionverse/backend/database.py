@@ -217,17 +217,17 @@ def update_workaround(id, data):
         return False
     
     try:
-    cur = conn.cursor()
-    cur.execute(
-        """UPDATE workarounds 
-           SET category = %s, issue = %s, description = %s
-           WHERE id = %s""",
-        (data['category'], data['issue'], data['description'], id)
-    )
-    conn.commit()
+        cur = conn.cursor()
+        cur.execute(
+            """UPDATE workarounds 
+               SET category = %s, issue = %s, description = %s
+               WHERE id = %s""",
+            (data['category'], data['issue'], data['description'], id)
+        )
+        conn.commit()
         success = cur.rowcount > 0
-    cur.close()
-    conn.close()
+        cur.close()
+        conn.close()
         return success
     
     except psycopg2.Error as e:
