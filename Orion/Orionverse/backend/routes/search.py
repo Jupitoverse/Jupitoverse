@@ -25,12 +25,12 @@ defect_data = load_json_data('defect_data.json')
 def get_all_data():
     """
     Fetches the TOP 10 rows from each data source for the initial page load.
+    Also returns total counts for statistics.
     """
     wa_data = []
     try:
         conn = database.get_db_connection()
         cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        # ✅ FIX: Added LIMIT 10 to the query
         cur.execute('SELECT * FROM workarounds ORDER BY created_date DESC LIMIT 10;')
         wa_data = cur.fetchall()
         cur.close()
@@ -38,11 +38,18 @@ def get_all_data():
     except Exception as e:
         print(f"Database error in get_all_data: {e}")
     
+    print(f"📊 Initial load: {len(sr_data)} total SRs, {len(defect_data)} total defects, {len(wa_data)} WAs")
+    
     return jsonify({
-        # ✅ FIX: Slicing the JSON data to return only the first 10 rows
         "sr_data": sr_data[:10],
         "defect_data": defect_data[:10],
-        "wa_data": wa_data
+        "wa_data": wa_data,
+        # Add total counts for statistics
+        "total_counts": {
+            "sr_total": len(sr_data),
+            "defect_total": len(defect_data),
+            "wa_total": len(wa_data)
+        }
     })
 
 @search_bp.route('/filter', methods=['POST'])

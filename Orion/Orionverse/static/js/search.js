@@ -32,7 +32,7 @@ const SearchAnything = {
             }
         });
     },
-
+    
     /**
      * Setup the page - initialize components and load data
      */
@@ -213,19 +213,26 @@ const SearchAnything = {
             console.log('📡 Fetching data from backend...');
             const data = await API.getAllSearchData();
             
-            // Store all data
+            // Store initial display data (top 10)
             this.allData.sr = data.sr_data || [];
             this.allData.defect = data.defect_data || [];
             this.allData.wa = data.wa_data || [];
             
-            // Set current data to all data initially
+            // Store total counts for statistics (from backend)
+            this.totalCounts = data.total_counts || {
+                sr_total: this.allData.sr.length,
+                defect_total: this.allData.defect.length,
+                wa_total: this.allData.wa.length
+            };
+            
+            // Set current data to initial data
             this.currentData.sr = this.allData.sr;
             this.currentData.defect = this.allData.defect;
             this.currentData.wa = this.allData.wa;
             
-            console.log(`✅ Data loaded: ${this.allData.sr.length} SRs, ${this.allData.defect.length} Defects, ${this.allData.wa.length} WAs`);
+            console.log(`✅ Data loaded: ${this.allData.sr.length} SRs (of ${this.totalCounts.sr_total}), ${this.allData.defect.length} Defects (of ${this.totalCounts.defect_total}), ${this.allData.wa.length} WAs`);
             
-            // Update stats
+            // Update stats with total counts
             this.updateStats();
             
             // Render all results
@@ -243,12 +250,19 @@ const SearchAnything = {
     },
 
     /**
-     * Update statistics display
+     * Update statistics display (uses total counts from backend)
      */
     updateStats() {
-        document.getElementById('sr-count').textContent = this.allData.sr.length.toLocaleString();
-        document.getElementById('defect-count').textContent = this.allData.defect.length.toLocaleString();
-        document.getElementById('wa-count').textContent = this.allData.wa.length;
+        if (this.totalCounts) {
+            document.getElementById('sr-count').textContent = this.totalCounts.sr_total.toLocaleString();
+            document.getElementById('defect-count').textContent = this.totalCounts.defect_total.toLocaleString();
+            document.getElementById('wa-count').textContent = this.totalCounts.wa_total;
+        } else {
+            // Fallback if totalCounts not available
+            document.getElementById('sr-count').textContent = this.allData.sr.length.toLocaleString();
+            document.getElementById('defect-count').textContent = this.allData.defect.length.toLocaleString();
+            document.getElementById('wa-count').textContent = this.allData.wa.length;
+        }
     },
 
     /**
@@ -322,10 +336,10 @@ const SearchAnything = {
 
             return `
                 <article class="wa-card" data-id="${wa.id}">
-                    <div class="wa-card-header">
+                <div class="wa-card-header">
                         <span class="wa-card-category">${wa.category || 'General'}</span>
                         <h3 class="wa-card-issue">${wa.issue || 'No Issue Title'}</h3>
-                    </div>
+                </div>
                     <p class="wa-card-meta">
                         👤 ${wa.created_by || 'Anonymous'} | 📅 ${postDate}
                     </p>
@@ -349,8 +363,8 @@ const SearchAnything = {
                             <button class="wa-download-btn secondary-btn" title="Download as PDF">
                                 📥 PDF
                             </button>
-                        </div>
-                        <div class="wa-card-stats">
+                    </div>
+                    <div class="wa-card-stats">
                             <span class="wa-stat">👁️ ${wa.views || 0} views</span>
                         </div>
                     </div>
@@ -453,7 +467,7 @@ const SearchAnything = {
      */
     attachWorkaroundEventListeners() {
         document.querySelectorAll('.wa-card').forEach(card => {
-            const id = parseInt(card.dataset.id);
+        const id = parseInt(card.dataset.id);
             
             card.querySelector('.wa-read-more-btn')?.addEventListener('click', () => this.viewWorkaround(id));
             card.querySelector('.wa-like-btn')?.addEventListener('click', () => this.likeWorkaround(id));
