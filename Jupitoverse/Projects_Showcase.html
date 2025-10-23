@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science Projects Showcase | Jupitoverse</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #3b82f6;
+            --secondary: #8b5cf6;
+            --accent: #10b981;
+            --dark: #111827;
+            --darker: #030712;
+            --light: #f3f4f6;
+            --gray: #6b7280;
+            --border: #d1d5db;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--darker);
+            color: white;
+            line-height: 1.6;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--darker) 100%);
+            padding: 100px 20px 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.1), transparent);
+        }
+        
+        .hero-section h1 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-section p {
+            font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+            color: var(--gray);
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        
+        .filters-section {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+        }
+        
+        .filter-btn {
+            padding: 12px 30px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .project-card {
+            background: var(--dark);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 60px rgba(59, 130, 246, 0.3);
+        }
+        
+        .project-thumbnail {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+        
+        .project-thumbnail::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .project-icon {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .project-content {
+            padding: 30px;
+        }
+        
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+        
+        .project-category {
+            display: inline-block;
+            padding: 5px 12px;
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--primary);
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .project-status {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .status-active {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent);
+        }
+        
+        .status-completed {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--secondary);
+        }
+        
+        .status-upcoming {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+        
+        .project-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+        
+        .project-description {
+            color: var(--gray);
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+        
+        .project-tech {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .tech-badge {
+            padding: 4px 10px;
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--secondary);
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .project-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .project-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .project-links {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .project-btn {
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .project-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+        }
+        
+        .stats-banner {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 50px;
+            padding: 40px;
+            background: var(--dark);
+            border-radius: 20px;
+            border: 2px solid rgba(59, 130, 246, 0.2);
+        }
+        
+        .stat-card {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: var(--dark);
+            border-radius: 20px;
+            max-width: 900px;
+            margin: 20px;
+            padding: 50px;
+            position: relative;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--gray);
+            transition: all 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            color: white;
+            transform: rotate(90deg);
+        }
+        
+        .modal-header {
+            margin-bottom: 30px;
+        }
+        
+        .modal-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .modal-body h3 {
+            font-size: 1.5rem;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .modal-body p {
+            color: var(--gray);
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .modal-body ul {
+            list-style-position: inside;
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+        
+        .modal-body li {
+            margin-bottom: 10px;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .modal-btn {
+            flex: 1;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-section">
+        <h1>🚀 Science Projects Showcase</h1>
+        <p>Explore innovative projects, research initiatives, and experiments from the Jupitoverse community</p>
+    </div>
+    
+    <div class="container">
+        <div class="stats-banner">
+            <div class="stat-card">
+                <div class="stat-number" id="totalProjects">42</div>
+                <div class="stat-label">Total Projects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="activeProjects">18</div>
+                <div class="stat-label">Active Projects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="completedProjects">24</div>
+                <div class="stat-label">Completed Projects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="contributors">156</div>
+                <div class="stat-label">Contributors</div>
+            </div>
+        </div>
+        
+        <div class="filters-section">
+            <button class="filter-btn active" data-filter="all">All Projects</button>
+            <button class="filter-btn" data-filter="physics">Physics</button>
+            <button class="filter-btn" data-filter="astronomy">Astronomy</button>
+            <button class="filter-btn" data-filter="biology">Biology</button>
+            <button class="filter-btn" data-filter="computing">Computing</button>
+            <button class="filter-btn" data-filter="engineering">Engineering</button>
+        </div>
+        
+        <div class="projects-grid" id="projectsGrid"></div>
+    </div>
+    
+    <div class="modal" id="projectModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+    
+    <script>
+        const projects = [
+            {
+                id: 1,
+                title: "Quantum Error Correction Simulator",
+                category: "physics",
+                status: "active",
+                icon: "⚛️",
+                description: "Interactive tool for visualizing and testing quantum error correction codes including Surface Code and Shor's Code. Helps researchers understand how quantum computers maintain coherence.",
+                fullDescription: "This project implements various quantum error correction schemes in an interactive environment. Users can inject errors and watch how different codes detect and correct them in real-time.",
+                tech: ["Python", "Qiskit", "NumPy", "WebGL"],
+                stats: { views: "2.3K", stars: "145", forks: "32" },
+                features: [
+                    "Multiple error correction codes (Surface, Shor, Steane)",
+                    "Real-time error injection and correction visualization",
+                    "Performance benchmarking tools",
+                    "Export results for research papers"
+                ],
+                team: "Quantum Computing Lab, MIT"
+            },
+            {
+                id: 2,
+                title: "Exoplanet Detection ML Pipeline",
+                category: "astronomy",
+                status: "completed",
+                icon: "🪐",
+                description: "Machine learning pipeline for detecting exoplanets from Kepler and TESS telescope data. Uses deep learning to identify transit signals with 96% accuracy.",
+                fullDescription: "This pipeline processes light curves from space telescopes to automatically detect exoplanet transits. It has been used to discover 8 new exoplanet candidates.",
+                tech: ["TensorFlow", "Python", "Astropy", "Docker"],
+                stats: { views: "5.1K", stars: "289", forks: "67" },
+                features: [
+                    "Pre-trained models for Kepler and TESS data",
+                    "False positive filtering",
+                    "Batch processing for large datasets",
+                    "Visualization tools for light curves"
+                ],
+                team: "Exoplanet Research Group, Caltech"
+            },
+            {
+                id: 3,
+                title: "CRISPR Design Optimizer",
+                category: "biology",
+                status: "active",
+                icon: "🧬",
+                description: "AI-powered tool for designing optimal CRISPR guide RNAs. Predicts off-target effects and suggests best sequences for gene editing experiments.",
+                fullDescription: "Leverages machine learning to design CRISPR experiments with minimal off-target effects. Includes comprehensive database of validated designs.",
+                tech: ["PyTorch", "BioPython", "React", "PostgreSQL"],
+                stats: { views: "8.7K", stars: "423", forks: "98" },
+                features: [
+                    "Off-target prediction using deep learning",
+                    "Database of 50K+ validated designs",
+                    "Integration with genome browsers",
+                    "Collaboration tools for research teams"
+                ],
+                team: "Bioengineering Dept, Stanford"
+            },
+            {
+                id: 4,
+                title: "Gravitational Wave Detector",
+                category: "physics",
+                status: "active",
+                icon: "🌊",
+                description: "Open-source software for analyzing gravitational wave data from LIGO and Virgo. Features advanced signal processing and matched filtering algorithms.",
+                fullDescription: "Comprehensive toolkit for gravitational wave astronomy. Used by researchers worldwide to analyze black hole mergers and neutron star collisions.",
+                tech: ["Python", "C++", "CUDA", "Docker"],
+                stats: { views: "3.2K", stars: "201", forks: "45" },
+                features: [
+                    "Matched filtering for signal detection",
+                    "Parameter estimation for merger events",
+                    "GPU-accelerated processing",
+                    "Visualization of strain data"
+                ],
+                team: "LIGO Scientific Collaboration"
+            },
+            {
+                id: 5,
+                title: "Climate Model Visualization",
+                category: "computing",
+                status: "completed",
+                icon: "🌍",
+                description: "Interactive 3D visualization of global climate models. Displays temperature, precipitation, and sea level projections through 2100.",
+                fullDescription: "Built on WebGL to provide real-time exploration of climate data from CMIP6 models. Helps communicate climate science to public and policymakers.",
+                tech: ["Three.js", "WebGL", "Python", "NetCDF"],
+                stats: { views: "12K", stars: "567", forks: "89" },
+                features: [
+                    "Multiple emission scenarios (SSP1-SSP5)",
+                    "Regional analysis tools",
+                    "Time-series animation",
+                    "Export high-res images and videos"
+                ],
+                team: "Climate Visualization Lab, NASA"
+            },
+            {
+                id: 6,
+                title: "Protein Folding Predictor",
+                category: "biology",
+                status: "active",
+                icon: "🔬",
+                description: "Deep learning model for predicting 3D protein structures from amino acid sequences. Achieves AlphaFold-level accuracy on validation sets.",
+                fullDescription: "Neural network architecture inspired by AlphaFold2. Includes tools for structure visualization and functional analysis.",
+                tech: ["JAX", "Python", "PyMOL", "HPC"],
+                stats: { views: "6.4K", stars: "312", forks: "71" },
+                features: [
+                    "Structure prediction from sequence",
+                    "Multiple sequence alignment tools",
+                    "Confidence scoring",
+                    "Integration with protein databases"
+                ],
+                team: "Computational Biology Group, DeepMind"
+            },
+            {
+                id: 7,
+                title: "Solar System Simulator",
+                category: "astronomy",
+                status: "completed",
+                icon: "☀️",
+                description: "Accurate N-body simulation of our solar system with real orbital mechanics. Includes asteroids, comets, and spacecraft trajectories.",
+                fullDescription: "Physics-accurate simulation using numerical integration. Perfect for education and mission planning visualization.",
+                tech: ["JavaScript", "WebGL", "Python", "SPICE"],
+                stats: { views: "15K", stars: "892", forks: "156" },
+                features: [
+                    "Real-time orbital mechanics",
+                    "Historical spacecraft missions",
+                    "Future trajectory planning",
+                    "VR support"
+                ],
+                team: "JPL Education Office"
+            },
+            {
+                id: 8,
+                title: "Fusion Reactor Simulator",
+                category: "physics",
+                status: "active",
+                icon: "⚡",
+                description: "Computational model of tokamak fusion reactors. Simulates plasma behavior, magnetic confinement, and energy output.",
+                fullDescription: "High-fidelity simulation helping design next-generation fusion reactors. Used in ITER project planning.",
+                tech: ["Fortran", "Python", "MPI", "HPC"],
+                stats: { views: "2.8K", stars: "167", forks: "28" },
+                features: [
+                    "Magnetohydrodynamics solver",
+                    "Plasma instability detection",
+                    "Energy balance calculations",
+                    "Real-time parameter optimization"
+                ],
+                team: "ITER Collaboration"
+            },
+            {
+                id: 9,
+                title: "Cosmic Microwave Background Analyzer",
+                category: "astronomy",
+                status: "completed",
+                icon: "📡",
+                description: "Tools for analyzing CMB data from Planck satellite. Maps temperature fluctuations and extracts cosmological parameters.",
+                fullDescription: "Complete pipeline from raw satellite data to cosmological parameter estimation. Contributed to precision measurement of universe's age.",
+                tech: ["Python", "HEALPix", "C", "MCMC"],
+                stats: { views: "1.9K", stars: "134", forks: "22" },
+                features: [
+                    "Power spectrum analysis",
+                    "Foreground subtraction",
+                    "Parameter estimation",
+                    "Beautiful sky maps"
+                ],
+                team: "Planck Collaboration, ESA"
+            },
+            {
+                id: 10,
+                title: "Quantum Chemistry Calculator",
+                category: "computing",
+                status: "active",
+                icon: "⚗️",
+                description: "Quantum computing algorithms for molecular simulations. Calculates ground state energies and molecular properties on quantum hardware.",
+                fullDescription: "Implements VQE and quantum phase estimation on real quantum computers. Bridges quantum computing and chemistry research.",
+                tech: ["Qiskit", "PySCF", "Python", "IBM Quantum"],
+                stats: { views: "4.2K", stars: "245", forks: "54" },
+                features: [
+                    "Multiple quantum algorithms (VQE, QPE)",
+                    "Noise mitigation techniques",
+                    "Classical comparison benchmarks",
+                    "Molecular visualization"
+                ],
+                team: "Quantum Chemistry Lab, IBM Research"
+            },
+            {
+                id: 11,
+                title: "Neural Spike Train Analyzer",
+                category: "biology",
+                status: "active",
+                icon: "🧠",
+                description: "Real-time analysis of neural recordings. Identifies patterns in brain activity and correlates with behavior.",
+                fullDescription: "Processes multi-electrode array data to decode neural activity. Used in brain-computer interface research.",
+                tech: ["MATLAB", "Python", "LabVIEW", "GPU"],
+                stats: { views: "3.5K", stars: "198", forks: "43" },
+                features: [
+                    "Real-time spike detection",
+                    "Population coding analysis",
+                    "Behavior correlation",
+                    "Machine learning decoders"
+                ],
+                team: "Neuroscience Institute, UCSD"
+            },
+            {
+                id: 12,
+                title: "Dark Matter Simulation",
+                category: "physics",
+                status: "upcoming",
+                icon: "🌑",
+                description: "Large-scale simulation of dark matter halos and galaxy formation. Uses billions of particles to model cosmic structure evolution.",
+                fullDescription: "Massive N-body simulation running on supercomputers. Helps understand how dark matter shaped the universe we see today.",
+                tech: ["C++", "MPI", "CUDA", "HPC"],
+                stats: { views: "2.1K", stars: "156", forks: "19" },
+                features: [
+                    "Billions of particles",
+                    "Adaptive mesh refinement",
+                    "Halo finding algorithms",
+                    "Cosmological initial conditions"
+                ],
+                team: "Computational Cosmology, Princeton"
+            }
+        ];
+        
+        let currentFilter = 'all';
+        
+        function renderProjects() {
+            const grid = document.getElementById('projectsGrid');
+            const filtered = currentFilter === 'all' 
+                ? projects 
+                : projects.filter(p => p.category === currentFilter);
+            
+            grid.innerHTML = filtered.map(project => `
+                <div class="project-card" onclick="openProject(${project.id})">
+                    <div class="project-thumbnail" style="background: linear-gradient(135deg, ${getGradient(project.category)})">
+                        <span class="project-icon">${project.icon}</span>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <span class="project-category">${project.category}</span>
+                            <span class="project-status status-${project.status}">${project.status}</span>
+                        </div>
+                        <h2 class="project-title">${project.title}</h2>
+                        <p class="project-description">${project.description}</p>
+                        <div class="project-tech">
+                            ${project.tech.slice(0, 4).map(t => `<span class="tech-badge">${t}</span>`).join('')}
+                        </div>
+                        <div class="project-footer">
+                            <div class="project-meta">
+                                <div class="meta-item">👁️ ${project.stats.views}</div>
+                                <div class="meta-item">⭐ ${project.stats.stars}</div>
+                                <div class="meta-item">🔱 ${project.stats.forks}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function getGradient(category) {
+            const gradients = {
+                'physics': '#3b82f6, #8b5cf6',
+                'astronomy': '#8b5cf6, #ec4899',
+                'biology': '#10b981, #14b8a6',
+                'computing': '#0ea5e9, #3b82f6',
+                'engineering': '#f59e0b, #ef4444'
+            };
+            return gradients[category] || '#3b82f6, #8b5cf6';
+        }
+        
+        function openProject(id) {
+            const project = projects.find(p => p.id === id);
+            if (!project) return;
+            
+            document.getElementById('modalContent').innerHTML = `
+                <div class="modal-header">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+                        <span class="project-category">${project.category}</span>
+                        <span class="project-status status-${project.status}">${project.status}</span>
+                    </div>
+                    <h2 class="modal-title">${project.icon} ${project.title}</h2>
+                    <div class="project-meta">
+                        <div class="meta-item">👁️ ${project.stats.views} views</div>
+                        <div class="meta-item">⭐ ${project.stats.stars} stars</div>
+                        <div class="meta-item">🔱 ${project.stats.forks} forks</div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <h3>About This Project</h3>
+                    <p>${project.fullDescription}</p>
+                    
+                    <h3>Key Features</h3>
+                    <ul>
+                        ${project.features.map(f => `<li>${f}</li>`).join('')}
+                    </ul>
+                    
+                    <h3>Technologies Used</h3>
+                    <div class="project-tech" style="margin-top: 15px;">
+                        ${project.tech.map(t => `<span class="tech-badge">${t}</span>`).join('')}
+                    </div>
+                    
+                    <h3>Team</h3>
+                    <p>${project.team}</p>
+                </div>
+                <div class="modal-actions">
+                    <button class="modal-btn btn-primary" onclick="alert('View project demo')">🚀 View Demo</button>
+                    <button class="modal-btn btn-secondary" onclick="alert('Visit GitHub repo')">💻 GitHub Repo</button>
+                </div>
+            `;
+            
+            document.getElementById('projectModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal() {
+            document.getElementById('projectModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.dataset.filter;
+                renderProjects();
+            });
+        });
+        
+        // Close modal on outside click
+        document.getElementById('projectModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+        
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+        
+        // Initial render
+        renderProjects();
+    </script>
+</body>
+</html>
+

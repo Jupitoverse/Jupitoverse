@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcoming Science Events | Jupitoverse</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --dark: #1a202c;
+            --darker: #0f1419;
+            --light: #f7fafc;
+            --gray: #718096;
+            --success: #48bb78;
+            --info: #4299e1;
+            --warning: #ed8936;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            font-weight: 300;
+            opacity: 0.9;
+        }
+        
+        .filters {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .filter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+        
+        select, input[type="search"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        select:focus, input[type="search"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .view-toggle {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .view-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid var(--primary);
+            background: white;
+            color: var(--primary);
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .view-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        
+        .view-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+        
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .event-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .event-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+        
+        .event-header {
+            padding: 25px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            position: relative;
+        }
+        
+        .event-date {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+        
+        .event-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+        
+        .event-category {
+            display: inline-block;
+            padding: 5px 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .event-body {
+            padding: 25px;
+        }
+        
+        .event-description {
+            color: var(--gray);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        
+        .event-meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .meta-icon {
+            font-size: 1.2rem;
+        }
+        
+        .event-footer {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+        
+        .btn-outline {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .timeline-view {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+        
+        .timeline-view.active {
+            display: block;
+        }
+        
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            transform: translateX(-50%);
+        }
+        
+        .timeline-item {
+            display: flex;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        
+        .timeline-content {
+            flex: 1;
+            padding: 25px;
+            background: #f7fafc;
+            border-radius: 15px;
+            margin: 0 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .timeline-marker {
+            position: absolute;
+            left: 50%;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border: 4px solid var(--primary);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+        
+        .month-separator {
+            text-align: center;
+            margin: 40px 0 30px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .no-events {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+        
+        .no-events-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .no-events-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 20px;
+            }
+            
+            .timeline-item,
+            .timeline-item:nth-child(even) {
+                flex-direction: column;
+            }
+            
+            .timeline-marker {
+                left: 20px;
+            }
+            
+            .timeline-content {
+                margin-left: 50px;
+                margin-right: 0;
+            }
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .badge-upcoming {
+            background: #dcfce7;
+            color: var(--success);
+        }
+        
+        .badge-this-week {
+            background: #dbeafe;
+            color: var(--info);
+        }
+        
+        .badge-today {
+            background: #fed7d7;
+            color: #e53e3e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔬 Upcoming Science Events</h1>
+            <p class="subtitle">Explore conferences, workshops, launches, and discoveries happening around the world</p>
+        </header>
+        
+        <div class="filters">
+            <div class="filter-group">
+                <label>Search Events</label>
+                <input type="search" id="searchInput" placeholder="Search by title, location...">
+            </div>
+            
+            <div class="filter-group">
+                <label>Category</label>
+                <select id="categoryFilter">
+                    <option value="all">All Categories</option>
+                    <option value="astronomy">Astronomy & Space</option>
+                    <option value="physics">Physics & Quantum</option>
+                    <option value="biology">Biology & Life Sciences</option>
+                    <option value="technology">Technology & AI</option>
+                    <option value="conference">Conferences</option>
+                    <option value="launch">Space Launches</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label>Time Period</label>
+                <select id="timeFilter">
+                    <option value="all">All Time</option>
+                    <option value="today">Today</option>
+                    <option value="this-week">This Week</option>
+                    <option value="this-month">This Month</option>
+                    <option value="next-3-months">Next 3 Months</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label>View</label>
+                <div class="view-toggle">
+                    <button class="view-btn active" data-view="grid">📅 Grid</button>
+                    <button class="view-btn" data-view="timeline">📊 Timeline</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="events-grid" id="eventsGrid"></div>
+        <div class="timeline-view" id="timelineView"></div>
+    </div>
+    
+    <script>
+        // Sample events data
+        const events = [
+            {
+                title: "James Webb Space Telescope Data Release",
+                date: "2025-11-15",
+                time: "10:00 AM EST",
+                category: "astronomy",
+                location: "Online/Global",
+                type: "Virtual",
+                description: "NASA's latest data release from JWST revealing unprecedented views of distant galaxies and exoplanet atmospheres. Scientists will present findings on early universe formation.",
+                registrationLink: "#",
+                moreInfoLink: "#"
+            },
+            {
+                title: "Quantum Computing Summit 2025",
+                date: "2025-12-03",
+                time: "9:00 AM PST",
+                category: "physics",
+                location: "San Francisco, CA",
+                type: "In-Person",
+                description: "Leading researchers and industry experts gather to discuss breakthroughs in quantum error correction, quantum algorithms, and practical applications of quantum computers.",
+                registrationLink: "#",
+                moreInfoLink: "#"
+            },
+            {
+                title: "SpaceX Starship Mission to Mars",
+                date: "2025-11-28",
+                time: "2:30 PM EST",
+                category: "launch",
+                location: "Boca Chica, Texas",
+                type: "Live Stream",
+                description: "Historic uncrewed mission to Mars orbit. This test flight will demonstrate key technologies for future human missions including orbital refueling and heat shield performance.",
+                registrationLink: "#",
+                moreInfoLink: "#"
+            },
+            {
+                title: "International AI & Machine Learning Conference",
+                date: "2025-12-10",
+                time: "8:00 AM GMT",
+                category: "technology",
+                location: "London, UK",
+                type: "Hybrid",
+                description: "Explore the latest advances in artificial intelligence, neural networks, and machine learning applications across scientific research and industry.",
+                registrationLink: "#",
+                moreInfoLink: "#"
+            },
+            {
+                title: "Origins of the Universe Symposium",
+                date: "2025-11-20",
+                time: "11:00 AM CET",
+                category: "physics",
+                location: "Geneva, Switzerland",
+                type: "In-Person",
+                description: "CERN hosts leading cosmologists to discuss new theories about the Big Bang, dark matter, dark energy, and the fundamental nature of space-time.",
+                registrationLink: "#",
+                moreInfoLink: "#"
+            },
+            {
+                title: "CRISPR Gene Editing Workshop",
+                date: "2025-12-01",
+                time: "1:00 PM EST",
+                category: "biology",
+                location: "Boston, MA",
+                type: "In-Person",
+                description: "Hands-on workshop covering the latest CRISPR techniques, ethical considerations, and applications in treating genetic diseases and agricultural improvements.",
+                registrationLink: "#",
+                moreInfoLink: "#"
+            },
+            {
+                title: "Artemis III Moon Landing",
+                date: "2025-12-20",
+                time: "3:00 PM EST",
+                category: "launch",
+                location: "Kennedy Space Center, FL",
+                type: "Live Stream",
+                description: "NASA's Artemis III mission will land the first woman and first person of color on the Moon's south pole. This historic mission begins the era of sustained lunar exploration.",
+                registrationLink: "#",
+                moreInfoLink: "#"
+            },
+            {
+                title: "World Climate Science Summit",
+                date: "2025-11-25",
+                time: "9:00 AM EST",
+                category: "conference",
+                location: "New York, NY",
+                type: "Hybrid",
+                description: "Global summit bringing together climate scientists, policymakers, and innovators to present latest research on climate change and discuss actionable solutions.",
+                registrationLink: "#",
+                moreInfoLink: "#"
+            },
+            {
+                title: "Exoplanet Detection Breakthrough Announcement",
+                date: "2025-11-18",
+                time: "2:00 PM GMT",
+                category: "astronomy",
+                location: "Online",
+                type: "Virtual",
+                description: "European Space Agency announces the discovery of potentially habitable exoplanets in the Goldilocks zone with biosignature evidence.",
+                registrationLink: "#",
+                moreInfoLink: "#"
+            },
+            {
+                title: "Neuroscience and Brain Mapping Conference",
+                date: "2025-12-08",
+                time: "10:00 AM PST",
+                category: "biology",
+                location: "San Diego, CA",
+                type: "In-Person",
+                description: "Latest advances in brain mapping, neural interfaces, and understanding consciousness. Features presentations on breakthrough treatments for neurological disorders.",
+                registrationLink: "#",
+                moreInfoLink: "#"
+            },
+            {
+                title: "Fusion Energy Milestone Event",
+                date: "2025-11-22",
+                time: "11:00 AM EST",
+                category: "physics",
+                location: "Washington, D.C.",
+                type: "In-Person",
+                description: "Department of Energy announces major progress toward practical fusion energy. Scientists will discuss the path to commercial fusion power plants.",
+                registrationLink: "#",
+                moreInfoLink: "#"
+            },
+            {
+                title: "AI in Scientific Discovery Symposium",
+                date: "2025-12-15",
+                time: "9:00 AM PST",
+                category: "technology",
+                location: "Palo Alto, CA",
+                type: "Hybrid",
+                description: "Exploring how artificial intelligence is revolutionizing scientific research from drug discovery to materials science and astronomical data analysis.",
+                registrationLink: "#",
+                moreInfoLink: "#"
+            }
+        ];
+        
+        let filteredEvents = [...events];
+        let currentView = 'grid';
+        
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const options = { month: 'short', day: 'numeric', year: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        }
+        
+        function getTimeBadge(dateStr) {
+            const eventDate = new Date(dateStr);
+            const today = new Date();
+            const diffTime = eventDate - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) return '<span class="badge badge-today">Today</span>';
+            if (diffDays <= 7) return '<span class="badge badge-this-week">This Week</span>';
+            if (diffDays <= 30) return '<span class="badge badge-upcoming">Upcoming</span>';
+            return '';
+        }
+        
+        function getCategoryIcon(category) {
+            const icons = {
+                'astronomy': '🌌',
+                'physics': '⚛️',
+                'biology': '🧬',
+                'technology': '🤖',
+                'conference': '🎤',
+                'launch': '🚀'
+            };
+            return icons[category] || '🔬';
+        }
+        
+        function renderGridView() {
+            const grid = document.getElementById('eventsGrid');
+            
+            if (filteredEvents.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-events">
+                        <div class="no-events-icon">🔍</div>
+                        <div class="no-events-text">No events found matching your criteria</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = filteredEvents.map(event => `
+                <div class="event-card">
+                    <div class="event-header">
+                        <div class="event-date">
+                            📅 ${formatDate(event.date)} • ${event.time}
+                            ${getTimeBadge(event.date)}
+                        </div>
+                        <div class="event-title">${event.title}</div>
+                        <span class="event-category">${getCategoryIcon(event.category)} ${event.category.toUpperCase()}</span>
+                    </div>
+                    <div class="event-body">
+                        <p class="event-description">${event.description}</p>
+                        <div class="event-meta">
+                            <div class="meta-item">
+                                <span class="meta-icon">📍</span>
+                                <span>${event.location}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-icon">🎯</span>
+                                <span>${event.type}</span>
+                            </div>
+                        </div>
+                        <div class="event-footer">
+                            <button class="btn btn-primary" onclick="alert('Registration link would open here')">Register</button>
+                            <button class="btn btn-outline" onclick="alert('More info would open here')">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function renderTimelineView() {
+            const timeline = document.getElementById('timelineView');
+            
+            if (filteredEvents.length === 0) {
+                timeline.innerHTML = `
+                    <div class="no-events">
+                        <div class="no-events-icon">🔍</div>
+                        <div class="no-events-text">No events found matching your criteria</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Group events by month
+            const eventsByMonth = {};
+            filteredEvents.forEach(event => {
+                const date = new Date(event.date);
+                const monthYear = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+                if (!eventsByMonth[monthYear]) {
+                    eventsByMonth[monthYear] = [];
+                }
+                eventsByMonth[monthYear].push(event);
+            });
+            
+            let html = '<div class="timeline">';
+            
+            Object.keys(eventsByMonth).forEach(month => {
+                html += `<div class="month-separator">${month}</div>`;
+                
+                eventsByMonth[month].forEach(event => {
+                    html += `
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+                                    <div>
+                                        <h3 style="color: var(--dark); font-size: 1.3rem; margin-bottom: 5px;">${event.title}</h3>
+                                        <div style="color: var(--gray); font-size: 0.9rem;">
+                                            📅 ${formatDate(event.date)} • ${event.time} ${getTimeBadge(event.date)}
+                                        </div>
+                                    </div>
+                                    <span class="event-category">${getCategoryIcon(event.category)} ${event.category}</span>
+                                </div>
+                                <p style="color: var(--gray); line-height: 1.6; margin-bottom: 15px;">${event.description}</p>
+                                <div class="event-meta">
+                                    <div class="meta-item">
+                                        <span class="meta-icon">📍</span>
+                                        <span>${event.location}</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <span class="meta-icon">🎯</span>
+                                        <span>${event.type}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+            
+            html += '</div>';
+            timeline.innerHTML = html;
+        }
+        
+        function filterEvents() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const category = document.getElementById('categoryFilter').value;
+            const timeFilter = document.getElementById('timeFilter').value;
+            
+            filteredEvents = events.filter(event => {
+                // Search filter
+                const matchesSearch = event.title.toLowerCase().includes(searchTerm) ||
+                                    event.description.toLowerCase().includes(searchTerm) ||
+                                    event.location.toLowerCase().includes(searchTerm);
+                
+                // Category filter
+                const matchesCategory = category === 'all' || event.category === category;
+                
+                // Time filter
+                let matchesTime = true;
+                if (timeFilter !== 'all') {
+                    const eventDate = new Date(event.date);
+                    const today = new Date();
+                    const diffTime = eventDate - today;
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    
+                    switch(timeFilter) {
+                        case 'today':
+                            matchesTime = diffDays === 0;
+                            break;
+                        case 'this-week':
+                            matchesTime = diffDays >= 0 && diffDays <= 7;
+                            break;
+                        case 'this-month':
+                            matchesTime = diffDays >= 0 && diffDays <= 30;
+                            break;
+                        case 'next-3-months':
+                            matchesTime = diffDays >= 0 && diffDays <= 90;
+                            break;
+                    }
+                }
+                
+                return matchesSearch && matchesCategory && matchesTime;
+            });
+            
+            // Sort by date
+            filteredEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            if (currentView === 'grid') {
+                renderGridView();
+            } else {
+                renderTimelineView();
+            }
+        }
+        
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', filterEvents);
+        document.getElementById('categoryFilter').addEventListener('change', filterEvents);
+        document.getElementById('timeFilter').addEventListener('change', filterEvents);
+        
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                currentView = this.dataset.view;
+                
+                if (currentView === 'grid') {
+                    document.getElementById('eventsGrid').style.display = 'grid';
+                    document.getElementById('timelineView').style.display = 'none';
+                    renderGridView();
+                } else {
+                    document.getElementById('eventsGrid').style.display = 'none';
+                    document.getElementById('timelineView').style.display = 'block';
+                    renderTimelineView();
+                }
+            });
+        });
+        
+        // Initial render
+        renderGridView();
+    </script>
+</body>
+</html>
+

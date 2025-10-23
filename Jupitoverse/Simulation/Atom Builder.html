@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Atom Simulator</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        :root {
+            --primary-bg: #12121f;
+            --secondary-bg: #1a1a2e;
+            --container-bg: rgba(42, 42, 62, 0.6);
+            --text-primary: #e0e0e0;
+            --text-secondary: #c0c0c0;
+            --accent-color: #00cyan;
+            --stable-color: #76ff7a;
+            --radioactive-color: #ffcb6b;
+            --proton-color: #ff6b81;
+            --neutron-color: #9e9e9e;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-bg);
+            background-image: radial-gradient(circle, var(--secondary-bg), var(--primary-bg));
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #main-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            width: 100%;
+            max-width: 900px;
+            background: var(--container-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        #left-panel {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #right-panel {
+            flex: 1.5;
+            min-width: 300px;
+        }
+
+        h2,
+        h3 {
+            margin-top: 0;
+            font-weight: 700;
+            color: #ffffff;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h3 {
+            font-size: 1.1em;
+            text-align: left;
+            border-bottom-width: 1px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        #controls {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 16px;
+            align-items: center;
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        label {
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(0, 0, 0, 0.4);
+            outline: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            box-shadow: 0 0 10px var(--accent-color), 0 0 5px var(--accent-color);
+            border: 2px solid var(--primary-bg);
+        }
+
+        .value-display {
+            font-weight: 600;
+            color: var(--accent-color);
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 4px 8px;
+            border-radius: 6px;
+            min-width: 28px;
+            text-align: center;
+        }
+
+        #atom-info,
+        #isotope-info-box {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #atom-info {
+            text-align: center;
+            line-height: 1.7;
+        }
+
+        #atomicSymbol {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        #isotope-info {
+            font-weight: bold;
+        }
+
+        .stable {
+            color: var(--stable-color);
+        }
+
+        .radioactive {
+            color: var(--radioactive-color);
+        }
+
+        .info-text {
+            font-size: 0.95em;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        canvas {
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="main-container">
+        <div id="left-panel">
+            <h2>Atom Builder ⚛️</h2>
+            <div id="controls">
+                <label for="protons">Protons</label>
+                <input type="range" id="protons" value="1" min="1" max="118">
+                <span class="value-display" id="protons-value">1</span>
+
+                <label for="neutrons">Neutrons</label>
+                <input type="range" id="neutrons" value="0" min="0" max="184">
+                <span class="value-display" id="neutrons-value">0</span>
+
+                <label for="electrons">Electrons</label>
+                <input type="range" id="electrons" value="1" min="0" max="118">
+                <span class="value-display" id="electrons-value">1</span>
+            </div>
+            <canvas id="atomCanvas" width="300" height="300"></canvas>
+        </div>
+
+        <div id="right-panel">
+            <h2>Element Details</h2>
+            <div id="atom-info">
+                Element: <span id="elementName">Hydrogen</span> |
+                Symbol: <span id="atomicSymbol">H</span> |
+                Mass: <span id="atomicMass">1</span><br>
+                Charge: <span id="atomicCharge">0</span> (<strong id="ionStatus" class="stable">Neutral Atom</strong>)
+            </div>
+            <div id="isotope-info-box">
+                Isotope Info: <span id="isotope-info">Protium (Stable)</span>
+            </div>
+            <h3>Description</h3>
+            <p id="element-description" class="info-text"></p>
+            <h3>Origin of Name</h3>
+            <p id="element-origin" class="info-text"></p>
+            <h3>Amazing Fact</h3>
+            <p id="element-fact" class="info-text"></p>
+        </div>
+    </div>
+
+    <script>
+        // --- ELEMENT DATA (Sample: First 20 Elements) ---
+        // The structure is ready for all 118 elements.
+        const elements = {
+            1: { name: 'Hydrogen', symbol: 'H', description: 'A colorless, flammable gas. It is the simplest and most abundant element.', origin: 'From Greek "hydro" (water) and "genes" (forming).', fact: 'The universe is composed of about 75% hydrogen by mass.', isotopes: { 0: { name: 'Protium', stability: 'Stable' }, 1: { name: 'Deuterium', stability: 'Stable' }, 2: { name: 'Tritium', stability: 'Radioactive' } } },
+            2: { name: 'Helium', symbol: 'He', description: 'A colorless, inert gas, the second lightest element.', origin: 'From Greek "helios" (sun), as it was first detected in the sun\'s spectrum.', fact: 'Helium is so light that Earth\'s gravity cannot hold it; it constantly bleeds into space.', isotopes: { 1: { name: 'Helium-3', stability: 'Stable' }, 2: { name: 'Helium-4', stability: 'Stable' } } },
+            3: { name: 'Lithium', symbol: 'Li', description: 'A soft, silvery-white alkali metal. It is the least dense solid element.', origin: 'From Greek "lithos" (stone).', fact: 'Lithium is a key component in rechargeable batteries for phones, laptops, and electric vehicles.', isotopes: { 3: { name: 'Lithium-6', stability: 'Stable' }, 4: { name: 'Lithium-7', stability: 'Stable' } } },
+            4: { name: 'Beryllium', symbol: 'Be', description: 'A hard, grayish metal found in emeralds and aquamarines.', origin: 'From Greek "beryllos" (beryl).', fact: 'Mirrors for advanced telescopes like the James Webb Space Telescope are made of beryllium.', isotopes: { 5: { name: 'Beryllium-9', stability: 'Stable' } } },
+            5: { name: 'Boron', symbol: 'B', description: 'A metalloid that can be a brown amorphous powder or a crystalline solid.', origin: 'From Arabic "buraq" (borax).', fact: 'Combined with nitrogen, it forms cubic boron nitride, a material nearly as hard as diamond.', isotopes: { 5: { name: 'Boron-10', stability: 'Stable' }, 6: { name: 'Boron-11', stability: 'Stable' } } },
+            6: { name: 'Carbon', symbol: 'C', description: 'A nonmetal that is the basis of all known life on Earth.', origin: 'From Latin "carbo" (coal, charcoal).', fact: 'It exists in many forms (allotropes), including graphite, diamond, and graphene.', isotopes: { 6: { name: 'Carbon-12', stability: 'Stable' }, 7: { name: 'Carbon-13', stability: 'Stable' }, 8: { name: 'Carbon-14', stability: 'Radioactive' } } },
+            7: { name: 'Nitrogen', symbol: 'N', description: 'A colorless, odorless gas that makes up about 78% of Earth\'s atmosphere.', origin: 'From Greek "nitron" and "genes" (soda-forming).', fact: 'The vibrant colors of auroras are often caused by energized nitrogen atoms.', isotopes: { 7: { name: 'Nitrogen-14', stability: 'Stable' }, 8: { name: 'Nitrogen-15', stability: 'Stable' } } },
+            8: { name: 'Oxygen', symbol: 'O', description: 'A highly reactive nonmetal essential for respiration.', origin: 'From Greek "oxys" and "genes" (acid-forming).', fact: 'While it makes up ~21% of the atmosphere, it constitutes about half of the Earth\'s crust by mass.', isotopes: { 8: { name: 'Oxygen-16', stability: 'Stable' }, 9: { name: 'Oxygen-17', stability: 'Stable' }, 10: { name: 'Oxygen-18', stability: 'Stable' } } },
+            9: { name: 'Fluorine', symbol: 'F', description: 'A pale yellow-green gas. It is the most electronegative and reactive of all elements.', origin: 'From Latin "fluere" (to flow).', fact: 'Fluorine gas is so reactive it will ignite most organic materials, including asbestos and water, on contact.', isotopes: { 10: { name: 'Fluorine-19', stability: 'Stable' } } },
+            10: { name: 'Neon', symbol: 'Ne', description: 'An inert noble gas known for its bright reddish-orange glow in vacuum tubes.', origin: 'From Greek "neos" (new).', fact: 'Despite its use in signs, neon is rare on Earth, about 1 part in 65,000 of the atmosphere.', isotopes: { 10: { name: 'Neon-20', stability: 'Stable' }, 11: { name: 'Neon-21', stability: 'Stable' }, 12: { name: 'Neon-22', stability: 'Stable' } } },
+            11: { name: 'Sodium', symbol: 'Na', description: 'A soft, highly reactive alkali metal. Its symbol Na comes from its Latin name, Natrium.', origin: 'From English "soda"; its symbol is from Latin "natrium".', fact: 'Pure sodium metal reacts violently with water, producing hydrogen gas and sodium hydroxide.', isotopes: { 12: { name: 'Sodium-23', stability: 'Stable' } } },
+            12: { name: 'Magnesium', symbol: 'Mg', description: 'A shiny gray solid, essential for many biological processes in plants and animals.', origin: 'Named after Magnesia, a district in Thessaly, Greece.', fact: 'Magnesium burns with a brilliant white light, which is why it\'s used in fireworks and flares.', isotopes: { 12: { name: 'Magnesium-24', stability: 'Stable' }, 13: { name: 'Magnesium-25', stability: 'Stable' }, 14: { name: 'Magnesium-26', stability: 'Stable' } } },
+            13: { name: 'Aluminum', symbol: 'Al', description: 'A silvery-white, lightweight, and corrosion-resistant metal.', origin: 'From Latin "alumen" (alum).', fact: 'It was once more valuable than gold due to the difficulty of extracting it from its ore.', isotopes: { 14: { name: 'Aluminum-27', stability: 'Stable' } } },
+            14: { name: 'Silicon', symbol: 'Si', description: 'A hard, brittle crystalline solid with a blue-grey metallic lustre.', origin: 'From Latin "silex" (flint).', fact: 'Silicon is the heart of the digital age; it is the primary component of most semiconductors.', isotopes: { 14: { name: 'Silicon-28', stability: 'Stable' }, 15: { name: 'Silicon-29', stability: 'Stable' }, 16: { name: 'Silicon-30', stability: 'Stable' } } },
+            15: { name: 'Phosphorus', symbol: 'P', description: 'A highly reactive nonmetal that exists in two major forms: white phosphorus and red phosphorus.', origin: 'From Greek "phosphoros" (light-bringing), referring to the glow of white phosphorus.', fact: 'The discovery of phosphorus was the first time an element was discovered that was not known since ancient times.', isotopes: { 16: { name: 'Phosphorus-31', stability: 'Stable' } } },
+            16: { name: 'Sulfur', symbol: 'S', description: 'A bright yellow, crystalline solid known for its distinct smell in compounds like hydrogen sulfide.', origin: 'From Latin "sulphurium".', fact: 'The characteristic smell of rotten eggs comes from hydrogen sulfide, a sulfur compound.', isotopes: { 16: { name: 'Sulfur-32', stability: 'Stable' }, 17: { name: 'Sulfur-33', stability: 'Stable' }, 18: { name: 'Sulfur-34', stability: 'Stable' }, 20: { name: 'Sulfur-36', stability: 'Stable' } } },
+            17: { name: 'Chlorine', symbol: 'Cl', description: 'A poisonous, yellow-green gas used for disinfection and in the production of many products.', origin: 'From Greek "chloros" (pale green).', fact: 'Chlorine gas was used as a chemical weapon in World War I.', isotopes: { 18: { name: 'Chlorine-35', stability: 'Stable' }, 20: { name: 'Chlorine-37', stability: 'Stable' } } },
+            18: { name: 'Argon', symbol: 'Ar', description: 'An inert noble gas that makes up about 1% of the Earth\'s atmosphere.', origin: 'From Greek "argos" (inactive).', fact: 'Argon is used in incandescent light bulbs to prevent the filament from oxidizing and evaporating.', isotopes: { 18: { name: 'Argon-36', stability: 'Stable' }, 20: { name: 'Argon-38', stability: 'Stable' }, 22: { name: 'Argon-40', stability: 'Stable' } } },
+            19: { name: 'Potassium', symbol: 'K', description: 'A silvery-white alkali metal that is highly reactive with water. Its symbol K comes from its Latin name, Kalium.', origin: 'From English "potash"; symbol from Latin "kalium".', fact: 'Bananas are famous for being rich in potassium, an essential mineral for human health.', isotopes: { 20: { name: 'Potassium-39', stability: 'Stable' }, 21: { name: 'Potassium-40', stability: 'Radioactive' }, 22: { name: 'Potassium-41', stability: 'Stable' } } },
+            20: { name: 'Calcium', symbol: 'Ca', description: 'A silvery-white metal essential for living organisms, particularly in cell physiology and for bones.', origin: 'From Latin "calx" (lime).', fact: 'Calcium is the fifth most abundant element in the Earth\'s crust.', isotopes: { 20: { name: 'Calcium-40', stability: 'Stable' }, 22: { name: 'Calcium-42', stability: 'Stable' }, 23: { name: 'Calcium-43', stability: 'Stable' }, 24: { name: 'Calcium-44', stability: 'Stable' }, 28: { name: 'Calcium-48', stability: 'Stable' } } },
+            21: { name: 'Scandium', symbol: 'Sc', description: 'A silvery-white metallic transition metal, historically classified as a rare-earth element.', origin: 'From Latin "Scandia" (Scandinavia).', fact: 'It is added to aluminum alloys for the aerospace industry to improve strength and durability.', isotopes: { 24: { name: 'Scandium-45', stability: 'Stable' } } },
+            22: { name: 'Titanium', symbol: 'Ti', description: 'A transition metal with a silver color, low density, and high strength.', origin: 'Named after the Titans of Greek mythology.', fact: 'It is highly resistant to corrosion in sea water, making it perfect for naval applications.', isotopes: { 24: { name: 'Titanium-46', stability: 'Stable' }, 25: { name: 'Titanium-47', stability: 'Stable' }, 26: { name: 'Titanium-48', stability: 'Stable' }, 27: { name: 'Titanium-49', stability: 'Stable' }, 28: { name: 'Titanium-50', stability: 'Stable' } } },
+            23: { name: 'Vanadium', symbol: 'V', description: 'A hard, silvery-grey, ductile transition metal.', origin: 'Named after "Vanadis", the Scandinavian goddess of beauty.', fact: 'Adding a small amount of vanadium to steel creates a much stronger alloy used in tools.', isotopes: { 27: { name: 'Vanadium-50', stability: 'Radioactive' }, 28: { name: 'Vanadium-51', stability: 'Stable' } } },
+            24: { name: 'Chromium', symbol: 'Cr', description: 'A steely-gray, lustrous, hard metal that takes a high polish and resists tarnishing.', origin: 'From Greek "chroma" (color), due to the many colored compounds it forms.', fact: 'Chromium is used for chrome plating, which provides both a decorative and protective finish.', isotopes: { 26: { name: 'Chromium-50', stability: 'Stable' }, 28: { name: 'Chromium-52', stability: 'Stable' }, 29: { name: 'Chromium-53', stability: 'Stable' }, 30: { name: 'Chromium-54', stability: 'Stable' } } },
+            25: { name: 'Manganese', symbol: 'Mn', description: 'A hard, brittle, silvery metal, often found in minerals in combination with iron.', origin: 'Named after the Magnesia region in Greece, similar to Magnesium.', fact: 'Manganese is essential for making stainless steel and is a critical component in steel production.', isotopes: { 30: { name: 'Manganese-55', stability: 'Stable' } } },
+            26: { name: 'Iron', symbol: 'Fe', description: 'A strong, hard, magnetic silvery-gray metal, the most common element on Earth by mass.', origin: 'From Anglo-Saxon "iron"; symbol from Latin "ferrum".', fact: 'The red color of blood is due to the interaction of iron and oxygen in hemoglobin.', isotopes: { 28: { name: 'Iron-54', stability: 'Stable' }, 30: { name: 'Iron-56', stability: 'Stable' }, 31: { name: 'Iron-57', stability: 'Stable' }, 32: { name: 'Iron-58', stability: 'Stable' } } },
+            27: { name: 'Cobalt', symbol: 'Co', description: 'A hard, lustrous, silver-gray metal. It is ferromagnetic.', origin: 'From German "kobold" (goblin), as miners believed it bewitched their silver ores.', fact: 'Cobalt salts produce deep blue colors, used for centuries in glass, ceramics, and paints.', isotopes: { 32: { name: 'Cobalt-59', stability: 'Stable' } } },
+            28: { name: 'Nickel', symbol: 'Ni', description: 'A silvery-white lustrous metal with a slight golden tinge.', origin: 'From German "kupfernickel" (devil\'s copper), as its ore resembled copper but yielded no metal.', fact: 'The U.S. five-cent coin, the "nickel," is actually 75% copper and only 25% nickel.', isotopes: { 30: { name: 'Nickel-58', stability: 'Stable' }, 32: { name: 'Nickel-60', stability: 'Stable' }, 33: { name: 'Nickel-61', stability: 'Stable' }, 34: { name: 'Nickel-62', stability: 'Stable' }, 36: { name: 'Nickel-64', stability: 'Stable' } } },
+            29: { name: 'Copper', symbol: 'Cu', description: 'A soft, malleable, and ductile metal with very high thermal and electrical conductivity.', origin: 'From Latin "Cyprium aes" (metal from Cyprus); symbol from "cuprum".', fact: 'Humans have been using copper for at least 10,000 years.', isotopes: { 34: { name: 'Copper-63', stability: 'Stable' }, 36: { name: 'Copper-65', stability: 'Stable' } } },
+            30: { name: 'Zinc', symbol: 'Zn', description: 'A bluish-white, lustrous metal that is brittle at room temperature.', origin: 'From German "zink".', fact: 'Zinc is used to galvanize steel, coating it in a protective layer to prevent rust.', isotopes: { 34: { name: 'Zinc-64', stability: 'Stable' }, 36: { name: 'Zinc-66', stability: 'Stable' }, 37: { name: 'Zinc-67', stability: 'Stable' }, 38: { name: 'Zinc-68', stability: 'Stable' }, 40: { name: 'Zinc-70', stability: 'Stable' } } },
+            31: { name: 'Gallium', symbol: 'Ga', description: 'A soft, silvery metal that is a brittle solid at low temperatures and melts near room temperature.', origin: 'From Latin "Gallia" (France).', fact: 'Gallium can melt in your hand, as its melting point is 29.76 °C (85.58 °F).', isotopes: { 38: { name: 'Gallium-69', stability: 'Stable' }, 40: { name: 'Gallium-71', stability: 'Stable' } } },
+            32: { name: 'Germanium', symbol: 'Ge', description: 'A lustrous, hard-brittle, grayish-white metalloid.', origin: 'Named after "Germania" (Germany), the home country of its discoverer.', fact: 'It is an important semiconductor used in transistors and as a phosphor in fluorescent lamps.', isotopes: { 38: { name: 'Germanium-70', stability: 'Stable' }, 40: { name: 'Germanium-72', stability: 'Stable' }, 41: { name: 'Germanium-73', stability: 'Stable' }, 42: { name: 'Germanium-74', stability: 'Stable' } } },
+            33: { name: 'Arsenic', symbol: 'As', description: 'A toxic metalloid known for its use in poisons.', origin: 'From Greek "arsenikon" (yellow orpiment, a mineral).', fact: 'Despite its toxicity, arsenic compounds were historically used in medicine.', isotopes: { 42: { name: 'Arsenic-75', stability: 'Stable' } } },
+            34: { name: 'Selenium', symbol: 'Se', description: 'A nonmetal with properties that are intermediate between the elements above and below in the periodic table, sulfur and tellurium.', origin: 'From Greek "selene" (moon).', fact: 'Selenium\'s electrical conductivity changes with light exposure, making it useful in photocells.', isotopes: { 40: { name: 'Selenium-74', stability: 'Stable' }, 42: { name: 'Selenium-76', stability: 'Stable' }, 43: { name: 'Selenium-77', stability: 'Stable' }, 44: { name: 'Selenium-78', stability: 'Stable' }, 46: { name: 'Selenium-80', stability: 'Stable' } } },
+            35: { name: 'Bromine', symbol: 'Br', description: 'A fuming reddish-brown liquid at room temperature, the only nonmetallic element that is liquid under these conditions.', origin: 'From Greek "bromos" (stench), referring to its sharp, unpleasant smell.', fact: 'It is commonly used in flame retardants.', isotopes: { 44: { name: 'Bromine-79', stability: 'Stable' }, 46: { name: 'Bromine-81', stability: 'Stable' } } },
+            36: { name: 'Krypton', symbol: 'Kr', description: 'A colorless, odorless, tasteless noble gas.', origin: 'From Greek "kryptos" (the hidden one).', fact: 'Krypton-based high-powered gas lasers are used in research and to etch microchips.', isotopes: { 42: { name: 'Krypton-78', stability: 'Stable' }, 44: { name: 'Krypton-80', stability: 'Stable' }, 46: { name: 'Krypton-82', stability: 'Stable' }, 47: { name: 'Krypton-83', stability: 'Stable' }, 48: { name: 'Krypton-84', stability: 'Stable' }, 50: { name: 'Krypton-86', stability: 'Stable' } } },
+            37: { name: 'Rubidium', symbol: 'Rb', description: 'A very soft, silvery-white metallic element of the alkali metal group.', origin: 'From Latin "rubidus" (deep red), the color it showed in a spectroscope.', fact: 'It is highly reactive and can ignite spontaneously in air.', isotopes: { 48: { name: 'Rubidium-85', stability: 'Stable' }, 50: { name: 'Rubidium-87', stability: 'Radioactive' } } },
+            38: { name: 'Strontium', symbol: 'Sr', description: 'A soft, silver-white yellowish metallic element of the alkaline-earth group.', origin: 'Named after Strontian, a village in Scotland where it was discovered.', fact: 'The isotope Strontium-90 is a dangerous product of nuclear fallout, but other isotopes give fireworks and flares their brilliant red color.', isotopes: { 46: { name: 'Strontium-84', stability: 'Stable' }, 48: { name: 'Strontium-86', stability: 'Stable' }, 49: { name: 'Strontium-87', stability: 'Stable' }, 50: { name: 'Strontium-88', stability: 'Stable' } } },
+            39: { name: 'Yttrium', symbol: 'Y', description: 'A silvery-metallic transition metal chemically similar to the lanthanides.', origin: 'Named after Ytterby, a village in Sweden, the source of many rare-earth elements.', fact: 'Yttrium is one of four elements named after the village of Ytterby, Sweden.', isotopes: { 50: { name: 'Yttrium-89', stability: 'Stable' } } },
+            40: { name: 'Zirconium', symbol: 'Zr', description: 'A lustrous, greyish-white, strong transition metal that resembles hafnium and, to a lesser extent, titanium.', origin: 'From the mineral zircon; derived from Persian "zargun" (gold-like).', fact: 'It is extremely heat and corrosion resistant, making it ideal for use in nuclear reactors.', isotopes: { 50: { name: 'Zirconium-90', stability: 'Stable' }, 51: { name: 'Zirconium-91', stability: 'Stable' }, 52: { name: 'Zirconium-92', stability: 'Stable' }, 54: { name: 'Zirconium-94', stability: 'Stable' } } },
+            41: { name: 'Niobium', symbol: 'Nb', description: 'A light grey, crystalline, and ductile transition metal.', origin: 'Named after Niobe, a figure from Greek mythology, daughter of Tantalus.', fact: 'Used in superalloys for jet engines and in superconducting magnets for MRI scanners.', isotopes: { 52: { name: 'Niobium-93', stability: 'Stable' } } },
+            42: { name: 'Molybdenum', symbol: 'Mo', description: 'A silvery-white metal that is ductile and highly resistant to corrosion.', origin: 'From Greek "molybdos" (lead), as its ores were confused with lead ores.', fact: 'It has one of the highest melting points of all pure elements, so it is used in high-temperature steel alloys.', isotopes: { 50: { name: 'Molybdenum-92', stability: 'Stable' }, 52: { name: 'Molybdenum-94', stability: 'Stable' }, 53: { name: 'Molybdenum-95', stability: 'Stable' }, 54: { name: 'Molybdenum-96', stability: 'Stable' }, 55: { name: 'Molybdenum-97', stability: 'Stable' }, 56: { name: 'Molybdenum-98', stability: 'Stable' } } },
+            43: { name: 'Technetium', symbol: 'Tc', description: 'A silvery-grey, radioactive metal. It is the lightest element whose isotopes are all radioactive.', origin: 'From Greek "technetos" (artificial), as it was the first synthetically produced element.', fact: 'It is used in medical diagnostic procedures as a radioactive tracer.', isotopes: { 55: { name: 'Technetium-98', stability: 'Radioactive' } } },
+            44: { name: 'Ruthenium', symbol: 'Ru', description: 'A rare transition metal belonging to the platinum group of the periodic table.', origin: 'From "Ruthenia", the Latin name for Rus\' (a historical region).', fact: 'It is used in wear-resistant electrical contacts and to plate other metals for hardness.', isotopes: { 52: { name: 'Ruthenium-96', stability: 'Stable' }, 54: { name: 'Ruthenium-98', stability: 'Stable' }, 55: { name: 'Ruthenium-99', stability: 'Stable' }, 56: { name: 'Ruthenium-100', stability: 'Stable' }, 57: { name: 'Ruthenium-101', stability: 'Stable' }, 58: { name: 'Ruthenium-102', stability: 'Stable' }, 60: { name: 'Ruthenium-104', stability: 'Stable' } } },
+            45: { name: 'Rhodium', symbol: 'Rh', description: 'A silvery-white, hard, corrosion-resistant, and chemically inert transition metal.', origin: 'From Greek "rhodon" (rose), because of the rosy color of one of its chlorine compounds.', fact: 'It is one of the rarest and most valuable precious metals, primarily used in catalytic converters for cars.', isotopes: { 58: { name: 'Rhodium-103', stability: 'Stable' } } },
+            46: { name: 'Palladium', symbol: 'Pd', description: 'A rare and lustrous silvery-white metal.', origin: 'Named after the asteroid Pallas, which was discovered at about the same time.', fact: 'Palladium can absorb up to 900 times its own volume of hydrogen gas.', isotopes: { 56: { name: 'Palladium-102', stability: 'Stable' }, 58: { name: 'Palladium-104', stability: 'Stable' }, 59: { name: 'Palladium-105', stability: 'Stable' }, 60: { name: 'Palladium-106', stability: 'Stable' }, 62: { name: 'Palladium-108', stability: 'Stable' }, 64: { name: 'Palladium-110', stability: 'Stable' } } },
+            47: { name: 'Silver', symbol: 'Ag', description: 'A precious, lustrous, soft, white metal with the highest electrical and thermal conductivity of any metal.', origin: 'From Anglo-Saxon "siolfur"; symbol from Latin "argentum".', fact: 'Silver has antimicrobial properties and was historically used to prevent infection.', isotopes: { 60: { name: 'Silver-107', stability: 'Stable' }, 62: { name: 'Silver-109', stability: 'Stable' } } },
+            48: { name: 'Cadmium', symbol: 'Cd', description: 'A soft, bluish-white metal which is chemically similar to zinc and mercury.', origin: 'From Latin "cadmia", which was a name for the mineral calamine.', fact: 'Cadmium is highly toxic and its use is now restricted, but it was used in rechargeable batteries.', isotopes: { 58: { name: 'Cadmium-106', stability: 'Stable' }, 60: { name: 'Cadmium-108', stability: 'Stable' }, 62: { name: 'Cadmium-110', stability: 'Stable' }, 63: { name: 'Cadmium-111', stability: 'Stable' }, 64: { name: 'Cadmium-112', stability: 'Stable' }, 66: { name: 'Cadmium-114', stability: 'Stable' } } },
+            49: { name: 'Indium', symbol: 'In', description: 'A very soft, silvery-white post-transition metal.', origin: 'Named for the indigo blue line in its atomic spectrum.', fact: 'When bent, pure indium emits a high-pitched "cry". It is used to make transparent conductive coatings for touchscreens.', isotopes: { 64: { name: 'Indium-113', stability: 'Stable' }, 66: { name: 'Indium-115', stability: 'Radioactive' } } },
+            50: { name: 'Tin', symbol: 'Sn', description: 'A silvery, malleable post-transition metal that is not easily oxidized in air.', origin: 'From Anglo-Saxon "tin"; symbol from Latin "stannum".', fact: 'The alloy of tin and copper creates bronze, which was so important it has an entire historical period named after it: The Bronze Age.', isotopes: { 62: { name: 'Tin-112', stability: 'Stable' }, 64: { name: 'Tin-114', stability: 'Stable' }, 65: { name: 'Tin-115', stability: 'Stable' }, 66: { name: 'Tin-116', stability: 'Stable' }, 67: { name: 'Tin-117', stability: 'Stable' }, 68: { name: 'Tin-118', stability: 'Stable' }, 69: { name: 'Tin-119', stability: 'Stable' }, 70: { name: 'Tin-120', stability: 'Stable' }, 72: { name: 'Tin-122', stability: 'Stable' }, 74: { name: 'Tin-124', stability: 'Stable' } } },
+            51: { name: 'Antimony', symbol: 'Sb', description: 'A lustrous gray metalloid.', origin: 'From Greek "anti" (not) and "monos" (alone), as it is usually found in ores. Symbol from Latin "stibium".', fact: 'Ancient Egyptians used ground stibnite (an antimony ore) as black eyeliner.', isotopes: { 70: { name: 'Antimony-121', stability: 'Stable' }, 72: { name: 'Antimony-123', stability: 'Stable' } } },
+            52: { name: 'Tellurium', symbol: 'Te', description: 'A brittle, mildly toxic, rare, silver-white metalloid.', origin: 'From Latin "tellus" (earth).', fact: 'Compounds of tellurium are used in rewritable CDs and DVDs.', isotopes: { 68: { name: 'Tellurium-120', stability: 'Stable' }, 70: { name: 'Tellurium-122', stability: 'Stable' }, 71: { name: 'Tellurium-123', stability: 'Radioactive' }, 72: { name: 'Tellurium-124', stability: 'Stable' }, 73: { name: 'Tellurium-125', stability: 'Stable' }, 74: { name: 'Tellurium-126', stability: 'Stable' }, 76: { name: 'Tellurium-128', stability: 'Radioactive' }, 78: { name: 'Tellurium-130', stability: 'Radioactive' } } },
+            53: { name: 'Iodine', symbol: 'I', description: 'A lustrous, purple-black nonmetallic solid that readily sublimes into a violet gas.', origin: 'From Greek "iodes" (violet).', fact: 'Iodine is essential for human health for the synthesis of thyroid hormones.', isotopes: { 74: { name: 'Iodine-127', stability: 'Stable' } } },
+            54: { name: 'Xenon', symbol: 'Xe', description: 'A dense, colorless, odorless noble gas.', origin: 'From Greek "xenos" (the stranger).', fact: 'Xenon is used in high-intensity lamps, such as in movie projectors and car headlights.', isotopes: { 70: { name: 'Xenon-124', stability: 'Radioactive' }, 72: { name: 'Xenon-126', stability: 'Stable' }, 74: { name: 'Xenon-128', stability: 'Stable' }, 75: { name: 'Xenon-129', stability: 'Stable' }, 76: { name: 'Xenon-130', stability: 'Stable' }, 77: { name: 'Xenon-131', stability: 'Stable' }, 78: { name: 'Xenon-132', stability: 'Stable' }, 80: { name: 'Xenon-134', stability: 'Stable' }, 82: { name: 'Xenon-136', stability: 'Radioactive' } } },
+            55: { name: 'Cesium', symbol: 'Cs', description: 'A soft, silvery-golden alkali metal which is liquid at or near room temperature.', origin: 'From Latin "caesius" (sky blue), for the blue lines in its spectrum.', fact: 'Cesium is used in the most accurate atomic clocks, which are the standard for timekeeping.', isotopes: { 78: { name: 'Cesium-133', stability: 'Stable' } } },
+            56: { name: 'Barium', symbol: 'Ba', description: 'A soft, silvery alkaline earth metal.', origin: 'From Greek "barys" (heavy).', fact: 'Barium compounds are used to create the green colors in fireworks.', isotopes: { 74: { name: 'Barium-130', stability: 'Radioactive' }, 76: { name: 'Barium-132', stability: 'Stable' }, 78: { name: 'Barium-134', stability: 'Stable' }, 79: { name: 'Barium-135', stability: 'Stable' }, 80: { name: 'Barium-136', stability: 'Stable' }, 81: { name: 'Barium-137', stability: 'Stable' }, 82: { name: 'Barium-138', stability: 'Stable' } } },
+            57: { name: 'Lanthanum', symbol: 'La', description: 'A soft, ductile, silvery-white metal that tarnishes rapidly when exposed to air.', origin: 'From Greek "lanthanein" (to lie hidden).', fact: 'It is the first element of the lanthanide series and gives the series its name.', isotopes: { 81: { name: 'Lanthanum-138', stability: 'Radioactive' }, 82: { name: 'Lanthanum-139', stability: 'Stable' } } },
+            58: { name: 'Cerium', symbol: 'Ce', description: 'A soft, ductile, and silvery-white metal that tarnishes when exposed to air.', origin: 'Named after the dwarf planet Ceres, discovered two years prior.', fact: 'The flints in cigarette lighters are an alloy of cerium and iron.', isotopes: { 78: { name: 'Cerium-136', stability: 'Stable' }, 80: { name: 'Cerium-138', stability: 'Stable' }, 82: { name: 'Cerium-140', stability: 'Stable' }, 84: { name: 'Cerium-142', stability: 'Stable' } } },
+            59: { name: 'Praseodymium', symbol: 'Pr', description: 'A soft, silvery, malleable and ductile metal, valued for its magnetic, electrical, and optical properties.', origin: 'From Greek "prasios didymos" (green twin).', fact: 'It is used to create yellow-green glass for welder\'s goggles.', isotopes: { 82: { name: 'Praseodymium-141', stability: 'Stable' } } },
+            60: { name: 'Neodymium', symbol: 'Nd', description: 'A soft silvery metal that tarnishes in air.', origin: 'From Greek "neos didymos" (new twin).', fact: 'Neodymium magnets are the strongest type of permanent magnet commercially available.', isotopes: { 82: { name: 'Neodymium-142', stability: 'Stable' }, 83: { name: 'Neodymium-143', stability: 'Stable' }, 84: { name: 'Neodymium-144', stability: 'Radioactive' }, 85: { name: 'Neodymium-145', stability: 'Stable' }, 86: { name: 'Neodymium-146', stability: 'Stable' }, 88: { name: 'Neodymium-148', stability: 'Stable' }, 90: { name: 'Neodymium-150', stability: 'Radioactive' } } },
+            61: { name: 'Promethium', symbol: 'Pm', description: 'A radioactive element, of which only trace amounts are found in natural ores.', origin: 'Named after the Titan Prometheus from Greek mythology, who stole fire from the gods.', fact: 'It is used in luminous paints and atomic batteries for spacecraft and missiles.', isotopes: { 84: { name: 'Promethium-145', stability: 'Radioactive' } } },
+            62: { name: 'Samarium', symbol: 'Sm', description: 'A moderately hard silvery metal that slowly oxidizes in air.', origin: 'Named after the mineral samarskite, from which it was isolated.', fact: 'Samarium-cobalt magnets can withstand much higher temperatures than neodymium magnets.', isotopes: { 84: { name: 'Samarium-144', stability: 'Stable' }, 85: { name: 'Samarium-147', stability: 'Radioactive' }, 86: { name: 'Samarium-148', stability: 'Radioactive' }, 87: { name: 'Samarium-149', stability: 'Stable' }, 88: { name: 'Samarium-150', stability: 'Stable' }, 90: { name: 'Samarium-152', stability: 'Stable' }, 92: { name: 'Samarium-154', stability: 'Stable' } } },
+            63: { name: 'Europium', symbol: 'Eu', description: 'A moderately hard, silvery metal which readily oxidizes in air and water.', origin: 'Named after the continent of Europe.', fact: 'Europium compounds are used as the red phosphor in television screens and fluorescent lamps. It was used in Euro banknotes for anti-forgery purposes.', isotopes: { 88: { name: 'Europium-151', stability: 'Stable' }, 90: { name: 'Europium-153', stability: 'Stable' } } },
+            64: { name: 'Gadolinium', symbol: 'Gd', description: 'A silvery-white, malleable, and ductile rare-earth element.', origin: 'Named after Johan Gadolin, a Finnish chemist who discovered yttrium.', fact: 'It has the highest ability to capture thermal neutrons of all known elements, making it useful in nuclear reactor shielding.', isotopes: { 88: { name: 'Gadolinium-152', stability: 'Radioactive' }, 90: { name: 'Gadolinium-154', stability: 'Stable' }, 91: { name: 'Gadolinium-155', stability: 'Stable' }, 92: { name: 'Gadolinium-156', stability: 'Stable' }, 93: { name: 'Gadolinium-157', stability: 'Stable' }, 94: { name: 'Gadolinium-158', stability: 'Stable' }, 96: { name: 'Gadolinium-160', stability: 'Stable' } } },
+            65: { name: 'Terbium', symbol: 'Tb', description: 'A silvery-white, rare earth metal that is malleable, ductile and soft enough to be cut with a knife.', origin: 'Named after the village of Ytterby, Sweden.', fact: 'It is used as the green phosphor in fluorescent lamps and TV tubes.', isotopes: { 94: { name: 'Terbium-159', stability: 'Stable' } } },
+            66: { name: 'Dysprosium', symbol: 'Dy', description: 'A rare earth element that has a metallic, bright silver luster.', origin: 'From Greek "dysprositos" (hard to get).', fact: 'Used in control rods in nuclear reactors and in high-power magnets for hybrid electric vehicles.', isotopes: { 90: { name: 'Dysprosium-156', stability: 'Stable' }, 92: { name: 'Dysprosium-158', stability: 'Stable' }, 94: { name: 'Dysprosium-160', stability: 'Stable' }, 95: { name: 'Dysprosium-161', stability: 'Stable' }, 96: { name: 'Dysprosium-162', stability: 'Stable' }, 97: { name: 'Dysprosium-163', stability: 'Stable' }, 98: { name: 'Dysprosium-164', stability: 'Stable' } } },
+            67: { name: 'Holmium', symbol: 'Ho', description: 'A relatively soft and malleable silvery-white rare-earth metal.', origin: 'From "Holmia", the Latin name for Stockholm, Sweden.', fact: 'Holmium has the highest magnetic strength of any element, and is used to create the strongest artificially generated magnetic fields.', isotopes: { 98: { name: 'Holmium-165', stability: 'Stable' } } },
+            68: { name: 'Erbium', symbol: 'Er', description: 'A silvery-white solid metal when artificially isolated, natural erbium is always found in chemical combination with other elements.', origin: 'Named after the village of Ytterby, Sweden.', fact: 'It has a pink color in its trivalent ion state, and is used to color glass and porcelain.', isotopes: { 94: { name: 'Erbium-162', stability: 'Stable' }, 96: { name: 'Erbium-164', stability: 'Stable' }, 98: { name: 'Erbium-166', stability: 'Stable' }, 99: { name: 'Erbium-167', stability: 'Stable' }, 100: { name: 'Erbium-168', stability: 'Stable' }, 102: { name: 'Erbium-170', stability: 'Stable' } } },
+            69: { name: 'Thulium', symbol: 'Tm', description: 'A soft, silvery-gray rare-earth metal. It is the least abundant of the lanthanides.', origin: 'Named after Thule, an ancient name for Scandinavia.', fact: 'Despite its rarity and high cost, it is used in portable X-ray machines.', isotopes: { 100: { name: 'Thulium-169', stability: 'Stable' } } },
+            70: { name: 'Ytterbium', symbol: 'Yb', description: 'A soft, malleable and ductile chemical element with a bright silvery luster.', origin: 'Named after the village of Ytterby, Sweden.', fact: 'The fourth element named after Ytterby, it is used in some steel alloys and as a radiation source for portable X-ray machines.', isotopes: { 98: { name: 'Ytterbium-168', stability: 'Stable' }, 100: { name: 'Ytterbium-170', stability: 'Stable' }, 101: { name: 'Ytterbium-171', stability: 'Stable' }, 102: { name: 'Ytterbium-172', stability: 'Stable' }, 103: { name: 'Ytterbium-173', stability: 'Stable' }, 104: { name: 'Ytterbium-174', stability: 'Stable' }, 106: { name: 'Ytterbium-176', stability: 'Stable' } } },
+            71: { name: 'Lutetium', symbol: 'Lu', description: 'A silvery-white metal which resists corrosion in dry air, but not in moist air.', origin: 'Named after "Lutetia", the ancient Roman name for Paris.', fact: 'Lutetium is one of the most expensive rare-earth metals, with a price about US$10,000 per kilogram.', isotopes: { 104: { name: 'Lutetium-175', stability: 'Stable' }, 105: { name: 'Lutetium-176', stability: 'Radioactive' } } },
+            72: { name: 'Hafnium', symbol: 'Hf', description: 'A lustrous, silvery, ductile transition metal. Chemically, it is very similar to zirconium.', origin: 'Named after "Hafnia", the Latin name for Copenhagen.', fact: 'Its main use is in control rods for nuclear reactors because of its excellent ability to absorb neutrons.', isotopes: { 102: { name: 'Hafnium-174', stability: 'Stable' }, 104: { name: 'Hafnium-176', stability: 'Stable' }, 105: { name: 'Hafnium-177', stability: 'Stable' }, 106: { name: 'Hafnium-178', stability: 'Stable' }, 107: { name: 'Hafnium-179', stability: 'Stable' }, 108: { name: 'Hafnium-180', stability: 'Stable' } } },
+            73: { name: 'Tantalum', symbol: 'Ta', description: 'A hard, blue-gray, lustrous transition metal that is highly corrosion-resistant.', origin: 'Named after Tantalus, a villain from Greek mythology, for its inability to absorb acid.', fact: 'It is used in surgical implants and high-end electronic capacitors, such as those in smartphones.', isotopes: { 107: { name: 'Tantalum-180m', stability: 'Radioactive' }, 108: { name: 'Tantalum-181', stability: 'Stable' } } },
+            74: { name: 'Tungsten', symbol: 'W', description: 'A hard, rare metal, known for having the highest melting point of all elements.', origin: 'From Swedish "tung sten" (heavy stone). Symbol W is from its other name, Wolfram.', fact: 'Its high melting point makes it ideal for the filaments in incandescent light bulbs.', isotopes: { 106: { name: 'Tungsten-180', stability: 'Radioactive' }, 108: { name: 'Tungsten-182', stability: 'Stable' }, 109: { name: 'Tungsten-183', stability: 'Stable' }, 110: { name: 'Tungsten-184', stability: 'Stable' }, 112: { name: 'Tungsten-186', stability: 'Stable' } } },
+            75: { name: 'Rhenium', symbol: 'Re', description: 'A silvery-gray, heavy, third-row transition metal.', origin: 'Named after the Rhine River in Europe.', fact: 'It is one of the rarest elements in Earth\'s crust and has the third-highest melting point.', isotopes: { 110: { name: 'Rhenium-185', stability: 'Stable' }, 112: { name: 'Rhenium-187', stability: 'Radioactive' } } },
+            76: { name: 'Osmium', symbol: 'Os', description: 'A hard, brittle, bluish-white transition metal in the platinum group.', origin: 'From Greek "osme" (smell), due to the ashy and smoky smell of its volatile oxide.', fact: 'Osmium is the densest naturally occurring element.', isotopes: { 110: { name: 'Osmium-184', stability: 'Stable' }, 112: { name: 'Osmium-186', stability: 'Radioactive' }, 113: { name: 'Osmium-187', stability: 'Stable' }, 114: { name: 'Osmium-188', stability: 'Stable' }, 115: { name: 'Osmium-189', stability: 'Stable' }, 116: { name: 'Osmium-190', stability: 'Stable' }, 118: { name: 'Osmium-192', stability: 'Stable' } } },
+            77: { name: 'Iridium', symbol: 'Ir', description: 'A very hard, brittle, silvery-white transition metal of the platinum group.', origin: 'Named after Iris, the Greek goddess of the rainbow, because of the vibrant colors of its salts.', fact: 'Iridium is the most corrosion-resistant metal known. The standard meter bar was made from a platinum-iridium alloy.', isotopes: { 114: { name: 'Iridium-191', stability: 'Stable' }, 116: { name: 'Iridium-193', stability: 'Stable' } } },
+            78: { name: 'Platinum', symbol: 'Pt', description: 'A dense, malleable, ductile, highly unreactive, precious, silverish-white transition metal.', origin: 'From Spanish "platina" (little silver).', fact: 'It is a major precious metal and is heavily used in jewelry, catalytic converters, and laboratory equipment.', isotopes: { 112: { name: 'Platinum-190', stability: 'Radioactive' }, 114: { name: 'Platinum-192', stability: 'Stable' }, 116: { name: 'Platinum-194', stability: 'Stable' }, 117: { name: 'Platinum-195', stability: 'Stable' }, 118: { name: 'Platinum-196', stability: 'Stable' }, 120: { name: 'Platinum-198', stability: 'Stable' } } },
+            79: { name: 'Gold', symbol: 'Au', description: 'A bright, slightly reddish yellow, dense, soft, malleable, and ductile metal.', origin: 'From Anglo-Saxon "gold"; symbol from Latin "aurum" (shining dawn).', fact: 'Gold is so malleable that a single ounce can be stretched into a thread 50 miles long.', isotopes: { 118: { name: 'Gold-197', stability: 'Stable' } } },
+            80: { name: 'Mercury', symbol: 'Hg', description: 'A heavy, silvery d-block element, it is the only metallic element that is liquid at standard conditions for temperature and pressure.', origin: 'Named after the Roman god Mercury. Symbol from its Latinized Greek name "hydrargyrum" (water-silver).', fact: 'The toxicity of mercury led to the phrase "mad as a hatter", as hat makers historically used it and suffered neurological damage.', isotopes: { 116: { name: 'Mercury-196', stability: 'Stable' }, 118: { name: 'Mercury-198', stability: 'Stable' }, 119: { name: 'Mercury-199', stability: 'Stable' }, 120: { name: 'Mercury-200', stability: 'Stable' }, 121: { name: 'Mercury-201', stability: 'Stable' }, 122: { name: 'Mercury-202', stability: 'Stable' }, 124: { name: 'Mercury-204', stability: 'Stable' } } },
+            81: { name: 'Thallium', symbol: 'Tl', description: 'A soft gray post-transition metal that is not found free in nature.', origin: 'From Greek "thallos" (a green shoot or twig), after a bright green line in its spectrum.', fact: 'It is extremely toxic and was once widely used as a rat poison.', isotopes: { 122: { name: 'Thallium-203', stability: 'Stable' }, 124: { name: 'Thallium-205', stability: 'Stable' } } },
+            82: { name: 'Lead', symbol: 'Pb', description: 'A heavy metal that is denser than most common materials. It is soft and malleable, and also has a relatively low melting point.', origin: 'From Anglo-Saxon "lead"; symbol from Latin "plumbum".', fact: 'Ancient Romans used lead extensively for plumbing, which gives us the English words "plumber" and "plumbing".', isotopes: { 122: { name: 'Lead-204', stability: 'Stable' }, 124: { name: 'Lead-206', stability: 'Stable' }, 125: { name: 'Lead-207', stability: 'Stable' }, 126: { name: 'Lead-208', stability: 'Stable' } } },
+            83: { name: 'Bismuth', symbol: 'Bi', description: 'A brittle metal with a silvery-white color when freshly produced, but surface oxidation can give it a pink tinge.', origin: 'From German "wismuth", possibly from "weisse masse" (white mass).', fact: 'Technically radioactive, its only natural isotope has a half-life more than a billion times the estimated age of the universe.', isotopes: { 126: { name: 'Bismuth-209', stability: 'Radioactive' } } },
+            84: { name: 'Polonium', symbol: 'Po', description: 'A highly radioactive metal with no stable isotopes.', origin: 'Named after Poland, the native country of Marie Curie.', fact: 'It is over 250,000 times more toxic than hydrogen cyanide by weight.', isotopes: { 125: { name: 'Polonium-209', stability: 'Radioactive' } } },
+            85: { name: 'Astatine', symbol: 'At', description: 'The rarest naturally occurring element in the Earth\'s crust. It is a highly radioactive halogen.', origin: 'From Greek "astatos" (unstable).', fact: 'The total amount of astatine in the Earth\'s crust at any given time is estimated to be less than one gram.', isotopes: { 125: { name: 'Astatine-210', stability: 'Radioactive' } } },
+            86: { name: 'Radon', symbol: 'Rn', description: 'A radioactive, colorless, odorless, tasteless noble gas.', origin: 'From radium, from which it is produced by radioactive decay.', fact: 'It is one of the densest substances that remains a gas under normal conditions.', isotopes: { 136: { name: 'Radon-222', stability: 'Radioactive' } } },
+            87: { name: 'Francium', symbol: 'Fr', description: 'A highly radioactive metal that decays into astatine, radium, and radon.', origin: 'Named after France, where it was discovered.', fact: 'It is the second-rarest naturally occurring element, after astatine.', isotopes: { 136: { name: 'Francium-223', stability: 'Radioactive' } } },
+            88: { name: 'Radium', symbol: 'Ra', description: 'An almost pure-white alkaline earth metal, it readily oxidizes on exposure to air, turning from almost pure white to black.', origin: 'From Latin "radius" (ray), in recognition of its power of emitting energy in the form of rays.', fact: 'It was formerly used in self-luminous paints for watches and instrument dials, a practice stopped due to health concerns.', isotopes: { 138: { name: 'Radium-226', stability: 'Radioactive' } } },
+            89: { name: 'Actinium', symbol: 'Ac', description: 'A soft, silvery-white radioactive metal.', origin: 'From Greek "aktis" or "aktinos" (beam or ray).', fact: 'It glows in the dark with a pale blue light due to its intense radioactivity.', isotopes: { 138: { name: 'Actinium-227', stability: 'Radioactive' } } },
+            90: { name: 'Thorium', symbol: 'Th', description: 'A weakly radioactive metallic chemical element. It is silvery and tarnishes black when exposed to air.', origin: 'Named after Thor, the Norse god of thunder.', fact: 'Thorium is being investigated as a potentially safer and more abundant alternative to uranium for nuclear fuel.', isotopes: { 142: { name: 'Thorium-232', stability: 'Radioactive' } } },
+            91: { name: 'Protactinium', symbol: 'Pa', description: 'A dense, silvery-gray radioactive actinide metal which readily reacts with oxygen, water vapor and inorganic acids.', origin: 'From Greek "protos" (first) and "actinium", as it is the parent of actinium.', fact: 'There are no uses for protactinium outside of basic scientific research because of its scarcity, high radioactivity and high toxicity.', isotopes: { 140: { name: 'Protactinium-231', stability: 'Radioactive' } } },
+            92: { name: 'Uranium', symbol: 'U', description: 'A silvery-white, weakly radioactive metal. It is the heaviest naturally occurring element on Earth.', origin: 'Named after the planet Uranus, which had been discovered eight years earlier.', fact: 'The isotope Uranium-235 is the primary fuel for nuclear reactors and nuclear weapons.', isotopes: { 142: { name: 'Uranium-234', stability: 'Radioactive' }, 143: { name: 'Uranium-235', stability: 'Radioactive' }, 146: { name: 'Uranium-238', stability: 'Radioactive' } } },
+            93: { name: 'Neptunium', symbol: 'Np', description: 'A hard, silvery, ductile, radioactive actinide metal.', origin: 'Named after the planet Neptune, as it follows uranium in the periodic table, just as Neptune follows Uranus.', fact: 'It is the first transuranic element, meaning it has an atomic number higher than uranium.', isotopes: { 144: { name: 'Neptunium-237', stability: 'Radioactive' } } },
+            94: { name: 'Plutonium', symbol: 'Pu', description: 'A radioactive actinide metal of silvery-white appearance that tarnishes when exposed to air.', origin: 'Named after the dwarf planet Pluto, following the planetary naming scheme.', fact: 'It is a key fissile component in modern nuclear weapons.', isotopes: { 150: { name: 'Plutonium-244', stability: 'Radioactive' } } },
+            95: { name: 'Americium', symbol: 'Am', description: 'A synthetic radioactive element that is a silvery-white, malleable metal.', origin: 'Named after the Americas, by analogy with its lanthanide homologue, europium.', fact: 'Small amounts of Americium-241 are used in household smoke detectors.', isotopes: { 148: { name: 'Americium-243', stability: 'Radioactive' } } },
+            96: { name: 'Curium', symbol: 'Cm', description: 'A synthetic, hard, brittle, silvery, radioactive metal.', origin: 'Named after Marie and Pierre Curie, pioneers in radioactivity research.', fact: 'It was used as the alpha particle source for the Alpha Particle X-ray Spectrometers on the Mars rovers.', isotopes: { 151: { name: 'Curium-247', stability: 'Radioactive' } } },
+            97: { name: 'Berkelium', symbol: 'Bk', description: 'A synthetic radioactive metal, the first sample of which was produced in 1949.', origin: 'Named after Berkeley, California, the city where it was discovered.', fact: 'Only milligram quantities of berkelium have ever been produced.', isotopes: { 150: { name: 'Berkelium-247', stability: 'Radioactive' } } },
+            98: { name: 'Californium', symbol: 'Cf', description: 'A synthetic radioactive element first made in 1950.', origin: 'Named after the state of California and the University of California, Berkeley.', fact: 'Californium-252 is a very strong neutron emitter and is used to start up nuclear reactors.', isotopes: { 153: { name: 'Californium-251', stability: 'Radioactive' } } },
+            99: { name: 'Einsteinium', symbol: 'Es', description: 'A synthetic element that is a soft, silvery, paramagnetic metal.', origin: 'Named in honor of Albert Einstein.', fact: 'It was discovered in the debris of the first hydrogen bomb explosion in 1952.', isotopes: { 153: { name: 'Einsteinium-252', stability: 'Radioactive' } } },
+            100: { name: 'Fermium', symbol: 'Fm', description: 'A synthetic element and the heaviest that can be formed by neutron bombardment of lighter elements.', origin: 'Named in honor of Enrico Fermi, a pioneer of nuclear physics.', fact: 'Like einsteinium, it was first discovered in the debris of a hydrogen bomb test.', isotopes: { 157: { name: 'Fermium-257', stability: 'Radioactive' } } },
+            101: { name: 'Mendelevium', symbol: 'Md', description: 'A synthetic element that is radioactive.', origin: 'Named after Dmitri Mendeleev, the father of the periodic table.', fact: 'It was the first element to be synthesized one atom at a time.', isotopes: { 157: { name: 'Mendelevium-258', stability: 'Radioactive' } } },
+            102: { name: 'Nobelium', symbol: 'No', description: 'A synthetic radioactive element.', origin: 'Named in honor of Alfred Nobel, the inventor of dynamite and founder of the Nobel Prizes.', fact: 'Its discovery was claimed by teams in Sweden, the US, and the Soviet Union, leading to a long naming dispute.', isotopes: { 157: { name: 'Nobelium-259', stability: 'Radioactive' } } },
+            103: { name: 'Lawrencium', symbol: 'Lr', description: 'A synthetic radioactive element. It is the last member of the actinide series.', origin: 'Named in honor of Ernest Lawrence, inventor of the cyclotron particle accelerator.', fact: 'Experiments have shown that lawrencium behaves more like the lighter actinides than would be predicted by its position.', isotopes: { 159: { name: 'Lawrencium-262', stability: 'Radioactive' } } },
+            104: { name: 'Rutherfordium', symbol: 'Rf', description: 'A synthetic radioactive element, the first transactinide element.', origin: 'Named in honor of Ernest Rutherford, the father of nuclear physics.', fact: 'Its properties are not well known as it has only been produced in very small amounts.', isotopes: { 163: { name: 'Rutherfordium-267', stability: 'Radioactive' } } },
+            105: { name: 'Dubnium', symbol: 'Db', description: 'A synthetic radioactive element.', origin: 'Named after Dubna, Russia, the site of the Joint Institute for Nuclear Research.', fact: 'The naming of this element was part of a major controversy involving several elements in this region of the table.', isotopes: { 163: { name: 'Dubnium-268', stability: 'Radioactive' } } },
+            106: { name: 'Seaborgium', symbol: 'Sg', description: 'A synthetic radioactive element.', origin: 'Named in honor of Glenn T. Seaborg, an American chemist instrumental in the discovery of many transuranic elements.', fact: 'Seaborg was the first living person to have an element named after them.', isotopes: { 165: { name: 'Seaborgium-271', stability: 'Radioactive' } } },
+            107: { name: 'Bohrium', symbol: 'Bh', description: 'A synthetic radioactive element.', origin: 'Named in honor of Niels Bohr, a Danish physicist who made foundational contributions to understanding atomic structure.', fact: 'It is a member of group 7, placing it as a heavier homologue to rhenium.', isotopes: { 165: { name: 'Bohrium-272', stability: 'Radioactive' } } },
+            108: { name: 'Hassium', symbol: 'Hs', description: 'A synthetic radioactive element.', origin: 'Named after the German state of Hesse (Hassia in Latin), where it was discovered.', fact: 'It is the heaviest element in Group 8, and is expected to be a dense, silvery metal.', isotopes: { 169: { name: 'Hassium-277', stability: 'Radioactive' } } },
+            109: { name: 'Meitnerium', symbol: 'Mt', description: 'A synthetic radioactive element.', origin: 'Named in honor of Lise Meitner, an Austrian physicist who was a pioneer in nuclear fission.', fact: 'Meitner was one of the first women to have a non-mythological element named after her.', isotopes: { 169: { name: 'Meitnerium-278', stability: 'Radioactive' } } },
+            110: { name: 'Darmstadtium', symbol: 'Ds', description: 'A synthetic radioactive element.', origin: 'Named after Darmstadt, Germany, the city where it was created.', fact: 'It is one of the super-heavy elements, and its properties are mostly predicted.', isotopes: { 171: { name: 'Darmstadtium-281', stability: 'Radioactive' } } },
+            111: { name: 'Roentgenium', symbol: 'Rg', description: 'A synthetic radioactive element.', origin: 'Named in honor of Wilhelm Conrad Röntgen, the discoverer of X-rays.', fact: 'The element is expected to be a solid at room temperature and have a metallic appearance.', isotopes: { 171: { name: 'Roentgenium-282', stability: 'Radioactive' } } },
+            112: { name: 'Copernicium', symbol: 'Cn', description: 'A synthetic radioactive element.', origin: 'Named in honor of Nicolaus Copernicus, the astronomer who proposed a heliocentric model of the universe.', fact: 'It is extremely volatile for a metal and may be a gas at room temperature.', isotopes: { 173: { name: 'Copernicium-285', stability: 'Radioactive' } } },
+            113: { name: 'Nihonium', symbol: 'Nh', description: 'A synthetic radioactive element.', origin: 'Named after Japan ("Nihon" in Japanese), where it was discovered.', fact: 'It was the first modern element to be discovered in an Asian country.', isotopes: { 172: { name: 'Nihonium-286', stability: 'Radioactive' } } },
+            114: { name: 'Flerovium', symbol: 'Fl', description: 'A synthetic radioactive element.', origin: 'Named after the Flerov Laboratory of Nuclear Reactions in Dubna, Russia.', fact: 'It is located in the "island of stability," a theoretical region of superheavy elements predicted to have longer half-lives.', isotopes: { 175: { name: 'Flerovium-289', stability: 'Radioactive' } } },
+            115: { name: 'Moscovium', symbol: 'Mc', description: 'A synthetic radioactive element.', origin: 'Named after the Moscow Oblast in Russia, where the discovery experiments were conducted.', fact: 'Its discovery was a collaboration between Russian and American scientists.', isotopes: { 176: { name: 'Moscovium-290', stability: 'Radioactive' } } },
+            116: { name: 'Livermorium', symbol: 'Lv', description: 'A synthetic radioactive element.', origin: 'Named after the Lawrence Livermore National Laboratory in California.', fact: 'Only a few dozen atoms of Livermorium have ever been detected.', isotopes: { 177: { name: 'Livermorium-293', stability: 'Radioactive' } } },
+            117: { name: 'Tennessine', symbol: 'Ts', description: 'A synthetic radioactive element.', origin: 'Named after the state of Tennessee, home to several major physics research labs.', fact: 'It is the second-heaviest known element and is a member of the halogen group.', isotopes: { 177: { name: 'Tennessine-294', stability: 'Radioactive' } } },
+            118: { name: 'Oganesson', symbol: 'Og', description: 'A synthetic radioactive element and the element with the highest atomic number ever synthesized.', origin: 'Named in honor of Yuri Oganessian for his pioneering research in superheavy elements.', fact: 'It is the only element in Group 18 (the noble gases) that is predicted to be a reactive solid at room temperature.', isotopes: { 176: { name: 'Oganesson-294', stability: 'Radioactive' } } }
+        };
+
+        // --- Get all DOM elements ---
+        const ui = {
+            protons: { slider: document.getElementById('protons'), value: document.getElementById('protons-value') },
+            neutrons: { slider: document.getElementById('neutrons'), value: document.getElementById('neutrons-value') },
+            electrons: { slider: document.getElementById('electrons'), value: document.getElementById('electrons-value') },
+            elementName: document.getElementById('elementName'),
+            atomicSymbol: document.getElementById('atomicSymbol'),
+            atomicMass: document.getElementById('atomicMass'),
+            atomicCharge: document.getElementById('atomicCharge'),
+            ionStatus: document.getElementById('ionStatus'),
+            isotopeInfo: document.getElementById('isotope-info'),
+            description: document.getElementById('element-description'),
+            origin: document.getElementById('element-origin'),
+            fact: document.getElementById('element-fact'),
+            canvas: document.getElementById('atomCanvas')
+        };
+        const ctx = ui.canvas.getContext('2d');
+
+        // --- MAIN UPDATE FUNCTION ---
+        function updateSimulation() {
+            const protons = parseInt(ui.protons.slider.value);
+            const neutrons = parseInt(ui.neutrons.slider.value);
+            const electrons = parseInt(ui.electrons.slider.value);
+
+            ui.protons.value.textContent = protons;
+            ui.neutrons.value.textContent = neutrons;
+            ui.electrons.value.textContent = electrons;
+
+            const element = elements[protons];
+            if (!element) {
+                // Handle cases where element data is not present (for numbers > 20 in this sample)
+                ui.elementName.textContent = 'Unknown Element';
+                [ui.atomicSymbol, ui.atomicMass, ui.description, ui.origin, ui.fact, ui.isotopeInfo].forEach(el => el.textContent = '?');
+                return;
+            }
+
+            // --- Update Element and Charge Info ---
+            const charge = protons - electrons;
+            ui.elementName.textContent = element.name;
+            ui.atomicSymbol.textContent = element.symbol;
+            ui.atomicMass.textContent = protons + neutrons;
+            ui.atomicCharge.textContent = charge > 0 ? `+${charge}` : charge;
+
+            if (charge === 0) { ui.ionStatus.textContent = 'Neutral Atom'; ui.ionStatus.className = 'stable'; }
+            else if (charge > 0) { ui.ionStatus.textContent = 'Cation (Positive)'; ui.ionStatus.className = 'radioactive'; }
+            else { ui.ionStatus.textContent = 'Anion (Negative)'; ui.ionStatus.className = 'radioactive'; }
+
+            // --- Update Isotope Info ---
+            const isotope = element.isotopes[neutrons];
+            if (isotope) {
+                ui.isotopeInfo.textContent = `${isotope.name} (${isotope.stability})`;
+                ui.isotopeInfo.className = isotope.stability === 'Stable' ? 'stable' : 'radioactive';
+            } else {
+                ui.isotopeInfo.textContent = `${element.name}-${protons + neutrons} (Unstable/Unknown Isotope)`;
+                ui.isotopeInfo.className = 'radioactive';
+            }
+
+            // --- Update Detailed Info ---
+            ui.description.textContent = element.description;
+            ui.origin.textContent = element.origin;
+            ui.fact.textContent = element.fact;
+        }
+
+        // --- DRAWING FUNCTION ---
+        function drawAtom() {
+            const protons = parseInt(ui.protons.slider.value);
+            const neutrons = parseInt(ui.neutrons.slider.value);
+            const electrons = parseInt(ui.electrons.slider.value);
+            const nucleusRadius = 10 + Math.cbrt(protons + neutrons) * 4;
+            const centerX = ui.canvas.width / 2;
+            const centerY = ui.canvas.height / 2;
+
+            ctx.clearRect(0, 0, ui.canvas.width, ui.canvas.height);
+
+            // --- Draw Electron Shells and Electrons ---
+            const shellMaxElectrons = [2, 8, 18, 32, 32, 18, 8];
+            const shellRadii = [60, 90, 115, 135, 150]; // Simplified visual shells
+            let electronsToDraw = electrons;
+
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.lineWidth = 1.5;
+
+            for (let i = 0; i < shellMaxElectrons.length && electronsToDraw > 0; i++) {
+                if (!shellRadii[i]) continue;
+                const electronsInShell = Math.min(electronsToDraw, shellMaxElectrons[i]);
+
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, shellRadii[i], 0, Math.PI * 2);
+                ctx.stroke();
+
+                for (let j = 0; j < electronsInShell; j++) {
+                    const angle = (j / electronsInShell) * 2 * Math.PI + (Date.now() / (3000 * (i + 1.5)));
+                    const eX = centerX + shellRadii[i] * Math.cos(angle);
+                    const eY = centerY + shellRadii[i] * Math.sin(angle);
+                    ctx.beginPath();
+                    ctx.arc(eX, eY, 5, 0, Math.PI * 2);
+                    ctx.fillStyle = 'var(--accent-color)';
+                    ctx.fill();
+                }
+                electronsToDraw -= electronsInShell;
+            }
+
+            // --- Draw Nucleons (Protons and Neutrons) ---
+            for (let i = 0; i < protons + neutrons; i++) {
+                const isProton = i < protons;
+                const angle = i * 2.4 + (isProton ? 0 : Math.PI);
+                const dist = Math.pow(Math.random(), 0.5) * (nucleusRadius - 6);
+                const pX = centerX + dist * Math.cos(angle);
+                const pY = centerY + dist * Math.sin(angle);
+
+                ctx.beginPath();
+                ctx.arc(pX, pY, 6, 0, Math.PI * 2);
+                ctx.fillStyle = isProton ? 'var(--proton-color)' : 'var(--neutron-color)';
+                ctx.fill();
+            }
+
+            requestAnimationFrame(drawAtom);
+        }
+
+        // --- Event Listeners ---
+        ui.protons.slider.addEventListener('input', updateSimulation);
+        ui.neutrons.slider.addEventListener('input', updateSimulation);
+        ui.electrons.slider.addEventListener('input', updateSimulation);
+
+        // --- Initial Load ---
+        updateSimulation();
+        drawAtom();
+    </script>
+</body>
+
+</html>

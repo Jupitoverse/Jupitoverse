@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science Blog | Jupitoverse</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Montserrat:wght@400;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --dark: #1e293b;
+            --darker: #0f172a;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --border: #e2e8f0;
+        }
+        
+        body {
+            font-family: 'Merriweather', serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.8;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" fill="%23ffffff"></path><path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" fill="%23ffffff"></path><path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="%23ffffff"></path></svg>') no-repeat bottom;
+            background-size: cover;
+            opacity: 0.1;
+        }
+        
+        .hero h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 900;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero p {
+            font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+            font-weight: 300;
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: -60px auto 60px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .filters-bar {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 50px;
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+        
+        .filter-btn {
+            padding: 12px 28px;
+            border: 2px solid var(--primary);
+            background: white;
+            color: var(--primary);
+            border-radius: 25px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+        }
+        
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        @media (max-width: 768px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .blog-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+        
+        .blog-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .blog-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.2), transparent);
+        }
+        
+        .blog-content {
+            padding: 30px;
+        }
+        
+        .blog-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .blog-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--dark);
+            line-height: 1.3;
+        }
+        
+        .blog-excerpt {
+            color: var(--gray);
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+        
+        .blog-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .tag {
+            padding: 6px 14px;
+            background: #ede9fe;
+            color: var(--secondary);
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+        
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .read-more:hover {
+            gap: 12px;
+            color: var(--secondary);
+        }
+        
+        .featured-post {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            max-height: 500px;
+        }
+        
+        @media (max-width: 968px) {
+            .featured-post {
+                grid-template-columns: 1fr;
+                max-height: none;
+            }
+        }
+        
+        .featured-post .blog-image {
+            height: 100%;
+            min-height: 400px;
+        }
+        
+        .featured-post .blog-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 50px;
+        }
+        
+        .featured-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            color: white;
+            border-radius: 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            width: fit-content;
+        }
+        
+        .article-view {
+            display: none;
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+        
+        .article-view.active {
+            display: block;
+        }
+        
+        .article-header {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: var(--light);
+            border: none;
+            border-radius: 10px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: var(--border);
+        }
+        
+        .article-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            color: var(--dark);
+            line-height: 1.2;
+        }
+        
+        .article-body h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 40px 0 20px;
+            color: var(--dark);
+        }
+        
+        .article-body h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 30px 0 15px;
+            color: var(--primary);
+        }
+        
+        .article-body p {
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
+        
+        .article-body blockquote {
+            border-left: 4px solid var(--primary);
+            padding-left: 30px;
+            margin: 30px 0;
+            font-style: italic;
+            color: var(--gray);
+            background: var(--light);
+            padding: 20px 20px 20px 30px;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .article-body ul, .article-body ol {
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+        
+        .article-body li {
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            border-left: 4px solid var(--primary);
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 10px;
+        }
+        
+        .author-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: var(--light);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 50px;
+        }
+        
+        .author-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .author-info h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .author-bio {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>📚 Science Blog</h1>
+        <p>Exploring the frontiers of Quantum Physics, the Origins of the Universe, Quantum Computing, and more</p>
+    </div>
+    
+    <div class="container">
+        <div class="filters-bar">
+            <button class="filter-btn active" data-category="all">All Posts</button>
+            <button class="filter-btn" data-category="quantum-physics">Quantum Physics</button>
+            <button class="filter-btn" data-category="cosmology">Origin of Universe</button>
+            <button class="filter-btn" data-category="quantum-computing">Quantum Computing</button>
+            <button class="filter-btn" data-category="astrophysics">Astrophysics</button>
+            <button class="filter-btn" data-category="technology">Technology</button>
+        </div>
+        
+        <div class="blog-grid" id="blogGrid"></div>
+        
+        <div class="article-view" id="articleView"></div>
+    </div>
+    
+    <script>
+        const blogPosts = [
+            {
+                id: 1,
+                title: "The Quantum Revolution: Understanding Superposition and Entanglement",
+                category: "quantum-physics",
+                icon: "⚛️",
+                date: "2025-10-15",
+                readTime: "12 min",
+                author: "Dr. Sarah Chen",
+                excerpt: "Dive deep into the fascinating world of quantum mechanics, where particles can exist in multiple states simultaneously and remain mysteriously connected across vast distances.",
+                tags: ["Quantum Mechanics", "Superposition", "Entanglement", "Physics"],
+                featured: true,
+                content: `
+                    <h2>The Strange World of Quantum Mechanics</h2>
+                    <p>Quantum mechanics represents one of the most profound and counterintuitive theories in all of science. At the quantum scale, the rules that govern our everyday experience break down completely, replaced by a bizarre reality where particles behave in ways that seem to defy common sense.</p>
+                    
+                    <h3>What is Quantum Superposition?</h3>
+                    <p>Imagine a coin spinning in the air. While it's spinning, it's neither heads nor tails—it's both at once. This is the essence of quantum superposition. In the quantum world, particles like electrons exist in multiple states simultaneously until they are measured.</p>
+                    
+                    <div class="highlight-box">
+                        <strong>Key Insight:</strong> The famous Schrödinger's cat thought experiment illustrates this perfectly. The cat in the box is simultaneously alive and dead until we open the box and observe it. This isn't just a limitation of our knowledge—it's the fundamental nature of quantum reality.
+                    </div>
+                    
+                    <h3>Quantum Entanglement: Spooky Action at a Distance</h3>
+                    <p>Even Einstein was troubled by quantum entanglement, calling it "spooky action at a distance." When two particles become entangled, they remain connected regardless of the distance between them. Measuring one particle instantly affects the state of the other, even if they're separated by billions of light-years.</p>
+                    
+                    <blockquote>"The day science begins to study non-physical phenomena, it will make more progress in one decade than in all the previous centuries of its existence." - Nikola Tesla</blockquote>
+                    
+                    <h3>Real-World Applications</h3>
+                    <p>These quantum phenomena aren't just theoretical curiosities. They're the foundation of emerging technologies:</p>
+                    <ul>
+                        <li><strong>Quantum Computing:</strong> Leveraging superposition to perform calculations exponentially faster than classical computers</li>
+                        <li><strong>Quantum Cryptography:</strong> Using entanglement to create unhackable communication channels</li>
+                        <li><strong>Quantum Sensors:</strong> Achieving unprecedented precision in measurements</li>
+                        <li><strong>Quantum Teleportation:</strong> Transferring quantum states across distances</li>
+                    </ul>
+                    
+                    <h2>The Future of Quantum Science</h2>
+                    <p>We are only beginning to scratch the surface of what quantum mechanics can offer. As we develop better control over quantum systems, we're entering an era where the impossible becomes possible. From quantum computers that can solve problems beyond the reach of classical machines to quantum sensors that can detect gravitational waves, the quantum revolution is just beginning.</p>
+                    
+                    <p>The journey into the quantum realm challenges our most fundamental assumptions about reality, causality, and the nature of information itself. It's a reminder that the universe is far stranger and more wonderful than we ever imagined.</p>
+                `
+            },
+            {
+                id: 2,
+                title: "The Big Bang and Beyond: Unraveling the Origin of Our Universe",
+                category: "cosmology",
+                icon: "🌌",
+                date: "2025-10-10",
+                readTime: "15 min",
+                author: "Prof. James Rodriguez",
+                excerpt: "Journey back 13.8 billion years to understand how our universe began, evolved, and continues to expand. Explore the evidence, theories, and mysteries of cosmic origins.",
+                tags: ["Cosmology", "Big Bang", "Universe", "Astrophysics"],
+                featured: false,
+                content: `
+                    <h2>In the Beginning...</h2>
+                    <p>Approximately 13.8 billion years ago, everything that exists—all matter, energy, space, and time—emerged from a singular point of infinite density and temperature. This moment, known as the Big Bang, wasn't an explosion in space, but rather an expansion of space itself.</p>
+                    
+                    <h3>The First Moments</h3>
+                    <p>The first fraction of a second after the Big Bang was a period of extraordinary transformation:</p>
+                    <ul>
+                        <li><strong>10⁻⁴³ seconds (Planck time):</strong> The earliest moment we can theoretically describe with current physics</li>
+                        <li><strong>10⁻³⁵ seconds:</strong> Cosmic inflation begins, causing the universe to expand exponentially</li>
+                        <li><strong>10⁻⁶ seconds:</strong> Quarks combine to form protons and neutrons</li>
+                        <li><strong>3 minutes:</strong> Nuclear fusion creates the first atomic nuclei</li>
+                        <li><strong>380,000 years:</strong> Atoms form, and the universe becomes transparent to light</li>
+                    </ul>
+                    
+                    <div class="highlight-box">
+                        <strong>Mind-Blowing Fact:</strong> In less than one second, the universe went from being smaller than an atom to being light-years across. During inflation, space expanded faster than the speed of light—this doesn't violate relativity because space itself was expanding, not objects moving through space.
+                    </div>
+                    
+                    <h3>Evidence for the Big Bang</h3>
+                    <p>Multiple independent lines of evidence support the Big Bang theory:</p>
+                    <ol>
+                        <li><strong>Cosmic Microwave Background (CMB):</strong> The afterglow of the Big Bang, discovered in 1964, provides a snapshot of the universe when it was only 380,000 years old</li>
+                        <li><strong>Hubble's Law:</strong> Observations show that distant galaxies are moving away from us, and the farther away they are, the faster they're receding</li>
+                        <li><strong>Abundance of Light Elements:</strong> The ratios of hydrogen, helium, and lithium match predictions from Big Bang nucleosynthesis</li>
+                        <li><strong>Large-Scale Structure:</strong> The distribution of galaxies and galaxy clusters matches simulations based on Big Bang cosmology</li>
+                    </ol>
+                    
+                    <h2>The Dark Universe</h2>
+                    <p>One of the most profound discoveries of modern cosmology is that ordinary matter—the atoms that make up stars, planets, and us—comprises only about 5% of the universe. The rest is dark:</p>
+                    
+                    <h3>Dark Matter (27%)</h3>
+                    <p>Dark matter doesn't emit, absorb, or reflect light, but we know it exists because of its gravitational effects. Without dark matter, galaxies would fly apart and couldn't have formed in the first place.</p>
+                    
+                    <h3>Dark Energy (68%)</h3>
+                    <p>Even more mysterious is dark energy—an unknown form of energy causing the universe's expansion to accelerate. Discovered in 1998, dark energy remains one of the greatest puzzles in physics.</p>
+                    
+                    <blockquote>"The most incomprehensible thing about the universe is that it is comprehensible." - Albert Einstein</blockquote>
+                    
+                    <h2>The Ultimate Fate of the Universe</h2>
+                    <p>What does the future hold? Current observations suggest several possibilities:</p>
+                    
+                    <h3>The Big Freeze (Heat Death)</h3>
+                    <p>As the universe continues expanding and accelerating, galaxies will move beyond our observable horizon. Stars will exhaust their fuel, and eventually, the universe will reach maximum entropy—a cold, dark, and empty state.</p>
+                    
+                    <h3>The Big Rip</h3>
+                    <p>If dark energy continues to strengthen, it could eventually overcome all forces—even the forces binding atoms together—tearing the universe apart.</p>
+                    
+                    <h3>The Big Crunch</h3>
+                    <p>If dark energy weakens or reverses, gravity could cause the universe to collapse back on itself, potentially triggering another Big Bang in an endless cycle.</p>
+                    
+                    <h2>Unanswered Questions</h2>
+                    <p>Despite tremendous progress, fundamental questions remain:</p>
+                    <ul>
+                        <li>What caused the Big Bang?</li>
+                        <li>What happened before the Big Bang?</li>
+                        <li>Is our universe one of many in a vast multiverse?</li>
+                        <li>What are dark matter and dark energy?</li>
+                        <li>Why is there more matter than antimatter?</li>
+                    </ul>
+                    
+                    <p>The quest to answer these questions drives modern cosmology and takes us to the very edge of human knowledge, where physics, philosophy, and wonder converge.</p>
+                `
+            },
+            {
+                id: 3,
+                title: "Quantum Computing: The Next Computing Revolution",
+                category: "quantum-computing",
+                icon: "💻",
+                date: "2025-10-05",
+                readTime: "10 min",
+                author: "Dr. Emily Watson",
+                excerpt: "Quantum computers promise to revolutionize computing by harnessing quantum mechanics. Learn how they work, what problems they can solve, and when they'll be ready.",
+                tags: ["Quantum Computing", "Technology", "Qubits", "Algorithms"],
+                featured: false,
+                content: `
+                    <h2>Beyond Classical Computing</h2>
+                    <p>For decades, classical computers have followed Moore's Law, doubling in power approximately every two years. But we're approaching the physical limits of silicon-based computing. Enter quantum computers—machines that leverage the bizarre rules of quantum mechanics to process information in fundamentally new ways.</p>
+                    
+                    <h3>Bits vs. Qubits</h3>
+                    <p>Classical computers use bits that are either 0 or 1. Quantum computers use quantum bits, or qubits, which can be 0, 1, or both simultaneously thanks to superposition. This might seem like a small change, but the implications are profound:</p>
+                    
+                    <div class="highlight-box">
+                        <strong>Power of Quantum:</strong> While 3 classical bits can represent only one of 8 possible states at a time, 3 qubits can represent all 8 states simultaneously. A quantum computer with just 300 qubits could process more states than there are atoms in the observable universe.
+                    </div>
+                    
+                    <h3>How Quantum Computers Work</h3>
+                    <p>Building a quantum computer requires three key ingredients:</p>
+                    
+                    <h4>1. Superposition</h4>
+                    <p>Qubits exist in multiple states at once, allowing quantum computers to explore many solutions simultaneously rather than trying them one by one.</p>
+                    
+                    <h4>2. Entanglement</h4>
+                    <p>Qubits can be correlated with each other in ways that have no classical analog. Measuring one entangled qubit instantly affects the others, enabling complex computations.</p>
+                    
+                    <h4>3. Interference</h4>
+                    <p>Quantum algorithms are designed to amplify correct answers and cancel out wrong ones through quantum interference, like waves reinforcing or canceling each other.</p>
+                    
+                    <h3>What Can Quantum Computers Do?</h3>
+                    <p>Quantum computers won't replace classical computers for everyday tasks. Instead, they excel at specific problems:</p>
+                    
+                    <h4>Drug Discovery</h4>
+                    <p>Simulating molecular interactions to design new medicines. Classical computers struggle with even simple molecules, but quantum computers can model complex chemical reactions.</p>
+                    
+                    <h4>Cryptography</h4>
+                    <p>Shor's algorithm can factor large numbers exponentially faster than classical algorithms, potentially breaking current encryption schemes—but also enabling new, quantum-secure cryptography.</p>
+                    
+                    <h4>Optimization</h4>
+                    <p>Finding optimal solutions among astronomical possibilities: logistics routing, financial modeling, AI training, and scheduling problems.</p>
+                    
+                    <h4>Materials Science</h4>
+                    <p>Designing new materials with specific properties, from better batteries to room-temperature superconductors.</p>
+                    
+                    <h4>Artificial Intelligence</h4>
+                    <p>Quantum machine learning could dramatically speed up pattern recognition and data analysis.</p>
+                    
+                    <blockquote>"Quantum computing represents a fundamental shift in how we process information, opening doors to solving problems that were previously considered intractable." - John Preskill, Caltech</blockquote>
+                    
+                    <h2>The Challenges</h2>
+                    <p>Despite enormous progress, significant challenges remain:</p>
+                    
+                    <h3>Quantum Decoherence</h3>
+                    <p>Qubits are extremely fragile. Any interaction with the environment causes them to lose their quantum properties—a process called decoherence. Current quantum computers must be cooled to near absolute zero and isolated from vibrations, magnetic fields, and even cosmic rays.</p>
+                    
+                    <h3>Error Rates</h3>
+                    <p>Quantum operations are error-prone. While classical computers have error rates of about 1 in 10¹⁷, quantum computers currently have error rates around 1 in 1,000. Quantum error correction requires many physical qubits to create one reliable logical qubit.</p>
+                    
+                    <h3>Scalability</h3>
+                    <p>Building systems with millions of qubits while maintaining quantum coherence and low error rates is an enormous engineering challenge.</p>
+                    
+                    <h2>Current State of Technology</h2>
+                    <p>Several approaches to building quantum computers are being pursued:</p>
+                    
+                    <ul>
+                        <li><strong>Superconducting Qubits:</strong> Used by IBM and Google, cooled to 0.015 Kelvin</li>
+                        <li><strong>Trapped Ions:</strong> Used by IonQ and Honeywell, using electromagnetic fields to trap individual atoms</li>
+                        <li><strong>Photonic Qubits:</strong> Using particles of light, potentially operable at room temperature</li>
+                        <li><strong>Topological Qubits:</strong> Microsoft's approach, theoretically more stable but not yet demonstrated</li>
+                    </ul>
+                    
+                    <h2>When Will Quantum Computers Be Ready?</h2>
+                    <p>We're currently in the "Noisy Intermediate-Scale Quantum" (NISQ) era. Quantum computers with 50-100 qubits can perform certain calculations beyond classical computers, but they're not yet practical for most applications.</p>
+                    
+                    <p>Experts predict that practical, large-scale quantum computers are 10-20 years away. However, the journey has already begun, and each breakthrough brings us closer to a quantum-powered future.</p>
+                    
+                    <p>The quantum computing revolution isn't just about faster computers—it's about accessing entirely new computational paradigms that will help us solve humanity's greatest challenges, from climate change to disease to understanding the universe itself.</p>
+                `
+            },
+            {
+                id: 4,
+                title: "Black Holes: The Universe's Most Extreme Objects",
+                category: "astrophysics",
+                icon: "🕳️",
+                date: "2025-09-28",
+                readTime: "11 min",
+                author: "Dr. Michael Thompson",
+                excerpt: "Explore the fascinating physics of black holes, from event horizons to Hawking radiation, and discover what recent observations have revealed about these cosmic monsters.",
+                tags: ["Black Holes", "Astrophysics", "Relativity", "Space"],
+                featured: false,
+                content: `
+                    <h2>What is a Black Hole?</h2>
+                    <p>Black holes are regions of spacetime where gravity is so strong that nothing—not even light—can escape. They're the universe's ultimate prisons, formed when massive stars collapse or through other extreme processes.</p>
+                    
+                    <p>The concept might sound like science fiction, but black holes are very real, and we've even photographed one. Understanding them requires grappling with Einstein's general relativity and quantum mechanics.</p>
+                    
+                    <h3>The Anatomy of a Black Hole</h3>
+                    <p>Black holes have several key features:</p>
+                    
+                    <h4>The Singularity</h4>
+                    <p>At the center lies a point of infinite density where all the black hole's mass is concentrated. Here, our current theories of physics break down.</p>
+                    
+                    <h4>The Event Horizon</h4>
+                    <p>This is the "point of no return." Once you cross this boundary, escape is impossible. The radius of the event horizon is called the Schwarzschild radius.</p>
+                    
+                    <h4>The Accretion Disk</h4>
+                    <p>Matter spiraling into a black hole forms a disk that heats up to millions of degrees, emitting intense radiation before crossing the event horizon.</p>
+                    
+                    <div class="highlight-box">
+                        <strong>Amazing Fact:</strong> If you could replace the Sun with a black hole of equal mass, Earth's orbit wouldn't change—we'd just get very cold! A black hole's gravity only seems "stronger" because you can get much closer to all its mass than you can with a normal star.
+                    </div>
+                    
+                    <h3>Types of Black Holes</h3>
+                    
+                    <h4>Stellar Black Holes (5-100 solar masses)</h4>
+                    <p>Formed when massive stars (over 20 times the Sun's mass) explode as supernovae and their cores collapse.</p>
+                    
+                    <h4>Intermediate Black Holes (100-100,000 solar masses)</h4>
+                    <p>These are rare and not well understood. They might form from the merger of stellar black holes or the collapse of dense star clusters.</p>
+                    
+                    <h4>Supermassive Black Holes (millions to billions of solar masses)</h4>
+                    <p>Found at the centers of most galaxies, including our Milky Way. Our galaxy's supermassive black hole, Sagittarius A*, has a mass of about 4 million suns.</p>
+                    
+                    <h4>Primordial Black Holes (any mass)</h4>
+                    <p>Hypothetical black holes that could have formed in the early universe from density fluctuations. Some theories suggest they might make up dark matter.</p>
+                    
+                    <h2>Time and Space Near Black Holes</h2>
+                    <p>Black holes don't just warp space—they warp time itself:</p>
+                    
+                    <h3>Time Dilation</h3>
+                    <p>As you approach a black hole, time slows down relative to distant observers. If you could watch someone fall into a black hole from a safe distance, you'd see them slow down and appear to freeze at the event horizon. From their perspective, they'd cross the event horizon in finite time.</p>
+                    
+                    <h3>Spaghettification</h3>
+                    <p>The tidal forces near a black hole stretch objects like spaghetti. Your feet (closer to the black hole) would be pulled much harder than your head, stretching you into a long, thin strand.</p>
+                    
+                    <blockquote>"Black holes are where God divided by zero." - Steven Wright</blockquote>
+                    
+                    <h2>Hawking Radiation</h2>
+                    <p>In 1974, Stephen Hawking made a shocking discovery: black holes aren't completely black! Quantum effects near the event horizon cause black holes to emit radiation and slowly evaporate.</p>
+                    
+                    <p>For large black holes, this process is incredibly slow—a solar-mass black hole would take 10⁶⁷ years to evaporate. But tiny black holes would evaporate rapidly in a burst of energy.</p>
+                    
+                    <h2>Recent Discoveries</h2>
+                    
+                    <h3>The First Image (2019)</h3>
+                    <p>The Event Horizon Telescope captured the first direct image of a black hole's shadow in the galaxy M87. The black hole has a mass of 6.5 billion suns and is 55 million light-years away.</p>
+                    
+                    <h3>Gravitational Waves (2015-present)</h3>
+                    <p>LIGO and Virgo detectors have observed dozens of black hole mergers, confirming Einstein's prediction of gravitational waves and opening a new window on the universe.</p>
+                    
+                    <h3>Sagittarius A* Image (2022)</h3>
+                    <p>The Event Horizon Telescope captured an image of the supermassive black hole at the center of our own Milky Way galaxy.</p>
+                    
+                    <h2>Unsolved Mysteries</h2>
+                    <p>Despite tremendous progress, many questions remain:</p>
+                    <ul>
+                        <li>What happens to information that falls into a black hole? (The information paradox)</li>
+                        <li>What is the structure of the singularity?</li>
+                        <li>Can we resolve the conflict between quantum mechanics and general relativity at the singularity?</li>
+                        <li>Could rotating black holes contain wormholes to other places or times?</li>
+                        <li>How do supermassive black holes grow so large so quickly?</li>
+                    </ul>
+                    
+                    <p>Black holes remain one of nature's most fascinating laboratories for testing the fundamental laws of physics. They push our theories to their limits and beyond, revealing the deep connections between gravity, space, time, and quantum mechanics.</p>
+                `
+            },
+            {
+                id: 5,
+                title: "CRISPR and Gene Editing: Rewriting the Code of Life",
+                category: "technology",
+                icon: "🧬",
+                date: "2025-09-20",
+                readTime: "9 min",
+                author: "Dr. Lisa Park",
+                excerpt: "CRISPR technology has revolutionized biology, offering unprecedented ability to edit genes. Explore the science, applications, and ethical considerations of this powerful tool.",
+                tags: ["CRISPR", "Genetics", "Biotechnology", "Medicine"],
+                featured: false,
+                content: `
+                    <h2>The Gene Editing Revolution</h2>
+                    <p>CRISPR-Cas9, often called "molecular scissors," allows scientists to edit genes with unprecedented precision, speed, and cost-effectiveness. This technology is transforming medicine, agriculture, and our understanding of biology itself.</p>
+                    
+                    <p>In less than a decade since its development, CRISPR has gone from a curiosity about bacterial immune systems to a tool being used in human clinical trials.</p>
+                    
+                    <h3>How CRISPR Works</h3>
+                    <p>CRISPR (Clustered Regularly Interspaced Short Palindromic Repeats) is actually a natural defense system that bacteria use to fight viruses. Scientists have adapted it as a gene-editing tool:</p>
+                    
+                    <ol>
+                        <li><strong>Guide RNA:</strong> A custom-designed RNA molecule that matches the target DNA sequence</li>
+                        <li><strong>Cas9 Enzyme:</strong> The "molecular scissors" that cuts the DNA at the target location</li>
+                        <li><strong>Repair:</strong> The cell's natural repair mechanisms fix the break, either disabling the gene or inserting new genetic material</li>
+                    </ol>
+                    
+                    <div class="highlight-box">
+                        <strong>Why It's Revolutionary:</strong> Previous gene-editing techniques took months or years and cost hundreds of thousands of dollars. CRISPR can do the same work in weeks for a few thousand dollars, with higher accuracy.
+                    </div>
+                    
+                    <h2>Applications</h2>
+                    
+                    <h3>Medicine</h3>
+                    <p>CRISPR is already being used in clinical trials to treat:</p>
+                    <ul>
+                        <li><strong>Sickle Cell Disease:</strong> Editing blood cells to correct the genetic mutation</li>
+                        <li><strong>Cancer:</strong> Engineering immune cells to better recognize and attack tumors</li>
+                        <li><strong>Blindness:</strong> Correcting genetic defects in retinal cells</li>
+                        <li><strong>HIV:</strong> Editing immune cells to resist infection</li>
+                    </ul>
+                    
+                    <h3>Agriculture</h3>
+                    <p>Creating crops that are:</p>
+                    <ul>
+                        <li>More resistant to drought, pests, and diseases</li>
+                        <li>More nutritious (like golden rice with added vitamin A)</li>
+                        <li>Better adapted to climate change</li>
+                        <li>Able to grow with less water and fertilizer</li>
+                    </ul>
+                    
+                    <h3>Basic Research</h3>
+                    <p>Understanding how genes function by systematically turning them on and off, creating models of human diseases in animals, and discovering new drug targets.</p>
+                    
+                    <h2>Recent Breakthroughs</h2>
+                    
+                    <h3>Base Editing</h3>
+                    <p>A refined version of CRISPR that can change individual DNA letters without cutting the DNA strand, reducing errors and side effects.</p>
+                    
+                    <h3>Prime Editing</h3>
+                    <p>An even more precise technique that can insert, delete, or replace DNA sequences without requiring a break in the DNA double helix.</p>
+                    
+                    <h3>In Vivo Editing</h3>
+                    <p>Delivering CRISPR directly into the body rather than editing cells in a lab first, opening up treatment possibilities for more diseases.</p>
+                    
+                    <blockquote>"CRISPR is a transformative technology that will impact many areas of human health and agriculture." - Jennifer Doudna, Nobel Laureate</blockquote>
+                    
+                    <h2>Ethical Considerations</h2>
+                    <p>With great power comes great responsibility. CRISPR raises profound ethical questions:</p>
+                    
+                    <h3>Germline Editing</h3>
+                    <p>Should we edit genes in embryos, making changes that will be inherited by future generations? Most scientists say not yet, citing safety concerns and ethical issues.</p>
+                    
+                    <h3>The "Designer Baby" Concern</h3>
+                    <p>Could CRISPR be used for enhancement rather than treatment—selecting for intelligence, appearance, or athletic ability? Where do we draw the line?</p>
+                    
+                    <h3>Equity and Access</h3>
+                    <p>Will CRISPR therapies be available only to the wealthy, creating a genetic divide between rich and poor?</p>
+                    
+                    <h3>Environmental Risks</h3>
+                    <p>What happens if gene-edited organisms escape into the wild? Could we create invasive species or upset ecosystems?</p>
+                    
+                    <h2>The Future</h2>
+                    <p>CRISPR technology continues to evolve rapidly:</p>
+                    <ul>
+                        <li>More precise editing with fewer off-target effects</li>
+                        <li>Ability to edit multiple genes simultaneously</li>
+                        <li>Temporary, reversible edits that don't permanently change DNA</li>
+                        <li>Better delivery methods to reach any cell in the body</li>
+                        <li>Integration with AI to predict the best edits for desired outcomes</li>
+                    </ul>
+                    
+                    <p>As CRISPR technology matures, it promises to treat or cure thousands of genetic diseases, create more sustainable agriculture, and provide powerful tools for scientific discovery. The key will be developing this technology responsibly, with appropriate oversight and public dialogue about how it should be used.</p>
+                    
+                    <p>We stand at the threshold of an era where we can rewrite the code of life itself. The choices we make today about how to use this power will shape the future of our species and our planet.</p>
+                `
+            }
+        ];
+        
+        let currentCategory = 'all';
+        let currentArticle = null;
+        
+        function renderBlogGrid() {
+            const grid = document.getElementById('blogGrid');
+            const filteredPosts = currentCategory === 'all' 
+                ? blogPosts 
+                : blogPosts.filter(post => post.category === currentCategory);
+            
+            grid.innerHTML = filteredPosts.map((post, index) => {
+                const isFeatured = post.featured && currentCategory === 'all' && index === 0;
+                
+                return `
+                    <div class="blog-card ${isFeatured ? 'featured-post' : ''}" onclick="openArticle(${post.id})">
+                        <div class="blog-image" style="background: linear-gradient(135deg, ${getGradientColors(post.category)})">
+                            <span style="position: relative; z-index: 1;">${post.icon}</span>
+                        </div>
+                        <div class="blog-content">
+                            ${isFeatured ? '<div class="featured-badge">⭐ Featured Article</div>' : ''}
+                            <div class="blog-meta">
+                                <div class="meta-item">📅 ${formatDate(post.date)}</div>
+                                <div class="meta-item">⏱️ ${post.readTime} read</div>
+                            </div>
+                            <h2 class="blog-title">${post.title}</h2>
+                            <p class="blog-excerpt">${post.excerpt}</p>
+                            <div class="blog-tags">
+                                ${post.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                            </div>
+                            <a href="#" class="read-more" onclick="event.preventDefault(); openArticle(${post.id})">
+                                Read Full Article
+                                <span>→</span>
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function getGradientColors(category) {
+            const gradients = {
+                'quantum-physics': '#6366f1, #8b5cf6',
+                'cosmology': '#8b5cf6, #ec4899',
+                'quantum-computing': '#06b6d4, #3b82f6',
+                'astrophysics': '#ec4899, #f43f5e',
+                'technology': '#10b981, #06b6d4'
+            };
+            return gradients[category] || '#6366f1, #8b5cf6';
+        }
+        
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        }
+        
+        function openArticle(id) {
+            const post = blogPosts.find(p => p.id === id);
+            if (!post) return;
+            
+            currentArticle = post;
+            document.getElementById('blogGrid').style.display = 'none';
+            document.querySelector('.filters-bar').style.display = 'none';
+            
+            const articleView = document.getElementById('articleView');
+            articleView.innerHTML = `
+                <button class="back-btn" onclick="closeArticle()">
+                    ← Back to Blog
+                </button>
+                <div class="article-header">
+                    <div class="blog-tags">
+                        ${post.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                    <h1 class="article-title">${post.title}</h1>
+                    <div class="blog-meta">
+                        <div class="meta-item">📅 ${formatDate(post.date)}</div>
+                        <div class="meta-item">⏱️ ${post.readTime} read</div>
+                        <div class="meta-item">✍️ ${post.author}</div>
+                    </div>
+                </div>
+                <div class="article-body">
+                    ${post.content}
+                </div>
+                <div class="author-card">
+                    <div class="author-avatar">${post.author.split(' ').map(n => n[0]).join('')}</div>
+                    <div class="author-info">
+                        <h4>${post.author}</h4>
+                        <p class="author-bio">Science writer and researcher passionate about making complex scientific concepts accessible to everyone.</p>
+                    </div>
+                </div>
+            `;
+            articleView.classList.add('active');
+            window.scrollTo(0, 0);
+        }
+        
+        function closeArticle() {
+            document.getElementById('articleView').classList.remove('active');
+            document.getElementById('blogGrid').style.display = 'grid';
+            document.querySelector('.filters-bar').style.display = 'flex';
+            window.scrollTo(0, 0);
+        }
+        
+        // Filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentCategory = this.dataset.category;
+                renderBlogGrid();
+            });
+        });
+        
+        // Initial render
+        renderBlogGrid();
+    </script>
+</body>
+</html>
+

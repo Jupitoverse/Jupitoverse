@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science Job Portal | Jupitoverse</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #2563eb;
+            --secondary: #7c3aed;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #111827;
+            --light: #f9fafb;
+            --gray: #6b7280;
+            --border: #e5e7eb;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to bottom, #f9fafb 0%, #e5e7eb 100%);
+            color: var(--dark);
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+        }
+        
+        .header p {
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            opacity: 0.95;
+            font-weight: 300;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: -50px auto 0;
+            padding: 0 20px 40px;
+        }
+        
+        .search-bar {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            margin-bottom: 30px;
+        }
+        
+        .search-inputs {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 15px;
+            align-items: end;
+        }
+        
+        @media (max-width: 1024px) {
+            .search-inputs {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .input-group label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--dark);
+        }
+        
+        .input-group input,
+        .input-group select {
+            padding: 14px 18px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .search-btn {
+            padding: 14px 30px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+        }
+        
+        @media (max-width: 968px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .filters-sidebar {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+        
+        .filter-section {
+            margin-bottom: 25px;
+        }
+        
+        .filter-section h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--dark);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .filter-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+        
+        .filter-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+        
+        .filter-option label {
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--gray);
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+        
+        .filter-count {
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+        
+        .jobs-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .results-count {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .sort-dropdown {
+            padding: 10px 15px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+        }
+        
+        .job-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary);
+        }
+        
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 20px;
+        }
+        
+        .job-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+        
+        .job-info {
+            flex: 1;
+        }
+        
+        .job-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+        
+        .job-company {
+            font-size: 1rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .job-meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .job-description {
+            color: var(--gray);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        
+        .job-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .tag {
+            padding: 6px 14px;
+            background: #eff6ff;
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .job-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .salary {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+        
+        .job-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+        
+        .btn-outline {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .badge-new {
+            background: #dcfce7;
+            color: var(--success);
+        }
+        
+        .badge-featured {
+            background: #fef3c7;
+            color: var(--warning);
+        }
+        
+        .badge-urgent {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 20px;
+        }
+        
+        .no-results-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .clear-filters-btn {
+            margin-top: 20px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>💼 Science Job Portal</h1>
+        <p>Find your next opportunity in scientific research and innovation</p>
+    </div>
+    
+    <div class="container">
+        <div class="search-bar">
+            <div class="search-inputs">
+                <div class="input-group">
+                    <label>Job Title or Keywords</label>
+                    <input type="text" id="jobSearch" placeholder="e.g., Quantum Physicist, Data Scientist">
+                </div>
+                <div class="input-group">
+                    <label>Location</label>
+                    <input type="text" id="locationSearch" placeholder="City, State, or Remote">
+                </div>
+                <div class="input-group">
+                    <label>Experience Level</label>
+                    <select id="experienceSelect">
+                        <option value="">All Levels</option>
+                        <option value="entry">Entry Level</option>
+                        <option value="mid">Mid Level</option>
+                        <option value="senior">Senior Level</option>
+                        <option value="lead">Lead/Principal</option>
+                    </select>
+                </div>
+                <button class="search-btn" onclick="filterJobs()">🔍 Search</button>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <aside class="filters-sidebar">
+                <div class="filter-section">
+                    <h3>Job Type</h3>
+                    <div class="filter-option">
+                        <input type="checkbox" id="fulltime" value="full-time" onchange="filterJobs()">
+                        <label for="fulltime">Full-time <span class="filter-count">(42)</span></label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="parttime" value="part-time" onchange="filterJobs()">
+                        <label for="parttime">Part-time <span class="filter-count">(18)</span></label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="contract" value="contract" onchange="filterJobs()">
+                        <label for="contract">Contract <span class="filter-count">(23)</span></label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="internship" value="internship" onchange="filterJobs()">
+                        <label for="internship">Internship <span class="filter-count">(15)</span></label>
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h3>Field</h3>
+                    <div class="filter-option">
+                        <input type="checkbox" id="physics" value="physics" onchange="filterJobs()">
+                        <label for="physics">Physics <span class="filter-count">(28)</span></label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="biology" value="biology" onchange="filterJobs()">
+                        <label for="biology">Biology <span class="filter-count">(35)</span></label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="chemistry" value="chemistry" onchange="filterJobs()">
+                        <label for="chemistry">Chemistry <span class="filter-count">(22)</span></label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="astronomy" value="astronomy" onchange="filterJobs()">
+                        <label for="astronomy">Astronomy <span class="filter-count">(16)</span></label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="datascience" value="data-science" onchange="filterJobs()">
+                        <label for="datascience">Data Science <span class="filter-count">(44)</span></label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="engineering" value="engineering" onchange="filterJobs()">
+                        <label for="engineering">Engineering <span class="filter-count">(31)</span></label>
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h3>Salary Range</h3>
+                    <div class="filter-option">
+                        <input type="checkbox" id="sal1" value="0-60" onchange="filterJobs()">
+                        <label for="sal1">$0 - $60k <span class="filter-count">(12)</span></label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="sal2" value="60-100" onchange="filterJobs()">
+                        <label for="sal2">$60k - $100k <span class="filter-count">(38)</span></label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="sal3" value="100-150" onchange="filterJobs()">
+                        <label for="sal3">$100k - $150k <span class="filter-count">(45)</span></label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="sal4" value="150+" onchange="filterJobs()">
+                        <label for="sal4">$150k+ <span class="filter-count">(28)</span></label>
+                    </div>
+                </div>
+                
+                <button class="btn btn-outline clear-filters-btn" onclick="clearFilters()">Clear All Filters</button>
+            </aside>
+            
+            <div class="jobs-container">
+                <div class="results-header">
+                    <div class="results-count" id="resultsCount">Showing 98 jobs</div>
+                    <select class="sort-dropdown" id="sortSelect" onchange="sortJobs()">
+                        <option value="relevant">Most Relevant</option>
+                        <option value="recent">Most Recent</option>
+                        <option value="salary-high">Salary: High to Low</option>
+                        <option value="salary-low">Salary: Low to High</option>
+                    </select>
+                </div>
+                
+                <div id="jobsList"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const jobs = [
+            {
+                id: 1,
+                title: "Senior Quantum Computing Researcher",
+                company: "IBM Research",
+                location: "Yorktown Heights, NY",
+                type: "full-time",
+                field: "physics",
+                experience: "senior",
+                salary: "$145,000 - $185,000",
+                salaryMin: 145000,
+                description: "Lead cutting-edge research in quantum error correction and algorithm development. Work with world-class team on superconducting quantum computers.",
+                tags: ["Quantum Computing", "Python", "Qiskit", "Research"],
+                badge: "featured",
+                posted: "2 days ago"
+            },
+            {
+                id: 2,
+                title: "Computational Biologist",
+                company: "Moderna Therapeutics",
+                location: "Cambridge, MA",
+                type: "full-time",
+                field: "biology",
+                experience: "mid",
+                salary: "$95,000 - $130,000",
+                salaryMin: 95000,
+                description: "Apply machine learning and bioinformatics to accelerate mRNA therapeutic discovery. Work on next-generation vaccine development.",
+                tags: ["Bioinformatics", "Python", "R", "Machine Learning"],
+                badge: "new",
+                posted: "1 day ago"
+            },
+            {
+                id: 3,
+                title: "Astrophysics Research Associate",
+                company: "NASA JPL",
+                location: "Pasadena, CA",
+                type: "full-time",
+                field: "astronomy",
+                experience: "entry",
+                salary: "$75,000 - $95,000",
+                salaryMin: 75000,
+                description: "Support missions studying exoplanets and cosmic phenomena. Analyze data from space telescopes and contribute to groundbreaking discoveries.",
+                tags: ["Astrophysics", "Data Analysis", "MATLAB", "Python"],
+                badge: "urgent",
+                posted: "3 days ago"
+            },
+            {
+                id: 4,
+                title: "Principal AI Research Scientist",
+                company: "DeepMind",
+                location: "London, UK",
+                type: "full-time",
+                field: "data-science",
+                experience: "lead",
+                salary: "$180,000 - $250,000",
+                salaryMin: 180000,
+                description: "Lead research in artificial general intelligence, reinforcement learning, and neural networks. Shape the future of AI for scientific discovery.",
+                tags: ["AI", "Deep Learning", "TensorFlow", "PyTorch"],
+                badge: "featured",
+                posted: "1 week ago"
+            },
+            {
+                id: 5,
+                title: "Materials Science Engineer",
+                company: "Tesla",
+                location: "Fremont, CA",
+                type: "full-time",
+                field: "engineering",
+                experience: "mid",
+                salary: "$110,000 - $145,000",
+                salaryMin: 110000,
+                description: "Develop next-generation battery materials and technologies. Work on sustainable energy solutions at scale.",
+                tags: ["Materials Science", "Battery Tech", "R&D"],
+                badge: "new",
+                posted: "2 days ago"
+            },
+            {
+                id: 6,
+                title: "Particle Physics PostDoc",
+                company: "CERN",
+                location: "Geneva, Switzerland",
+                type: "contract",
+                field: "physics",
+                experience: "entry",
+                salary: "$65,000 - $80,000",
+                salaryMin: 65000,
+                description: "Contribute to Large Hadron Collider experiments. Analyze collision data and search for new particles and physics phenomena.",
+                tags: ["Particle Physics", "C++", "Data Analysis", "LHC"],
+                badge: "featured",
+                posted: "5 days ago"
+            },
+            {
+                id: 7,
+                title: "Genomics Data Scientist",
+                company: "23andMe",
+                location: "Sunnyvale, CA (Remote)",
+                type: "full-time",
+                field: "data-science",
+                experience: "mid",
+                salary: "$120,000 - $160,000",
+                salaryMin: 120000,
+                description: "Analyze large-scale genomic datasets. Develop algorithms to identify genetic variants associated with traits and diseases.",
+                tags: ["Genomics", "Big Data", "Python", "Statistics"],
+                badge: "new",
+                posted: "1 day ago"
+            },
+            {
+                id: 8,
+                title: "Climate Science Researcher",
+                company: "NOAA",
+                location: "Boulder, CO",
+                type: "full-time",
+                field: "physics",
+                experience: "senior",
+                salary: "$105,000 - $135,000",
+                salaryMin: 105000,
+                description: "Model climate systems and predict future trends. Contribute to critical climate change research and policy recommendations.",
+                tags: ["Climate Science", "Modeling", "Python", "GIS"],
+                badge: null,
+                posted: "1 week ago"
+            },
+            {
+                id: 9,
+                title: "Synthetic Biology Intern",
+                company: "Ginkgo Bioworks",
+                location: "Boston, MA",
+                type: "internship",
+                field: "biology",
+                experience: "entry",
+                salary: "$25/hour",
+                salaryMin: 52000,
+                description: "Learn and contribute to designing organisms for industrial biotechnology. Hands-on experience with CRISPR and genetic engineering.",
+                tags: ["Synthetic Biology", "CRISPR", "Lab Work"],
+                badge: "urgent",
+                posted: "3 days ago"
+            },
+            {
+                id: 10,
+                title: "Fusion Energy Research Engineer",
+                company: "Commonwealth Fusion Systems",
+                location: "Cambridge, MA",
+                type: "full-time",
+                field: "engineering",
+                experience: "senior",
+                salary: "$140,000 - $180,000",
+                salaryMin: 140000,
+                description: "Work on commercial fusion energy reactor development. Design and test high-field superconducting magnets and plasma systems.",
+                tags: ["Fusion Energy", "Plasma Physics", "Engineering"],
+                badge: "featured",
+                posted: "4 days ago"
+            },
+            {
+                id: 11,
+                title: "Neuroscience Research Assistant",
+                company: "MIT Brain and Cognitive Sciences",
+                location: "Cambridge, MA",
+                type: "part-time",
+                field: "biology",
+                experience: "entry",
+                salary: "$45,000 - $55,000",
+                salaryMin: 45000,
+                description: "Support research on neural circuits and brain function. Conduct experiments and analyze neural imaging data.",
+                tags: ["Neuroscience", "Research", "fMRI", "Data Analysis"],
+                badge: "new",
+                posted: "2 days ago"
+            },
+            {
+                id: 12,
+                title: "Organic Chemistry Lead Scientist",
+                company: "Pfizer",
+                location: "Groton, CT",
+                type: "full-time",
+                field: "chemistry",
+                experience: "lead",
+                salary: "$155,000 - $195,000",
+                salaryMin: 155000,
+                description: "Lead drug discovery programs and synthetic chemistry teams. Design and synthesize novel pharmaceutical compounds.",
+                tags: ["Organic Chemistry", "Drug Discovery", "Synthesis"],
+                badge: "featured",
+                posted: "1 week ago"
+            }
+        ];
+        
+        let filteredJobs = [...jobs];
+        
+        function renderJobs() {
+            const jobsList = document.getElementById('jobsList');
+            const resultsCount = document.getElementById('resultsCount');
+            
+            if (filteredJobs.length === 0) {
+                jobsList.innerHTML = `
+                    <div class="no-results">
+                        <div class="no-results-icon">🔍</div>
+                        <h2>No jobs found</h2>
+                        <p>Try adjusting your filters or search terms</p>
+                    </div>
+                `;
+                resultsCount.textContent = 'No jobs found';
+                return;
+            }
+            
+            resultsCount.textContent = `Showing ${filteredJobs.length} job${filteredJobs.length !== 1 ? 's' : ''}`;
+            
+            jobsList.innerHTML = filteredJobs.map(job => `
+                <div class="job-card">
+                    <div class="job-header">
+                        <div style="display: flex; width: 100%;">
+                            <div class="job-logo">${job.company.charAt(0)}</div>
+                            <div class="job-info" style="flex: 1;">
+                                <div style="display: flex; justify-content: space-between; align-items: start;">
+                                    <div>
+                                        <h2 class="job-title">${job.title}</h2>
+                                        <div class="job-company">${job.company}</div>
+                                    </div>
+                                    ${job.badge ? `<span class="badge badge-${job.badge}">${job.badge.toUpperCase()}</span>` : ''}
+                                </div>
+                                <div class="job-meta">
+                                    <div class="meta-item">📍 ${job.location}</div>
+                                    <div class="meta-item">💼 ${job.type}</div>
+                                    <div class="meta-item">⏰ ${job.posted}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="job-description">${job.description}</p>
+                    <div class="job-tags">
+                        ${job.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                    <div class="job-footer">
+                        <div class="salary">${job.salary}</div>
+                        <div class="job-actions">
+                            <button class="btn btn-outline" onclick="alert('Save job: ${job.title}')">💾 Save</button>
+                            <button class="btn btn-primary" onclick="alert('Apply to: ${job.title}')">Apply Now →</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function filterJobs() {
+            const searchTerm = document.getElementById('jobSearch').value.toLowerCase();
+            const location = document.getElementById('locationSearch').value.toLowerCase();
+            const experience = document.getElementById('experienceSelect').value;
+            
+            // Get checked filters
+            const jobTypes = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
+                .map(cb => cb.value)
+                .filter(v => ['full-time', 'part-time', 'contract', 'internship'].includes(v));
+            
+            const fields = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
+                .map(cb => cb.value)
+                .filter(v => ['physics', 'biology', 'chemistry', 'astronomy', 'data-science', 'engineering'].includes(v));
+            
+            filteredJobs = jobs.filter(job => {
+                const matchesSearch = !searchTerm || 
+                    job.title.toLowerCase().includes(searchTerm) ||
+                    job.description.toLowerCase().includes(searchTerm) ||
+                    job.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+                
+                const matchesLocation = !location ||
+                    job.location.toLowerCase().includes(location);
+                
+                const matchesExperience = !experience || job.experience === experience;
+                
+                const matchesJobType = jobTypes.length === 0 || jobTypes.includes(job.type);
+                
+                const matchesField = fields.length === 0 || fields.includes(job.field);
+                
+                return matchesSearch && matchesLocation && matchesExperience && matchesJobType && matchesField;
+            });
+            
+            renderJobs();
+        }
+        
+        function sortJobs() {
+            const sortValue = document.getElementById('sortSelect').value;
+            
+            switch(sortValue) {
+                case 'recent':
+                    // Already sorted by date in the data
+                    break;
+                case 'salary-high':
+                    filteredJobs.sort((a, b) => b.salaryMin - a.salaryMin);
+                    break;
+                case 'salary-low':
+                    filteredJobs.sort((a, b) => a.salaryMin - b.salaryMin);
+                    break;
+                default:
+                    // Relevant (default order)
+                    filteredJobs = jobs.filter(job => filteredJobs.includes(job));
+            }
+            
+            renderJobs();
+        }
+        
+        function clearFilters() {
+            document.getElementById('jobSearch').value = '';
+            document.getElementById('locationSearch').value = '';
+            document.getElementById('experienceSelect').value = '';
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            filteredJobs = [...jobs];
+            renderJobs();
+        }
+        
+        // Initial render
+        renderJobs();
+    </script>
+</body>
+</html>
+
