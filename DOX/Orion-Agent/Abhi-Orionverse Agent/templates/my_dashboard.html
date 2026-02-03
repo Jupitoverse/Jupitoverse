@@ -1,0 +1,650 @@
+<div class="page-container">
+    <div class="page-header">
+        <h1>📊 My Dashboard</h1>
+        <p class="page-subtitle">Personal SR Analysis Portal with AI-Powered Workaround Suggestions</p>
+    </div>
+
+    <!-- Upload Info Banner -->
+    <div class="info-banner" id="upload-info-banner">
+        <div class="info-icon">📊</div>
+        <div class="info-content">
+            <span id="database-info">Loading database info...</span>
+        </div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="search-section">
+        <h3>🔍 Search Service Request</h3>
+        <div class="search-box">
+            <input type="text" id="sr-search-input" placeholder="Enter SR ID (e.g., SR019568026)">
+            <button class="primary-btn" id="search-sr-btn">🔍 Search</button>
+        </div>
+        <p class="search-hint">Search historical SRs for AI-generated workarounds and semantic matches</p>
+    </div>
+
+    <!-- SR Details Section (Hidden by default) -->
+    <div class="sr-details-section" id="sr-details-section" style="display: none;">
+        <!-- SR Header -->
+        <div class="sr-header">
+            <div class="sr-id-badge">
+                <span class="sr-id" id="result-sr-id">-</span>
+                <span class="sr-priority" id="result-priority">-</span>
+            </div>
+            <div class="sr-meta">
+                <span><strong>Status:</strong> <span id="result-status">-</span></span>
+                <span><strong>Assigned To:</strong> <span id="result-assignee">-</span></span>
+                <span><strong>Age:</strong> <span id="result-age">-</span></span>
+            </div>
+        </div>
+
+        <!-- SR Description -->
+        <div class="sr-card">
+            <div class="sr-card-header">
+                <h4>📝 SR Description</h4>
+            </div>
+            <div class="sr-card-body">
+                <div class="description-box" id="result-description">-</div>
+            </div>
+        </div>
+
+        <!-- Workarounds Section -->
+        <div class="workarounds-section">
+            <h3>💡 Workaround Suggestions</h3>
+            
+            <!-- AI Generated Workaround -->
+            <div class="workaround-card ai-card" id="ai-workaround-card" style="display: none;">
+                <div class="workaround-header ai-header">
+                    <span class="workaround-icon">🤖</span>
+                    <span class="workaround-title">AI Generated Workaround</span>
+                    <span class="workaround-badge ai-badge">AI</span>
+                </div>
+                <div class="workaround-content" id="ai-workaround-content">-</div>
+                <div class="workaround-actions">
+                    <button class="vote-btn vote-up" onclick="MyDashboard.voteWorkaround('ai', 'up')">👍 Helpful</button>
+                    <button class="vote-btn vote-down" onclick="MyDashboard.voteWorkaround('ai', 'down')">👎 Not Helpful</button>
+                </div>
+            </div>
+
+            <!-- User Corrected Workaround -->
+            <div class="workaround-card user-card" id="user-workaround-card" style="display: none;">
+                <div class="workaround-header user-header">
+                    <span class="workaround-icon">👤</span>
+                    <span class="workaround-title">User Corrected Workaround</span>
+                    <span class="workaround-badge user-badge">USER</span>
+                </div>
+                <div class="workaround-content" id="user-workaround-content">-</div>
+            </div>
+
+            <!-- Semantic Workaround (Summarized) -->
+            <div class="workaround-card semantic-card" id="semantic-workaround-card" style="display: none;">
+                <div class="workaround-header semantic-header">
+                    <span class="workaround-icon">🔗</span>
+                    <span class="workaround-title">Semantic Match Summary</span>
+                    <span class="workaround-badge semantic-badge">SEMANTIC</span>
+                </div>
+                <div class="workaround-content" id="semantic-workaround-content">-</div>
+                <div class="similar-srs-count" id="similar-srs-count">-</div>
+            </div>
+
+            <!-- No Workaround Available -->
+            <div class="no-workaround" id="no-workaround-msg" style="display: none;">
+                <div class="no-workaround-icon">🔍</div>
+                <p>No workaround suggestions available for this SR.</p>
+                <p class="sub-text">You can add your own workaround below.</p>
+            </div>
+        </div>
+
+        <!-- Similar SRs Section -->
+        <div class="similar-srs-section" id="similar-srs-section" style="display: none;">
+            <h3>📋 Similar Historical SRs</h3>
+            <div class="similar-srs-list" id="similar-srs-list">
+                <!-- Similar SRs will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Add/Edit Workaround Section -->
+        <div class="feedback-section">
+            <h3>✍️ Add Your Workaround</h3>
+            <p class="section-desc">Share your resolution for this SR to help train the AI and assist your team.</p>
+            <form id="feedback-form">
+                <div class="form-group">
+                    <label for="user-workaround-input">Your Workaround / Resolution</label>
+                    <textarea id="user-workaround-input" rows="6" 
+                        placeholder="Describe the steps you took to resolve this SR..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="primary-btn">💾 Submit Workaround</button>
+                    <button type="button" class="secondary-btn" id="clear-workaround-btn">🔄 Clear</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Resolution Info -->
+        <div class="resolution-section" id="resolution-section" style="display: none;">
+            <h3>📊 Resolution Information</h3>
+            <div class="resolution-grid">
+                <div class="resolution-item">
+                    <span class="resolution-label">Resolution Category</span>
+                    <span class="resolution-value" id="result-resolution">-</span>
+                </div>
+                <div class="resolution-item">
+                    <span class="resolution-label">SLA Resolution</span>
+                    <span class="resolution-value" id="result-sla-resolution">-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="dashboard-loader" style="display: none;">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <p class="loader-text">Searching Database...</p>
+        </div>
+    </div>
+
+    <!-- Toast Message -->
+    <div class="toast-message" id="dashboard-toast"></div>
+</div>
+
+<style>
+/* My Dashboard Specific Styles */
+.info-banner {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-left: 4px solid var(--accent-primary);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.info-icon {
+    font-size: 28px;
+}
+
+.info-content {
+    color: var(--text-secondary);
+}
+
+.search-section {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.search-section h3 {
+    margin-bottom: 16px;
+}
+
+.search-box {
+    display: flex;
+    gap: 12px;
+}
+
+.search-box input {
+    flex: 1;
+    padding: 14px 18px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 16px;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
+
+.search-hint {
+    color: var(--text-secondary);
+    font-size: 13px;
+    margin-top: 10px;
+}
+
+/* SR Details Section */
+.sr-details-section {
+    animation: fadeIn 0.4s ease;
+}
+
+.sr-header {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.sr-id-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sr-id {
+    font-size: 24px;
+    font-weight: 700;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.sr-priority {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.sr-priority.p1 { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+.sr-priority.p2 { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+.sr-priority.p3 { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+.sr-priority.p4 { background: rgba(139, 92, 246, 0.2); color: #8B5CF6; }
+
+.sr-meta {
+    display: flex;
+    gap: 24px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* SR Card */
+.sr-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+
+.sr-card-header {
+    background: var(--bg-primary);
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border-primary);
+}
+
+.sr-card-header h4 {
+    margin: 0;
+    font-size: 15px;
+    color: var(--text-primary);
+}
+
+.sr-card-body {
+    padding: 20px;
+}
+
+.description-box {
+    background: var(--bg-primary);
+    padding: 16px;
+    border-radius: 8px;
+    line-height: 1.7;
+    color: var(--text-primary);
+    white-space: pre-wrap;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Workarounds Section */
+.workarounds-section {
+    margin-bottom: 24px;
+}
+
+.workarounds-section h3 {
+    margin-bottom: 16px;
+}
+
+.workaround-card {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    border: 1px solid var(--border-primary);
+}
+
+.workaround-header {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ai-header {
+    background: linear-gradient(135deg, rgba(30, 64, 175, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+    border-bottom: 2px solid #1e40af;
+}
+
+.user-header {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.2) 100%);
+    border-bottom: 2px solid #10b981;
+}
+
+.semantic-header {
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(245, 158, 11, 0.2) 100%);
+    border-bottom: 2px solid #f59e0b;
+}
+
+.workaround-icon {
+    font-size: 20px;
+}
+
+.workaround-title {
+    flex: 1;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.workaround-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.ai-badge { background: #1e40af; color: white; }
+.user-badge { background: #10b981; color: white; }
+.semantic-badge { background: #f59e0b; color: white; }
+
+.workaround-content {
+    padding: 20px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    color: var(--text-primary);
+}
+
+.workaround-actions {
+    padding: 12px 20px;
+    border-top: 1px solid var(--border-primary);
+    display: flex;
+    gap: 12px;
+}
+
+.vote-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.vote-btn.vote-up {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.vote-btn.vote-up:hover {
+    background: rgba(16, 185, 129, 0.2);
+}
+
+.vote-btn.vote-down {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.vote-btn.vote-down:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+.similar-srs-count {
+    padding: 10px 20px;
+    background: var(--bg-primary);
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* No Workaround */
+.no-workaround {
+    text-align: center;
+    padding: 40px;
+    background: var(--bg-secondary);
+    border: 1px dashed var(--border-primary);
+    border-radius: 12px;
+    margin-bottom: 16px;
+}
+
+.no-workaround-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+    opacity: 0.6;
+}
+
+.no-workaround p {
+    color: var(--text-secondary);
+}
+
+.no-workaround .sub-text {
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+/* Similar SRs Section */
+.similar-srs-section {
+    margin-bottom: 24px;
+}
+
+.similar-srs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.similar-sr-item {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 10px;
+    padding: 16px;
+    transition: all 0.2s;
+}
+
+.similar-sr-item:hover {
+    border-color: var(--accent-primary);
+}
+
+.similar-sr-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.similar-sr-id {
+    font-weight: 600;
+    color: var(--accent-primary);
+}
+
+.similarity-score {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    background: var(--accent-gradient);
+    color: white;
+}
+
+.similar-sr-summary {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.similar-sr-workaround {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-primary);
+    font-size: 13px;
+    color: var(--text-primary);
+}
+
+/* Feedback Section */
+.feedback-section {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.feedback-section h3 {
+    margin-bottom: 8px;
+}
+
+.section-desc {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.feedback-section textarea {
+    width: 100%;
+    padding: 14px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 14px;
+    resize: vertical;
+    min-height: 120px;
+}
+
+.feedback-section textarea:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+/* Resolution Section */
+.resolution-section {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.resolution-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.resolution-item {
+    background: var(--bg-primary);
+    padding: 16px;
+    border-radius: 8px;
+}
+
+.resolution-label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.resolution-value {
+    display: block;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+/* Loading Overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 10, 18, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.loader-content {
+    text-align: center;
+}
+
+.loader-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid var(--border-primary);
+    border-top-color: var(--accent-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loader-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Toast Message */
+.toast-message {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 16px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    z-index: 9999;
+    transform: translateX(120%);
+    transition: transform 0.3s ease;
+}
+
+.toast-message.show {
+    transform: translateX(0);
+}
+
+.toast-message.success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+}
+
+.toast-message.error {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .sr-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .sr-meta {
+        flex-direction: column;
+        gap: 8px;
+    }
+    .search-box {
+        flex-direction: column;
+    }
+}
+</style>
+
+
+
+

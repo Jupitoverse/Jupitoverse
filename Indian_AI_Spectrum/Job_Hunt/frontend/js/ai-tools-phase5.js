@@ -1,0 +1,130 @@
+// AI Tools Database - Phase 5: Design, Creative & Art AI
+// 200+ Tools for designers and creative professionals
+
+const AI_TOOLS_PHASE5 = [
+    // ==================== GRAPHIC DESIGN ====================
+    {name: "Canva", category: "Design", subcategory: "Graphic Design", desc: "Visual design platform with AI features", url: "canva.com", pricing: "Freemium", rating: 4.8, tags: ["design", "templates", "easy"], featured: true},
+    {name: "Adobe Express", category: "Design", subcategory: "Graphic Design", desc: "Quick design tool by Adobe", url: "adobe.com/express", pricing: "Freemium", rating: 4.5, tags: ["adobe", "quick", "social"]},
+    {name: "Figma", category: "Design", subcategory: "UI/UX Design", desc: "Collaborative design tool with AI plugins", url: "figma.com", pricing: "Freemium", rating: 4.9, tags: ["collaborative", "ui-ux", "prototyping"], featured: true},
+    {name: "Sketch", category: "Design", subcategory: "UI/UX Design", desc: "Digital design toolkit for Mac", url: "sketch.com", pricing: "Paid", rating: 4.5, tags: ["mac", "ui-ux", "plugins"]},
+    {name: "Adobe XD", category: "Design", subcategory: "UI/UX Design", desc: "UI/UX design and prototyping", url: "adobe.com/xd", pricing: "Freemium", rating: 4.3, tags: ["adobe", "prototyping", "ui-ux"]},
+    {name: "Penpot", category: "Design", subcategory: "UI/UX Design", desc: "Open-source design platform", url: "penpot.app", pricing: "Free", rating: 4.3, tags: ["open-source", "collaborative", "free"]},
+    {name: "Lunacy", category: "Design", subcategory: "Graphic Design", desc: "Free graphic design software", url: "icons8.com/lunacy", pricing: "Free", rating: 4.3, tags: ["free", "windows", "design"]},
+    {name: "Visme", category: "Design", subcategory: "Visual Content", desc: "Visual content creation platform", url: "visme.co", pricing: "Freemium", rating: 4.3, tags: ["infographics", "presentations", "visual"]},
+    {name: "VistaCreate (Crello)", category: "Design", subcategory: "Graphic Design", desc: "Visual design tool", url: "create.vista.com", pricing: "Freemium", rating: 4.2, tags: ["design", "templates", "animation"]},
+    {name: "Snappa", category: "Design", subcategory: "Social Graphics", desc: "Quick graphic creation for social", url: "snappa.com", pricing: "Freemium", rating: 4.2, tags: ["social", "quick", "templates"]},
+    {name: "Stencil", category: "Design", subcategory: "Social Graphics", desc: "Fast image creation for marketers", url: "getstencil.com", pricing: "Freemium", rating: 4.1, tags: ["marketing", "quick", "social"]},
+    {name: "Desygner", category: "Design", subcategory: "Graphic Design", desc: "Design platform for teams", url: "desygner.com", pricing: "Freemium", rating: 4.1, tags: ["teams", "brand", "templates"]},
+    {name: "RelayThat", category: "Design", subcategory: "Brand Design", desc: "AI design for consistent branding", url: "relaythat.com", pricing: "Paid", rating: 4.0, tags: ["brand", "consistency", "automation"]},
+    {name: "Looka", category: "Design", subcategory: "Logo Design", desc: "AI logo and brand kit maker", url: "looka.com", pricing: "Paid", rating: 4.3, tags: ["logo", "branding", "ai"]},
+    {name: "Brandmark", category: "Design", subcategory: "Logo Design", desc: "AI logo design tool", url: "brandmark.io", pricing: "Paid", rating: 4.2, tags: ["logo", "ai", "branding"]},
+    
+    // ==================== UI/UX DESIGN ====================
+    {name: "Uizard", category: "UI/UX", subcategory: "AI Design", desc: "AI-powered UI design", url: "uizard.io", pricing: "Freemium", rating: 4.5, tags: ["ai", "prototyping", "wireframes"], featured: true},
+    {name: "Visily", category: "UI/UX", subcategory: "AI Design", desc: "AI design tool for wireframes", url: "visily.ai", pricing: "Freemium", rating: 4.4, tags: ["wireframes", "ai", "collaboration"]},
+    {name: "Magician (Figma)", category: "UI/UX", subcategory: "Figma Plugin", desc: "AI design assistant for Figma", url: "magician.design", pricing: "Freemium", rating: 4.4, tags: ["figma", "ai", "plugin"]},
+    {name: "Genius by Diagram", category: "UI/UX", subcategory: "Figma Plugin", desc: "AI-powered Figma design", url: "diagram.com", pricing: "Free", rating: 4.3, tags: ["figma", "ai", "design"]},
+    {name: "Galileo AI", category: "UI/UX", subcategory: "AI Design", desc: "AI-generated UI designs", url: "usegalileo.ai", pricing: "Waitlist", rating: 4.5, tags: ["ai", "generation", "ui"]},
+    {name: "Khroma", category: "UI/UX", subcategory: "Color", desc: "AI color palette generator", url: "khroma.co", pricing: "Free", rating: 4.3, tags: ["color", "palette", "ai"]},
+    {name: "Coolors", category: "UI/UX", subcategory: "Color", desc: "Color scheme generator", url: "coolors.co", pricing: "Freemium", rating: 4.5, tags: ["color", "palette", "generator"]},
+    {name: "Colormind", category: "UI/UX", subcategory: "Color", desc: "AI color scheme generator", url: "colormind.io", pricing: "Free", rating: 4.2, tags: ["color", "ai", "deep-learning"]},
+    {name: "Fontjoy", category: "UI/UX", subcategory: "Typography", desc: "AI font pairing generator", url: "fontjoy.com", pricing: "Free", rating: 4.3, tags: ["fonts", "pairing", "ai"]},
+    {name: "Archetype", category: "UI/UX", subcategory: "Typography", desc: "Typography system generator", url: "archetypeapp.com", pricing: "Free", rating: 4.1, tags: ["typography", "scale", "system"]},
+    {name: "Mobbin", category: "UI/UX", subcategory: "Design Inspiration", desc: "UI/UX design patterns library", url: "mobbin.com", pricing: "Freemium", rating: 4.6, tags: ["inspiration", "patterns", "mobile"]},
+    {name: "Screenlane", category: "UI/UX", subcategory: "Design Inspiration", desc: "UI design inspiration", url: "screenlane.com", pricing: "Freemium", rating: 4.3, tags: ["inspiration", "web", "mobile"]},
+    {name: "Dribbble", category: "UI/UX", subcategory: "Design Community", desc: "Design community and inspiration", url: "dribbble.com", pricing: "Freemium", rating: 4.5, tags: ["community", "inspiration", "portfolio"]},
+    {name: "Behance", category: "UI/UX", subcategory: "Design Community", desc: "Adobe's design showcase platform", url: "behance.net", pricing: "Free", rating: 4.5, tags: ["portfolio", "adobe", "community"]},
+    {name: "Maze", category: "UI/UX", subcategory: "User Testing", desc: "Rapid user testing platform", url: "maze.co", pricing: "Freemium", rating: 4.5, tags: ["testing", "research", "prototypes"]},
+    
+    // ==================== 3D DESIGN ====================
+    {name: "Spline", category: "3D", subcategory: "3D Design", desc: "3D design tool for the web", url: "spline.design", pricing: "Freemium", rating: 4.6, tags: ["web", "3d", "interactive"], featured: true},
+    {name: "Blender", category: "3D", subcategory: "3D Software", desc: "Open-source 3D creation suite", url: "blender.org", pricing: "Free", rating: 4.8, tags: ["open-source", "professional", "free"]},
+    {name: "Vectary", category: "3D", subcategory: "3D Design", desc: "3D and AR design platform", url: "vectary.com", pricing: "Freemium", rating: 4.3, tags: ["web", "ar", "easy"]},
+    {name: "Luma AI", category: "3D", subcategory: "3D Capture", desc: "AI 3D capture from photos", url: "lumalabs.ai", pricing: "Freemium", rating: 4.5, tags: ["nerf", "capture", "photorealistic"]},
+    {name: "Kaedim", category: "3D", subcategory: "2D to 3D", desc: "AI 2D image to 3D model", url: "kaedim3d.com", pricing: "Paid", rating: 4.3, tags: ["conversion", "ai", "modeling"]},
+    {name: "Masterpiece Studio", category: "3D", subcategory: "AI 3D", desc: "Generate 3D models with AI", url: "masterpiecestudio.com", pricing: "Paid", rating: 4.2, tags: ["generation", "ai", "text-to-3d"]},
+    {name: "Meshy", category: "3D", subcategory: "AI 3D", desc: "AI 3D model generation", url: "meshy.ai", pricing: "Freemium", rating: 4.3, tags: ["generation", "text-to-3d", "ai"]},
+    {name: "CSM AI", category: "3D", subcategory: "AI 3D", desc: "Image to 3D with AI", url: "csm.ai", pricing: "Freemium", rating: 4.2, tags: ["image-to-3d", "ai", "assets"]},
+    {name: "Point-E", category: "3D", subcategory: "AI 3D", desc: "OpenAI's 3D point cloud model", url: "github.com/openai/point-e", pricing: "Free", rating: 4.0, tags: ["open-source", "research", "openai"]},
+    {name: "Shap-E", category: "3D", subcategory: "AI 3D", desc: "Generate 3D objects from text", url: "github.com/openai/shap-e", pricing: "Free", rating: 4.1, tags: ["open-source", "text-to-3d", "openai"]},
+    {name: "3DFY", category: "3D", subcategory: "AI 3D", desc: "AI-generated 3D models at scale", url: "3dfy.ai", pricing: "Paid", rating: 4.2, tags: ["enterprise", "scale", "assets"]},
+    {name: "Skybox AI", category: "3D", subcategory: "HDRI", desc: "AI-generated 360 skyboxes", url: "skybox.blockadelabs.com", pricing: "Freemium", rating: 4.5, tags: ["skybox", "360", "environments"]},
+    {name: "Sketchfab", category: "3D", subcategory: "3D Platform", desc: "3D model sharing platform", url: "sketchfab.com", pricing: "Freemium", rating: 4.5, tags: ["sharing", "marketplace", "viewer"]},
+    {name: "Turbosquid", category: "3D", subcategory: "3D Marketplace", desc: "3D model marketplace", url: "turbosquid.com", pricing: "Marketplace", rating: 4.4, tags: ["marketplace", "assets", "professional"]},
+    {name: "CGTrader", category: "3D", subcategory: "3D Marketplace", desc: "3D model marketplace", url: "cgtrader.com", pricing: "Marketplace", rating: 4.3, tags: ["marketplace", "ar", "vr"]},
+    
+    // ==================== VIDEO EFFECTS & MOTION ====================
+    {name: "After Effects", category: "Motion", subcategory: "Motion Graphics", desc: "Industry-standard motion graphics", url: "adobe.com/aftereffects", pricing: "Paid", rating: 4.7, tags: ["professional", "vfx", "motion"], featured: true},
+    {name: "DaVinci Resolve", category: "Motion", subcategory: "Video Editing", desc: "Professional video editing and color", url: "blackmagicdesign.com/davinciresolve", pricing: "Freemium", rating: 4.8, tags: ["professional", "color", "free"]},
+    {name: "Rive", category: "Motion", subcategory: "Interactive Animation", desc: "Create interactive animations", url: "rive.app", pricing: "Freemium", rating: 4.5, tags: ["interactive", "apps", "games"]},
+    {name: "LottieFiles", category: "Motion", subcategory: "Animation", desc: "Lottie animation platform", url: "lottiefiles.com", pricing: "Freemium", rating: 4.5, tags: ["lottie", "lightweight", "web"]},
+    {name: "Jitter", category: "Motion", subcategory: "Motion Design", desc: "Motion design in the browser", url: "jitter.video", pricing: "Freemium", rating: 4.4, tags: ["browser", "easy", "motion"]},
+    {name: "Cavalry", category: "Motion", subcategory: "Motion Graphics", desc: "Next-gen motion graphics", url: "cavalry.scenegroup.co", pricing: "Paid", rating: 4.3, tags: ["procedural", "data-driven", "motion"]},
+    {name: "Fable", category: "Motion", subcategory: "Motion Design", desc: "Collaborative motion design", url: "fable.app", pricing: "Freemium", rating: 4.2, tags: ["collaborative", "browser", "motion"]},
+    {name: "Rotato", category: "Motion", subcategory: "3D Mockups", desc: "3D mockup animations", url: "rotato.app", pricing: "Paid", rating: 4.3, tags: ["mockups", "3d", "app-store"]},
+    {name: "Shots.so", category: "Motion", subcategory: "Mockups", desc: "Create beautiful mockups", url: "shots.so", pricing: "Freemium", rating: 4.3, tags: ["mockups", "screenshots", "beautiful"]},
+    {name: "Cleanshot X", category: "Motion", subcategory: "Screenshots", desc: "Screenshot and recording tool", url: "cleanshot.com", pricing: "Paid", rating: 4.6, tags: ["screenshots", "recording", "mac"]},
+    {name: "Screen Studio", category: "Motion", subcategory: "Screen Recording", desc: "Beautiful screen recordings", url: "screen.studio", pricing: "Paid", rating: 4.5, tags: ["recording", "beautiful", "mac"]},
+    {name: "Cap", category: "Motion", subcategory: "Screen Recording", desc: "Beautiful screen recording", url: "cap.so", pricing: "Freemium", rating: 4.3, tags: ["recording", "open-source", "web"]},
+    {name: "Loom", category: "Motion", subcategory: "Video Messaging", desc: "Async video messaging", url: "loom.com", pricing: "Freemium", rating: 4.6, tags: ["video", "messaging", "async"]},
+    {name: "Vimeo", category: "Motion", subcategory: "Video Platform", desc: "Professional video platform", url: "vimeo.com", pricing: "Freemium", rating: 4.5, tags: ["hosting", "professional", "streaming"]},
+    {name: "Wistia", category: "Motion", subcategory: "Video Marketing", desc: "Video marketing platform", url: "wistia.com", pricing: "Freemium", rating: 4.4, tags: ["marketing", "analytics", "hosting"]},
+    
+    // ==================== ILLUSTRATION ====================
+    {name: "Illustrator", category: "Illustration", subcategory: "Vector Design", desc: "Industry-standard vector graphics", url: "adobe.com/illustrator", pricing: "Paid", rating: 4.7, tags: ["vector", "professional", "adobe"], featured: true},
+    {name: "Affinity Designer", category: "Illustration", subcategory: "Vector Design", desc: "Professional vector graphics editor", url: "affinity.serif.com/designer", pricing: "Paid", rating: 4.6, tags: ["vector", "affordable", "professional"]},
+    {name: "Vectornator (Linearity)", category: "Illustration", subcategory: "Vector Design", desc: "Free vector design for Mac/iPad", url: "linearity.io", pricing: "Free", rating: 4.4, tags: ["free", "apple", "vector"]},
+    {name: "Inkscape", category: "Illustration", subcategory: "Vector Design", desc: "Open-source vector editor", url: "inkscape.org", pricing: "Free", rating: 4.3, tags: ["open-source", "free", "vector"]},
+    {name: "Procreate", category: "Illustration", subcategory: "Digital Art", desc: "Digital illustration for iPad", url: "procreate.com", pricing: "Paid", rating: 4.9, tags: ["ipad", "illustration", "brushes"]},
+    {name: "Clip Studio Paint", category: "Illustration", subcategory: "Digital Art", desc: "Manga and illustration software", url: "clipstudio.net", pricing: "Paid", rating: 4.7, tags: ["manga", "comic", "illustration"]},
+    {name: "Krita", category: "Illustration", subcategory: "Digital Art", desc: "Open-source digital painting", url: "krita.org", pricing: "Free", rating: 4.5, tags: ["open-source", "free", "painting"]},
+    {name: "Sketchbook", category: "Illustration", subcategory: "Digital Art", desc: "Digital drawing app by Autodesk", url: "sketchbook.com", pricing: "Free", rating: 4.4, tags: ["free", "drawing", "autodesk"]},
+    {name: "Tayasui Sketches", category: "Illustration", subcategory: "Digital Art", desc: "Realistic drawing tools", url: "tayasui.com/sketches", pricing: "Freemium", rating: 4.3, tags: ["realistic", "brushes", "mobile"]},
+    {name: "Concepts", category: "Illustration", subcategory: "Sketching", desc: "Infinite canvas sketching", url: "concepts.app", pricing: "Freemium", rating: 4.4, tags: ["infinite", "sketching", "vectors"]},
+    {name: "Paper by Dropbox", category: "Illustration", subcategory: "Sketching", desc: "Sketching and note-taking", url: "dropbox.com/paper", pricing: "Free", rating: 4.2, tags: ["sketching", "notes", "dropbox"]},
+    {name: "Fresco", category: "Illustration", subcategory: "Digital Art", desc: "Adobe's drawing and painting app", url: "adobe.com/fresco", pricing: "Freemium", rating: 4.4, tags: ["adobe", "painting", "ipad"]},
+    {name: "Rebelle", category: "Illustration", subcategory: "Digital Art", desc: "Realistic painting software", url: "escapemotions.com/rebelle", pricing: "Paid", rating: 4.4, tags: ["realistic", "watercolor", "oil"]},
+    {name: "Corel Painter", category: "Illustration", subcategory: "Digital Art", desc: "Professional digital art", url: "painterartist.com", pricing: "Paid", rating: 4.4, tags: ["professional", "realistic", "brushes"]},
+    {name: "ArtRage", category: "Illustration", subcategory: "Digital Art", desc: "Natural painting software", url: "artrage.com", pricing: "Paid", rating: 4.2, tags: ["realistic", "natural", "affordable"]},
+    
+    // ==================== STOCK & ASSETS ====================
+    {name: "Shutterstock", category: "Stock", subcategory: "Images", desc: "Stock photos, videos, and music", url: "shutterstock.com", pricing: "Paid", rating: 4.5, tags: ["photos", "videos", "vectors"], featured: true},
+    {name: "Adobe Stock", category: "Stock", subcategory: "Images", desc: "Stock media integrated with Adobe", url: "stock.adobe.com", pricing: "Paid", rating: 4.5, tags: ["adobe", "integration", "quality"]},
+    {name: "Getty Images", category: "Stock", subcategory: "Images", desc: "Premium stock photography", url: "gettyimages.com", pricing: "Paid", rating: 4.4, tags: ["premium", "editorial", "professional"]},
+    {name: "iStock", category: "Stock", subcategory: "Images", desc: "Affordable stock media", url: "istockphoto.com", pricing: "Paid", rating: 4.3, tags: ["affordable", "variety", "getty"]},
+    {name: "Unsplash", category: "Stock", subcategory: "Free Images", desc: "Beautiful free images", url: "unsplash.com", pricing: "Free", rating: 4.8, tags: ["free", "beautiful", "community"]},
+    {name: "Pexels", category: "Stock", subcategory: "Free Images", desc: "Free stock photos and videos", url: "pexels.com", pricing: "Free", rating: 4.7, tags: ["free", "photos", "videos"]},
+    {name: "Pixabay", category: "Stock", subcategory: "Free Images", desc: "Free images and royalty-free stock", url: "pixabay.com", pricing: "Free", rating: 4.5, tags: ["free", "royalty-free", "community"]},
+    {name: "Freepik", category: "Stock", subcategory: "Vectors", desc: "Free vectors, photos, PSD", url: "freepik.com", pricing: "Freemium", rating: 4.5, tags: ["vectors", "photos", "psd"]},
+    {name: "Flaticon", category: "Stock", subcategory: "Icons", desc: "Database of free icons", url: "flaticon.com", pricing: "Freemium", rating: 4.6, tags: ["icons", "vectors", "database"]},
+    {name: "Noun Project", category: "Stock", subcategory: "Icons", desc: "Icons and stock photos", url: "thenounproject.com", pricing: "Freemium", rating: 4.5, tags: ["icons", "diverse", "community"]},
+    {name: "IconScout", category: "Stock", subcategory: "Icons", desc: "Icons, illustrations, and 3D assets", url: "iconscout.com", pricing: "Freemium", rating: 4.4, tags: ["icons", "illustrations", "3d"]},
+    {name: "Icons8", category: "Stock", subcategory: "Icons", desc: "Icons, illustrations, photos, music", url: "icons8.com", pricing: "Freemium", rating: 4.5, tags: ["icons", "ai", "diverse"]},
+    {name: "Envato Elements", category: "Stock", subcategory: "All-in-One", desc: "Unlimited creative assets", url: "elements.envato.com", pricing: "Paid", rating: 4.5, tags: ["unlimited", "templates", "diverse"]},
+    {name: "Creative Market", category: "Stock", subcategory: "Marketplace", desc: "Design assets marketplace", url: "creativemarket.com", pricing: "Marketplace", rating: 4.4, tags: ["fonts", "templates", "graphics"]},
+    {name: "GraphicRiver", category: "Stock", subcategory: "Marketplace", desc: "Graphics and design templates", url: "graphicriver.net", pricing: "Marketplace", rating: 4.3, tags: ["templates", "graphics", "envato"]},
+    
+    // ==================== FONTS & TYPOGRAPHY ====================
+    {name: "Google Fonts", category: "Typography", subcategory: "Free Fonts", desc: "Free web fonts by Google", url: "fonts.google.com", pricing: "Free", rating: 4.8, tags: ["free", "web", "open-source"], featured: true},
+    {name: "Adobe Fonts", category: "Typography", subcategory: "Font Library", desc: "Font library with Adobe CC", url: "fonts.adobe.com", pricing: "Included", rating: 4.6, tags: ["adobe", "quality", "sync"]},
+    {name: "Fontshare", category: "Typography", subcategory: "Free Fonts", desc: "Free fonts by Indian Type Foundry", url: "fontshare.com", pricing: "Free", rating: 4.6, tags: ["free", "quality", "indian"]},
+    {name: "Font Squirrel", category: "Typography", subcategory: "Free Fonts", desc: "Free commercial-use fonts", url: "fontsquirrel.com", pricing: "Free", rating: 4.4, tags: ["free", "commercial", "quality"]},
+    {name: "DaFont", category: "Typography", subcategory: "Free Fonts", desc: "Archive of free fonts", url: "dafont.com", pricing: "Free", rating: 4.2, tags: ["free", "archive", "variety"]},
+    {name: "MyFonts", category: "Typography", subcategory: "Font Marketplace", desc: "Largest font marketplace", url: "myfonts.com", pricing: "Marketplace", rating: 4.5, tags: ["marketplace", "whatthefont", "variety"]},
+    {name: "Typewolf", category: "Typography", subcategory: "Font Inspiration", desc: "Font recommendations and inspiration", url: "typewolf.com", pricing: "Freemium", rating: 4.5, tags: ["inspiration", "curation", "recommendations"]},
+    {name: "Fonts In Use", category: "Typography", subcategory: "Font Inspiration", desc: "Font usage examples", url: "fontsinuse.com", pricing: "Free", rating: 4.4, tags: ["examples", "inspiration", "real-world"]},
+    {name: "Fontstand", category: "Typography", subcategory: "Font Rental", desc: "Rent fonts monthly", url: "fontstand.com", pricing: "Subscription", rating: 4.3, tags: ["rental", "affordable", "try-before-buy"]},
+    {name: "Type Network", category: "Typography", subcategory: "Premium Fonts", desc: "Independent type foundries", url: "typenetwork.com", pricing: "Marketplace", rating: 4.4, tags: ["premium", "foundries", "quality"]},
+    {name: "Future Fonts", category: "Typography", subcategory: "In-Progress Fonts", desc: "Buy fonts in development", url: "futurefonts.xyz", pricing: "Marketplace", rating: 4.3, tags: ["wip", "support-designers", "unique"]},
+    {name: "Glyphs", category: "Typography", subcategory: "Font Editor", desc: "Professional font editor for Mac", url: "glyphsapp.com", pricing: "Paid", rating: 4.7, tags: ["editor", "mac", "professional"]},
+    {name: "FontForge", category: "Typography", subcategory: "Font Editor", desc: "Open-source font editor", url: "fontforge.org", pricing: "Free", rating: 4.2, tags: ["open-source", "free", "editor"]},
+    {name: "Prototypo", category: "Typography", subcategory: "Font Creation", desc: "Create custom fonts", url: "prototypo.io", pricing: "Paid", rating: 4.0, tags: ["parametric", "custom", "creation"]},
+    {name: "Calligraphr", category: "Typography", subcategory: "Handwriting Fonts", desc: "Turn handwriting into fonts", url: "calligraphr.com", pricing: "Freemium", rating: 4.2, tags: ["handwriting", "custom", "personal"]},
+];
+
+// Export
+if (typeof window !== 'undefined') {
+    window.AI_TOOLS_PHASE5 = AI_TOOLS_PHASE5;
+}
+
+

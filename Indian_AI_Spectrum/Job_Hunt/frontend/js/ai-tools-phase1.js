@@ -1,0 +1,191 @@
+// AI Tools Database - Phase 1: Text, Writing & Content AI
+// 200+ Tools for content creation, writing, and text processing
+
+const AI_TOOLS_PHASE1 = [
+    // ==================== CHATBOTS & CONVERSATIONAL AI ====================
+    {name: "ChatGPT", category: "Chatbot", subcategory: "General Assistant", desc: "OpenAI's powerful conversational AI for text generation, coding, analysis", url: "chat.openai.com", pricing: "Freemium", rating: 4.9, tags: ["conversation", "writing", "coding", "analysis"], featured: true},
+    {name: "Claude", category: "Chatbot", subcategory: "General Assistant", desc: "Anthropic's AI assistant known for nuanced, safe responses", url: "claude.ai", pricing: "Freemium", rating: 4.8, tags: ["conversation", "analysis", "writing", "research"], featured: true},
+    {name: "Google Gemini", category: "Chatbot", subcategory: "General Assistant", desc: "Google's multimodal AI for text, image, and code", url: "gemini.google.com", pricing: "Free", rating: 4.7, tags: ["multimodal", "search", "coding"], featured: true},
+    {name: "Microsoft Copilot", category: "Chatbot", subcategory: "General Assistant", desc: "AI assistant integrated with Microsoft 365 and web search", url: "copilot.microsoft.com", pricing: "Freemium", rating: 4.6, tags: ["productivity", "search", "office"]},
+    {name: "Perplexity AI", category: "Chatbot", subcategory: "Research Assistant", desc: "AI search engine with real-time web access and citations", url: "perplexity.ai", pricing: "Freemium", rating: 4.8, tags: ["search", "research", "citations"], featured: true},
+    {name: "Pi by Inflection", category: "Chatbot", subcategory: "Personal Assistant", desc: "Personal AI for thoughtful conversations and emotional support", url: "pi.ai", pricing: "Free", rating: 4.5, tags: ["personal", "emotional", "conversation"]},
+    {name: "Poe", category: "Chatbot", subcategory: "Multi-Model", desc: "Platform to access multiple AI models including GPT-4, Claude", url: "poe.com", pricing: "Freemium", rating: 4.6, tags: ["multi-model", "comparison", "chat"]},
+    {name: "Character.AI", category: "Chatbot", subcategory: "Character Chat", desc: "Chat with AI characters - fictional, historical, or custom", url: "character.ai", pricing: "Freemium", rating: 4.5, tags: ["characters", "roleplay", "entertainment"]},
+    {name: "Replika", category: "Chatbot", subcategory: "Companion", desc: "AI companion for emotional support and conversation", url: "replika.ai", pricing: "Freemium", rating: 4.3, tags: ["companion", "emotional", "mental-health"]},
+    {name: "Kuki (Mitsuku)", category: "Chatbot", subcategory: "Entertainment", desc: "Award-winning conversational AI chatbot for entertainment", url: "kuki.ai", pricing: "Free", rating: 4.2, tags: ["entertainment", "chat", "fun"]},
+    {name: "YouChat", category: "Chatbot", subcategory: "Search Assistant", desc: "AI chatbot with web search integration from You.com", url: "you.com", pricing: "Free", rating: 4.4, tags: ["search", "chat", "web"]},
+    {name: "Chatsonic", category: "Chatbot", subcategory: "Content Assistant", desc: "ChatGPT alternative with real-time data and image generation", url: "writesonic.com/chat", pricing: "Freemium", rating: 4.4, tags: ["content", "images", "realtime"]},
+    {name: "HuggingChat", category: "Chatbot", subcategory: "Open Source", desc: "Open-source chat interface for Hugging Face models", url: "huggingface.co/chat", pricing: "Free", rating: 4.3, tags: ["open-source", "models", "research"]},
+    {name: "Llama 2 Chat", category: "Chatbot", subcategory: "Open Source", desc: "Meta's open-source large language model for chat", url: "ai.meta.com/llama", pricing: "Free", rating: 4.5, tags: ["open-source", "meta", "llm"]},
+    {name: "Mistral Chat", category: "Chatbot", subcategory: "Open Source", desc: "High-performance open-source AI model from Mistral AI", url: "mistral.ai", pricing: "Free", rating: 4.6, tags: ["open-source", "efficient", "llm"]},
+    
+    // ==================== WRITING ASSISTANTS ====================
+    {name: "Jasper", category: "Writing", subcategory: "Marketing Copy", desc: "AI writing assistant for marketing teams and content creators", url: "jasper.ai", pricing: "Paid", rating: 4.7, tags: ["marketing", "copywriting", "content"], featured: true},
+    {name: "Copy.ai", category: "Writing", subcategory: "Copywriting", desc: "AI copywriter for marketing copy, blogs, and social media", url: "copy.ai", pricing: "Freemium", rating: 4.6, tags: ["copywriting", "marketing", "social"]},
+    {name: "Writesonic", category: "Writing", subcategory: "Content Creation", desc: "AI writer for articles, ads, product descriptions", url: "writesonic.com", pricing: "Freemium", rating: 4.5, tags: ["articles", "ads", "ecommerce"]},
+    {name: "Rytr", category: "Writing", subcategory: "Multi-purpose", desc: "Affordable AI writing assistant for various content types", url: "rytr.me", pricing: "Freemium", rating: 4.4, tags: ["affordable", "versatile", "templates"]},
+    {name: "Wordtune", category: "Writing", subcategory: "Rewriting", desc: "AI-powered rewriting and paraphrasing tool", url: "wordtune.com", pricing: "Freemium", rating: 4.5, tags: ["rewriting", "paraphrasing", "clarity"]},
+    {name: "QuillBot", category: "Writing", subcategory: "Paraphrasing", desc: "Paraphrasing tool with grammar checker and summarizer", url: "quillbot.com", pricing: "Freemium", rating: 4.6, tags: ["paraphrasing", "grammar", "summarize"], featured: true},
+    {name: "Grammarly", category: "Writing", subcategory: "Grammar", desc: "AI-powered writing assistant for grammar and style", url: "grammarly.com", pricing: "Freemium", rating: 4.8, tags: ["grammar", "style", "clarity"], featured: true},
+    {name: "ProWritingAid", category: "Writing", subcategory: "Grammar", desc: "Comprehensive writing assistant with style suggestions", url: "prowritingaid.com", pricing: "Freemium", rating: 4.5, tags: ["grammar", "style", "editing"]},
+    {name: "Hemingway Editor", category: "Writing", subcategory: "Clarity", desc: "Makes your writing bold and clear by highlighting issues", url: "hemingwayapp.com", pricing: "Freemium", rating: 4.4, tags: ["clarity", "readability", "simple"]},
+    {name: "LanguageTool", category: "Writing", subcategory: "Grammar", desc: "Multilingual grammar and style checker", url: "languagetool.org", pricing: "Freemium", rating: 4.4, tags: ["multilingual", "grammar", "open-source"]},
+    {name: "Ginger Software", category: "Writing", subcategory: "Grammar", desc: "Grammar checker with translation and text reader", url: "gingersoftware.com", pricing: "Freemium", rating: 4.2, tags: ["grammar", "translation", "reader"]},
+    {name: "Writer.com", category: "Writing", subcategory: "Enterprise", desc: "Enterprise AI writing platform with brand consistency", url: "writer.com", pricing: "Paid", rating: 4.5, tags: ["enterprise", "brand", "consistency"]},
+    {name: "Anyword", category: "Writing", subcategory: "Marketing", desc: "AI copywriting with predictive performance scores", url: "anyword.com", pricing: "Paid", rating: 4.4, tags: ["marketing", "performance", "copy"]},
+    {name: "Copysmith", category: "Writing", subcategory: "E-commerce", desc: "AI content generation for e-commerce and marketing", url: "copysmith.ai", pricing: "Paid", rating: 4.3, tags: ["ecommerce", "product", "marketing"]},
+    {name: "Frase", category: "Writing", subcategory: "SEO Content", desc: "AI content optimization for SEO and research", url: "frase.io", pricing: "Paid", rating: 4.5, tags: ["seo", "research", "optimization"]},
+    {name: "Surfer SEO", category: "Writing", subcategory: "SEO Content", desc: "SEO-focused content editor with AI writing", url: "surferseo.com", pricing: "Paid", rating: 4.6, tags: ["seo", "optimization", "content"]},
+    {name: "Clearscope", category: "Writing", subcategory: "SEO Content", desc: "Content optimization platform for SEO", url: "clearscope.io", pricing: "Paid", rating: 4.5, tags: ["seo", "keywords", "optimization"]},
+    {name: "MarketMuse", category: "Writing", subcategory: "Content Strategy", desc: "AI content planning and optimization platform", url: "marketmuse.com", pricing: "Paid", rating: 4.4, tags: ["strategy", "planning", "seo"]},
+    {name: "INK Editor", category: "Writing", subcategory: "SEO Writing", desc: "AI writing assistant with SEO optimization", url: "inkforall.com", pricing: "Freemium", rating: 4.3, tags: ["seo", "writing", "optimization"]},
+    {name: "Peppertype.ai", category: "Writing", subcategory: "Content", desc: "AI content generator for marketing and social", url: "peppertype.ai", pricing: "Paid", rating: 4.3, tags: ["content", "marketing", "social"]},
+    {name: "Scalenut", category: "Writing", subcategory: "SEO Content", desc: "AI-powered SEO content marketing platform", url: "scalenut.com", pricing: "Paid", rating: 4.4, tags: ["seo", "content", "marketing"]},
+    {name: "ContentBot", category: "Writing", subcategory: "Automation", desc: "AI content generator with automation workflows", url: "contentbot.ai", pricing: "Paid", rating: 4.2, tags: ["automation", "content", "workflows"]},
+    {name: "Article Forge", category: "Writing", subcategory: "Article Generation", desc: "Automated article writing with deep learning", url: "articleforge.com", pricing: "Paid", rating: 4.0, tags: ["articles", "automated", "bulk"]},
+    {name: "Wordai", category: "Writing", subcategory: "Rewriting", desc: "AI article rewriter and spinner", url: "wordai.com", pricing: "Paid", rating: 4.1, tags: ["rewriting", "spinning", "articles"]},
+    
+    // ==================== BLOG & ARTICLE WRITERS ====================
+    {name: "Koala AI", category: "Writing", subcategory: "Blog Writing", desc: "One-click SEO-optimized blog post generator", url: "koala.sh", pricing: "Paid", rating: 4.5, tags: ["blog", "seo", "one-click"]},
+    {name: "Byword", category: "Writing", subcategory: "Blog Writing", desc: "AI blog writer with automatic publishing", url: "byword.ai", pricing: "Paid", rating: 4.4, tags: ["blog", "publishing", "seo"]},
+    {name: "Autoblogging.ai", category: "Writing", subcategory: "Blog Automation", desc: "Automated blog post generation at scale", url: "autoblogging.ai", pricing: "Paid", rating: 4.3, tags: ["automation", "blog", "scale"]},
+    {name: "BlogNLP", category: "Writing", subcategory: "Blog Writing", desc: "AI blog post writer with research integration", url: "blognlp.com", pricing: "Paid", rating: 4.2, tags: ["blog", "research", "nlp"]},
+    {name: "LongShot AI", category: "Writing", subcategory: "Long-form", desc: "AI for factual long-form content with citations", url: "longshot.ai", pricing: "Paid", rating: 4.4, tags: ["long-form", "factual", "citations"]},
+    {name: "Hypotenuse AI", category: "Writing", subcategory: "E-commerce", desc: "AI writing for product descriptions and blog posts", url: "hypotenuse.ai", pricing: "Paid", rating: 4.3, tags: ["ecommerce", "product", "blog"]},
+    {name: "Craftly.AI", category: "Writing", subcategory: "Multi-purpose", desc: "AI writing tool with 100+ content templates", url: "craftly.ai", pricing: "Paid", rating: 4.2, tags: ["templates", "content", "versatile"]},
+    {name: "Closers Copy", category: "Writing", subcategory: "Sales Copy", desc: "AI copywriting focused on sales and conversions", url: "closerscopy.com", pricing: "Paid", rating: 4.3, tags: ["sales", "conversion", "copy"]},
+    {name: "Texta.ai", category: "Writing", subcategory: "Blog Writing", desc: "AI blog writer with SEO and plagiarism check", url: "texta.ai", pricing: "Freemium", rating: 4.2, tags: ["blog", "seo", "plagiarism"]},
+    {name: "Sassbook AI", category: "Writing", subcategory: "Story Writing", desc: "AI story and content writer with creativity focus", url: "sassbook.com", pricing: "Freemium", rating: 4.1, tags: ["story", "creative", "content"]},
+    
+    // ==================== EMAIL WRITING ====================
+    {name: "Superhuman AI", category: "Email", subcategory: "Email Assistant", desc: "AI-powered email client with writing assistance", url: "superhuman.com", pricing: "Paid", rating: 4.7, tags: ["email", "productivity", "fast"], featured: true},
+    {name: "Flowrite", category: "Email", subcategory: "Email Writing", desc: "AI email writer that turns instructions into emails", url: "flowrite.com", pricing: "Paid", rating: 4.5, tags: ["email", "productivity", "templates"]},
+    {name: "Lavender", category: "Email", subcategory: "Sales Email", desc: "AI email coach for sales teams", url: "lavender.ai", pricing: "Freemium", rating: 4.5, tags: ["sales", "email", "coaching"]},
+    {name: "Smartwriter.ai", category: "Email", subcategory: "Cold Email", desc: "AI cold email and LinkedIn outreach personalization", url: "smartwriter.ai", pricing: "Paid", rating: 4.4, tags: ["cold-email", "outreach", "personalization"]},
+    {name: "Instantly.ai", category: "Email", subcategory: "Cold Email", desc: "Cold email software with AI personalization", url: "instantly.ai", pricing: "Paid", rating: 4.5, tags: ["cold-email", "automation", "outreach"]},
+    {name: "Reply.io", category: "Email", subcategory: "Sales Outreach", desc: "Sales engagement platform with AI email writing", url: "reply.io", pricing: "Paid", rating: 4.4, tags: ["sales", "outreach", "automation"]},
+    {name: "Mailscribe", category: "Email", subcategory: "Email Design", desc: "AI email template builder and copywriter", url: "mailscribe.com", pricing: "Paid", rating: 4.2, tags: ["email", "design", "templates"]},
+    {name: "Compose AI", category: "Email", subcategory: "Email Assistant", desc: "AI autocomplete for email and web writing", url: "compose.ai", pricing: "Free", rating: 4.3, tags: ["autocomplete", "email", "chrome"]},
+    {name: "Ellie", category: "Email", subcategory: "Email Reply", desc: "AI email assistant that learns your writing style", url: "ellieai.com", pricing: "Paid", rating: 4.3, tags: ["email", "reply", "personalized"]},
+    {name: "Mailbutler", category: "Email", subcategory: "Email Assistant", desc: "AI-powered email assistant for Apple Mail and Outlook", url: "mailbutler.io", pricing: "Freemium", rating: 4.3, tags: ["email", "assistant", "tracking"]},
+    
+    // ==================== SOCIAL MEDIA CONTENT ====================
+    {name: "Hootsuite OwlyWriter", category: "Social Media", subcategory: "Social Content", desc: "AI content generator for social media posts", url: "hootsuite.com", pricing: "Paid", rating: 4.5, tags: ["social", "scheduling", "content"]},
+    {name: "Buffer AI", category: "Social Media", subcategory: "Social Content", desc: "AI writing assistant for social media scheduling", url: "buffer.com", pricing: "Freemium", rating: 4.4, tags: ["social", "scheduling", "content"]},
+    {name: "Lately", category: "Social Media", subcategory: "Content Repurposing", desc: "AI that turns long-form content into social posts", url: "lately.ai", pricing: "Paid", rating: 4.4, tags: ["repurposing", "social", "automation"]},
+    {name: "Publer", category: "Social Media", subcategory: "Social Scheduling", desc: "Social media scheduler with AI content suggestions", url: "publer.io", pricing: "Freemium", rating: 4.3, tags: ["scheduling", "social", "suggestions"]},
+    {name: "Ocoya", category: "Social Media", subcategory: "Social Content", desc: "AI social media content creation and scheduling", url: "ocoya.com", pricing: "Paid", rating: 4.4, tags: ["social", "content", "scheduling"]},
+    {name: "Predis.ai", category: "Social Media", subcategory: "Social Content", desc: "AI-generated social media posts with graphics", url: "predis.ai", pricing: "Freemium", rating: 4.3, tags: ["social", "graphics", "content"]},
+    {name: "Flick AI", category: "Social Media", subcategory: "Instagram", desc: "AI for Instagram captions, hashtags, and analytics", url: "flick.social", pricing: "Paid", rating: 4.4, tags: ["instagram", "hashtags", "captions"]},
+    {name: "Tweet Hunter", category: "Social Media", subcategory: "Twitter/X", desc: "AI-powered Twitter growth and content tool", url: "tweethunter.io", pricing: "Paid", rating: 4.5, tags: ["twitter", "growth", "content"]},
+    {name: "Hypefury", category: "Social Media", subcategory: "Twitter/X", desc: "Twitter scheduling and automation with AI", url: "hypefury.com", pricing: "Paid", rating: 4.4, tags: ["twitter", "scheduling", "automation"]},
+    {name: "Taplio", category: "Social Media", subcategory: "LinkedIn", desc: "AI-powered LinkedIn content and growth tool", url: "taplio.com", pricing: "Paid", rating: 4.5, tags: ["linkedin", "growth", "content"]},
+    {name: "AuthoredUp", category: "Social Media", subcategory: "LinkedIn", desc: "LinkedIn post editor with AI writing assistance", url: "authoredup.com", pricing: "Freemium", rating: 4.3, tags: ["linkedin", "editor", "formatting"]},
+    {name: "Viral Post Generator", category: "Social Media", subcategory: "LinkedIn", desc: "AI generator for viral LinkedIn posts", url: "viralpostgenerator.com", pricing: "Free", rating: 4.1, tags: ["linkedin", "viral", "posts"]},
+    {name: "FeedHive", category: "Social Media", subcategory: "Social Management", desc: "AI-powered social media management platform", url: "feedhive.com", pricing: "Paid", rating: 4.4, tags: ["social", "management", "ai"]},
+    {name: "SocialBee", category: "Social Media", subcategory: "Social Scheduling", desc: "Social media management with AI content creation", url: "socialbee.com", pricing: "Paid", rating: 4.4, tags: ["scheduling", "content", "management"]},
+    {name: "Vista Social", category: "Social Media", subcategory: "Social Management", desc: "Social media management with AI features", url: "vistasocial.com", pricing: "Freemium", rating: 4.3, tags: ["social", "management", "analytics"]},
+    
+    // ==================== SUMMARIZATION ====================
+    {name: "TLDR This", category: "Summarization", subcategory: "Article Summary", desc: "AI article summarizer for quick reading", url: "tldrthis.com", pricing: "Freemium", rating: 4.4, tags: ["summary", "articles", "quick"]},
+    {name: "SummarizeBot", category: "Summarization", subcategory: "Multi-format", desc: "AI summarization for text, URLs, files", url: "summarizebot.com", pricing: "Freemium", rating: 4.2, tags: ["summary", "documents", "urls"]},
+    {name: "Scholarcy", category: "Summarization", subcategory: "Academic", desc: "AI summarizer for academic papers and research", url: "scholarcy.com", pricing: "Freemium", rating: 4.5, tags: ["academic", "research", "papers"]},
+    {name: "Genei", category: "Summarization", subcategory: "Research", desc: "AI research assistant and summarizer", url: "genei.io", pricing: "Paid", rating: 4.4, tags: ["research", "summary", "productivity"]},
+    {name: "Wordtune Read", category: "Summarization", subcategory: "Article Summary", desc: "AI that summarizes long articles and documents", url: "wordtune.com/read", pricing: "Freemium", rating: 4.4, tags: ["summary", "reading", "documents"]},
+    {name: "Resoomer", category: "Summarization", subcategory: "Text Summary", desc: "Online tool to summarize texts and articles", url: "resoomer.com", pricing: "Freemium", rating: 4.2, tags: ["summary", "text", "online"]},
+    {name: "Summari", category: "Summarization", subcategory: "Link Summary", desc: "AI that summarizes web links and content", url: "summari.com", pricing: "Freemium", rating: 4.3, tags: ["links", "summary", "web"]},
+    {name: "Upword", category: "Summarization", subcategory: "Research Summary", desc: "AI research assistant for content summarization", url: "upword.ai", pricing: "Freemium", rating: 4.3, tags: ["research", "summary", "highlights"]},
+    {name: "Glasp", category: "Summarization", subcategory: "Web Highlighter", desc: "Social web highlighter with AI summarization", url: "glasp.co", pricing: "Free", rating: 4.4, tags: ["highlights", "social", "summary"]},
+    {name: "Otter.ai", category: "Summarization", subcategory: "Meeting Summary", desc: "AI meeting transcription and summarization", url: "otter.ai", pricing: "Freemium", rating: 4.6, tags: ["meetings", "transcription", "summary"], featured: true},
+    
+    // ==================== TRANSLATION ====================
+    {name: "DeepL", category: "Translation", subcategory: "Document Translation", desc: "AI translation with superior accuracy", url: "deepl.com", pricing: "Freemium", rating: 4.9, tags: ["translation", "accurate", "documents"], featured: true},
+    {name: "Google Translate", category: "Translation", subcategory: "General Translation", desc: "Free translation for 100+ languages", url: "translate.google.com", pricing: "Free", rating: 4.5, tags: ["translation", "free", "multilingual"]},
+    {name: "Microsoft Translator", category: "Translation", subcategory: "General Translation", desc: "AI translation with real-time conversation", url: "translator.microsoft.com", pricing: "Free", rating: 4.4, tags: ["translation", "conversation", "microsoft"]},
+    {name: "Reverso", category: "Translation", subcategory: "Context Translation", desc: "Translation with context and examples", url: "reverso.net", pricing: "Freemium", rating: 4.4, tags: ["translation", "context", "examples"]},
+    {name: "Linguee", category: "Translation", subcategory: "Dictionary", desc: "Translation with dictionary and examples", url: "linguee.com", pricing: "Free", rating: 4.4, tags: ["dictionary", "translation", "examples"]},
+    {name: "Papago", category: "Translation", subcategory: "Asian Languages", desc: "Naver's AI translator for Asian languages", url: "papago.naver.com", pricing: "Free", rating: 4.5, tags: ["asian", "korean", "japanese"]},
+    {name: "Systran", category: "Translation", subcategory: "Enterprise", desc: "Enterprise neural machine translation", url: "systran.net", pricing: "Paid", rating: 4.3, tags: ["enterprise", "professional", "api"]},
+    {name: "Smartcat", category: "Translation", subcategory: "CAT Tool", desc: "AI-powered translation management platform", url: "smartcat.com", pricing: "Freemium", rating: 4.4, tags: ["cat-tool", "management", "collaboration"]},
+    {name: "Phrase", category: "Translation", subcategory: "Localization", desc: "AI translation and localization platform", url: "phrase.com", pricing: "Paid", rating: 4.4, tags: ["localization", "enterprise", "workflow"]},
+    {name: "Lokalise", category: "Translation", subcategory: "Localization", desc: "Translation management for software", url: "lokalise.com", pricing: "Paid", rating: 4.5, tags: ["localization", "software", "collaboration"]},
+    
+    // ==================== STORY & CREATIVE WRITING ====================
+    {name: "Sudowrite", category: "Creative Writing", subcategory: "Fiction", desc: "AI writing partner for fiction and stories", url: "sudowrite.com", pricing: "Paid", rating: 4.6, tags: ["fiction", "stories", "creative"], featured: true},
+    {name: "NovelAI", category: "Creative Writing", subcategory: "Storytelling", desc: "AI-assisted storytelling and image generation", url: "novelai.net", pricing: "Paid", rating: 4.5, tags: ["stories", "images", "creative"]},
+    {name: "AI Dungeon", category: "Creative Writing", subcategory: "Interactive Fiction", desc: "AI-powered text adventure game", url: "aidungeon.com", pricing: "Freemium", rating: 4.4, tags: ["game", "adventure", "interactive"]},
+    {name: "Shortly AI", category: "Creative Writing", subcategory: "Story Writing", desc: "AI writing assistant for creative content", url: "shortly.ai", pricing: "Paid", rating: 4.4, tags: ["creative", "stories", "writing"]},
+    {name: "Verb.ai", category: "Creative Writing", subcategory: "Screenwriting", desc: "AI screenwriting assistant", url: "verb.ai", pricing: "Paid", rating: 4.3, tags: ["screenwriting", "scripts", "creative"]},
+    {name: "Squibler", category: "Creative Writing", subcategory: "Book Writing", desc: "AI writing software for authors", url: "squibler.io", pricing: "Paid", rating: 4.3, tags: ["books", "authors", "writing"]},
+    {name: "Reedsy", category: "Creative Writing", subcategory: "Book Writing", desc: "Book writing software with AI features", url: "reedsy.com", pricing: "Freemium", rating: 4.4, tags: ["books", "publishing", "writing"]},
+    {name: "Plot Factory", category: "Creative Writing", subcategory: "Story Planning", desc: "Online story planner and writing software", url: "plotfactory.com", pricing: "Freemium", rating: 4.2, tags: ["planning", "stories", "organization"]},
+    {name: "Dabble Writer", category: "Creative Writing", subcategory: "Novel Writing", desc: "Novel writing software with AI assistance", url: "dabblewriter.com", pricing: "Paid", rating: 4.3, tags: ["novels", "writing", "organization"]},
+    {name: "Atticus", category: "Creative Writing", subcategory: "Book Formatting", desc: "Book writing and formatting software", url: "atticus.io", pricing: "Paid", rating: 4.4, tags: ["formatting", "books", "publishing"]},
+    
+    // ==================== CONTENT DETECTION & PLAGIARISM ====================
+    {name: "GPTZero", category: "AI Detection", subcategory: "AI Detection", desc: "Detect AI-generated content with high accuracy", url: "gptzero.me", pricing: "Freemium", rating: 4.6, tags: ["detection", "ai-content", "academic"], featured: true},
+    {name: "Originality.AI", category: "AI Detection", subcategory: "AI Detection", desc: "AI content detector and plagiarism checker", url: "originality.ai", pricing: "Paid", rating: 4.5, tags: ["detection", "plagiarism", "content"]},
+    {name: "Copyleaks", category: "AI Detection", subcategory: "Plagiarism", desc: "AI-powered plagiarism and AI detection", url: "copyleaks.com", pricing: "Paid", rating: 4.5, tags: ["plagiarism", "detection", "enterprise"]},
+    {name: "Turnitin", category: "AI Detection", subcategory: "Academic", desc: "Academic plagiarism detection with AI detection", url: "turnitin.com", pricing: "Paid", rating: 4.6, tags: ["academic", "plagiarism", "education"]},
+    {name: "Winston AI", category: "AI Detection", subcategory: "AI Detection", desc: "AI content detector for publishers and educators", url: "gowinston.ai", pricing: "Freemium", rating: 4.4, tags: ["detection", "publishing", "education"]},
+    {name: "Sapling AI Detector", category: "AI Detection", subcategory: "AI Detection", desc: "Free AI content detector", url: "sapling.ai/ai-content-detector", pricing: "Free", rating: 4.3, tags: ["detection", "free", "ai-content"]},
+    {name: "ZeroGPT", category: "AI Detection", subcategory: "AI Detection", desc: "Detect ChatGPT and AI-generated text", url: "zerogpt.com", pricing: "Freemium", rating: 4.2, tags: ["detection", "chatgpt", "free"]},
+    {name: "Crossplag", category: "AI Detection", subcategory: "AI Detection", desc: "AI content detector and plagiarism checker", url: "crossplag.com", pricing: "Freemium", rating: 4.2, tags: ["detection", "plagiarism", "checker"]},
+    {name: "Content at Scale", category: "AI Detection", subcategory: "AI Detection", desc: "AI detector that passes AI detection", url: "contentatscale.ai", pricing: "Paid", rating: 4.4, tags: ["detection", "bypass", "content"]},
+    {name: "Undetectable AI", category: "AI Detection", subcategory: "AI Bypass", desc: "Make AI content undetectable by humanizing", url: "undetectable.ai", pricing: "Paid", rating: 4.3, tags: ["humanize", "bypass", "rewrite"]},
+    
+    // ==================== SPEECH TO TEXT ====================
+    {name: "Whisper (OpenAI)", category: "Speech to Text", subcategory: "Transcription", desc: "OpenAI's robust speech recognition model", url: "openai.com/research/whisper", pricing: "Free", rating: 4.8, tags: ["transcription", "open-source", "accurate"], featured: true},
+    {name: "Rev", category: "Speech to Text", subcategory: "Transcription", desc: "AI and human transcription services", url: "rev.com", pricing: "Paid", rating: 4.6, tags: ["transcription", "human", "accurate"]},
+    {name: "Descript", category: "Speech to Text", subcategory: "Audio/Video", desc: "All-in-one audio/video editor with transcription", url: "descript.com", pricing: "Freemium", rating: 4.7, tags: ["editing", "transcription", "video"], featured: true},
+    {name: "Sonix", category: "Speech to Text", subcategory: "Transcription", desc: "Automated transcription in 35+ languages", url: "sonix.ai", pricing: "Paid", rating: 4.5, tags: ["transcription", "multilingual", "automated"]},
+    {name: "Trint", category: "Speech to Text", subcategory: "Transcription", desc: "AI transcription for journalists and creators", url: "trint.com", pricing: "Paid", rating: 4.4, tags: ["transcription", "journalism", "editing"]},
+    {name: "Fireflies.ai", category: "Speech to Text", subcategory: "Meeting Notes", desc: "AI meeting assistant for transcription and notes", url: "fireflies.ai", pricing: "Freemium", rating: 4.5, tags: ["meetings", "transcription", "notes"]},
+    {name: "Notta", category: "Speech to Text", subcategory: "Transcription", desc: "AI transcription for meetings and interviews", url: "notta.ai", pricing: "Freemium", rating: 4.4, tags: ["transcription", "meetings", "interviews"]},
+    {name: "Happy Scribe", category: "Speech to Text", subcategory: "Transcription", desc: "AI transcription and subtitling", url: "happyscribe.com", pricing: "Paid", rating: 4.5, tags: ["transcription", "subtitles", "multilingual"]},
+    {name: "Speak AI", category: "Speech to Text", subcategory: "Research", desc: "Transcription and analysis for researchers", url: "speakai.co", pricing: "Paid", rating: 4.3, tags: ["research", "analysis", "transcription"]},
+    {name: "AssemblyAI", category: "Speech to Text", subcategory: "API", desc: "Speech-to-text API with AI models", url: "assemblyai.com", pricing: "Paid", rating: 4.6, tags: ["api", "developers", "transcription"]},
+    
+    // ==================== TEXT TO SPEECH ====================
+    {name: "ElevenLabs", category: "Text to Speech", subcategory: "Voice Generation", desc: "Lifelike AI voice generation and cloning", url: "elevenlabs.io", pricing: "Freemium", rating: 4.9, tags: ["voice", "cloning", "realistic"], featured: true},
+    {name: "Murf AI", category: "Text to Speech", subcategory: "Voiceover", desc: "AI voice generator for voiceovers", url: "murf.ai", pricing: "Freemium", rating: 4.6, tags: ["voiceover", "professional", "voices"]},
+    {name: "Play.ht", category: "Text to Speech", subcategory: "Voice Generation", desc: "AI text to speech with realistic voices", url: "play.ht", pricing: "Freemium", rating: 4.5, tags: ["voice", "realistic", "multilingual"]},
+    {name: "Speechify", category: "Text to Speech", subcategory: "Reading", desc: "Text to speech for reading and learning", url: "speechify.com", pricing: "Freemium", rating: 4.5, tags: ["reading", "learning", "accessibility"]},
+    {name: "Resemble AI", category: "Text to Speech", subcategory: "Voice Cloning", desc: "AI voice cloning and generation", url: "resemble.ai", pricing: "Paid", rating: 4.5, tags: ["cloning", "custom", "enterprise"]},
+    {name: "Lovo AI", category: "Text to Speech", subcategory: "Voiceover", desc: "AI voiceover and text to speech platform", url: "lovo.ai", pricing: "Freemium", rating: 4.4, tags: ["voiceover", "video", "content"]},
+    {name: "Narakeet", category: "Text to Speech", subcategory: "Video Narration", desc: "Text to audio/video with AI voices", url: "narakeet.com", pricing: "Freemium", rating: 4.3, tags: ["video", "narration", "education"]},
+    {name: "WellSaid Labs", category: "Text to Speech", subcategory: "Enterprise", desc: "Enterprise AI voice platform", url: "wellsaidlabs.com", pricing: "Paid", rating: 4.5, tags: ["enterprise", "professional", "voices"]},
+    {name: "Coqui", category: "Text to Speech", subcategory: "Open Source", desc: "Open-source text to speech engine", url: "coqui.ai", pricing: "Free", rating: 4.4, tags: ["open-source", "developers", "customizable"]},
+    {name: "Natural Reader", category: "Text to Speech", subcategory: "Reading", desc: "Text to speech for documents and web", url: "naturalreaders.com", pricing: "Freemium", rating: 4.3, tags: ["reading", "documents", "accessibility"]},
+    
+    // ==================== PRESENTATION & SLIDES ====================
+    {name: "Tome", category: "Presentation", subcategory: "AI Slides", desc: "AI-powered storytelling and presentations", url: "tome.app", pricing: "Freemium", rating: 4.6, tags: ["slides", "storytelling", "ai"], featured: true},
+    {name: "Gamma", category: "Presentation", subcategory: "AI Slides", desc: "Create presentations with AI in seconds", url: "gamma.app", pricing: "Freemium", rating: 4.7, tags: ["slides", "fast", "beautiful"], featured: true},
+    {name: "Beautiful.ai", category: "Presentation", subcategory: "Design", desc: "AI-powered presentation design", url: "beautiful.ai", pricing: "Paid", rating: 4.5, tags: ["design", "slides", "professional"]},
+    {name: "Slidesgo AI", category: "Presentation", subcategory: "Templates", desc: "AI presentation maker with templates", url: "slidesgo.com", pricing: "Freemium", rating: 4.4, tags: ["templates", "slides", "free"]},
+    {name: "Presentations.AI", category: "Presentation", subcategory: "AI Slides", desc: "Generate presentations from text prompts", url: "presentations.ai", pricing: "Paid", rating: 4.3, tags: ["generate", "prompt", "slides"]},
+    {name: "Decktopus", category: "Presentation", subcategory: "AI Slides", desc: "AI presentation creator with templates", url: "decktopus.com", pricing: "Freemium", rating: 4.3, tags: ["templates", "fast", "easy"]},
+    {name: "Pitch", category: "Presentation", subcategory: "Collaboration", desc: "Collaborative presentation software with AI", url: "pitch.com", pricing: "Freemium", rating: 4.4, tags: ["collaboration", "design", "teams"]},
+    {name: "Canva Presentations", category: "Presentation", subcategory: "Design", desc: "Create presentations in Canva with AI", url: "canva.com", pricing: "Freemium", rating: 4.6, tags: ["design", "templates", "easy"]},
+    {name: "Prezi AI", category: "Presentation", subcategory: "Dynamic", desc: "Dynamic presentations with AI assistance", url: "prezi.com", pricing: "Freemium", rating: 4.3, tags: ["dynamic", "zooming", "unique"]},
+    {name: "SlidesAI", category: "Presentation", subcategory: "Google Slides", desc: "AI add-on for Google Slides", url: "slidesai.io", pricing: "Freemium", rating: 4.3, tags: ["google-slides", "addon", "fast"]},
+    
+    // ==================== DOCUMENT & PDF ====================
+    {name: "ChatPDF", category: "Document", subcategory: "PDF Chat", desc: "Chat with any PDF document using AI", url: "chatpdf.com", pricing: "Freemium", rating: 4.6, tags: ["pdf", "chat", "analysis"], featured: true},
+    {name: "PDF.ai", category: "Document", subcategory: "PDF Chat", desc: "AI-powered PDF analysis and chat", url: "pdf.ai", pricing: "Freemium", rating: 4.5, tags: ["pdf", "analysis", "questions"]},
+    {name: "Docsumo", category: "Document", subcategory: "Data Extraction", desc: "AI document data extraction", url: "docsumo.com", pricing: "Paid", rating: 4.4, tags: ["extraction", "automation", "documents"]},
+    {name: "Rossum", category: "Document", subcategory: "Invoice Processing", desc: "AI for invoice and document processing", url: "rossum.ai", pricing: "Paid", rating: 4.4, tags: ["invoices", "automation", "enterprise"]},
+    {name: "Nanonets", category: "Document", subcategory: "OCR", desc: "AI-based OCR and document processing", url: "nanonets.com", pricing: "Freemium", rating: 4.4, tags: ["ocr", "extraction", "automation"]},
+    {name: "Humata AI", category: "Document", subcategory: "Document Analysis", desc: "AI for analyzing and understanding documents", url: "humata.ai", pricing: "Freemium", rating: 4.5, tags: ["analysis", "research", "documents"]},
+    {name: "Docalysis", category: "Document", subcategory: "Document Chat", desc: "Chat with documents using AI", url: "docalysis.com", pricing: "Freemium", rating: 4.3, tags: ["chat", "documents", "analysis"]},
+    {name: "AskYourPDF", category: "Document", subcategory: "PDF Chat", desc: "AI chatbot for PDF documents", url: "askyourpdf.com", pricing: "Freemium", rating: 4.4, tags: ["pdf", "chat", "research"]},
+    {name: "Sharly AI", category: "Document", subcategory: "Document Analysis", desc: "Chat with documents and get summaries", url: "sharly.ai", pricing: "Freemium", rating: 4.3, tags: ["documents", "summary", "chat"]},
+    {name: "Parsio", category: "Document", subcategory: "Email Parser", desc: "AI email and document parser", url: "parsio.io", pricing: "Freemium", rating: 4.2, tags: ["email", "parser", "automation"]},
+];
+
+// Export
+if (typeof window !== 'undefined') {
+    window.AI_TOOLS_PHASE1 = AI_TOOLS_PHASE1;
+}
+
+

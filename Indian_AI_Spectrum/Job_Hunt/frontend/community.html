@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community - AI Spectrum India</title>
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        .post-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:16px}
+        .post-header{display:flex;justify-content:space-between;margin-bottom:16px}
+        .post-author{display:flex;align-items:center;gap:12px}
+        .author-avatar{width:40px;height:40px;border-radius:50%;background:var(--gradient-1);display:flex;align-items:center;justify-content:center;font-weight:600;color:#000}
+        .author-name{font-weight:600}
+        .author-meta{color:var(--text-muted);font-size:.85rem}
+        .post-content h3{margin-bottom:12px}
+        .post-content p{color:var(--text-secondary)}
+        .post-tags{display:flex;gap:8px;margin-top:16px}
+        .post-actions{display:flex;gap:24px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
+        .post-action{display:flex;align-items:center;gap:6px;color:var(--text-muted);cursor:pointer;transition:color .2s}
+        .post-action:hover{color:var(--accent)}
+        .create-post{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:24px}
+        .create-post textarea{width:100%;background:var(--bg-secondary);border:1px solid var(--border);border-radius:8px;padding:16px;color:var(--text-primary);resize:none;margin-bottom:16px}
+        .sidebar-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+        .filter-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+        .filter-tab{padding:8px 16px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:999px;color:var(--text-secondary);cursor:pointer;transition:all .2s}
+        .filter-tab:hover,.filter-tab.active{background:var(--accent);color:#000;border-color:var(--accent)}
+    </style>
+</head>
+<body>
+    <!-- Header injected by JS -->
+    <script src="js/header.js"></script>
+
+    <section class="page-hero">
+        <div class="container">
+            <h1>Community <span class="text-gradient">Discussions</span></h1>
+            <p class="text-muted mt-2">Ask questions, share experiences, request referrals - all anonymously</p>
+        </div>
+    </section>
+
+    <section class="section" style="padding-top:0">
+        <div class="container">
+            <div style="display:grid;grid-template-columns:1fr 300px;gap:32px">
+                <div>
+                    <div class="filter-tabs">
+                        <button class="filter-tab active" data-filter="all">All Posts</button>
+                        <button class="filter-tab" data-filter="question">Questions</button>
+                        <button class="filter-tab" data-filter="discussion">Discussions</button>
+                        <button class="filter-tab" data-filter="referral_request">Referral Requests</button>
+                        <button class="filter-tab" data-filter="interview">Interview Exp</button>
+                    </div>
+
+                    <div class="create-post" id="create-post-section">
+                        <textarea placeholder="Share something with the community... (Posts are anonymous by default)" rows="3" id="post-content"></textarea>
+                        <div class="flex justify-between items-center">
+                            <div class="flex gap-2">
+                                <select class="form-select" style="width:150px;padding:8px" id="post-type">
+                                    <option value="discussion">Discussion</option>
+                                    <option value="question">Question</option>
+                                    <option value="referral_request">Referral Request</option>
+                                    <option value="interview">Interview Exp</option>
+                                </select>
+                                <input type="text" class="form-input" placeholder="Company (optional)" style="width:180px;padding:8px" id="post-company">
+                            </div>
+                            <div class="flex gap-2 items-center">
+                                <label class="flex items-center gap-2 text-sm text-muted"><input type="checkbox" checked id="anonymous">Anonymous</label>
+                                <button class="btn btn-primary btn-sm" onclick="createPost()">Post</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="posts-list">
+                        <div class="post-card">
+                            <div class="post-header">
+                                <div class="post-author">
+                                    <div class="author-avatar">A</div>
+                                    <div><div class="author-name">Anonymous</div><div class="author-meta">2 hours ago</div></div>
+                                </div>
+                                <span class="tag tag-primary">Question</span>
+                            </div>
+                            <div class="post-content">
+                                <h3>What's the interview process at Google India?</h3>
+                                <p>I have an interview coming up for L4 SWE role. Anyone who has gone through recently can share their experience?</p>
+                            </div>
+                            <div class="post-tags"><span class="tag">google</span><span class="tag">interview</span><span class="tag">swe</span></div>
+                            <div class="post-actions">
+                                <div class="post-action">👍 24</div>
+                                <div class="post-action">💬 12 Comments</div>
+                                <div class="post-action">🔖 Save</div>
+                                <div class="post-action">📤 Share</div>
+                            </div>
+                        </div>
+                        <div class="post-card">
+                            <div class="post-header">
+                                <div class="post-author">
+                                    <div class="author-avatar">V</div>
+                                    <div><div class="author-name">Verified @ Microsoft <span class="badge badge-verified" style="font-size:.7rem">✓</span></div><div class="author-meta">5 hours ago</div></div>
+                                </div>
+                                <span class="tag tag-success">Referral</span>
+                            </div>
+                            <div class="post-content">
+                                <h3>Offering referrals for Microsoft India</h3>
+                                <p>I can refer for SDE 1/2 roles in Azure team. DM with your resume and JD link. Only serious candidates please.</p>
+                            </div>
+                            <div class="post-tags"><span class="tag">microsoft</span><span class="tag">referral</span><span class="tag">azure</span></div>
+                            <div class="post-actions">
+                                <div class="post-action">👍 89</div>
+                                <div class="post-action">💬 45 Comments</div>
+                                <div class="post-action">🔖 Save</div>
+                            </div>
+                        </div>
+                        <div class="post-card">
+                            <div class="post-header">
+                                <div class="post-author">
+                                    <div class="author-avatar">A</div>
+                                    <div><div class="author-name">Anonymous</div><div class="author-meta">1 day ago</div></div>
+                                </div>
+                                <span class="tag">Discussion</span>
+                            </div>
+                            <div class="post-content">
+                                <h3>Is moving to Dubai worth it for tech?</h3>
+                                <p>Got an offer from a Dubai-based fintech. 25 LPA tax-free. Currently at 18 LPA in Bangalore. Should I take it? Anyone with Dubai experience?</p>
+                            </div>
+                            <div class="post-tags"><span class="tag">dubai</span><span class="tag">salary</span><span class="tag">abroad</span></div>
+                            <div class="post-actions">
+                                <div class="post-action">👍 156</div>
+                                <div class="post-action">💬 78 Comments</div>
+                                <div class="post-action">🔖 Save</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <aside>
+                    <div class="sidebar-card">
+                        <h4 class="mb-4">🔥 Trending Companies</h4>
+                        <div class="flex flex-col gap-2">
+                            <a href="#" class="text-muted" style="text-decoration:none">Google (45 posts)</a>
+                            <a href="#" class="text-muted" style="text-decoration:none">Microsoft (38 posts)</a>
+                            <a href="#" class="text-muted" style="text-decoration:none">Amazon (32 posts)</a>
+                            <a href="#" class="text-muted" style="text-decoration:none">Flipkart (28 posts)</a>
+                            <a href="#" class="text-muted" style="text-decoration:none">Swiggy (21 posts)</a>
+                        </div>
+                    </div>
+                    <div class="sidebar-card">
+                        <h4 class="mb-4">📌 Popular Tags</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag">salary</span><span class="tag">interview</span><span class="tag">referral</span>
+                            <span class="tag">wlb</span><span class="tag">remote</span><span class="tag">abroad</span>
+                        </div>
+                    </div>
+                    <div class="sidebar-card" style="background:linear-gradient(135deg,var(--bg-card),rgba(99,102,241,.1));border-color:rgba(99,102,241,.3)">
+                        <h4 class="mb-2">✓ Get Verified</h4>
+                        <p class="text-muted text-sm mb-4">Verify your company email to get a trusted badge on your posts.</p>
+                        <a href="dashboard.html#verify" class="btn btn-primary btn-sm" style="width:100%">Verify Now</a>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/auth.js"></script>
+    <script>
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
+        function createPost() {
+            if (!Auth.isLoggedIn()) { window.location.href = 'login.html'; return; }
+            alert('Post created! (Demo mode)');
+        }
+        if (!Auth.isLoggedIn()) document.getElementById('create-post-section').innerHTML = '<p class="text-center text-muted"><a href="login.html">Login</a> to create posts</p>';
+    </script>
+</body>
+</html>
+

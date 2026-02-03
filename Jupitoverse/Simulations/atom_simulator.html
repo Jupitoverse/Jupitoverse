@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Atom Simulator | Jupitoverse</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-bg: #0a0e27;
+            --secondary-bg: #1a1f3a;
+            --accent-blue: #00d4ff;
+            --accent-purple: #b794f6;
+            --accent-pink: #ff006e;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --glow: rgba(0, 212, 255, 0.3);
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--primary-bg) 0%, #0f1729 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(183, 148, 246, 0.1) 100%);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+        
+        .subtitle {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            color: var(--text-secondary);
+            font-weight: 300;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .canvas-container {
+            background: var(--secondary-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .canvas-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple), var(--accent-pink));
+            border-radius: 20px;
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        #atomCanvas {
+            display: block;
+            width: 100%;
+            height: 600px;
+            background: radial-gradient(circle at center, rgba(0, 212, 255, 0.05) 0%, transparent 70%);
+            border-radius: 15px;
+            cursor: grab;
+        }
+        
+        #atomCanvas:active {
+            cursor: grabbing;
+        }
+        
+        .control-panel {
+            background: var(--secondary-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            height: fit-content;
+        }
+        
+        .control-section {
+            margin-bottom: 30px;
+        }
+        
+        .control-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+        
+        .element-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .element-btn {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(183, 148, 246, 0.1));
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 15px 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .element-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px var(--glow);
+            border-color: var(--accent-blue);
+        }
+        
+        .element-btn.active {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            border-color: var(--accent-blue);
+            box-shadow: 0 10px 30px var(--glow);
+        }
+        
+        .element-symbol {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .element-number {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            display: block;
+        }
+        
+        .element-name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 3px;
+        }
+        
+        .slider-control {
+            margin-bottom: 20px;
+        }
+        
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+        
+        .slider-value {
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 5px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--glow);
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--glow);
+        }
+        
+        .toggle-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .toggle-btn {
+            flex: 1;
+            min-width: 120px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 2px solid var(--accent-blue);
+            border-radius: 10px;
+            padding: 12px;
+            color: var(--text-primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-btn:hover {
+            background: rgba(0, 212, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .toggle-btn.active {
+            background: var(--accent-blue);
+            box-shadow: 0 5px 20px var(--glow);
+        }
+        
+        .info-panel {
+            background: rgba(0, 212, 255, 0.05);
+            border-left: 4px solid var(--accent-blue);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+        
+        .info-label {
+            color: var(--text-secondary);
+        }
+        
+        .info-value {
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+        
+        .legend {
+            background: var(--secondary-bg);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+        
+        .legend h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--accent-purple);
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .legend-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 15px;
+            box-shadow: 0 0 15px currentColor;
+        }
+        
+        .legend-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Quantum State Selector */
+        .quantum-state {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .state-btn {
+            background: rgba(183, 148, 246, 0.1);
+            border: 2px solid var(--accent-purple);
+            border-radius: 8px;
+            padding: 10px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .state-btn:hover {
+            background: rgba(183, 148, 246, 0.2);
+        }
+        
+        .state-btn.active {
+            background: var(--accent-purple);
+            box-shadow: 0 5px 20px rgba(183, 148, 246, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚛️ Interactive Atom Simulator</h1>
+            <p class="subtitle">Explore the quantum world: Visualize atomic structure and electron behavior</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="canvas-container">
+                <canvas id="atomCanvas"></canvas>
+            </div>
+            
+            <div class="control-panel">
+                <div class="control-section">
+                    <h3>Select Element</h3>
+                    <div class="element-grid" id="elementGrid"></div>
+                </div>
+                
+                <div class="control-section">
+                    <h3>Visualization Controls</h3>
+                    <div class="slider-control">
+                        <div class="slider-label">
+                            <span>Rotation Speed</span>
+                            <span class="slider-value" id="speedValue">1.0x</span>
+                        </div>
+                        <input type="range" id="speedSlider" min="0" max="3" step="0.1" value="1">
+                    </div>
+                    
+                    <div class="slider-control">
+                        <div class="slider-label">
+                            <span>Zoom Level</span>
+                            <span class="slider-value" id="zoomValue">1.0x</span>
+                        </div>
+                        <input type="range" id="zoomSlider" min="0.5" max="2" step="0.1" value="1">
+                    </div>
+                </div>
+                
+                <div class="control-section">
+                    <h3>Display Options</h3>
+                    <div class="toggle-group">
+                        <button class="toggle-btn active" id="orbitsBtn">Show Orbits</button>
+                        <button class="toggle-btn active" id="labelsBtn">Show Labels</button>
+                    </div>
+                    <div class="toggle-group" style="margin-top: 10px;">
+                        <button class="toggle-btn active" id="nucleusBtn">Show Nucleus</button>
+                        <button class="toggle-btn" id="trailsBtn">Electron Trails</button>
+                    </div>
+                </div>
+                
+                <div class="control-section">
+                    <h3>Quantum State</h3>
+                    <div class="quantum-state">
+                        <button class="state-btn active" data-state="ground">Ground State</button>
+                        <button class="state-btn" data-state="excited1">Excited 1</button>
+                        <button class="state-btn" data-state="excited2">Excited 2</button>
+                    </div>
+                </div>
+                
+                <div class="info-panel">
+                    <div class="info-row">
+                        <span class="info-label">Element:</span>
+                        <span class="info-value" id="infoElement">Hydrogen</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Atomic Number:</span>
+                        <span class="info-value" id="infoNumber">1</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Protons:</span>
+                        <span class="info-value" id="infoProtons">1</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Neutrons:</span>
+                        <span class="info-value" id="infoNeutrons">0</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Electrons:</span>
+                        <span class="info-value" id="infoElectrons">1</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Electron Config:</span>
+                        <span class="info-value" id="infoConfig">1s¹</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="legend">
+            <h3>Particle Legend</h3>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #ff6b6b; color: #ff6b6b;"></div>
+                <div class="legend-text">Protons (Positive charge)</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #4ecdc4; color: #4ecdc4;"></div>
+                <div class="legend-text">Neutrons (No charge)</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #00d4ff; color: #00d4ff;"></div>
+                <div class="legend-text">Electrons (Negative charge)</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Element data
+        const elements = [
+            { symbol: 'H', name: 'Hydrogen', number: 1, protons: 1, neutrons: 0, electrons: 1, config: '1s¹' },
+            { symbol: 'He', name: 'Helium', number: 2, protons: 2, neutrons: 2, electrons: 2, config: '1s²' },
+            { symbol: 'Li', name: 'Lithium', number: 3, protons: 3, neutrons: 4, electrons: 3, config: '1s² 2s¹' },
+            { symbol: 'C', name: 'Carbon', number: 6, protons: 6, neutrons: 6, electrons: 6, config: '1s² 2s² 2p²' },
+            { symbol: 'N', name: 'Nitrogen', number: 7, protons: 7, neutrons: 7, electrons: 7, config: '1s² 2s² 2p³' },
+            { symbol: 'O', name: 'Oxygen', number: 8, protons: 8, neutrons: 8, electrons: 8, config: '1s² 2s² 2p⁴' },
+            { symbol: 'Ne', name: 'Neon', number: 10, protons: 10, neutrons: 10, electrons: 10, config: '1s² 2s² 2p⁶' },
+            { symbol: 'Na', name: 'Sodium', number: 11, protons: 11, neutrons: 12, electrons: 11, config: '1s² 2s² 2p⁶ 3s¹' },
+            { symbol: 'Mg', name: 'Magnesium', number: 12, protons: 12, neutrons: 12, electrons: 12, config: '1s² 2s² 2p⁶ 3s²' },
+            { symbol: 'Al', name: 'Aluminum', number: 13, protons: 13, neutrons: 14, electrons: 13, config: '[Ne] 3s² 3p¹' },
+            { symbol: 'Si', name: 'Silicon', number: 14, protons: 14, neutrons: 14, electrons: 14, config: '[Ne] 3s² 3p²' },
+            { symbol: 'P', name: 'Phosphorus', number: 15, protons: 15, neutrons: 16, electrons: 15, config: '[Ne] 3s² 3p³' },
+            { symbol: 'S', name: 'Sulfur', number: 16, protons: 16, neutrons: 16, electrons: 16, config: '[Ne] 3s² 3p⁴' },
+            { symbol: 'Cl', name: 'Chlorine', number: 17, protons: 17, neutrons: 18, electrons: 17, config: '[Ne] 3s² 3p⁵' },
+            { symbol: 'Ar', name: 'Argon', number: 18, protons: 18, neutrons: 22, electrons: 18, config: '[Ne] 3s² 3p⁶' },
+            { symbol: 'K', name: 'Potassium', number: 19, protons: 19, neutrons: 20, electrons: 19, config: '[Ar] 4s¹' },
+            { symbol: 'Ca', name: 'Calcium', number: 20, protons: 20, neutrons: 20, electrons: 20, config: '[Ar] 4s²' },
+            { symbol: 'Fe', name: 'Iron', number: 26, protons: 26, neutrons: 30, electrons: 26, config: '[Ar] 3d⁶ 4s²' }
+        ];
+        
+        // Canvas setup
+        const canvas = document.getElementById('atomCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * window.devicePixelRatio;
+            canvas.height = rect.height * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        }
+        
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        // Simulation state
+        let currentElement = elements[0];
+        let rotationSpeed = 1;
+        let zoomLevel = 1;
+        let showOrbits = true;
+        let showLabels = true;
+        let showNucleus = true;
+        let showTrails = false;
+        let quantumState = 'ground';
+        let angle = 0;
+        let trails = [];
+        
+        // Electron shell configuration
+        function getShellConfiguration(electrons) {
+            const shells = [];
+            const maxPerShell = [2, 8, 18, 32];
+            let remaining = electrons;
+            
+            for (let i = 0; i < maxPerShell.length && remaining > 0; i++) {
+                const inThisShell = Math.min(remaining, maxPerShell[i]);
+                shells.push(inThisShell);
+                remaining -= inThisShell;
+            }
+            
+            return shells;
+        }
+        
+        // Animation
+        function animate() {
+            const rect = canvas.getBoundingClientRect();
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            ctx.clearRect(0, 0, rect.width, rect.height);
+            
+            // Draw trails
+            if (showTrails) {
+                ctx.globalAlpha = 0.3;
+                trails.forEach((trail, idx) => {
+                    const alpha = (idx / trails.length) * 0.5;
+                    ctx.globalAlpha = alpha;
+                    ctx.fillStyle = '#00d4ff';
+                    trail.forEach(point => {
+                        ctx.beginPath();
+                        ctx.arc(point.x, point.y, 2, 0, Math.PI * 2);
+                        ctx.fill();
+                    });
+                });
+                ctx.globalAlpha = 1;
+            }
+            
+            // Draw nucleus
+            if (showNucleus) {
+                const nucleusRadius = 20 * zoomLevel;
+                
+                // Draw protons
+                for (let i = 0; i < currentElement.protons; i++) {
+                    const angleOffset = (i / currentElement.protons) * Math.PI * 2;
+                    const radius = nucleusRadius * 0.6;
+                    const x = centerX + Math.cos(angleOffset) * radius * 0.3;
+                    const y = centerY + Math.sin(angleOffset) * radius * 0.3;
+                    
+                    ctx.beginPath();
+                    ctx.arc(x, y, 8, 0, Math.PI * 2);
+                    ctx.fillStyle = '#ff6b6b';
+                    ctx.fill();
+                    ctx.strokeStyle = '#ff4757';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                    
+                    // Glow effect
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = '#ff6b6b';
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+                
+                // Draw neutrons
+                for (let i = 0; i < currentElement.neutrons; i++) {
+                    const angleOffset = (i / currentElement.neutrons) * Math.PI * 2 + Math.PI / currentElement.neutrons;
+                    const radius = nucleusRadius * 0.6;
+                    const x = centerX + Math.cos(angleOffset) * radius * 0.3;
+                    const y = centerY + Math.sin(angleOffset) * radius * 0.3;
+                    
+                    ctx.beginPath();
+                    ctx.arc(x, y, 8, 0, Math.PI * 2);
+                    ctx.fillStyle = '#4ecdc4';
+                    ctx.fill();
+                    ctx.strokeStyle = '#45b7aa';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                    
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = '#4ecdc4';
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+            }
+            
+            // Draw electron shells
+            const shells = getShellConfiguration(currentElement.electrons);
+            let trailPoints = [];
+            
+            shells.forEach((electronCount, shellIndex) => {
+                const orbitRadius = (80 + shellIndex * 80) * zoomLevel;
+                const stateMultiplier = quantumState === 'excited1' ? 1.2 : quantumState === 'excited2' ? 1.4 : 1;
+                const radius = orbitRadius * stateMultiplier;
+                
+                // Draw orbit
+                if (showOrbits) {
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+                    ctx.strokeStyle = `rgba(0, 212, 255, ${0.3 - shellIndex * 0.05})`;
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([5, 10]);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                }
+                
+                // Draw electrons
+                for (let i = 0; i < electronCount; i++) {
+                    const electronAngle = angle + (i / electronCount) * Math.PI * 2 + shellIndex * 0.5;
+                    const x = centerX + Math.cos(electronAngle) * radius;
+                    const y = centerY + Math.sin(electronAngle) * radius;
+                    
+                    trailPoints.push({ x, y });
+                    
+                    // Electron glow
+                    ctx.shadowBlur = 20;
+                    ctx.shadowColor = '#00d4ff';
+                    
+                    ctx.beginPath();
+                    ctx.arc(x, y, 6, 0, Math.PI * 2);
+                    ctx.fillStyle = '#00d4ff';
+                    ctx.fill();
+                    
+                    ctx.shadowBlur = 0;
+                    
+                    // Draw label
+                    if (showLabels) {
+                        ctx.fillStyle = '#ffffff';
+                        ctx.font = '10px Inter';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('e⁻', x, y - 12);
+                    }
+                }
+            });
+            
+            // Update trails
+            if (showTrails) {
+                trails.push(trailPoints);
+                if (trails.length > 30) {
+                    trails.shift();
+                }
+            } else {
+                trails = [];
+            }
+            
+            // Draw element symbol in center
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.font = 'bold 60px Inter';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(currentElement.symbol, centerX, centerY);
+            
+            angle += 0.02 * rotationSpeed;
+            requestAnimationFrame(animate);
+        }
+        
+        // Populate element grid
+        const elementGrid = document.getElementById('elementGrid');
+        elements.forEach((element, index) => {
+            const btn = document.createElement('div');
+            btn.className = 'element-btn' + (index === 0 ? ' active' : '');
+            btn.innerHTML = `
+                <span class="element-symbol">${element.symbol}</span>
+                <span class="element-number">${element.number}</span>
+                <span class="element-name">${element.name}</span>
+            `;
+            btn.addEventListener('click', () => selectElement(element, btn));
+            elementGrid.appendChild(btn);
+        });
+        
+        function selectElement(element, btn) {
+            currentElement = element;
+            document.querySelectorAll('.element-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            updateInfo();
+        }
+        
+        function updateInfo() {
+            document.getElementById('infoElement').textContent = currentElement.name;
+            document.getElementById('infoNumber').textContent = currentElement.number;
+            document.getElementById('infoProtons').textContent = currentElement.protons;
+            document.getElementById('infoNeutrons').textContent = currentElement.neutrons;
+            document.getElementById('infoElectrons').textContent = currentElement.electrons;
+            document.getElementById('infoConfig').textContent = currentElement.config;
+        }
+        
+        // Controls
+        document.getElementById('speedSlider').addEventListener('input', (e) => {
+            rotationSpeed = parseFloat(e.target.value);
+            document.getElementById('speedValue').textContent = rotationSpeed.toFixed(1) + 'x';
+        });
+        
+        document.getElementById('zoomSlider').addEventListener('input', (e) => {
+            zoomLevel = parseFloat(e.target.value);
+            document.getElementById('zoomValue').textContent = zoomLevel.toFixed(1) + 'x';
+        });
+        
+        document.getElementById('orbitsBtn').addEventListener('click', function() {
+            showOrbits = !showOrbits;
+            this.classList.toggle('active');
+        });
+        
+        document.getElementById('labelsBtn').addEventListener('click', function() {
+            showLabels = !showLabels;
+            this.classList.toggle('active');
+        });
+        
+        document.getElementById('nucleusBtn').addEventListener('click', function() {
+            showNucleus = !showNucleus;
+            this.classList.toggle('active');
+        });
+        
+        document.getElementById('trailsBtn').addEventListener('click', function() {
+            showTrails = !showTrails;
+            this.classList.toggle('active');
+        });
+        
+        // Quantum state buttons
+        document.querySelectorAll('.state-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.state-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                quantumState = this.dataset.state;
+            });
+        });
+        
+        // Initialize
+        updateInfo();
+        animate();
+    </script>
+</body>
+</html>
+

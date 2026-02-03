@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar System Explorer | Jupitoverse</title>
+    
+    <!-- Three.js for 3D Graphics -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- OrbitControls for camera control -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #0a0e27 100%);
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(to right, #1a1a3e, #2d1b4e);
+            padding: 20px 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #00d4ff, #ff00ea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #a0a0a0;
+            font-size: 1.1em;
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            min-height: calc(100vh - 100px);
+        }
+
+        /* Category Sidebar */
+        .sidebar {
+            width: 320px;
+            background: rgba(20, 20, 40, 0.9);
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 2px solid rgba(100, 100, 255, 0.2);
+            max-height: calc(100vh - 100px);
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar h2 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #00d4ff;
+            padding-bottom: 10px;
+        }
+
+        .category-btn {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, rgba(40, 40, 80, 0.6), rgba(60, 40, 100, 0.6));
+            border: 1px solid rgba(100, 100, 255, 0.3);
+            color: #e0e0e0;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s ease;
+            font-size: 0.95em;
+        }
+
+        .category-btn:hover {
+            background: linear-gradient(135deg, rgba(60, 60, 120, 0.8), rgba(80, 60, 140, 0.8));
+            border-color: #00d4ff;
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .category-btn.active {
+            background: linear-gradient(135deg, #00d4ff, #0088ff);
+            color: #ffffff;
+            border-color: #00d4ff;
+            font-weight: bold;
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.5);
+        }
+
+        .category-count {
+            float: right;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.85em;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .category-header {
+            margin-bottom: 30px;
+        }
+
+        .category-header h2 {
+            font-size: 2.2em;
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+
+        .category-header p {
+            color: #b0b0b0;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        /* Object Cards */
+        .objects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .object-card {
+            background: linear-gradient(135deg, rgba(30, 30, 60, 0.7), rgba(50, 30, 80, 0.7));
+            border: 1px solid rgba(100, 100, 255, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .object-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .object-card:hover::before {
+            opacity: 1;
+        }
+
+        .object-card:hover {
+            transform: translateY(-5px);
+            border-color: #00d4ff;
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.4);
+        }
+
+        .object-card h3 {
+            color: #00d4ff;
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+
+        .object-card .fullname {
+            color: #a0a0a0;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .object-props {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .prop {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.85em;
+        }
+
+        .prop-label {
+            color: #00d4ff;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .prop-value {
+            color: #e0e0e0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: bold;
+            margin-right: 5px;
+            margin-top: 5px;
+        }
+
+        .badge-pha {
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+            color: white;
+        }
+
+        .badge-nea {
+            background: linear-gradient(135deg, #ffaa00, #ff6600);
+            color: white;
+        }
+
+        .badge-comet {
+            background: linear-gradient(135deg, #00ccff, #0088ff);
+            color: white;
+        }
+
+        .badge-asteroid {
+            background: linear-gradient(135deg, #00ff88, #00aa44);
+            color: white;
+        }
+
+        /* 3D Visualization Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a3e, #2d1b4e);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 1200px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 50px rgba(0, 212, 255, 0.5);
+            border: 2px solid rgba(0, 212, 255, 0.5);
+        }
+
+        .modal-header {
+            padding: 25px;
+            border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .modal-header h2 {
+            font-size: 2em;
+            color: #00d4ff;
+            margin-bottom: 5px;
+        }
+
+        .modal-header .subtitle {
+            color: #a0a0a0;
+            font-size: 1.1em;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 2.5em;
+            color: #00d4ff;
+            cursor: pointer;
+            background: none;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #ff00ea;
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .visualization-container {
+            width: 100%;
+            height: 500px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            background: #000;
+            position: relative;
+        }
+
+        .object-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .detail-card {
+            background: rgba(40, 40, 80, 0.6);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(100, 100, 255, 0.2);
+        }
+
+        .detail-card h3 {
+            color: #00d4ff;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+            padding-bottom: 8px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(100, 100, 255, 0.1);
+        }
+
+        .detail-label {
+            color: #a0a0a0;
+            font-weight: 600;
+        }
+
+        .detail-value {
+            color: #e0e0e0;
+            text-align: right;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: linear-gradient(135deg, rgba(40, 40, 80, 0.6), rgba(60, 40, 100, 0.6));
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(100, 100, 255, 0.3);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+
+        .stat-label {
+            color: #a0a0a0;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+
+        /* Loading Animation */
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.5em;
+            color: #00d4ff;
+        }
+
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        /* Search Bar */
+        .search-container {
+            margin-bottom: 25px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(40, 40, 80, 0.6);
+            border: 2px solid rgba(100, 100, 255, 0.3);
+            border-radius: 10px;
+            color: #e0e0e0;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                max-height: none;
+                position: relative;
+            }
+
+            .objects-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .objects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 95%;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(20, 20, 40, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #00d4ff, #0088ff);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #00ffff, #00aaff);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>🌌 Solar System Explorer</h1>
+        <p>Explore asteroids, comets, and near-Earth objects from NASA's JPL database</p>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Category Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <h2>Categories</h2>
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search objects...">
+            </div>
+            <div id="categoriesList"></div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <div class="loading">Loading solar system data</div>
+        </div>
+    </div>
+
+    <!-- 3D Visualization Modal -->
+    <div class="modal" id="visualizationModal">
+        <div class="modal-content">
+            <button class="close-btn" id="closeModal">&times;</button>
+            <div class="modal-header">
+                <h2 id="modalTitle">Object Details</h2>
+                <p class="subtitle" id="modalSubtitle">Loading...</p>
+            </div>
+            <div class="modal-body">
+                <div class="visualization-container" id="vizContainer"></div>
+                <div class="object-details" id="objectDetails"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Complete database from extraction
+        const DATABASE = {
+  "orbit_classes": [
+    {
+      "id": 1,
+      "name": "Unclassified Comet",
+      "slug": "unclassified-comets",
+      "abbrev": "COM",
+      "desc": "Comets whose orbits do not match any defined orbit class",
+      "orbit_sentence": "whose orbit does not match any defined comet orbit class"
+    },
+    {
+      "id": 2,
+      "name": "Chiron-type Comet",
+      "slug": "chiron-type-comets",
+      "abbrev": "CTc",
+      "desc": "Chiron-type comet, as defined by Levison and Duncan (TJupiter > 3; a > aJupiter)",
+      "orbit_sentence": "whose orbit is approximately between Jupiter and Neptune"
+    },
+    {
+      "id": 3,
+      "name": "Encke-type Comet",
+      "slug": "encke-type-comets",
+      "abbrev": "ETc",
+      "desc": "Encke-type comet, as defined by Levison and Duncan (TJupiter > 3; a < aJupiter)",
+      "orbit_sentence": "whose orbit brings it closer to the sun than Jupiter"
+    },
+    {
+      "id": 4,
+      "name": "Halley-type Comet",
+      "slug": "halley-type-comets",
+      "abbrev": "HTC",
+      "desc": "Halley-type comet, classical definition (20 y < P < 200 y)",
+      "orbit_sentence": "with a medium-length orbit that is highly inclined to the ecliptic plane of the solar system"
+    },
+    {
+      "id": 5,
+      "name": "Hyperbolic Comet",
+      "slug": "hyperbolic-comets",
+      "abbrev": "HYP",
+      "desc": "Comets on hyperbolic orbits (e > 1.0)",
+      "orbit_sentence": "with a trajectory through the solar system likely originating from the Oort Cloud"
+    },
+    {
+      "id": 6,
+      "name": "Jupiter-family Comet",
+      "slug": "jupiter-family-comets",
+      "abbrev": "JFc",
+      "desc": "Jupiter-family comets, as defined by Levison and Duncan (2 < TJupiter < 3)",
+      "orbit_sentence": "whose orbit features a relatively short period, low inclination, and is controlled by Jupiter's gravitational effects"
+    },
+    {
+      "id": 7,
+      "name": "Parabolic Comet",
+      "slug": "parabolic-comets",
+      "abbrev": "PAR",
+      "desc": "Comets on parabolic orbits (e = 1.0)",
+      "orbit_sentence": "with a marginal orbit that brings it from the outer reaches of the solar system"
+    },
+    {
+      "id": 8,
+      "name": "Amor-class Asteroid",
+      "slug": "amor",
+      "abbrev": "AMO",
+      "desc": "Near-Earth asteroid whose orbits are similar to that of 1221 Amor (a > 1.0 AU; 1.017 AU < q < 1.3 AU)",
+      "orbit_sentence": "with a perihelion distance between 1.017 and 1.3 AU"
+    },
+    {
+      "id": 9,
+      "name": "Apollo-class Asteroid",
+      "slug": "apollo",
+      "abbrev": "APO",
+      "desc": "Near-Earth asteroids whose orbits cross the Earth's orbit similar to that of 1862 Apollo (a > 1.0 AU; q < 1.017 AU).",
+      "orbit_sentence": "that is a Near-Earth Asteroid and periodically crosses Earth's orbit"
+    },
+    {
+      "id": 10,
+      "name": "Asteroid",
+      "slug": "asteroid",
+      "abbrev": "AST",
+      "desc": "Asteroid orbit not matching any defined orbit class",
+      "orbit_sentence": "that does not match any defined orbit class"
+    },
+    {
+      "id": 11,
+      "name": "Aten-class Asteroid",
+      "slug": "aten",
+      "abbrev": "ATE",
+      "desc": "Near-Earth asteroid orbits similar to that of 2062 Aten (a < 1.0 AU; Q > 0.983 AU)",
+      "orbit_sentence": "that has a semimajor axis of less than one AU"
+    },
+    {
+      "id": 12,
+      "name": "Centaur-class Asteroid",
+      "slug": "centaur",
+      "abbrev": "CEN",
+      "desc": "Objects with orbits between Jupiter and Neptune (5.5 AU < a < 30.1 AU)",
+      "orbit_sentence": "with an orbit between Jupiter and Neptune"
+    },
+    {
+      "id": 13,
+      "name": "Hyperbolic Asteroid",
+      "slug": "hyperbolic",
+      "abbrev": "HYP",
+      "desc": "Asteroids on hyperbolic orbits (e > 1.0)",
+      "orbit_sentence": "with a strongly hyperbolic trajectory"
+    },
+    {
+      "id": 14,
+      "name": "Interior-Earth Asteroid",
+      "slug": "ies",
+      "abbrev": "IEO",
+      "desc": "Asteroids with orbits contained entirely within the orbit of the Earth (Q < 0.983 AU)",
+      "orbit_sentence": "that orbits entirely within Earth's orbit"
+    },
+    {
+      "id": 15,
+      "name": "Inner Main-belt Asteroid",
+      "slug": "imb",
+      "abbrev": "IMB",
+      "desc": "Asteroids with orbital elements constrained by (a < 2.0 AU; q > 1.666 AU)",
+      "orbit_sentence": "that is in the inner part of the asteroid belt"
+    },
+    {
+      "id": 16,
+      "name": "Main-belt Asteroid",
+      "slug": "mba",
+      "abbrev": "MBA",
+      "desc": "Asteroids with orbital elements constrained by (2.0 AU < a < 3.2 AU; q > 1.666 AU)",
+      "orbit_sentence": "that is in the main asteroid belt between Mars and Jupiter"
+    },
+    {
+      "id": 17,
+      "name": "Mars-crossing Asteroid",
+      "slug": "mars-crosser",
+      "abbrev": "MCA",
+      "desc": "Asteroids that cross the orbit of Mars constrained by (1.3 AU < q < 1.666 AU; a < 3.2 AU)",
+      "orbit_sentence": "that crosses the orbit of Mars"
+    },
+    {
+      "id": 18,
+      "name": "Outer Main-belt Asteroid",
+      "slug": "omb",
+      "abbrev": "OMB",
+      "desc": "Asteroids with orbital elements constrained by (3.2 AU < a < 4.6 AU)",
+      "orbit_sentence": "that is in the outer part of the asteroid belt"
+    },
+    {
+      "id": 19,
+      "name": "Parabolic Asteroid",
+      "slug": "parabolic",
+      "abbrev": "PAR",
+      "desc": "Asteroids on parabolic orbits (e = 1.0)",
+      "orbit_sentence": "on a parabolic trajectory"
+    },
+    {
+      "id": 20,
+      "name": "Jupiter Trojan",
+      "slug": "trojan",
+      "abbrev": "TJN",
+      "desc": "Asteroids trapped in Jupiter's L4/L5 Lagrange points (4.6 AU < a < 5.5 AU; e < 0.3)",
+      "orbit_sentence": "that is a Trojan asteroid near one of Jupiter's Lagrange points"
+    },
+    {
+      "id": 21,
+      "name": "Trans-Neptunian Object",
+      "slug": "tno",
+      "abbrev": "TNO",
+      "desc": "Objects with orbits outside Neptune (a > 30.1 AU)",
+      "orbit_sentence": "with an orbit beyond Neptune"
+    }
+  ],
+  "objects": []  // Objects will be loaded from complete_database.json
+};
+
+        let currentCategory = null;
+        let allObjects = [];
+        let currentVisualization = null;
+
+        // Initialize the app
+        async function init() {
+            try {
+                // Load objects data from the extracted database
+                const response = await fetch('comprehensive_nasa_data.json');
+                const data = await response.json();
+                
+                allObjects = data.objects;
+                DATABASE.orbit_classes = data.orbit_classes;
+                
+                renderCategories();
+                showCategory('all');
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.getElementById('mainContent').innerHTML = `
+                    <div style="text-align: center; padding: 50px; color: #ff4444;">
+                        <h2>Error Loading Data</h2>
+                        <p>Could not load the solar system database. Please ensure comprehensive_nasa_data.json is present.</p>
+                        <p style="font-size: 0.9em; color: #888; margin-top: 15px;">Error: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Render category buttons in sidebar
+        function renderCategories() {
+            const container = document.getElementById('categoriesList');
+            
+            // Count objects per category
+            const categoryCounts = {};
+            allObjects.forEach(obj => {
+                const classId = obj.orbit_class_id;
+                categoryCounts[classId] = (categoryCounts[classId] || 0) + 1;
+            });
+
+            let html = '';
+            
+            // All objects button
+            html += `
+                <button class="category-btn active" onclick="showCategory('all')">
+                    🌌 All Objects <span class="category-count">${allObjects.length}</span>
+                </button>
+            `;
+
+            // Category buttons
+            DATABASE.orbit_classes.forEach(cat => {
+                const count = categoryCounts[cat.id] || 0;
+                if (count > 0) {
+                    const icon = cat.abbrev.includes('C') || cat.name.includes('Comet') ? '☄️' : '🌑';
+                    html += `
+                        <button class="category-btn" onclick="showCategory(${cat.id})">
+                            ${icon} ${cat.name} <span class="category-count">${count}</span>
+                        </button>
+                    `;
+                }
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Show objects for a specific category
+        function showCategory(categoryId) {
+            currentCategory = categoryId;
+            
+            // Update active button
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Filter objects
+            let filtered = categoryId === 'all' 
+                ? allObjects 
+                : allObjects.filter(obj => obj.orbit_class_id === categoryId);
+
+            // Get category info
+            const category = DATABASE.orbit_classes.find(c => c.id === categoryId);
+            const categoryName = categoryId === 'all' ? 'All Objects' : category?.name || 'Unknown';
+            const categoryDesc = categoryId === 'all' 
+                ? 'Explore all asteroids, comets, and near-Earth objects in our database'
+                : category?.desc || '';
+
+            renderObjects(filtered, categoryName, categoryDesc);
+        }
+
+        // Render object cards
+        function renderObjects(objects, categoryName, categoryDesc) {
+            const container = document.getElementById('mainContent');
+            
+            if (objects.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 50px;">
+                        <h2>No objects found</h2>
+                        <p>Try a different category or search term.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <div class="category-header">
+                    <h2>${categoryName}</h2>
+                    <p>${categoryDesc}</p>
+                </div>
+                
+                <div class="stats-section">
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-value">${objects.length}</div>
+                            <div class="stat-label">Total Objects</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">${objects.filter(o => o.object_type === 'comet').length}</div>
+                            <div class="stat-label">Comets</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">${objects.filter(o => o.object_type === 'asteroid').length}</div>
+                            <div class="stat-label">Asteroids</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">${objects.filter(o => o.is_nea).length}</div>
+                            <div class="stat-label">Near-Earth</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="objects-grid">
+            `;
+
+            objects.forEach(obj => {
+                const badges = [];
+                if (obj.is_pha) badges.push('<span class="badge badge-pha">⚠️ Potentially Hazardous</span>');
+                if (obj.is_nea) badges.push('<span class="badge badge-nea">🌍 Near-Earth</span>');
+                if (obj.object_type === 'comet') badges.push('<span class="badge badge-comet">☄️ Comet</span>');
+                if (obj.object_type === 'asteroid') badges.push('<span class="badge badge-asteroid">🌑 Asteroid</span>');
+
+                html += `
+                    <div class="object-card" onclick='showObjectDetails(${JSON.stringify(obj)})'>
+                        <h3>${obj.name || obj.fullname}</h3>
+                        <div class="fullname">${obj.fullname}</div>
+                        <div>${badges.join('')}</div>
+                        <div class="object-props">
+                            <div class="prop">
+                                <span class="prop-label">Semi-major Axis</span>
+                                <span class="prop-value">${obj.a ? obj.a.toFixed(3) + ' AU' : 'N/A'}</span>
+                            </div>
+                            <div class="prop">
+                                <span class="prop-label">Eccentricity</span>
+                                <span class="prop-value">${obj.e ? obj.e.toFixed(4) : 'N/A'}</span>
+                            </div>
+                            <div class="prop">
+                                <span class="prop-label">Inclination</span>
+                                <span class="prop-value">${obj.i ? obj.i.toFixed(2) + '°' : 'N/A'}</span>
+                            </div>
+                            <div class="prop">
+                                <span class="prop-label">Diameter</span>
+                                <span class="prop-value">${obj.diameter ? obj.diameter.toFixed(2) + ' km' : (obj.diameter_estimate ? '~' + obj.diameter_estimate.toFixed(2) + ' km' : 'N/A')}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        // Show detailed view with 3D visualization
+        function showObjectDetails(obj) {
+            const modal = document.getElementById('visualizationModal');
+            modal.classList.add('active');
+
+            document.getElementById('modalTitle').textContent = obj.name || obj.fullname;
+            document.getElementById('modalSubtitle').textContent = obj.orbit_class?.name || 'Unknown Orbit Class';
+
+            // Render detailed properties
+            const detailsContainer = document.getElementById('objectDetails');
+            detailsContainer.innerHTML = `
+                <div class="detail-card">
+                    <h3>Orbital Parameters</h3>
+                    <div class="detail-row">
+                        <span class="detail-label">Semi-major Axis (a)</span>
+                        <span class="detail-value">${obj.a ? obj.a.toFixed(6) + ' AU' : 'N/A'}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Eccentricity (e)</span>
+                        <span class="detail-value">${obj.e ? obj.e.toFixed(6) : 'N/A'}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Inclination (i)</span>
+                        <span class="detail-value">${obj.i ? obj.i.toFixed(4) + '°' : 'N/A'}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Mean Anomaly (ma)</span>
+                        <span class="detail-value">${obj.ma ? obj.ma.toFixed(4) + '°' : 'N/A'}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Ascending Node (om)</span>
+                        <span class="detail-value">${obj.om ? obj.om.toFixed(4) + '°' : 'N/A'}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Arg of Perihelion (w)</span>
+                        <span class="detail-value">${obj.w ? obj.w.toFixed(4) + '°' : 'N/A'}</span>
+                    </div>
+                </div>
+
+                <div class="detail-card">
+                    <h3>Physical Properties</h3>
+                    <div class="detail-row">
+                        <span class="detail-label">Absolute Magnitude (H)</span>
+                        <span class="detail-value">${obj.H ? obj.H.toFixed(2) : 'N/A'}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Diameter</span>
+                        <span class="detail-value">${obj.diameter ? obj.diameter.toFixed(2) + ' km' : (obj.diameter_estimate ? '~' + obj.diameter_estimate.toFixed(2) + ' km' : 'Unknown')}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Spectral Type (B)</span>
+                        <span class="detail-value">${obj.spec_B || 'Unknown'}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Spectral Type (T)</span>
+                        <span class="detail-value">${obj.spec_T || 'Unknown'}</span>
+                    </div>
+                </div>
+
+                <div class="detail-card">
+                    <h3>Classification</h3>
+                    <div class="detail-row">
+                        <span class="detail-label">Object Type</span>
+                        <span class="detail-value">${obj.object_type || 'Unknown'}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Orbit Class</span>
+                        <span class="detail-value">${obj.orbit_class?.name || 'Unknown'}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Near-Earth Object</span>
+                        <span class="detail-value">${obj.is_nea ? '✅ Yes' : '❌ No'}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Potentially Hazardous</span>
+                        <span class="detail-value">${obj.is_pha ? '⚠️ Yes' : '✅ No'}</span>
+                    </div>
+                </div>
+
+                <div class="detail-card">
+                    <h3>About This Orbit</h3>
+                    <p style="color: #e0e0e0; line-height: 1.6;">
+                        ${obj.orbit_class?.orbit_sentence || 'This object has an unclassified orbit.'}
+                    </p>
+                    <p style="color: #a0a0a0; margin-top: 10px; font-size: 0.9em;">
+                        ${obj.orbit_class?.desc || ''}
+                    </p>
+                </div>
+            `;
+
+            // Initialize 3D visualization
+            initialize3DVisualization(obj);
+        }
+
+        // Initialize Three.js visualization
+        function initialize3DVisualization(obj) {
+            const container = document.getElementById('vizContainer');
+            container.innerHTML = ''; // Clear previous visualization
+
+            try {
+                // Check if Three.js is loaded
+                if (typeof THREE === 'undefined') {
+                    container.innerHTML = `
+                        <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #ff4444;">
+                            <div style="text-align: center;">
+                                <p style="font-size: 1.2em; margin-bottom: 10px;">⚠️ Three.js not loaded</p>
+                                <p>Please check your internet connection and refresh the page.</p>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Scene setup
+                const scene = new THREE.Scene();
+                scene.background = new THREE.Color(0x000000);
+
+                // Camera setup
+                const camera = new THREE.PerspectiveCamera(
+                    75,
+                    container.clientWidth / container.clientHeight,
+                    0.1,
+                    10000
+                );
+                camera.position.set(0, 50, 100);
+
+                // Renderer setup
+                const renderer = new THREE.WebGLRenderer({ antialias: true });
+                renderer.setSize(container.clientWidth, container.clientHeight);
+                container.appendChild(renderer.domElement);
+
+                // Controls
+                const controls = new THREE.OrbitControls(camera, renderer.domElement);
+                controls.enableDamping = true;
+                controls.dampingFactor = 0.05;
+
+                // Lighting
+                const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+                scene.add(ambientLight);
+
+                const pointLight = new THREE.PointLight(0xffffff, 2, 500);
+                pointLight.position.set(0, 0, 0);
+                scene.add(pointLight);
+
+                // Create Sun
+                const sunGeometry = new THREE.SphereGeometry(5, 32, 32);
+                const sunMaterial = new THREE.MeshBasicMaterial({ 
+                    color: 0xffff00,
+                    emissive: 0xffaa00
+                });
+                const sun = new THREE.Mesh(sunGeometry, sunMaterial);
+                scene.add(sun);
+
+                // Add sun glow
+                const glowGeometry = new THREE.SphereGeometry(6, 32, 32);
+                const glowMaterial = new THREE.MeshBasicMaterial({
+                    color: 0xffaa00,
+                    transparent: true,
+                    opacity: 0.3
+                });
+                const sunGlow = new THREE.Mesh(glowGeometry, glowMaterial);
+                scene.add(sunGlow);
+
+                // Create Stars
+                const starsGeometry = new THREE.BufferGeometry();
+                const starVertices = [];
+                for (let i = 0; i < 10000; i++) {
+                    const x = (Math.random() - 0.5) * 2000;
+                    const y = (Math.random() - 0.5) * 2000;
+                    const z = (Math.random() - 0.5) * 2000;
+                    starVertices.push(x, y, z);
+                }
+                starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
+                const starsMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.7 });
+                const stars = new THREE.Points(starsGeometry, starsMaterial);
+                scene.add(stars);
+
+                // Create Earth reference
+                const earthGeometry = new THREE.SphereGeometry(1, 16, 16);
+                const earthMaterial = new THREE.MeshPhongMaterial({ color: 0x0077ff });
+                const earth = new THREE.Mesh(earthGeometry, earthMaterial);
+                earth.position.set(30, 0, 0);
+                scene.add(earth);
+
+                // Earth label
+                const earthOrbitLine = new THREE.Line(
+                    new THREE.BufferGeometry().setFromPoints(
+                        new THREE.Path().absarc(0, 0, 30, 0, Math.PI * 2).getPoints(100).map(p => new THREE.Vector3(p.x, 0, p.y))
+                    ),
+                    new THREE.LineBasicMaterial({ color: 0x0077ff, transparent: true, opacity: 0.3 })
+                );
+                scene.add(earthOrbitLine);
+
+                // Create Mars reference
+                const marsGeometry = new THREE.SphereGeometry(0.8, 16, 16);
+                const marsMaterial = new THREE.MeshPhongMaterial({ color: 0xff4444 });
+                const mars = new THREE.Mesh(marsGeometry, marsMaterial);
+                mars.position.set(45, 0, 0);
+                scene.add(mars);
+
+                // Mars orbit line
+                const marsOrbitLine = new THREE.Line(
+                    new THREE.BufferGeometry().setFromPoints(
+                        new THREE.Path().absarc(0, 0, 45, 0, Math.PI * 2).getPoints(100).map(p => new THREE.Vector3(p.x, 0, p.y))
+                    ),
+                    new THREE.LineBasicMaterial({ color: 0xff4444, transparent: true, opacity: 0.3 })
+                );
+                scene.add(marsOrbitLine);
+
+                // Create the asteroid/comet
+                if (obj.a && obj.e !== null && obj.i !== null) {
+                    const a = obj.a * 30; // Scale factor for AU
+                    const e = obj.e;
+                    const i = obj.i * Math.PI / 180; // Convert to radians
+                    
+                    // Calculate orbit points
+                    const orbitPoints = [];
+                    const segments = 200;
+                    for (let j = 0; j <= segments; j++) {
+                        const theta = (j / segments) * Math.PI * 2;
+                        const r = (a * (1 - e * e)) / (1 + e * Math.cos(theta));
+                        const x = r * Math.cos(theta);
+                        const y = r * Math.sin(theta) * Math.cos(i);
+                        const z = r * Math.sin(theta) * Math.sin(i);
+                        orbitPoints.push(new THREE.Vector3(x, y, z));
+                    }
+
+                    // Draw orbit
+                    const orbitGeometry = new THREE.BufferGeometry().setFromPoints(orbitPoints);
+                    const orbitColor = obj.object_type === 'comet' ? 0x00d4ff : 0x00ff88;
+                    const orbitMaterial = new THREE.LineBasicMaterial({ 
+                        color: orbitColor,
+                        linewidth: 2
+                    });
+                    const orbitLine = new THREE.Line(orbitGeometry, orbitMaterial);
+                    scene.add(orbitLine);
+
+                    // Create the object itself
+                    const objectGeometry = new THREE.SphereGeometry(0.5, 16, 16);
+                    const objectMaterial = new THREE.MeshPhongMaterial({ 
+                        color: orbitColor,
+                        emissive: orbitColor,
+                        emissiveIntensity: 0.3
+                    });
+                    const objectMesh = new THREE.Mesh(objectGeometry, objectMaterial);
+                    
+                    // Position at perihelion
+                    const r0 = a * (1 - e);
+                    objectMesh.position.set(r0, 0, 0);
+                    scene.add(objectMesh);
+
+                    // Add object label
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.width = 256;
+                    canvas.height = 64;
+                    context.fillStyle = '#ffffff';
+                    context.font = 'Bold 24px Arial';
+                    context.fillText(obj.name || obj.fullname.substring(0, 20), 10, 40);
+                    const texture = new THREE.CanvasTexture(canvas);
+                    const labelMaterial = new THREE.SpriteMaterial({ map: texture });
+                    const label = new THREE.Sprite(labelMaterial);
+                    label.position.set(r0, 3, 0);
+                    label.scale.set(10, 2.5, 1);
+                    scene.add(label);
+
+                    // Zoom to show the orbit
+                    const maxDist = a * (1 + e);
+                    camera.position.set(maxDist * 1.5, maxDist * 0.5, maxDist * 1.5);
+                    camera.lookAt(0, 0, 0);
+                }
+
+                // Animation loop
+                function animate() {
+                    requestAnimationFrame(animate);
+                    controls.update();
+                    renderer.render(scene, camera);
+                }
+                animate();
+
+                // Handle window resize
+                const handleResize = () => {
+                    camera.aspect = container.clientWidth / container.clientHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(container.clientWidth, container.clientHeight);
+                };
+                window.addEventListener('resize', handleResize);
+
+                // Store for cleanup
+                currentVisualization = { scene, camera, renderer, controls, handleResize };
+
+            } catch (error) {
+                console.error('3D visualization error:', error);
+                container.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #a0a0a0;">
+                        <div style="text-align: center;">
+                            <p style="font-size: 1.2em; margin-bottom: 10px;">3D Visualization Error</p>
+                            <p>${error.message}</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Close modal
+        document.getElementById('closeModal').addEventListener('click', () => {
+            document.getElementById('visualizationModal').classList.remove('active');
+            if (currentVisualization) {
+                // Cleanup Three.js resources
+                if (currentVisualization.renderer) {
+                    const container = document.getElementById('vizContainer');
+                    container.removeChild(currentVisualization.renderer.domElement);
+                    currentVisualization.renderer.dispose();
+                }
+                if (currentVisualization.handleResize) {
+                    window.removeEventListener('resize', currentVisualization.handleResize);
+                }
+                currentVisualization = null;
+            }
+        });
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            if (searchTerm.length < 2) {
+                if (currentCategory) {
+                    showCategory(currentCategory);
+                }
+                return;
+            }
+
+            const filtered = allObjects.filter(obj => 
+                (obj.name && obj.name.toLowerCase().includes(searchTerm)) ||
+                (obj.fullname && obj.fullname.toLowerCase().includes(searchTerm)) ||
+                (obj.slug && obj.slug.toLowerCase().includes(searchTerm))
+            );
+
+            renderObjects(filtered, 'Search Results', `Found ${filtered.length} objects matching "${searchTerm}"`);
+        });
+
+        // Initialize on page load
+        init();
+    </script>
+</body>
+</html>
+

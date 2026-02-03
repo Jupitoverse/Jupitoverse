@@ -1,0 +1,1204 @@
+<div class="activity-data-container" id="activity-data-container">
+    <!-- Header Section -->
+    <div class="activity-header">
+        <div class="header-title">
+            <h1>📊 Activity Data</h1>
+            <p class="subtitle">OSO Activity Database - <span id="total-records">0</span> records</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-refresh" onclick="ActivityData.testConnection()" title="Test API Connection">
+                🔌 Test Connection
+            </button>
+            <button class="btn btn-refresh" onclick="ActivityData.init()" title="Load Data">
+                🔄 Load Data
+            </button>
+            <button class="btn btn-refresh" onclick="ActivityData.refresh()" title="Refresh from Source">
+                🔄 Refresh
+            </button>
+            <button class="btn btn-export" onclick="ActivityData.exportCSV()" title="Export to CSV">
+                📥 Export CSV
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-value" id="stat-total">-</div>
+            <div class="stat-label">Total Records</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="stat-interfaces">-</div>
+            <div class="stat-label">Interfaces</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="stat-profiles">-</div>
+            <div class="stat-label">Profiles</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="stat-implementations">-</div>
+            <div class="stat-label">Implementations</div>
+        </div>
+    </div>
+
+    <!-- Search and Filter Section -->
+    <div class="search-filter-section">
+        <div class="global-search">
+            <input type="text" id="global-search" placeholder="🔍 Search across all columns..." 
+                   onkeyup="ActivityData.debounceSearch()" />
+            <button class="btn btn-clear" onclick="ActivityData.clearSearch()">Clear</button>
+        </div>
+        <div class="filter-controls">
+            <select id="page-size" onchange="ActivityData.changePageSize()">
+                <option value="50">50 per page</option>
+                <option value="100" selected>100 per page</option>
+                <option value="200">200 per page</option>
+                <option value="500">500 per page</option>
+            </select>
+            <button class="btn btn-toggle-filters" onclick="ActivityData.toggleColumnFilters()">
+                🔧 Column Filters
+            </button>
+        </div>
+    </div>
+
+    <!-- Column Filters (Hidden by default) -->
+    <div id="column-filters" class="column-filters" style="display: none;">
+        <div class="filters-header">
+            <span>Filter by Column</span>
+            <button class="btn btn-clear-filters" onclick="ActivityData.clearAllFilters()">Clear All</button>
+        </div>
+        <div id="filter-inputs" class="filter-inputs">
+            <!-- Dynamically populated -->
+        </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="table-wrapper">
+        <div id="loading-indicator" class="loading-indicator">
+            <div class="spinner"></div>
+            <span id="loading-text">Loading activity data...</span>
+            <span id="loading-subtext" style="font-size: 0.8rem; color: var(--text-secondary);">Loading from JSON (fast)</span>
+        </div>
+        <table id="activity-table" class="activity-table">
+            <thead id="table-header">
+                <!-- Dynamically populated -->
+            </thead>
+            <tbody id="table-body">
+                <!-- Dynamically populated -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination-section">
+        <div class="pagination-info">
+            Showing <span id="showing-start">0</span> - <span id="showing-end">0</span> 
+            of <span id="showing-total">0</span> records
+        </div>
+        <div class="pagination-controls">
+            <button class="btn btn-page" onclick="ActivityData.firstPage()">⏮️ First</button>
+            <button class="btn btn-page" onclick="ActivityData.prevPage()">◀️ Prev</button>
+            <span class="page-indicator">
+                Page <input type="number" id="current-page" value="1" min="1" 
+                       onchange="ActivityData.goToPage()" /> 
+                of <span id="total-pages">1</span>
+            </span>
+            <button class="btn btn-page" onclick="ActivityData.nextPage()">Next ▶️</button>
+            <button class="btn btn-page" onclick="ActivityData.lastPage()">Last ⏭️</button>
+        </div>
+    </div>
+</div>
+
+<style>
+.activity-data-container {
+    padding: 20px;
+    max-width: 100%;
+}
+
+/* Header */
+.activity-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color, #333);
+}
+
+.header-title h1 {
+    margin: 0;
+    color: var(--text-primary, #fff);
+    font-size: 1.8rem;
+}
+
+.header-title .subtitle {
+    margin: 5px 0 0 0;
+    color: var(--text-secondary, #888);
+    font-size: 0.9rem;
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Buttons */
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.btn-refresh {
+    background: var(--accent-color, #4a9eff);
+    color: white;
+}
+
+.btn-refresh:hover {
+    background: var(--accent-hover, #3a8eef);
+}
+
+.btn-export {
+    background: var(--bg-tertiary, #2a2a2a);
+    color: var(--text-primary, #fff);
+    border: 1px solid var(--border-color, #444);
+}
+
+.btn-export:hover {
+    background: var(--bg-hover, #3a3a3a);
+}
+
+.btn-clear, .btn-clear-filters {
+    background: #ff6b6b;
+    color: white;
+}
+
+.btn-toggle-filters {
+    background: var(--bg-tertiary, #2a2a2a);
+    color: var(--text-primary, #fff);
+    border: 1px solid var(--border-color, #444);
+}
+
+.btn-page {
+    background: var(--bg-tertiary, #2a2a2a);
+    color: var(--text-primary, #fff);
+    border: 1px solid var(--border-color, #444);
+    padding: 6px 12px;
+}
+
+.btn-page:hover {
+    background: var(--accent-color, #4a9eff);
+}
+
+/* Stats Row */
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    background: var(--bg-secondary, #1e1e1e);
+    border: 1px solid var(--border-color, #333);
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--accent-color, #4a9eff);
+}
+
+.stat-label {
+    color: var(--text-secondary, #888);
+    font-size: 0.85rem;
+    margin-top: 5px;
+}
+
+/* Search and Filter Section */
+.search-filter-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 15px;
+}
+
+.global-search {
+    flex: 1;
+    display: flex;
+    gap: 10px;
+}
+
+.global-search input {
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color, #444);
+    border-radius: 8px;
+    background: var(--bg-secondary, #1e1e1e);
+    color: var(--text-primary, #fff);
+    font-size: 1rem;
+}
+
+.global-search input::placeholder {
+    color: var(--text-secondary, #666);
+}
+
+.filter-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-controls select {
+    padding: 10px 15px;
+    border: 1px solid var(--border-color, #444);
+    border-radius: 6px;
+    background: var(--bg-secondary, #1e1e1e);
+    color: var(--text-primary, #fff);
+}
+
+/* Column Filters */
+.column-filters {
+    background: var(--bg-secondary, #1e1e1e);
+    border: 1px solid var(--border-color, #333);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.filters-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    color: var(--text-primary, #fff);
+    font-weight: bold;
+}
+
+.filter-inputs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+}
+
+.filter-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.filter-input-group label {
+    font-size: 0.75rem;
+    color: var(--text-secondary, #888);
+    text-transform: uppercase;
+}
+
+.filter-input-group input {
+    padding: 8px 10px;
+    border: 1px solid var(--border-color, #444);
+    border-radius: 4px;
+    background: var(--bg-tertiary, #2a2a2a);
+    color: var(--text-primary, #fff);
+    font-size: 0.85rem;
+}
+
+/* Table Wrapper */
+.table-wrapper {
+    background: var(--bg-secondary, #1e1e1e);
+    border: 1px solid var(--border-color, #333);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Loading Indicator */
+.loading-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    z-index: 100;
+    color: var(--text-primary, #fff);
+}
+
+.loading-indicator.hidden {
+    display: none;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border-color, #333);
+    border-top-color: var(--accent-color, #4a9eff);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Activity Table */
+.activity-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.activity-table thead {
+    background: var(--bg-tertiary, #2a2a2a);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.activity-table th {
+    padding: 12px 10px;
+    text-align: left;
+    color: var(--text-primary, #fff);
+    font-weight: 600;
+    border-bottom: 2px solid var(--border-color, #444);
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.activity-table th:hover {
+    background: var(--bg-hover, #3a3a3a);
+}
+
+.activity-table th .sort-indicator {
+    margin-left: 5px;
+    opacity: 0.5;
+}
+
+.activity-table th.sorted .sort-indicator {
+    opacity: 1;
+    color: var(--accent-color, #4a9eff);
+}
+
+.activity-table tbody tr {
+    border-bottom: 1px solid var(--border-color, #333);
+    transition: background 0.15s ease;
+}
+
+.activity-table tbody tr:hover {
+    background: var(--bg-hover, rgba(74, 158, 255, 0.1));
+}
+
+.activity-table tbody tr:nth-child(even) {
+    background: var(--bg-tertiary, #252525);
+}
+
+.activity-table tbody tr:nth-child(even):hover {
+    background: var(--bg-hover, rgba(74, 158, 255, 0.1));
+}
+
+.activity-table td {
+    padding: 10px;
+    color: var(--text-primary, #ddd);
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.activity-table td:hover {
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.activity-table td.cell-name,
+.activity-table td.cell-class {
+    max-width: 300px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.8rem;
+}
+
+.activity-table td.cell-spec_ver_id {
+    max-width: 150px;
+    font-family: monospace;
+    font-size: 0.75rem;
+    color: var(--text-secondary, #888);
+}
+
+/* Pagination */
+.pagination-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    margin-top: 15px;
+}
+
+.pagination-info {
+    color: var(--text-secondary, #888);
+    font-size: 0.9rem;
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.page-indicator {
+    color: var(--text-primary, #fff);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.page-indicator input {
+    width: 60px;
+    padding: 6px 10px;
+    border: 1px solid var(--border-color, #444);
+    border-radius: 4px;
+    background: var(--bg-secondary, #1e1e1e);
+    color: var(--text-primary, #fff);
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .activity-header {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .search-filter-section {
+        flex-direction: column;
+    }
+    
+    .stats-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .pagination-section {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+</style>
+
+<script>
+// Activity Data Module
+window.ActivityData = (function() {
+    const API_BASE = 'http://127.0.0.1:5001/api/activity';
+    
+    let currentData = [];
+    let columns = [];
+    let currentPage = 1;
+    let pageSize = 100;
+    let totalPages = 1;
+    let totalRecords = 0;
+    let sortColumn = '';
+    let sortDirection = 'asc';
+    let searchTimeout = null;
+    let columnFilters = {};
+    
+    async function init() {
+        console.log('[ActivityData] ===== INIT CALLED =====');
+        
+        // Wait for DOM elements
+        let retries = 0;
+        while (retries < 30) {
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const statTotal = document.getElementById('stat-total');
+            const tableBody = document.getElementById('table-body');
+            const tableHeader = document.getElementById('table-header');
+            
+            if (loadingIndicator && statTotal && tableBody && tableHeader) {
+                console.log('[ActivityData] ✅ All DOM elements found');
+                break;
+            }
+            await new Promise(resolve => setTimeout(resolve, 100));
+            retries++;
+        }
+        
+        if (retries >= 30) {
+            console.error('[ActivityData] ❌ DOM elements not found');
+            alert('Activity Data: DOM elements not found. Please refresh the page.');
+            return;
+        }
+        
+        try {
+            console.log('[ActivityData] Starting data load sequence...');
+            showLoading(true);
+            updateLoadingText('Connecting to backend...', '');
+            
+            // Test API connection first
+            console.log('[ActivityData] Testing API connection...');
+            const testResponse = await fetchWithTimeout(`${API_BASE}/status`, {}, 5000);
+            if (!testResponse.ok) {
+                throw new Error(`Backend not responding: ${testResponse.status}`);
+            }
+            const testData = await testResponse.json();
+            console.log('[ActivityData] ✅ API connection OK:', testData);
+            
+            // Load stats
+            console.log('[ActivityData] Loading statistics...');
+            await loadStats();
+            
+            // Load data
+            console.log('[ActivityData] Loading table data...');
+            await loadData();
+            
+            console.log('[ActivityData] ✅✅✅ INITIALIZATION COMPLETE ✅✅✅');
+        } catch (error) {
+            console.error('[ActivityData] ❌❌❌ INITIALIZATION FAILED ❌❌❌', error);
+            showLoading(false);
+            
+            const errorMsg = error.message || 'Unknown error';
+            const tableBody = document.getElementById('table-body');
+            const tableHeader = document.getElementById('table-header');
+            
+            if (tableHeader) {
+                tableHeader.innerHTML = '<tr><th>Error</th></tr>';
+            }
+            
+            if (tableBody) {
+                tableBody.innerHTML = `<tr><td style="text-align: center; padding: 40px; color: #ff6b6b;">
+                    <strong>⚠️ Error Loading Data</strong><br><br>
+                    ${errorMsg}<br><br>
+                    <button onclick="ActivityData.init()" style="padding: 12px 24px; background: #4a9eff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; margin: 5px;">
+                        🔄 Retry Now
+                    </button>
+                    <button onclick="location.reload()" style="padding: 12px 24px; background: #666; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; margin: 5px;">
+                        🔄 Reload Page
+                    </button>
+                    <br><br>
+                    <small>Check browser console (F12) for detailed error messages</small>
+                </td></tr>`;
+            }
+            
+            // Also update stats to show error
+            document.getElementById('stat-total').textContent = 'Error';
+            document.getElementById('stat-interfaces').textContent = '-';
+            document.getElementById('stat-profiles').textContent = '-';
+            document.getElementById('stat-implementations').textContent = '-';
+        }
+    }
+    
+    async function fetchWithTimeout(url, options = {}, timeout = 30000) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeout);
+        
+        try {
+            console.log('[ActivityData] Fetching:', url);
+            const response = await fetch(url, {
+                ...options,
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+            console.log('[ActivityData] Response status:', response.status, response.statusText);
+            return response;
+        } catch (error) {
+            clearTimeout(timeoutId);
+            console.error('[ActivityData] Fetch error:', error);
+            throw error;
+        }
+    }
+    
+    function updateLoadingText(text, subtext = '') {
+        const loadingText = document.getElementById('loading-text');
+        const loadingSubtext = document.getElementById('loading-subtext');
+        if (loadingText) loadingText.textContent = text;
+        if (loadingSubtext) loadingSubtext.textContent = subtext;
+    }
+    
+    async function checkStatus() {
+        try {
+            const response = await fetchWithTimeout(`${API_BASE}/status`, {}, 5000);
+            const status = await response.json();
+            return status;
+        } catch (error) {
+            console.error('[ActivityData] Status check failed:', error);
+            return { loaded: false, json_exists: false, excel_exists: false };
+        }
+    }
+    
+    async function loadStats() {
+        try {
+            // First check if data is already loaded
+            updateLoadingText('Checking data status...', '');
+            const status = await checkStatus();
+            console.log('[ActivityData] Status check result:', status);
+            
+            if (!status.loaded) {
+                if (!status.json_exists && !status.excel_exists) {
+                    throw new Error(`Data file not found. JSON: ${status.json_path || 'N/A'}, Excel: ${status.excel_path || 'N/A'}`);
+                }
+                updateLoadingText('Loading statistics...', 'Loading from JSON (fast loading)');
+            } else {
+                updateLoadingText('Loading statistics...', `Data already loaded: ${status.total_records} records`);
+            }
+            
+            const response = await fetchWithTimeout(`${API_BASE}/stats`, {}, 30000);
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const stats = await response.json();
+            
+            if (stats.error) {
+                throw new Error(stats.error);
+            }
+            
+            document.getElementById('stat-total').textContent = stats.total_records?.toLocaleString() || '-';
+            document.getElementById('stat-interfaces').textContent = stats.unique_interfaces?.toLocaleString() || '-';
+            document.getElementById('stat-profiles').textContent = stats.unique_profiles?.toLocaleString() || '-';
+            document.getElementById('stat-implementations').textContent = stats.unique_implementations?.toLocaleString() || '-';
+        } catch (error) {
+            console.error('[ActivityData] Failed to load stats:', error);
+            const errorMsg = error.message || 'Unknown error';
+            document.getElementById('stat-total').textContent = 'Error';
+            document.getElementById('stat-interfaces').textContent = '-';
+            document.getElementById('stat-profiles').textContent = '-';
+            document.getElementById('stat-implementations').textContent = '-';
+            
+            // Show error in loading indicator
+            const loadingText = document.getElementById('loading-text');
+            const loadingSubtext = document.getElementById('loading-subtext');
+            if (loadingText) loadingText.textContent = `Error: ${errorMsg}`;
+            if (loadingSubtext) loadingSubtext.textContent = 'Click Retry to try again';
+        }
+    }
+    
+    async function loadData() {
+        console.log('[ActivityData] loadData() called');
+        showLoading(true);
+        updateLoadingText('Fetching activity data...', 'Loading from JSON (fast)');
+        
+        try {
+            const searchTerm = document.getElementById('global-search')?.value || '';
+            const requestBody = {
+                search: searchTerm,
+                columnFilters: columnFilters,
+                sortColumn: sortColumn,
+                sortDirection: sortDirection,
+                page: currentPage,
+                pageSize: pageSize
+            };
+            
+            console.log('[ActivityData] Making API request to:', `${API_BASE}/search`);
+            console.log('[ActivityData] Request body:', requestBody);
+            
+            const response = await fetchWithTimeout(`${API_BASE}/search`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    search: searchTerm,
+                    columnFilters: columnFilters,
+                    sortColumn: sortColumn,
+                    sortDirection: sortDirection,
+                    page: currentPage,
+                    pageSize: pageSize
+                })
+            }, 30000);
+            
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const result = await response.json();
+            console.log('[ActivityData] API response received:', {
+                total_rows: result.total_rows,
+                columns_count: result.columns?.length,
+                data_count: result.data?.length,
+                page: result.page
+            });
+            
+            if (result.error) {
+                throw new Error(result.error);
+            }
+            
+            columns = result.columns || [];
+            currentData = result.data || [];
+            totalRecords = result.total_rows || 0;
+            totalPages = result.total_pages || 1;
+            
+            console.log('[ActivityData] Data processed:', {
+                columns: columns.length,
+                currentData: currentData.length,
+                totalRecords: totalRecords,
+                totalPages: totalPages
+            });
+            
+            document.getElementById('total-records').textContent = totalRecords.toLocaleString();
+            
+            renderTable();
+            renderColumnFilters();
+            updatePagination();
+            
+            console.log('[ActivityData] Table rendered successfully');
+            
+        } catch (error) {
+            console.error('[ActivityData] Failed to load data:', error);
+            let errorMessage = error.message || 'Unknown error';
+            if (error.name === 'AbortError') {
+                errorMessage = 'Request timed out. The Excel file is large (3,425 records) and may take 1-2 minutes to load. Please click Retry.';
+            } else if (error.message && error.message.includes('fetch')) {
+                errorMessage = 'Cannot connect to backend. Please ensure the backend server is running on port 5001.';
+            }
+            
+            const tableBody = document.getElementById('table-body');
+            if (tableBody) {
+                const colCount = columns.length || 12;
+                tableBody.innerHTML = 
+                    `<tr><td colspan="${colCount}" style="text-align: center; padding: 40px; color: #ff6b6b;">
+                        <strong>Error loading data:</strong><br>${errorMessage}<br><br>
+                        <button onclick="ActivityData.refresh()" style="margin-top: 15px; padding: 10px 20px; background: var(--accent-color); color: white; border: none; border-radius: 6px; cursor: pointer;">
+                            🔄 Retry
+                        </button>
+                        <button onclick="ActivityData.init()" style="margin-top: 15px; padding: 10px 20px; background: #666; color: white; border: none; border-radius: 6px; cursor: pointer; margin-left: 10px;">
+                            🔄 Reload
+                        </button>
+                    </td></tr>`;
+            }
+        } finally {
+            showLoading(false);
+        }
+    }
+    
+    function renderTable() {
+        console.log('[ActivityData] renderTable() called', {
+            columns: columns.length,
+            currentData: currentData.length
+        });
+        
+        const tableHeader = document.getElementById('table-header');
+        const tableBody = document.getElementById('table-body');
+        
+        if (!tableHeader || !tableBody) {
+            console.error('[ActivityData] Table elements not found!');
+            return;
+        }
+        
+        if (!columns || columns.length === 0) {
+            console.warn('[ActivityData] No columns to render');
+            tableBody.innerHTML = '<tr><td colspan="12" style="text-align: center; padding: 40px;">No columns available</td></tr>';
+            return;
+        }
+        
+        // Render header
+        try {
+            const headerHtml = `<tr>${columns.map(col => {
+                const colName = formatColumnName(col);
+                const isSorted = sortColumn === col;
+                const sortIcon = isSorted ? (sortDirection === 'asc' ? '▲' : '▼') : '↕';
+                return `
+            <th class="${isSorted ? 'sorted' : ''}" onclick="ActivityData.sort('${col.replace(/'/g, "\\'")}')">
+                ${colName}
+                <span class="sort-indicator">${sortIcon}</span>
+            </th>`;
+            }).join('')}</tr>`;
+            
+            tableHeader.innerHTML = headerHtml;
+            console.log('[ActivityData] Header rendered');
+        } catch (error) {
+            console.error('[ActivityData] Error rendering header:', error);
+        }
+        
+        // Render body
+        if (currentData.length === 0) {
+            tableBody.innerHTML = 
+                `<tr><td colspan="${columns.length}" style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                    No records found
+                </td></tr>`;
+            console.log('[ActivityData] No data to render');
+            return;
+        }
+        
+        try {
+            const bodyHtml = currentData.map((row, idx) => {
+                return `<tr>${columns.map(col => {
+                    const value = row[col] || '';
+                    const cellClass = `cell-${col.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '')}`;
+                    const escapedValue = escapeHtml(String(value));
+                    return `
+                <td class="${cellClass}" title="${escapedValue}">
+                    ${escapedValue}
+                </td>`;
+                }).join('')}</tr>`;
+            }).join('');
+            
+            tableBody.innerHTML = bodyHtml;
+            console.log('[ActivityData] Body rendered with', currentData.length, 'rows');
+        } catch (error) {
+            console.error('[ActivityData] Error rendering body:', error);
+            tableBody.innerHTML = `<tr><td colspan="${columns.length}" style="text-align: center; padding: 40px; color: #ff6b6b;">Error rendering table: ${error.message}</td></tr>`;
+        }
+    }
+    
+    function renderColumnFilters() {
+        const filterInputs = document.getElementById('filter-inputs');
+        if (!filterInputs || columns.length === 0) return;
+        
+        // Only render if not already rendered
+        if (filterInputs.children.length === columns.length) return;
+        
+        filterInputs.innerHTML = columns.map(col => `
+            <div class="filter-input-group">
+                <label>${formatColumnName(col)}</label>
+                <input type="text" 
+                       placeholder="Filter..." 
+                       data-column="${col}"
+                       value="${columnFilters[col] || ''}"
+                       onkeyup="ActivityData.filterByColumn('${col}', this.value)" />
+            </div>
+        `).join('');
+    }
+    
+    function formatColumnName(name) {
+        return name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    }
+    
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    function showLoading(show) {
+        const indicator = document.getElementById('loading-indicator');
+        if (indicator) {
+            indicator.classList.toggle('hidden', !show);
+        }
+    }
+    
+    function updatePagination() {
+        const start = (currentPage - 1) * pageSize + 1;
+        const end = Math.min(currentPage * pageSize, totalRecords);
+        
+        document.getElementById('showing-start').textContent = totalRecords > 0 ? start : 0;
+        document.getElementById('showing-end').textContent = end;
+        document.getElementById('showing-total').textContent = totalRecords.toLocaleString();
+        document.getElementById('current-page').value = currentPage;
+        document.getElementById('total-pages').textContent = totalPages;
+    }
+    
+    // Public methods
+    return {
+        init,
+        
+        debounceSearch() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                currentPage = 1;
+                loadData();
+            }, 300);
+        },
+        
+        clearSearch() {
+            document.getElementById('global-search').value = '';
+            currentPage = 1;
+            loadData();
+        },
+        
+        sort(column) {
+            if (sortColumn === column) {
+                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortColumn = column;
+                sortDirection = 'asc';
+            }
+            currentPage = 1;
+            loadData();
+        },
+        
+        filterByColumn(column, value) {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                if (value) {
+                    columnFilters[column] = value;
+                } else {
+                    delete columnFilters[column];
+                }
+                currentPage = 1;
+                loadData();
+            }, 300);
+        },
+        
+        toggleColumnFilters() {
+            const filters = document.getElementById('column-filters');
+            filters.style.display = filters.style.display === 'none' ? 'block' : 'none';
+        },
+        
+        clearAllFilters() {
+            columnFilters = {};
+            document.querySelectorAll('#filter-inputs input').forEach(input => input.value = '');
+            currentPage = 1;
+            loadData();
+        },
+        
+        changePageSize() {
+            pageSize = parseInt(document.getElementById('page-size').value);
+            currentPage = 1;
+            loadData();
+        },
+        
+        firstPage() {
+            currentPage = 1;
+            loadData();
+        },
+        
+        prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                loadData();
+            }
+        },
+        
+        nextPage() {
+            if (currentPage < totalPages) {
+                currentPage++;
+                loadData();
+            }
+        },
+        
+        lastPage() {
+            currentPage = totalPages;
+            loadData();
+        },
+        
+        goToPage() {
+            const page = parseInt(document.getElementById('current-page').value);
+            if (page >= 1 && page <= totalPages) {
+                currentPage = page;
+                loadData();
+            }
+        },
+        
+        async refresh() {
+            try {
+                await fetch(`${API_BASE}/refresh`, { method: 'POST' });
+                await loadStats();
+                await loadData();
+            } catch (error) {
+                console.error('[ActivityData] Refresh failed:', error);
+            }
+        },
+        
+        async testConnection() {
+            console.log('[ActivityData] Testing API connection...');
+            const loadingText = document.getElementById('loading-text');
+            const loadingSubtext = document.getElementById('loading-subtext');
+            
+            try {
+                if (loadingText) loadingText.textContent = 'Testing connection...';
+                if (loadingSubtext) loadingSubtext.textContent = '';
+                
+                const response = await fetchWithTimeout(`${API_BASE}/status`, {}, 5000);
+                const status = await response.json();
+                
+                const msg = `✅ Connection OK!\n\n` +
+                    `Loaded: ${status.loaded ? 'Yes' : 'No'}\n` +
+                    `Total Records: ${status.total_records || 'N/A'}\n` +
+                    `Columns: ${status.columns || 'N/A'}\n` +
+                    `JSON Exists: ${status.json_exists ? 'Yes' : 'No'}\n` +
+                    `Excel Exists: ${status.excel_exists ? 'Yes' : 'No'}`;
+                
+                alert(msg);
+                console.log('[ActivityData] Connection test result:', status);
+                
+                if (status.loaded) {
+                    // Auto-load data if available
+                    await this.init();
+                }
+            } catch (error) {
+                const errorMsg = `❌ Connection Failed!\n\n${error.message}\n\nPlease check:\n1. Backend is running on port 5001\n2. No firewall blocking\n3. Check browser console for details`;
+                alert(errorMsg);
+                console.error('[ActivityData] Connection test failed:', error);
+            }
+        },
+        
+        exportCSV() {
+            if (currentData.length === 0) {
+                alert('No data to export');
+                return;
+            }
+            
+            // Create CSV content
+            const headers = columns.join(',');
+            const rows = currentData.map(row => 
+                columns.map(col => {
+                    const val = String(row[col] || '').replace(/"/g, '""');
+                    return `"${val}"`;
+                }).join(',')
+            );
+            
+            const csv = [headers, ...rows].join('\n');
+            
+            // Download
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `activity_data_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    };
+})();
+
+// Simple, reliable initialization - MULTIPLE TRIGGERS
+(function() {
+    let initAttempted = false;
+    
+    function initActivityData() {
+        if (initAttempted) {
+            console.log('[ActivityData] Init already attempted, skipping...');
+            return;
+        }
+        
+        const hash = window.location.hash.substring(1);
+        const container = document.getElementById('activity-data-container');
+        
+        if (hash === 'activity-data' || container) {
+            if (typeof ActivityData === 'undefined') {
+                console.log('[ActivityData] Module not ready yet, will retry...');
+                return;
+            }
+            
+            initAttempted = true;
+            console.log('[ActivityData] 🚀 STARTING AUTO-INITIALIZATION 🚀');
+            try {
+                ActivityData.init();
+            } catch (err) {
+                console.error('[ActivityData] Auto-init error:', err);
+                initAttempted = false; // Allow retry on error
+            }
+        }
+    }
+    
+    // Trigger 1: pageLoaded event (from main.js)
+    document.addEventListener('pageLoaded', function(e) {
+        if (e.detail && e.detail.pageId === 'activity-data') {
+            console.log('[ActivityData] 📍 Trigger: pageLoaded event');
+            setTimeout(initActivityData, 150);
+        }
+    });
+    
+    // Trigger 2: DOM ready
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        console.log('[ActivityData] 📍 Trigger: DOM already ready');
+        setTimeout(initActivityData, 300);
+    } else {
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('[ActivityData] 📍 Trigger: DOMContentLoaded');
+            setTimeout(initActivityData, 300);
+        });
+    }
+    
+    // Trigger 3: Window load
+    window.addEventListener('load', function() {
+        console.log('[ActivityData] 📍 Trigger: window.load');
+        setTimeout(initActivityData, 400);
+    });
+    
+    // Trigger 4: Hash change
+    window.addEventListener('hashchange', function() {
+        if (window.location.hash === '#activity-data') {
+            console.log('[ActivityData] 📍 Trigger: hashchange to activity-data');
+            initAttempted = false; // Reset to allow re-init on hash change
+            setTimeout(initActivityData, 200);
+        }
+    });
+    
+    // Trigger 5: Immediate check (after a delay to ensure module is loaded)
+    setTimeout(function() {
+        console.log('[ActivityData] 📍 Trigger: Delayed immediate check');
+        initActivityData();
+    }, 1000);
+    
+    // Trigger 6: Polling check (last resort)
+    let pollCount = 0;
+    const pollInterval = setInterval(function() {
+        pollCount++;
+        if (pollCount > 10) {
+            clearInterval(pollInterval);
+            return;
+        }
+        const hash = window.location.hash.substring(1);
+        if (hash === 'activity-data' && !initAttempted) {
+            console.log('[ActivityData] 📍 Trigger: Polling check #' + pollCount);
+            initActivityData();
+        }
+    }, 500);
+    
+    // Trigger 7: Direct window assignment (most reliable)
+    window.loadActivityData = function() {
+        console.log('[ActivityData] 📍 Trigger: Manual window.loadActivityData()');
+        initAttempted = false;
+        initActivityData();
+    };
+    
+    // Make init available globally for manual calls
+    window.initActivityData = initActivityData;
+})();
+
+// FINAL FALLBACK: If nothing else works, user can call this from console
+window.testActivityData = async function() {
+    console.log('=== MANUAL ACTIVITY DATA TEST ===');
+    try {
+        const API_BASE = 'http://127.0.0.1:5001/api/activity';
+        
+        // Test 1: Status
+        console.log('Test 1: Checking status...');
+        const statusRes = await fetch(`${API_BASE}/status`);
+        const status = await statusRes.json();
+        console.log('Status:', status);
+        
+        // Test 2: Stats
+        console.log('Test 2: Loading stats...');
+        const statsRes = await fetch(`${API_BASE}/stats`);
+        const stats = await statsRes.json();
+        console.log('Stats:', stats);
+        
+        // Test 3: Search
+        console.log('Test 3: Loading data...');
+        const searchRes = await fetch(`${API_BASE}/search`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ search: '', columnFilters: {}, sortColumn: '', sortDirection: 'asc', page: 1, pageSize: 5 })
+        });
+        const searchData = await searchRes.json();
+        console.log('Search result:', { total: searchData.total_rows, columns: searchData.columns.length, data: searchData.data.length });
+        
+        console.log('=== ALL TESTS PASSED ===');
+        alert('✅ All API tests passed! Check console for details. Now initializing ActivityData...');
+        
+        if (typeof ActivityData !== 'undefined' && ActivityData.init) {
+            ActivityData.init();
+        } else {
+            alert('⚠️ ActivityData module not found. Please refresh the page.');
+        }
+    } catch (error) {
+        console.error('=== TEST FAILED ===', error);
+        alert('❌ Test failed: ' + error.message + '\n\nCheck console for details.');
+    }
+};
+</script>

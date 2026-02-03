@@ -1,0 +1,146 @@
+# INSTRUCTIONS: How to Create the Table
+
+## Problem
+Your script cannot create the table because you only have access to a **read-only database**.
+
+## Solution
+You need to create the table on a **writable database** first. Here's how:
+
+---
+
+## Option 1: Give SQL to Your DBA (Easiest)
+
+### Step 1: Send them the SQL file
+- **File**: `CREATE_TABLE_OSO.sql` (in this folder)
+- **Database**: `prodossdb`
+- **Table Name**: `OSO_Service_Activated_Data`
+
+### Step 2: Ask them to:
+```
+Please create this table on the writable database that replicates to:
+  oso-pstgr-rd.orion.comcast.com:6432/prodossdb
+
+The table needs to be accessible via the read replica for my monitoring script.
+```
+
+### Step 3: After table is created
+Once the DBA confirms the table is created and replicated to the read replica:
+```bash
+python OSO_Service_Activated.py
+```
+The script will detect the table exists and proceed in read-only mode.
+
+---
+
+## Option 2: Create Table Yourself (If you have access to writable DB)
+
+### If you have access to a writable database:
+
+```bash
+# Connect to the writable database
+psql -h <writable-host> -p 6432 -U ossdb01db -d prodossdb
+
+# Run the SQL file
+\i CREATE_TABLE_OSO.sql
+
+# Verify table was created
+\dt OSO_Service_Activated_Data
+SELECT COUNT(*) FROM OSO_Service_Activated_Data;
+```
+
+---
+
+## Option 3: Try the WRITE DB from Different Server
+
+The WRITE DB host is:
+```
+Host: OSS-PROD1-PGRDS-NLB-1fe6faf4eb2c6ea3.elb.us-east-2.amazonaws.com
+Port: 6432
+Database: prodossdb
+User: ossdb01db
+Password: Pr0d_ossdb01db
+```
+
+If you can access this from a different server (with VPN, different network, etc.):
+
+1. Copy `OSO_Service_Activated.py` to that server
+2. Update the WRITE_DB_CONFIG back to the original host:
+```python
+WRITE_DB_CONFIG = {
+    'host': 'OSS-PROD1-PGRDS-NLB-1fe6faf4eb2c6ea3.elb.us-east-2.amazonaws.com',
+    ...
+}
+```
+3. Run the script - it will create the table automatically
+
+---
+
+## Option 4: Run Without Database Tracking (Workaround)
+
+If you cannot get write access at all, I can modify the script to:
+- Skip database entirely
+- Only fetch data and generate Excel reports
+- Use Excel files as the tracking mechanism
+
+Would you like me to create this version?
+
+---
+
+## What Happens After Table is Created?
+
+Once the table exists on the read replica, your script will:
+
+1. ✅ Detect table exists
+2. ✅ Fetch service activation data
+3. ✅ Compare against existing records
+4. ⚠️ Show new records (but cannot insert to read-only DB)
+5. ✅ Generate Excel report with ALL records
+6. ✅ Send email
+
+**Note**: You'll still be in read-only mode (cannot insert), but at least the script will run and provide reports.
+
+---
+
+## Quick Summary
+
+**Easiest Path Forward:**
+1. Send `CREATE_TABLE_OSO.sql` to your DBA
+2. Ask them to create the table on the master database
+3. Wait for replication to read replica
+4. Run your script
+
+**Alternative:**
+- Let me know if you want a "no database" version that only generates reports
+
+---
+
+## The SQL File Location
+
+The SQL file has been created here:
+```
+C:\Users\abhisha3\Desktop\Projects\Fallout\Billing\CREATE_TABLE_OSO.sql
+```
+
+You can:
+- Email it to DBA
+- Or copy/paste the contents
+- Or run it yourself if you have access to writable DB
+
+---
+
+**What would you like to do?**
+1. Send SQL to DBA and wait for table creation?
+2. Try to access WRITE DB from different server?
+3. Create a "no database" version that only generates Excel reports?
+
+
+
+
+
+
+
+
+
+
+
+

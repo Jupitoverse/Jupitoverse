@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Roadmaps - Job Hunt Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="bg-pattern"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🎯</div>
+                Job Hunt Portal
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="companies.html">Companies</a></li>
+                <li><a href="jobs.html">Jobs</a></li>
+                <li><a href="abroad.html">Abroad Jobs</a></li>
+                <li><a href="hr-contacts.html">HR Contacts 🔥</a></li>
+                <li><a href="community.html">Community</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>🗺️ Career Roadmaps</h1>
+            <p>Step-by-step guides to becoming a successful tech professional</p>
+        </div>
+
+        <!-- Roadmaps Grid -->
+        <div id="roadmapsList" class="grid-2">
+            <div class="loading"><div class="spinner"></div></div>
+        </div>
+
+        <!-- Detailed Roadmap View -->
+        <div id="roadmapDetail" style="display: none;">
+            <!-- Content loaded dynamically -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">🎯</div>
+                    Job Hunt Portal
+                </a>
+                <p>The ultimate job portal for Indian IT professionals.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+
+        // Fetch roadmaps
+        async function fetchRoadmaps() {
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/resources/roadmaps`);
+                const roadmaps = await response.json();
+                renderRoadmaps(roadmaps);
+            } catch (error) {
+                console.error('Error:', error);
+                // Show default roadmaps if API fails
+                renderDefaultRoadmaps();
+            }
+        }
+
+        // Render roadmaps
+        function renderRoadmaps(roadmaps) {
+            const container = document.getElementById('roadmapsList');
+            
+            if (!roadmaps || roadmaps.length === 0) {
+                renderDefaultRoadmaps();
+                return;
+            }
+
+            container.innerHTML = roadmaps.map(roadmap => `
+                <div class="card roadmap-card" onclick="showRoadmapDetail(${roadmap.id})" style="cursor: pointer;">
+                    <div class="roadmap-header">
+                        <h2 class="roadmap-title">${roadmap.title}</h2>
+                        <div class="roadmap-meta">
+                            ${roadmap.role || 'Tech Career'} • ${roadmap.estimated_duration_months || '6-12'} months
+                        </div>
+                    </div>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                        ${roadmap.description || ''}
+                    </p>
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                        ${roadmap.experience_level ? `<span class="tag primary">${roadmap.experience_level}</span>` : ''}
+                        ${roadmap.is_official ? '<span class="tag success">✓ Official</span>' : ''}
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                        <div style="color: var(--text-muted); font-size: 0.85rem;">
+                            👁️ ${roadmap.views_count || 0} views • ❤️ ${roadmap.likes_count || 0} likes
+                        </div>
+                        <button class="btn btn-sm btn-primary">View Roadmap</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render default roadmaps
+        function renderDefaultRoadmaps() {
+            const container = document.getElementById('roadmapsList');
+            container.innerHTML = `
+                <!-- Software Developer Roadmap -->
+                <div class="card" style="padding: 2rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                        <span style="font-size: 3rem;">💻</span>
+                        <div>
+                            <h2>Software Developer Roadmap 2024</h2>
+                            <p style="color: var(--text-secondary);">Fresher to SDE at Top Companies</p>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+                        <span class="tag primary">Fresher</span>
+                        <span class="tag success">8 months</span>
+                        <span class="tag">SDE</span>
+                    </div>
+
+                    <div class="roadmap-steps">
+                        <div class="roadmap-step">
+                            <span class="step-number">1</span>
+                            <span><strong>Programming Fundamentals</strong> - Python/Java basics, OOP (6 weeks)</span>
+                        </div>
+                        <div class="roadmap-step">
+                            <span class="step-number">2</span>
+                            <span><strong>Data Structures & Algorithms</strong> - Arrays, Trees, Graphs, DP (12 weeks)</span>
+                        </div>
+                        <div class="roadmap-step">
+                            <span class="step-number">3</span>
+                            <span><strong>Database & SQL</strong> - MySQL, MongoDB, queries (3 weeks)</span>
+                        </div>
+                        <div class="roadmap-step">
+                            <span class="step-number">4</span>
+                            <span><strong>Web Development</strong> - HTML, CSS, JS, React/Vue, APIs (6 weeks)</span>
+                        </div>
+                        <div class="roadmap-step">
+                            <span class="step-number">5</span>
+                            <span><strong>System Design Basics</strong> - Scalability, Design patterns (4 weeks)</span>
+                        </div>
+                        <div class="roadmap-step">
+                            <span class="step-number">6</span>
+                            <span><strong>Interview Prep</strong> - Mock interviews, Resume, Apply (4 weeks)</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                        <h4 style="margin-bottom: 1rem;">📚 Recommended Resources</h4>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <a href="https://youtube.com/@takeUforward" target="_blank" class="tag">Striver DSA</a>
+                            <a href="https://leetcode.com" target="_blank" class="tag">LeetCode</a>
+                            <a href="https://neetcode.io" target="_blank" class="tag">NeetCode</a>
+                            <a href="https://youtube.com/@ApnaCollegeOfficial" target="_blank" class="tag">Apna College</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Scientist Roadmap -->
+                <div class="card" style="padding: 2rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                        <span style="font-size: 3rem;">🤖</span>
+                        <div>
+                            <h2>Data Scientist Roadmap 2024</h2>
+                            <p style="color: var(--text-secondary);">From Zero to Data Science</p>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+                        <span class="tag primary">Fresher/Switcher</span>
+                        <span class="tag success">10 months</span>
+                        <span class="tag">Data Science</span>
+                    </div>
+
+                    <div class="roadmap-steps">
+                        <div class="roadmap-step">
+                            <span class="step-number">1</span>
+                            <span><strong>Python & Statistics</strong> - NumPy, Pandas, Stats basics (6 weeks)</span>
+                        </div>
+                        <div class="roadmap-step">
+                            <span class="step-number">2</span>
+                            <span><strong>Data Analysis & Viz</strong> - EDA, Matplotlib, Seaborn (4 weeks)</span>
+                        </div>
+                        <div class="roadmap-step">
+                            <span class="step-number">3</span>
+                            <span><strong>Machine Learning</strong> - Scikit-learn, Algorithms (10 weeks)</span>
+                        </div>
+                        <div class="roadmap-step">
+                            <span class="step-number">4</span>
+                            <span><strong>Deep Learning</strong> - Neural Networks, TensorFlow/PyTorch (8 weeks)</span>
+                        </div>
+                        <div class="roadmap-step">
+                            <span class="step-number">5</span>
+                            <span><strong>MLOps & Deployment</strong> - Docker, FastAPI, Cloud (4 weeks)</span>
+                        </div>
+                        <div class="roadmap-step">
+                            <span class="step-number">6</span>
+                            <span><strong>GenAI & LLMs</strong> - LangChain, RAG, Fine-tuning (6 weeks)</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                        <h4 style="margin-bottom: 1rem;">📚 Recommended Resources</h4>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <a href="https://youtube.com/@campusx-official" target="_blank" class="tag">CampusX (Hindi)</a>
+                            <a href="https://youtube.com/@krishnaik06" target="_blank" class="tag">Krish Naik</a>
+                            <a href="https://coursera.org/specializations/machine-learning-introduction" target="_blank" class="tag">Andrew Ng ML</a>
+                            <a href="https://kaggle.com" target="_blank" class="tag">Kaggle</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DevOps Roadmap -->
+                <div class="card" style="padding: 2rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                        <span style="font-size: 3rem;">⚙️</span>
+                        <div>
+                            <h2>DevOps Engineer Roadmap 2024</h2>
+                            <p style="color: var(--text-secondary);">Master CI/CD and Cloud</p>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+                        <span class="tag primary">Experienced</span>
+                        <span class="tag success">6 months</span>
+                        <span class="tag">DevOps/SRE</span>
+                    </div>
+
+                    <div class="roadmap-steps">
+                        <div class="roadmap-step">
+                            <span class="step-number">1</span>
+                            <span><strong>Linux & Networking</strong> - Commands, Shell scripting (4 weeks)</span>
+                        </div>
+                        <div class="roadmap-step">
+                            <span class="step-number">2</span>
+                            <span><strong>Git & Version Control</strong> - Branching, GitFlow (2 weeks)</span>
+                        </div>
+                        <div class="roadmap-step">
+                            <span class="step-number">3</span>
+                            <span><strong>Docker & Containers</strong> - Images, Compose (4 weeks)</span>
+                        </div>
+                        <div class="roadmap-step">
+                            <span class="step-number">4</span>
+                            <span><strong>Kubernetes</strong> - Pods, Services, Deployments (6 weeks)</span>
+                        </div>
+                        <div class="roadmap-step">
+                            <span class="step-number">5</span>
+                            <span><strong>CI/CD Pipelines</strong> - Jenkins, GitHub Actions (4 weeks)</span>
+                        </div>
+                        <div class="roadmap-step">
+                            <span class="step-number">6</span>
+                            <span><strong>Cloud (AWS/GCP/Azure)</strong> - Core services, IaC (6 weeks)</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                        <h4 style="margin-bottom: 1rem;">📚 Recommended Resources</h4>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <a href="https://youtube.com/@TechWorldwithNana" target="_blank" class="tag">TechWorld Nana</a>
+                            <a href="https://roadmap.sh/devops" target="_blank" class="tag">roadmap.sh</a>
+                            <a href="https://kubernetes.io/docs" target="_blank" class="tag">K8s Docs</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Full Stack Roadmap -->
+                <div class="card" style="padding: 2rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                        <span style="font-size: 3rem;">🌐</span>
+                        <div>
+                            <h2>Full Stack Developer Roadmap</h2>
+                            <p style="color: var(--text-secondary);">Frontend + Backend Mastery</p>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+                        <span class="tag primary">Fresher</span>
+                        <span class="tag success">9 months</span>
+                        <span class="tag">Full Stack</span>
+                    </div>
+
+                    <div class="roadmap-steps">
+                        <div class="roadmap-step">
+                            <span class="step-number">1</span>
+                            <span><strong>HTML, CSS, JavaScript</strong> - Web fundamentals (6 weeks)</span>
+                        </div>
+                        <div class="roadmap-step">
+                            <span class="step-number">2</span>
+                            <span><strong>React/Vue/Angular</strong> - Modern frontend framework (8 weeks)</span>
+                        </div>
+                        <div class="roadmap-step">
+                            <span class="step-number">3</span>
+                            <span><strong>Node.js/Python Backend</strong> - Express/FastAPI, REST (6 weeks)</span>
+                        </div>
+                        <div class="roadmap-step">
+                            <span class="step-number">4</span>
+                            <span><strong>Databases</strong> - SQL, MongoDB, Redis (4 weeks)</span>
+                        </div>
+                        <div class="roadmap-step">
+                            <span class="step-number">5</span>
+                            <span><strong>Authentication & Security</strong> - JWT, OAuth (3 weeks)</span>
+                        </div>
+                        <div class="roadmap-step">
+                            <span class="step-number">6</span>
+                            <span><strong>Deployment</strong> - AWS/Vercel, Docker, CI/CD (4 weeks)</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                        <h4 style="margin-bottom: 1rem;">📚 Recommended Resources</h4>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <a href="https://youtube.com/@CodeWithHarry" target="_blank" class="tag">CodeWithHarry</a>
+                            <a href="https://fullstackopen.com" target="_blank" class="tag">Full Stack Open</a>
+                            <a href="https://freecodecamp.org" target="_blank" class="tag">freeCodeCamp</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Show roadmap detail
+        function showRoadmapDetail(id) {
+            // Could load detailed view
+            console.log('Show roadmap:', id);
+        }
+
+        // Initialize
+        fetchRoadmaps();
+    </script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,321 @@
+<div class="page">
+    <h1>💳 Billing - Rebill 2025</h1>
+    <p class="subtitle">Comprehensive billing analysis and tracking</p>
+
+    <!-- Search & Filter Section -->
+    <div class="sa-search-engine">
+        <div class="sa-filter-group primary" style="flex: 2;">
+            <input type="text" id="billing-search" class="filter-input" placeholder="🔍 Search by Service ID, Customer ID, Site ID, Own By, etc." oninput="searchBillingData()">
+        </div>
+        <div class="sa-filter-group">
+            <label for="owner-filter">Owner:</label>
+            <select id="owner-filter" class="filter-input" onchange="filterBillingData()">
+                <option value="">All</option>
+                <option value="OSO">OSO</option>
+                <option value="ABP">ABP</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+        <div class="sa-filter-group">
+            <label for="category-filter">RCA Category:</label>
+            <select id="category-filter" class="filter-input" onchange="filterBillingData()">
+                <option value="">All</option>
+                <option value="Interface">Interface</option>
+                <option value="User Education">User Education</option>
+                <option value="Old Order">Old Order</option>
+            </select>
+        </div>
+        <button class="primary-btn" onclick="loadBillingData()">
+            🔄 Refresh
+        </button>
+        <button class="secondary-btn" onclick="exportBillingData()">
+            📊 Export CSV
+        </button>
+    </div>
+
+    <!-- Summary Stats -->
+    <div class="stats-row" style="margin-top: 20px;">
+        <div class="stat-card">
+            <div class="stat-icon">📋</div>
+            <div class="stat-info">
+                <h3 id="total-records">-</h3>
+                <p>Total Records</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🏢</div>
+            <div class="stat-info">
+                <h3 id="total-customers">-</h3>
+                <p>Unique Customers</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📍</div>
+            <div class="stat-info">
+                <h3 id="total-sites">-</h3>
+                <p>Unique Sites</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">⚠️</div>
+            <div class="stat-info">
+                <h3 id="oso-issues">-</h3>
+                <p>OSO Issues</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="sa-result-section" style="margin-top: 30px;">
+        <div class="result-header">
+            <h3>Rebill 2025 Data</h3>
+            <div>
+                <span id="showing-count" style="color: var(--text-secondary); margin-right: 15px;">Showing 0 of 0</span>
+            </div>
+        </div>
+        <div class="table-container">
+            <table id="billing-table" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Bill Run Date</th>
+                        <th>Service Id</th>
+                        <th>Customer Id</th>
+                        <th>Site ID</th>
+                        <th>Own By</th>
+                        <th>RCA Category</th>
+                        <th>RCA Sub Category</th>
+                        <th>ABP Analysis</th>
+                        <th>OSO Analysis</th>
+                        <th>Review Comment</th>
+                    </tr>
+                </thead>
+                <tbody id="billing-tbody">
+                    <tr>
+                        <td colspan="10" class="no-data">Loading billing data...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+.stat-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.stat-icon {
+    font-size: 3rem;
+}
+.stat-info h3 {
+    font-size: 2.5rem;
+    margin: 0;
+    color: var(--accent-primary);
+}
+.stat-info p {
+    margin: 0;
+    color: var(--text-secondary);
+}
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.table-container {
+    overflow-x: auto;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    padding: 20px;
+}
+#billing-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+#billing-table thead th {
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--accent-primary);
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid var(--border-primary);
+    white-space: nowrap;
+}
+#billing-table tbody td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-primary);
+    color: var(--text-primary);
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#billing-table tbody tr:hover {
+    background: rgba(139, 92, 246, 0.05);
+}
+.no-data {
+    text-align: center;
+    padding: 40px !important;
+    color: var(--text-secondary);
+}
+</style>
+
+<script>
+let billingData = [];
+let filteredData = [];
+let dataTable = null;
+
+document.addEventListener('pageLoaded', function(e) {
+    if (e.detail.pageId === 'billing') {
+        loadBillingData();
+    }
+});
+
+async function loadBillingData() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/billing-csv/rebill-data`);
+        const result = await response.json();
+        
+        if (result.success) {
+            billingData = result.data;
+            filteredData = billingData;
+            renderBillingData();
+            updateStats();
+        } else {
+            alert('Error loading billing data: ' + result.error);
+        }
+    } catch (error) {
+        console.error('Error loading billing data:', error);
+        document.getElementById('billing-tbody').innerHTML = '<tr><td colspan="10" class="no-data">Error loading data. Please try again.</td></tr>';
+    }
+}
+
+function renderBillingData() {
+    const tbody = document.getElementById('billing-tbody');
+    
+    if (filteredData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" class="no-data">No data found</td></tr>';
+        document.getElementById('showing-count').textContent = 'Showing 0 of 0';
+        return;
+    }
+
+    // Destroy existing DataTable if it exists
+    if (dataTable) {
+        dataTable.destroy();
+    }
+
+    // Prepare data for DataTable
+    const tableData = filteredData.map(row => [
+        row['Bill Run Date'] || '',
+        row['Service Id'] || '',
+        row['Customer Id'] || '',
+        row['Site ID'] || '',
+        row['Own By'] || '',
+        row['RCA Category'] || '',
+        row['RCA  Sub Category'] || '',
+        (row['ABP Analysis'] || '').substring(0, 100) + '...',
+        (row['OSO Analysis - Rebill'] || '').substring(0, 100) + '...',
+        (row['Review Comment'] || '').substring(0, 100) + '...'
+    ]);
+
+    tbody.innerHTML = '';
+    
+    // Initialize DataTable
+    dataTable = $('#billing-table').DataTable({
+        data: tableData,
+        pageLength: 25,
+        order: [[0, 'desc']],
+        language: {
+            search: "Search table:",
+            lengthMenu: "Show _MENU_ records per page",
+            info: "Showing _START_ to _END_ of _TOTAL_ entries",
+            infoEmpty: "No entries available",
+            infoFiltered: "(filtered from _MAX_ total entries)"
+        }
+    });
+
+    document.getElementById('showing-count').textContent = `Showing ${filteredData.length} of ${billingData.length}`;
+}
+
+function updateStats() {
+    document.getElementById('total-records').textContent = billingData.length;
+    
+    const uniqueCustomers = new Set(billingData.map(row => row['Customer Id'])).size;
+    document.getElementById('total-customers').textContent = uniqueCustomers;
+    
+    const uniqueSites = new Set(billingData.map(row => row['Site ID'])).size;
+    document.getElementById('total-sites').textContent = uniqueSites;
+    
+    const osoIssues = billingData.filter(row => row['Own By'] === 'OSO').length;
+    document.getElementById('oso-issues').textContent = osoIssues;
+}
+
+function searchBillingData() {
+    const searchTerm = document.getElementById('billing-search').value.toLowerCase();
+    
+    filteredData = billingData.filter(row => {
+        const rowStr = Object.values(row).join(' ').toLowerCase();
+        return rowStr.includes(searchTerm);
+    });
+    
+    applyFilters();
+}
+
+function filterBillingData() {
+    applyFilters();
+}
+
+function applyFilters() {
+    const ownerFilter = document.getElementById('owner-filter').value;
+    const categoryFilter = document.getElementById('category-filter').value;
+    
+    filteredData = billingData.filter(row => {
+        if (ownerFilter && row['Own By'] !== ownerFilter) return false;
+        if (categoryFilter && row['RCA Category'] !== categoryFilter) return false;
+        
+        const searchTerm = document.getElementById('billing-search').value.toLowerCase();
+        if (searchTerm) {
+            const rowStr = Object.values(row).join(' ').toLowerCase();
+            if (!rowStr.includes(searchTerm)) return false;
+        }
+        
+        return true;
+    });
+    
+    renderBillingData();
+}
+
+function exportBillingData() {
+    // Convert filtered data to CSV
+    if (filteredData.length === 0) {
+        alert('No data to export');
+        return;
+    }
+    
+    const headers = Object.keys(filteredData[0]);
+    const csvContent = [
+        headers.join(','),
+        ...filteredData.map(row => 
+            headers.map(header => `"${(row[header] || '').replace(/"/g, '""')}"`).join(',')
+        )
+    ].join('\n');
+    
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `rebill_2025_export_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+}
+</script>

@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Today's Uploads - Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #1a1a1a;
+            min-height: 100vh;
+            padding-top: 70px;
+        }
+
+        /* ========== NAVBAR STYLES ========== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: #2d2d2d;
+            border-bottom: 2px solid #ff6b35;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .nav-brand-icon { font-size: 1.5em; }
+        .nav-brand-text {
+            font-size: 1.3em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .nav-link {
+            color: #cccccc;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.95em;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-link:hover { color: #ffffff; background: #3d3d3d; }
+        .nav-link.active {
+            color: #ff6b35;
+            background: rgba(255, 107, 53, 0.15);
+            border-bottom: 2px solid #ff6b35;
+        }
+        .nav-actions { display: flex; align-items: center; gap: 15px; }
+        .nav-logout {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%);
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+        .nav-logout:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4); }
+
+        .container {
+            max-width: 95%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: #2d2d2d;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+            text-align: center;
+            border: 2px solid #2ecc71;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #cccccc;
+            font-size: 1em;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-size: 1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.5);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.5);
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #2d2d2d;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #444;
+        }
+
+        .stats-info {
+            color: #cccccc;
+            font-size: 1em;
+        }
+
+        .stats-info strong {
+            color: #2ecc71;
+        }
+
+        .refresh-btn {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 0.9em;
+        }
+
+        .sr-table-container {
+            background: #2d2d2d;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            border: 2px solid #444;
+        }
+
+        .sr-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .sr-table th {
+            background: #3d3d3d;
+            color: #ff6b35;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #ff6b35;
+        }
+
+        .sr-table td {
+            padding: 15px;
+            color: #cccccc;
+            border-bottom: 1px solid #444;
+            vertical-align: middle;
+        }
+
+        .sr-table tbody tr:hover {
+            background: #3d3d3d;
+        }
+
+        .sr-id-link {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .sr-id-link:hover {
+            text-decoration: underline;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .badge-priority-p1 {
+            background: rgba(231, 76, 60, 0.3);
+            color: #e74c3c;
+        }
+
+        .badge-priority-p2 {
+            background: rgba(241, 196, 15, 0.3);
+            color: #f1c40f;
+        }
+
+        .badge-priority-p3 {
+            background: rgba(52, 152, 219, 0.3);
+            color: #3498db;
+        }
+
+        .badge-priority-p4 {
+            background: rgba(149, 165, 166, 0.3);
+            color: #95a5a6;
+        }
+
+        /* Assignment dropdown styles */
+        .assignment-select {
+            padding: 8px 12px;
+            font-size: 0.9em;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            background: #3d3d3d;
+            color: #ffffff;
+            cursor: pointer;
+            min-width: 180px;
+            transition: all 0.3s;
+        }
+
+        .assignment-select:focus {
+            outline: none;
+            border-color: #2ecc71;
+            box-shadow: 0 0 10px rgba(46, 204, 113, 0.3);
+        }
+
+        .assignment-select.changed {
+            border-color: #f1c40f;
+            background: rgba(241, 196, 15, 0.1);
+        }
+
+        .assignment-select.saved {
+            border-color: #2ecc71;
+            background: rgba(46, 204, 113, 0.1);
+        }
+
+        .btn-save-assignment {
+            background: transparent;
+            border: 1px solid #2ecc71;
+            color: #2ecc71;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.3s;
+            margin-left: 10px;
+        }
+
+        .btn-save-assignment:hover {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .btn-save-assignment:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888;
+        }
+
+        .no-data-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #3498db;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 4px solid #3d3d3d;
+            border-top-color: #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .message {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .message.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.success {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+            border: 1px solid #2ecc71;
+        }
+
+        .message.error {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+        }
+
+        .current-assignee {
+            color: #888;
+            font-size: 0.85em;
+            margin-top: 4px;
+        }
+
+        .assignment-cell {
+            min-width: 250px;
+        }
+
+        @media (max-width: 768px) {
+            .navbar { padding: 0 15px; }
+            .nav-brand-text { display: none; }
+            .nav-link { padding: 8px 12px; font-size: 0.85em; }
+            .nav-link span { display: none; }
+            .container { max-width: 100%; padding: 10px; }
+            .sr-table { font-size: 0.85em; }
+            .sr-table th, .sr-table td { padding: 10px 8px; }
+            .assignment-select { min-width: 120px; }
+        }
+
+        /* ========== TEAM AVAILABILITY SECTION ========== */
+        .availability-panel {
+            background: #2d2d2d;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 2px solid #10b981;
+            overflow: hidden;
+        }
+
+        .availability-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+            user-select: none;
+        }
+
+        .availability-header:hover {
+            background: #3d3d3d;
+        }
+
+        .availability-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: #10b981;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .dropdown-arrow {
+            transition: transform 0.3s ease;
+            font-size: 0.8em;
+        }
+
+        .dropdown-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        .availability-summary {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        .summary-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .summary-badge.available {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .summary-badge.partial {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+
+        .summary-badge.unavailable {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .availability-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+            padding: 0 20px;
+        }
+
+        .availability-content.open {
+            max-height: 2000px;
+            padding: 0 20px 20px 20px;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #3d3d3d;
+        }
+
+        .btn-quick {
+            padding: 10px 20px;
+            font-size: 0.9em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-all-available {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-all-unavailable {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .btn-save-all {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            margin-left: auto;
+        }
+
+        .btn-quick:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-quick:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .availability-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 15px;
+        }
+
+        .member-avail-card {
+            background: #1a1a1a;
+            border-radius: 10px;
+            padding: 15px;
+            border: 2px solid #3d3d3d;
+            transition: all 0.3s;
+        }
+
+        .member-avail-card:hover {
+            border-color: #10b981;
+        }
+
+        .member-avail-card.active {
+            border-color: #10b981;
+        }
+
+        .member-avail-card.partial {
+            border-color: #f59e0b;
+        }
+
+        .member-avail-card.inactive {
+            border-color: #ef4444;
+            opacity: 0.7;
+        }
+
+        .member-avail-card.changed {
+            border-color: #3b82f6;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+
+        .member-avail-name {
+            font-weight: 600;
+            color: #ffffff;
+            font-size: 1em;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .avail-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avail-select {
+            flex: 1;
+            padding: 10px 14px;
+            background: #2d2d2d;
+            border: 2px solid #3d3d3d;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 0.95em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 16px;
+            padding-right: 35px;
+        }
+
+        .avail-select:focus {
+            border-color: #10b981;
+            outline: none;
+        }
+
+        .avail-select:hover {
+            border-color: #555;
+        }
+
+        .avail-select option {
+            background: #2d2d2d;
+            color: #ffffff;
+            padding: 10px;
+        }
+
+        .avail-bar {
+            width: 100%;
+            height: 8px;
+            background: #3d3d3d;
+            border-radius: 4px;
+            margin-top: 12px;
+            overflow: hidden;
+        }
+
+        .avail-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .avail-bar-fill.full { background: linear-gradient(90deg, #10b981 0%, #00ff87 100%); }
+        .avail-bar-fill.partial { background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%); }
+        .avail-bar-fill.none { background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%); }
+
+        .avail-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85em;
+            margin-top: 8px;
+        }
+
+        .avail-status-text.active { color: #10b981; }
+        .avail-status-text.partial { color: #f59e0b; }
+        .avail-status-text.inactive { color: #ef4444; }
+
+        .avail-saved-indicator {
+            color: #3b82f6;
+            font-size: 0.8em;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .avail-saved-indicator.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="nav-brand-icon">🎫</span>
+            <span class="nav-brand-text">Ticket Analyser</span>
+        </div>
+        <div class="nav-links">
+            <a href="/" class="nav-link">🏠 <span>Home</span></a>
+            <a href="/user" class="nav-link">👤 <span>User</span></a>
+            <a href="/skill" class="nav-link">👥 <span>Team</span></a>
+            <a href="/admin" class="nav-link">⚙️ <span>Admin</span></a>
+            <a href="/admin/today_upload" class="nav-link active">📋 <span>Today</span></a>
+        </div>
+        <div class="nav-actions">
+            <a href="/admin/logout" class="nav-logout" onclick="return confirm('Are you sure you want to logout?')">🚪 Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📋 Today's Dashboard</h1>
+            <p>Manage team availability and ticket assignments for today</p>
+        </div>
+
+        <!-- Message Area -->
+        <div id="messageArea" class="message"></div>
+
+        <!-- Team Availability Section (Collapsible Dropdown) -->
+        <div class="availability-panel">
+            <div class="availability-header" onclick="toggleAvailabilityPanel()">
+                <span class="availability-title">
+                    <span>👥 Team Availability Today</span>
+                    <span class="dropdown-arrow" id="dropdownArrow">▼</span>
+                </span>
+                <div class="availability-summary" id="availabilitySummary">
+                    <span id="summaryText">Click to expand</span>
+                </div>
+            </div>
+            <div class="availability-content" id="availabilityContent">
+                <div class="quick-actions">
+                    <!-- Hidden: All 100% and All 0% buttons
+                    <button class="btn-quick btn-all-available" onclick="setAllAvailability(100); event.stopPropagation();">
+                        ✅ All 100%
+                    </button>
+                    <button class="btn-quick btn-all-unavailable" onclick="setAllAvailability(0); event.stopPropagation();">
+                        ❌ All 0%
+                    </button>
+                    -->
+                    <button class="btn-quick btn-save-all" id="saveAllBtn" onclick="saveAllAvailability(); event.stopPropagation();">
+                        💾 Save All to Database
+                    </button>
+                </div>
+                <div class="availability-grid" id="availabilityGrid">
+                    <div class="loading">Loading team members...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stats-info">
+                📊 Found <strong id="srCount">0</strong> Tickets uploaded <strong>Today</strong>
+            </div>
+            <div class="refresh-btn">
+                <button class="btn btn-sm btn-primary" onclick="loadTodaySRs()">
+                    🔄 Refresh
+                </button>
+                <button class="btn btn-sm btn-success" onclick="batchReassignUnassigned()" id="reassignBtn">
+                    👥 Auto-Assign All Unassigned
+                </button>
+            </div>
+        </div>
+
+        <!-- SR Table -->
+        <div class="sr-table-container">
+            <div id="loadingArea" class="loading" style="display: none;">
+                <div class="loading-spinner"></div>
+                <p style="margin-top: 15px;">Loading Today's Tickets...</p>
+            </div>
+            
+            <div id="noDataArea" class="no-data" style="display: none;">
+                <div class="no-data-icon">📭</div>
+                <h3>No Tickets Found</h3>
+                <p>No tickets were uploaded today.</p>
+            </div>
+
+            <table class="sr-table" id="srTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Ticket ID</th>
+                        <th>Priority</th>
+                        <th>Description</th>
+                        <th class="assignment-cell">Assign To</th>
+                    </tr>
+                </thead>
+                <tbody id="srTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let currentSRs = [];
+        let teamMembers = [];
+        let originalAssignments = {};
+        let teamAvailability = {};       // Current local state
+        let savedAvailability = {};      // Last saved state from DB
+        let pendingChanges = {};         // Track unsaved changes
+        let isPanelOpen = false;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTeamMembers().then(() => {
+                renderAvailabilityGrid();
+                updateSummary();
+                loadTodaySRs();
+            });
+        });
+
+        function toggleAvailabilityPanel() {
+            isPanelOpen = !isPanelOpen;
+            const content = document.getElementById('availabilityContent');
+            const arrow = document.getElementById('dropdownArrow');
+            
+            if (isPanelOpen) {
+                content.classList.add('open');
+                arrow.classList.add('open');
+            } else {
+                content.classList.remove('open');
+                arrow.classList.remove('open');
+            }
+        }
+
+        function updateSummary() {
+            const summaryText = document.getElementById('summaryText');
+            if (!teamMembers || teamMembers.length === 0) {
+                summaryText.innerHTML = '<span class="summary-badge unavailable">No members</span>';
+                return;
+            }
+
+            let available = 0, partial = 0, unavailable = 0;
+            teamMembers.forEach(m => {
+                const avail = teamAvailability[m.name] || 0;
+                if (avail === 100) available++;
+                else if (avail > 0) partial++;
+                else unavailable++;
+            });
+
+            let html = '';
+            if (available > 0) html += `<span class="summary-badge available">${available} Full</span>`;
+            if (partial > 0) html += `<span class="summary-badge partial">${partial} Partial</span>`;
+            if (unavailable > 0) html += `<span class="summary-badge unavailable">${unavailable} Off</span>`;
+            
+            const pendingCount = Object.keys(pendingChanges).length;
+            if (pendingCount > 0) {
+                html += `<span class="summary-badge" style="background: rgba(59, 130, 246, 0.2); color: #3b82f6;">${pendingCount} unsaved</span>`;
+            }
+            
+            summaryText.innerHTML = html || '<span style="color: #666;">Click to expand</span>';
+        }
+
+        async function loadTeamMembers() {
+            try {
+                const response = await fetch('/api/get_people');
+                const data = await response.json();
+                if (data.success) {
+                    teamMembers = data.people || [];
+                    // Store availability
+                    teamMembers.forEach(m => {
+                        const avail = m.availability_percent || 0;
+                        teamAvailability[m.name] = avail;
+                        savedAvailability[m.name] = avail; // Track saved state
+                    });
+                    console.log('Loaded', teamMembers.length, 'team members');
+                }
+            } catch (error) {
+                console.error('Error loading team members:', error);
+            }
+        }
+
+        function renderAvailabilityGrid() {
+            const grid = document.getElementById('availabilityGrid');
+            
+            if (!teamMembers || teamMembers.length === 0) {
+                grid.innerHTML = '<div style="color: #888; text-align: center; padding: 20px;">No team members found. <a href="/skill" style="color: #10b981;">Add members in Team page</a></div>';
+                return;
+            }
+
+            let html = '';
+            teamMembers.forEach(member => {
+                const avail = teamAvailability[member.name] || 0;
+                const statusClass = avail === 0 ? 'inactive' : avail < 100 ? 'partial' : 'active';
+                const barClass = avail === 0 ? 'none' : avail < 100 ? 'partial' : 'full';
+                const statusText = avail === 0 ? 'Unavailable' : avail < 100 ? `${avail}% Available` : 'Fully Available';
+                const safeId = member.name.replace(/[^a-zA-Z0-9]/g, '_');
+
+                html += `
+                <div class="member-avail-card ${statusClass}" id="card-${safeId}">
+                    <div class="member-avail-name">
+                        <span>👤</span>
+                        <span>${member.name}</span>
+                    </div>
+                    <div class="avail-controls">
+                        <select class="avail-select" id="select-${safeId}" onchange="onAvailSelectChange('${safeId}', '${member.name}')">
+                            <option value="100" ${avail === 100 ? 'selected' : ''}>🟢 Full Day (100%)</option>
+                            <option value="75" ${avail === 75 ? 'selected' : ''}>🟡 Three-Quarter (75%)</option>
+                            <option value="50" ${avail === 50 ? 'selected' : ''}>🟠 Half Day (50%)</option>
+                            <option value="25" ${avail === 25 ? 'selected' : ''}>🟠 Quarter Day (25%)</option>
+                            <option value="0" ${avail === 0 ? 'selected' : ''}>🔴 Unavailable (0%)</option>
+                        </select>
+                    </div>
+                    <div class="avail-bar">
+                        <div class="avail-bar-fill ${barClass}" id="bar-${safeId}" style="width: ${avail}%"></div>
+                    </div>
+                    <div class="avail-status">
+                        <span class="avail-status-text ${statusClass}" id="status-${safeId}">${statusText}</span>
+                        <span class="avail-saved-indicator" id="saved-${safeId}">Saved!</span>
+                    </div>
+                </div>`;
+            });
+
+            grid.innerHTML = html;
+        }
+
+        function onAvailSelectChange(safeId, memberName) {
+            const select = document.getElementById(`select-${safeId}`);
+            const percent = parseInt(select.value) || 0;
+            
+            // Update local state
+            teamAvailability[memberName] = percent;
+            
+            // Track if changed from saved value
+            if (percent !== savedAvailability[memberName]) {
+                pendingChanges[memberName] = percent;
+                document.getElementById(`card-${safeId}`).classList.add('changed');
+            } else {
+                delete pendingChanges[memberName];
+                document.getElementById(`card-${safeId}`).classList.remove('changed');
+            }
+
+            // Update UI immediately
+            const card = document.getElementById(`card-${safeId}`);
+            const bar = document.getElementById(`bar-${safeId}`);
+            const status = document.getElementById(`status-${safeId}`);
+
+            const statusClass = percent === 0 ? 'inactive' : percent < 100 ? 'partial' : 'active';
+            const barClass = percent === 0 ? 'none' : percent < 100 ? 'partial' : 'full';
+            const statusText = percent === 0 ? 'Unavailable' : percent < 100 ? `${percent}% Available` : 'Fully Available';
+
+            // Remove old status classes, keep 'changed' if present
+            card.classList.remove('active', 'partial', 'inactive');
+            card.classList.add(statusClass);
+            
+            bar.className = `avail-bar-fill ${barClass}`;
+            bar.style.width = `${percent}%`;
+            status.className = `avail-status-text ${statusClass}`;
+            status.textContent = statusText;
+
+            // Update summary
+            updateSummary();
+            
+            // Update save button state
+            updateSaveButtonState();
+        }
+
+        function updateSaveButtonState() {
+            const btn = document.getElementById('saveAllBtn');
+            const pendingCount = Object.keys(pendingChanges).length;
+            if (pendingCount > 0) {
+                btn.textContent = `💾 Save All (${pendingCount} changes)`;
+                btn.disabled = false;
+            } else {
+                btn.textContent = '💾 Save All to Database';
+                btn.disabled = false; // Keep enabled for re-saving
+            }
+        }
+
+        async function saveAllAvailability() {
+            const btn = document.getElementById('saveAllBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ Saving...';
+
+            let successCount = 0;
+            let errorCount = 0;
+
+            for (const member of teamMembers) {
+                const safeId = member.name.replace(/[^a-zA-Z0-9]/g, '_');
+                const percent = teamAvailability[member.name] || 0;
+
+                try {
+                    const response = await fetch('/admin/set_availability', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            member_name: member.name,
+                            availability_percent: percent,
+                            availability_type: percent === 100 ? 'full_day' : percent === 50 ? 'half_day' : percent === 0 ? 'unavailable' : 'custom',
+                            reason: '',
+                            end_date: null
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        successCount++;
+                        savedAvailability[member.name] = percent;
+                        delete pendingChanges[member.name];
+                        
+                        // Show saved indicator
+                        const savedIndicator = document.getElementById(`saved-${safeId}`);
+                        const card = document.getElementById(`card-${safeId}`);
+                        
+                        if (savedIndicator) {
+                            savedIndicator.classList.add('show');
+                            setTimeout(() => savedIndicator.classList.remove('show'), 2000);
+                        }
+                        card.classList.remove('changed');
+                    } else {
+                        errorCount++;
+                    }
+                } catch (error) {
+                    errorCount++;
+                    console.error(`Error saving ${member.name}:`, error);
+                }
+            }
+
+            if (errorCount === 0) {
+                showMessage(`Saved ${successCount} team member availability to database`, 'success');
+            } else {
+                showMessage(`Saved ${successCount}, failed ${errorCount}`, 'error');
+            }
+
+            btn.disabled = false;
+            btn.textContent = '💾 Save All to Database';
+            updateSummary();
+        }
+
+        function setAllAvailability(percent) {
+            teamMembers.forEach(member => {
+                const safeId = member.name.replace(/[^a-zA-Z0-9]/g, '_');
+                const select = document.getElementById(`select-${safeId}`);
+                if (select) {
+                    select.value = String(percent);
+                    onAvailSelectChange(safeId, member.name);
+                }
+            });
+            
+            showMessage(`Set all members to ${percent}% - Click "Save All" to persist`, 'success');
+        }
+
+        function loadTodaySRs() {
+            const today = new Date().toISOString().split('T')[0];
+
+            // Show loading
+            document.getElementById('loadingArea').style.display = 'block';
+            document.getElementById('noDataArea').style.display = 'none';
+            document.getElementById('srTable').style.display = 'none';
+
+            fetch(`/admin/get_srs_by_date?date=${today}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('loadingArea').style.display = 'none';
+
+                    if (data.success) {
+                        currentSRs = data.srs;
+                        document.getElementById('srCount').textContent = data.count;
+                        
+                        // Store original assignments
+                        originalAssignments = {};
+                        currentSRs.forEach(sr => {
+                            originalAssignments[sr.sr_id] = sr.assigned_to;
+                        });
+
+                        if (data.count > 0) {
+                            renderTable(data.srs);
+                            document.getElementById('srTable').style.display = 'table';
+                        } else {
+                            document.getElementById('noDataArea').style.display = 'block';
+                        }
+                    } else {
+                        showMessage(data.error || 'Failed to load SRs', 'error');
+                        document.getElementById('noDataArea').style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('loadingArea').style.display = 'none';
+                    document.getElementById('noDataArea').style.display = 'block';
+                    showMessage('Error loading SRs: ' + error.message, 'error');
+                });
+        }
+
+        function renderTable(srs) {
+            const tbody = document.getElementById('srTableBody');
+            tbody.innerHTML = '';
+
+            srs.forEach(sr => {
+                const row = document.createElement('tr');
+                row.id = `row-${sr.sr_id}`;
+                
+                const priorityClass = `badge-priority-${(sr.priority || 'p3').toLowerCase()}`;
+                const description = sr.description || 'No description';
+                const shortDesc = description.length > 100 ? description.substring(0, 100) + '...' : description;
+
+                // Build team member options - show load and disable if at capacity
+                let optionsHtml = '<option value="">-- Select Team Member --</option>';
+                teamMembers.forEach(member => {
+                    const selected = member.name === sr.assigned_to ? 'selected' : '';
+                    const disabled = member.at_capacity && member.name !== sr.assigned_to ? 'disabled' : '';
+                    const style = member.at_capacity ? 'color: #ff6b6b;' : '';
+                    const displayText = member.display || `${member.name} (${member.current_load || 0}/${member.max_load || 10})`;
+                    optionsHtml += `<option value="${escapeHtml(member.name)}" ${selected} ${disabled} style="${style}">${escapeHtml(displayText)}</option>`;
+                });
+
+                const safeSrId = escapeJs(sr.sr_id);
+                row.innerHTML = `
+                    <td>
+                        <a href="#" class="sr-id-link" onclick="viewSR('${safeSrId}'); return false;">
+                            ${escapeHtml(sr.sr_id)}
+                        </a>
+                    </td>
+                    <td><span class="badge ${priorityClass}">${sr.priority || 'P3'}</span></td>
+                    <td title="${escapeHtml(description)}">${escapeHtml(shortDesc)}</td>
+                    <td class="assignment-cell">
+                        <select class="assignment-select" id="assign-${safeSrId}" onchange="onAssignmentChange('${safeSrId}')">
+                            ${optionsHtml}
+                        </select>
+                        <button class="btn-save-assignment" id="save-${safeSrId}" onclick="saveAssignment('${safeSrId}')" disabled>
+                            💾 Save
+                        </button>
+                        <div class="current-assignee" id="current-${safeSrId}">
+                            Current: ${sr.assigned_to || 'Not Assigned'}
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text || '';
+            return div.innerHTML;
+        }
+
+        function escapeJs(text) {
+            return String(text || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"');
+        }
+
+        // 🆕 Update all dropdowns with current team member loads
+        function updateAllDropdowns() {
+            currentSRs.forEach(sr => {
+                const safeSrId = escapeJs(sr.sr_id);
+                const select = document.getElementById(`assign-${safeSrId}`);
+                if (!select) return;
+                
+                const currentValue = select.value;
+                
+                // Rebuild options with updated loads
+                let optionsHtml = '<option value="">-- Select Team Member --</option>';
+                teamMembers.forEach(member => {
+                    const selected = member.name === currentValue ? 'selected' : '';
+                    const disabled = member.at_capacity && member.name !== currentValue ? 'disabled' : '';
+                    const style = member.at_capacity ? 'color: #ff6b6b;' : '';
+                    const displayText = member.display || `${member.name} (${member.current_load || 0}/${member.max_load || 10})`;
+                    optionsHtml += `<option value="${escapeHtml(member.name)}" ${selected} ${disabled} style="${style}">${escapeHtml(displayText)}</option>`;
+                });
+                
+                select.innerHTML = optionsHtml;
+            });
+        }
+
+        function onAssignmentChange(srId) {
+            const select = document.getElementById(`assign-${srId}`);
+            const saveBtn = document.getElementById(`save-${srId}`);
+            const originalValue = originalAssignments[srId] || '';
+            
+            if (select.value !== originalValue) {
+                select.classList.add('changed');
+                select.classList.remove('saved');
+                saveBtn.disabled = false;
+            } else {
+                select.classList.remove('changed');
+                saveBtn.disabled = true;
+            }
+        }
+
+        async function saveAssignment(srId) {
+            const select = document.getElementById(`assign-${srId}`);
+            const saveBtn = document.getElementById(`save-${srId}`);
+            const currentDiv = document.getElementById(`current-${srId}`);
+            const newAssignee = select.value;
+
+            if (!newAssignee) {
+                showMessage('Please select a team member', 'error');
+                return;
+            }
+
+            saveBtn.disabled = true;
+            saveBtn.textContent = '⏳...';
+
+            try {
+                const response = await fetch('/admin/update_sr_assignment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        sr_id: srId, 
+                        assigned_to: newAssignee 
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showMessage(`✅ ${srId} assigned to ${newAssignee}`, 'success');
+                    select.classList.remove('changed');
+                    select.classList.add('saved');
+                    currentDiv.textContent = `Current: ${newAssignee}`;
+                    originalAssignments[srId] = newAssignee;
+                    saveBtn.textContent = '✓ Saved';
+                    
+                    // 🆕 Update teamMembers array with new loads
+                    if (data.new_assignee) {
+                        const newMember = teamMembers.find(m => m.name === data.new_assignee);
+                        if (newMember) {
+                            newMember.current_load = data.new_assignee_load;
+                            newMember.at_capacity = newMember.current_load >= newMember.max_load;
+                            newMember.display = `${newMember.name} (${newMember.current_load}/${newMember.max_load})`;
+                        }
+                    }
+                    if (data.previous_assignee) {
+                        const prevMember = teamMembers.find(m => m.name === data.previous_assignee);
+                        if (prevMember && data.previous_assignee_load !== undefined) {
+                            prevMember.current_load = data.previous_assignee_load;
+                            prevMember.at_capacity = prevMember.current_load >= prevMember.max_load;
+                            prevMember.display = `${prevMember.name} (${prevMember.current_load}/${prevMember.max_load})`;
+                        }
+                    }
+                    
+                    // 🆕 Refresh all dropdowns with updated loads
+                    updateAllDropdowns();
+                    
+                    setTimeout(() => {
+                        saveBtn.textContent = '💾 Save';
+                        saveBtn.disabled = true;
+                        // 🆕 Reset dropdown style back to grey (remove .saved class)
+                        select.classList.remove('saved');
+                    }, 2000);
+                } else {
+                    showMessage(`❌ ${data.error}`, 'error');
+                    saveBtn.textContent = '💾 Save';
+                    saveBtn.disabled = false;
+                }
+            } catch (error) {
+                showMessage(`❌ Error: ${error.message}`, 'error');
+                saveBtn.textContent = '💾 Save';
+                saveBtn.disabled = false;
+            }
+        }
+
+        function viewSR(srId) {
+            window.location.href = `/user?sr_id=${srId}`;
+        }
+
+        function showMessage(text, type) {
+            const messageArea = document.getElementById('messageArea');
+            messageArea.textContent = text;
+            messageArea.className = `message ${type} show`;
+            
+            setTimeout(() => {
+                messageArea.classList.remove('show');
+            }, 5000);
+        }
+
+        // 🆕 Batch reassign all unassigned SRs
+        async function batchReassignUnassigned() {
+            const btn = document.getElementById('reassignBtn');
+            const originalText = btn.innerHTML;
+            
+            if (!confirm('This will automatically assign all unassigned SRs to team members based on skills and workload balance. Continue?')) {
+                return;
+            }
+            
+            try {
+                btn.disabled = true;
+                btn.innerHTML = '⏳ Assigning...';
+                
+                const response = await fetch('/admin/batch_reassign_unassigned', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Build distribution message
+                    let distMsg = '';
+                    if (data.distribution && Object.keys(data.distribution).length > 0) {
+                        distMsg = '\n\nDistribution:\n';
+                        for (const [name, count] of Object.entries(data.distribution)) {
+                            distMsg += `• ${name}: ${count} SR(s)\n`;
+                        }
+                    }
+                    
+                    showMessage(`✅ ${data.message}${distMsg}`, 'success');
+                    
+                    // Refresh the SR list
+                    loadTodaySRs();
+                } else {
+                    showMessage(`❌ ${data.error || 'Failed to reassign SRs'}`, 'error');
+                }
+            } catch (error) {
+                showMessage(`❌ Error: ${error.message}`, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
+
+    </script>
+</body>
+</html>
+

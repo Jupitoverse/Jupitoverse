@@ -1,0 +1,192 @@
+# FINAL SETUP - Ready to Run
+
+## ✅ Changes Made
+
+### 1. Increased Query Timeout
+- **Before**: 300 seconds (5 minutes)
+- **After**: 600 seconds (10 minutes)
+- **Reason**: Main SQL query takes time with ~250 records
+
+### 2. One-by-One Insert Logic
+The script now:
+1. ✅ Fetches data from READ DB (main SQL query)
+2. ✅ Stores in temporary DataFrame
+3. ✅ For each record:
+   - Checks if exists in table (using WRITE DB)
+   - If doesn't exist: Inserts it
+   - If exists: Skips it
+4. ✅ Commits in batches of 50 records
+5. ✅ Shows progress during insertion
+
+### 3. Database Configuration
+Currently using same database for READ and WRITE:
+```python
+READ_DB_CONFIG = {
+    'host': 'oso-pstgr-rd.orion.comcast.com',
+    ...
+}
+
+WRITE_DB_CONFIG = {
+    'host': 'oso-pstgr-rd.orion.comcast.com',  # Same as READ
+    ...
+}
+```
+
+**Note**: If you have access to a different writable database, update `WRITE_DB_CONFIG['host']` in the script.
+
+---
+
+## 🚀 How to Run
+
+### First Time (Initial Load)
+```bash
+python OSO_Service_Activated.py
+```
+
+This will:
+1. Connect to READ DB
+2. Verify table exists ✅ (you created it manually)
+3. Fetch ~250 records from source SQL query (10 min timeout)
+4. Check each record one-by-one
+5. Insert records that don't exist
+6. Generate Excel report
+7. Send email (if enabled)
+
+---
+
+## 📊 Expected Output
+
+```
+================================================================================
+  OSO Service Activated - Data Sync & Email Report
+  Execution Date: 2025-11-29
+================================================================================
+
+Step 1: Testing database connections...
+[OK] READ DB Connected!
+[OK] WRITE DB Connected!
+
+Step 2: Verifying table exists...
+[OK] Table 'OSO_Service_Activated_Data' exists with 0 records
+
+Step 3: Fetching service activation data from READ DB...
+================================================================================
+Fetching Data from READ Database...
+================================================================================
+Query timeout set to 600 seconds (10 minutes)
+... (query runs, may take 3-5 minutes) ...
+[OK] Retrieved 250 records from READ DB
+
+Step 4: Checking and inserting records (one-by-one)...
+Will check 250 records against existing table...
+================================================================================
+Inserting Records into WRITE Database...
+================================================================================
+Processing 250 records...
+    Progress: 50 inserted, 0 skipped (out of 50 processed)
+    Progress: 100 inserted, 0 skipped (out of 100 processed)
+    Progress: 150 inserted, 0 skipped (out of 150 processed)
+    Progress: 200 inserted, 0 skipped (out of 200 processed)
+
+[OK] Processing Complete:
+    Total processed: 250 records
+    Inserted: 250 new records
+    Skipped:  0 existing records
+================================================================================
+
+Step 5: Fetching all table data for email (READ DB)...
+[OK] Retrieved 250 total records from table
+
+Step 6: Saving Excel file...
+[OK] Excel file saved: OSO_Service_Activated_Report_2025-11-29.xlsx
+    Size: 125.45 KB
+    Records: 250
+
+Step 7: Sending email report...
+[OK] Mail sent successfully!
+
+================================================================================
+[OK] ALL OPERATIONS COMPLETED!
+================================================================================
+```
+
+---
+
+## 🔧 If WRITE DB is Still Read-Only
+
+If you get an error like:
+```
+cannot execute INSERT in a read-only transaction
+```
+
+Then you need to update `WRITE_DB_CONFIG` to point to a writable database.
+
+**Where you created the table manually?**
+- If you created it on `oso-pstgr-rd.orion.comcast.com`, this is read-only
+- You need to create the table on a **writable/master** database
+- Then update the script's `WRITE_DB_CONFIG` to use that writable database
+
+---
+
+## 📝 Configuration Summary
+
+```python
+# Main timeout (for the source query)
+QUERY_TIMEOUT_SECONDS = 600  # 10 minutes
+
+# Email toggle
+SEND_EMAIL = True  # Set to False to skip email
+
+# Execution frequency
+DATE_EXECUTION_FREQUENCY = 1  # Daily
+```
+
+---
+
+## ✅ Ready to Run!
+
+The script is now configured to:
+- ✅ Run the SQL query with 10-minute timeout
+- ✅ Fetch ~250 records and store in DataFrame
+- ✅ Check existence one-by-one using WRITE DB
+- ✅ Insert only new records
+- ✅ Show progress every 50 records
+- ✅ Generate Excel report
+- ✅ Send email
+
+**Run it now:**
+```bash
+python OSO_Service_Activated.py
+```
+
+---
+
+## ⚠️ Important Note
+
+**If the WRITE DB connection is still read-only**, the script will fail at the INSERT step.
+
+In that case:
+1. Find out which database is writable
+2. Update `WRITE_DB_CONFIG['host']` in the script
+3. Or ask your DBA where the table should be created for write access
+
+The current configuration assumes the database you created the table on is writable from your server.
+
+---
+
+**Updated**: November 29, 2025  
+**Query Timeout**: 600 seconds (10 minutes)  
+**Insert Method**: One-by-one with existence check  
+**Status**: ✅ Ready to Run
+
+
+
+
+
+
+
+
+
+
+
+

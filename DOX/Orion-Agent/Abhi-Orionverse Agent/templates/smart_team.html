@@ -1,0 +1,513 @@
+<div class="page-container">
+    <div class="page-header">
+        <h1>👥 Smart Team</h1>
+        <p class="page-subtitle">Team Management & Skill-Based Assignment Configuration</p>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-value" id="total-members">-</div>
+            <div class="stat-label">Team Members</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🎯</div>
+            <div class="stat-value" id="total-skills">-</div>
+            <div class="stat-label">Total Skills</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div class="stat-value" id="available-members">-</div>
+            <div class="stat-label">Available Today</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-value" id="todays-load">-</div>
+            <div class="stat-label">Today's SR Load</div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-bar">
+        <button class="primary-btn" id="add-member-btn">
+            ➕ Add New Member
+        </button>
+        <button class="secondary-btn" id="reassign-srs-btn">
+            🔄 Reassign Today's SRs
+        </button>
+        <button class="secondary-btn" id="refresh-team-btn">
+            🔃 Refresh Data
+        </button>
+    </div>
+
+    <!-- Search Filter -->
+    <div class="search-filter-bar">
+        <input type="text" id="team-search" class="search-input" placeholder="🔍 Search by name or skill...">
+    </div>
+
+    <!-- Team Members List -->
+    <div class="team-members-grid" id="team-members-container">
+        <div class="loading-state">
+            <div class="loader-spinner"></div>
+            <p>Loading team members...</p>
+        </div>
+    </div>
+
+    <!-- Add Member Modal -->
+    <div class="modal-overlay" id="add-member-modal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3>➕ Add New Team Member</h3>
+                <button class="modal-close-btn" onclick="SmartTeam.closeAddMemberModal()">×</button>
+            </div>
+            <form id="add-member-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="new-member-name">Full Name *</label>
+                        <input type="text" id="new-member-name" placeholder="e.g., John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-member-id">Employee ID</label>
+                        <input type="text" id="new-member-id" placeholder="e.g., EMP001">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="new-application">Primary Application *</label>
+                        <select id="new-application">
+                            <option value="SOM_MM">SOM_MM</option>
+                            <option value="SQO_MM">SQO_MM</option>
+                            <option value="BILLING_MM">BILLING_MM</option>
+                            <option value="NETWORK_MM">NETWORK_MM</option>
+                            <option value="BSS_MM">BSS_MM</option>
+                            <option value="OSS_MM">OSS_MM</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-skill-level">Skill Level</label>
+                        <select id="new-skill-level">
+                            <option value="1">1 - Beginner</option>
+                            <option value="2">2 - Learning</option>
+                            <option value="3" selected>3 - Intermediate</option>
+                            <option value="4">4 - Advanced</option>
+                            <option value="5">5 - Expert</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="new-specializations">Specializations</label>
+                        <input type="text" id="new-specializations" placeholder="e.g., Provisioning, Config, API">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-max-load">Max Load</label>
+                        <input type="number" id="new-max-load" min="1" max="50" value="10">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="secondary-btn" onclick="SmartTeam.closeAddMemberModal()">Cancel</button>
+                    <button type="submit" class="primary-btn">✅ Add Member</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Skills Modal -->
+    <div class="modal-overlay" id="edit-skills-modal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3>🎯 Edit Skills - <span id="edit-skills-member-name"></span></h3>
+                <button class="modal-close-btn" onclick="SmartTeam.closeEditSkillsModal()">×</button>
+            </div>
+            <div id="member-skills-container">
+                <!-- Skills will be loaded here -->
+            </div>
+            <div class="add-skill-form" id="add-skill-form">
+                <h4>Add New Skill</h4>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Application</label>
+                        <select id="skill-app">
+                            <option value="SOM_MM">SOM_MM</option>
+                            <option value="SQO_MM">SQO_MM</option>
+                            <option value="BILLING_MM">BILLING_MM</option>
+                            <option value="NETWORK_MM">NETWORK_MM</option>
+                            <option value="BSS_MM">BSS_MM</option>
+                            <option value="OSS_MM">OSS_MM</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Skill Level</label>
+                        <select id="skill-level">
+                            <option value="1">1 - Beginner</option>
+                            <option value="2">2 - Learning</option>
+                            <option value="3" selected>3 - Intermediate</option>
+                            <option value="4">4 - Advanced</option>
+                            <option value="5">5 - Expert</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Specializations</label>
+                        <input type="text" id="skill-specs" placeholder="e.g., Provisioning, Config">
+                    </div>
+                    <div class="form-group">
+                        <label>Max Load</label>
+                        <input type="number" id="skill-max-load" min="1" max="50" value="10">
+                    </div>
+                </div>
+                <button type="button" class="primary-btn" onclick="SmartTeam.saveNewSkill()">💾 Save Skill</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Box -->
+    <div class="toast-message" id="team-toast"></div>
+</div>
+
+<style>
+/* Smart Team Specific Styles */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.stat-card:hover {
+    border-color: var(--accent-primary);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px var(--shadow-color);
+}
+
+.stat-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+.action-bar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.search-filter-bar {
+    margin-bottom: 20px;
+}
+
+.search-filter-bar .search-input {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+.search-filter-bar .search-input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
+
+.team-members-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 20px;
+}
+
+.member-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s;
+}
+
+.member-card:hover {
+    border-color: var(--accent-primary);
+    box-shadow: 0 6px 20px var(--shadow-color);
+}
+
+.member-card-header {
+    background: var(--accent-gradient);
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.member-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+}
+
+.member-header-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.member-header-actions button {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.member-header-actions button:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+.member-header-actions .danger-btn {
+    background: rgba(244, 63, 94, 0.6);
+}
+
+.member-header-actions .danger-btn:hover {
+    background: rgba(244, 63, 94, 0.8);
+}
+
+.member-card-body {
+    padding: 16px 20px;
+}
+
+.member-info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-primary);
+}
+
+.member-info-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.info-label {
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+.info-value {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.member-skills {
+    margin-top: 12px;
+}
+
+.skills-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent-primary);
+    margin-bottom: 10px;
+}
+
+.skills-table {
+    width: 100%;
+    font-size: 13px;
+}
+
+.skills-table th {
+    text-align: left;
+    padding: 8px;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-primary);
+    font-weight: 500;
+}
+
+.skills-table td {
+    padding: 8px;
+    border-bottom: 1px solid var(--border-primary);
+}
+
+.skills-table tr:last-child td {
+    border-bottom: none;
+}
+
+.skill-app {
+    color: var(--accent-primary);
+    font-weight: 600;
+}
+
+.skill-level {
+    color: var(--text-primary);
+}
+
+.no-skills {
+    color: var(--text-secondary);
+    font-style: italic;
+    font-size: 13px;
+    padding: 10px 0;
+}
+
+.loading-state {
+    text-align: center;
+    padding: 60px;
+    color: var(--text-secondary);
+}
+
+.error-state {
+    text-align: center;
+    padding: 60px;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+}
+
+.error-state .error-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.error-state .error-detail {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin: 8px 0;
+    opacity: 0.7;
+}
+
+.error-state .primary-btn {
+    margin-top: 16px;
+}
+
+.loader-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border-primary);
+    border-top-color: var(--accent-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 16px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Modal Enhancements */
+.modal-lg {
+    max-width: 600px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-primary);
+}
+
+.add-skill-form {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-primary);
+}
+
+.add-skill-form h4 {
+    margin-bottom: 16px;
+    color: var(--accent-primary);
+}
+
+/* Toast Message */
+.toast-message {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 16px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    z-index: 9999;
+    transform: translateX(120%);
+    transition: transform 0.3s ease;
+}
+
+.toast-message.show {
+    transform: translateX(0);
+}
+
+.toast-message.success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+}
+
+.toast-message.error {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+}
+
+/* Capacity Badge */
+.capacity-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.capacity-badge.available {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+}
+
+.capacity-badge.busy {
+    background: rgba(251, 191, 36, 0.2);
+    color: #fbbf24;
+}
+
+.capacity-badge.full {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+}
+
+@media (max-width: 768px) {
+    .team-members-grid {
+        grid-template-columns: 1fr;
+    }
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+</head>
+<body>
+    <h1>Testing Search API</h1>
+    <button onclick="testGetAll()">Test /api/search/all</button>
+    <button onclick="testFilter()">Test /api/search/filter</button>
+    <button onclick="testDefectSearch()">Test Defect ID Search</button>
+    <pre id="output"></pre>
+
+    <script>
+        const API_BASE_URL = 'http://127.0.0.1:5001';
+
+        async function testGetAll() {
+            const output = document.getElementById('output');
+            output.textContent = 'Loading...';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/search/all`);
+                const data = await response.json();
+                
+                output.textContent = JSON.stringify({
+                    sr_count: data.sr_data.length,
+                    defect_count: data.defect_data.length,
+                    wa_count: data.wa_data.length,
+                    sample_sr: data.sr_data[0],
+                    sample_defect: data.defect_data[0],
+                    sample_wa: data.wa_data[0]
+                }, null, 2);
+            } catch (error) {
+                output.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function testFilter() {
+            const output = document.getElementById('output');
+            output.textContent = 'Loading...';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/search/filter`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        search_anything: 'order'
+                    })
+                });
+                const data = await response.json();
+                
+                output.textContent = JSON.stringify({
+                    sr_count: data.sr_data.length,
+                    defect_count: data.defect_data.length,
+                    wa_count: data.wa_data.length,
+                    sample_results: {
+                        sr: data.sr_data[0],
+                        defect: data.defect_data[0]
+                    }
+                }, null, 2);
+            } catch (error) {
+                output.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function testDefectSearch() {
+            const output = document.getElementById('output');
+            output.textContent = 'Loading...';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/search/filter`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: '2860119'
+                    })
+                });
+                const data = await response.json();
+                
+                output.textContent = JSON.stringify({
+                    message: 'Searching for Defect ID: 2860119',
+                    defect_count: data.defect_data.length,
+                    defects_found: data.defect_data,
+                    sr_count: data.sr_data.length
+                }, null, 2);
+            } catch (error) {
+                output.textContent = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
+

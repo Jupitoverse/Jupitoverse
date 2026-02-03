@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Job Hunt Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+            padding-top: 73px;
+        }
+        .admin-sidebar {
+            width: 260px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            position: fixed;
+            top: 73px;
+            bottom: 0;
+            overflow-y: auto;
+            padding: 24px 0;
+        }
+        .admin-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 32px;
+        }
+        .sidebar-section {
+            padding: 0 16px;
+            margin-bottom: 24px;
+        }
+        .sidebar-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            padding: 0 8px;
+        }
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            transition: all 0.2s;
+        }
+        .sidebar-link:hover {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+        .sidebar-link.active {
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--accent-primary);
+        }
+        .stat-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+        }
+        .stat-card .icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        .stat-card .label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .visibility-control {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .visibility-control h3 {
+            margin-bottom: 20px;
+        }
+        .slider-group {
+            margin-bottom: 24px;
+        }
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            appearance: none;
+            background: var(--bg-secondary);
+        }
+        .slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-primary);
+            cursor: pointer;
+        }
+        .admin-table {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+        .admin-table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        .bulk-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .checkbox-cell {
+            width: 40px;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        .status-dot.active { background: var(--success); }
+        .status-dot.inactive { background: var(--error); }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container navbar-inner">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🎯</div>
+                <span>Job<span class="text-gradient">Hunt</span></span>
+            </a>
+            
+            <div class="flex items-center gap-4">
+                <span class="badge badge-pro">ADMIN</span>
+                <button class="btn btn-secondary btn-sm" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Dashboard</div>
+                <a href="#" class="sidebar-link active" data-section="overview">
+                    📊 Overview
+                </a>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Content Management</div>
+                <a href="#" class="sidebar-link" data-section="hr-contacts">
+                    📇 HR Contacts
+                </a>
+                <a href="#" class="sidebar-link" data-section="companies">
+                    🏢 Companies
+                </a>
+                <a href="#" class="sidebar-link" data-section="jobs">
+                    💼 Jobs
+                </a>
+                <a href="#" class="sidebar-link" data-section="countries">
+                    🌍 Country Guides
+                </a>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Users</div>
+                <a href="#" class="sidebar-link" data-section="users">
+                    👥 All Users
+                </a>
+                <a href="#" class="sidebar-link" data-section="subscriptions">
+                    💳 Subscriptions
+                </a>
+                <a href="#" class="sidebar-link" data-section="referrals">
+                    🎁 Referrals
+                </a>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Community</div>
+                <a href="#" class="sidebar-link" data-section="posts">
+                    📝 Posts
+                </a>
+                <a href="#" class="sidebar-link" data-section="reports">
+                    🚨 Reports
+                </a>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Settings</div>
+                <a href="#" class="sidebar-link" data-section="visibility">
+                    🔒 Visibility Settings
+                </a>
+                <a href="#" class="sidebar-link" data-section="pricing">
+                    💰 Pricing
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-content">
+            <!-- Overview Section -->
+            <section id="section-overview">
+                <h2 class="mb-6">Dashboard Overview</h2>
+                
+                <div class="stat-cards">
+                    <div class="stat-card">
+                        <div class="icon" style="background: rgba(99, 102, 241, 0.15);">👥</div>
+                        <div class="value" id="stat-users">0</div>
+                        <div class="label">Total Users</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon" style="background: rgba(245, 158, 11, 0.15);">💳</div>
+                        <div class="value" id="stat-premium">0</div>
+                        <div class="label">Paid Users</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon" style="background: rgba(34, 197, 94, 0.15);">📇</div>
+                        <div class="value" id="stat-hr">0</div>
+                        <div class="label">HR Contacts</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon" style="background: rgba(139, 92, 246, 0.15);">🏢</div>
+                        <div class="value" id="stat-companies">0</div>
+                        <div class="label">Companies</div>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="card mb-6">
+                    <h3 class="mb-4">Quick Actions</h3>
+                    <div class="flex gap-4">
+                        <button class="btn btn-primary" onclick="openImportModal()">
+                            📥 Import HR Contacts
+                        </button>
+                        <button class="btn btn-secondary" onclick="showSection('visibility')">
+                            🔒 Adjust Visibility
+                        </button>
+                        <button class="btn btn-secondary" onclick="exportData()">
+                            📤 Export Data
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HR Contacts Section -->
+            <section id="section-hr-contacts" class="hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2>HR Contacts Management</h2>
+                    <div class="flex gap-4">
+                        <input type="text" id="hr-search" class="form-input" placeholder="Search contacts..." style="width: 300px;">
+                        <button class="btn btn-primary" onclick="openImportModal()">Import</button>
+                    </div>
+                </div>
+                
+                <div class="admin-table">
+                    <div class="admin-table-header">
+                        <div class="bulk-actions">
+                            <input type="checkbox" id="select-all-hr">
+                            <select id="bulk-visibility" class="form-select" style="width: 150px;">
+                                <option value="">Set Visibility</option>
+                                <option value="all">All Users</option>
+                                <option value="premium">Premium+</option>
+                                <option value="pro">Pro Only</option>
+                                <option value="hidden">Hidden</option>
+                            </select>
+                            <button class="btn btn-sm btn-secondary" onclick="applyBulkVisibility()">Apply</button>
+                        </div>
+                        <span id="hr-count" class="text-muted">Loading...</span>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="checkbox-cell"></th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Company</th>
+                                <th>Title</th>
+                                <th>Visibility</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="hr-table-body">
+                            <!-- Loaded via JS -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="pagination mt-4" id="hr-pagination"></div>
+            </section>
+
+            <!-- Visibility Settings Section -->
+            <section id="section-visibility" class="hidden">
+                <h2 class="mb-6">Visibility Settings</h2>
+                
+                <div class="visibility-control">
+                    <h3>HR Contacts Visibility by Plan</h3>
+                    <p class="text-muted mb-6">Control what percentage of HR contacts each subscription plan can access.</p>
+                    
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span>Free Users</span>
+                            <span id="free-value">10%</span>
+                        </div>
+                        <input type="range" class="slider" id="free-slider" min="0" max="100" value="10">
+                        <p class="text-muted text-sm mt-2">~<span id="free-count">0</span> contacts visible</p>
+                    </div>
+                    
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span>Premium Users (₹499/mo)</span>
+                            <span id="premium-value">40%</span>
+                        </div>
+                        <input type="range" class="slider" id="premium-slider" min="0" max="100" value="40">
+                        <p class="text-muted text-sm mt-2">~<span id="premium-count">0</span> contacts visible</p>
+                    </div>
+                    
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span>Pro Users (₹999/mo)</span>
+                            <span id="pro-value">100%</span>
+                        </div>
+                        <input type="range" class="slider" id="pro-slider" min="0" max="100" value="100">
+                        <p class="text-muted text-sm mt-2">~<span id="pro-count">0</span> contacts visible</p>
+                    </div>
+                    
+                    <button class="btn btn-primary mt-4" onclick="applyVisibilitySettings()">
+                        Apply Visibility Settings
+                    </button>
+                </div>
+                
+                <div class="alert alert-warning">
+                    ⚠️ Changes will redistribute visibility across all HR contacts. This cannot be undone.
+                </div>
+            </section>
+
+            <!-- Users Section -->
+            <section id="section-users" class="hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2>User Management</h2>
+                    <input type="text" id="user-search" class="form-input" placeholder="Search users..." style="width: 300px;">
+                </div>
+                
+                <div class="admin-table">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Plan</th>
+                                <th>Verified</th>
+                                <th>Referrals</th>
+                                <th>Joined</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <!-- Loaded via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Import Modal -->
+    <div class="modal-overlay" id="import-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Import HR Contacts</h3>
+                <button class="modal-close" onclick="closeImportModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted mb-4">Upload a CSV or Excel file with HR contacts. Required columns: Name, Email, Company, Title</p>
+                <input type="file" id="import-file" accept=".csv,.xlsx,.xls" class="form-input">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeImportModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="importContacts()">Import</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        const API_BASE = 'http://localhost:8000/api/v1';
+        let totalHRContacts = 0;
+        
+        // Check admin access
+        if (!Auth.isLoggedIn() || !Auth.isAdmin()) {
+            alert('Admin access required');
+            window.location.href = 'login.html';
+        }
+        
+        // Navigation
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const section = link.dataset.section;
+                showSection(section);
+            });
+        });
+        
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('[id^="section-"]').forEach(s => s.classList.add('hidden'));
+            // Show selected
+            document.getElementById(`section-${sectionName}`).classList.remove('hidden');
+            // Update nav
+            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+            document.querySelector(`[data-section="${sectionName}"]`).classList.add('active');
+            
+            // Load section data
+            if (sectionName === 'hr-contacts') loadHRContacts();
+            if (sectionName === 'users') loadUsers();
+            if (sectionName === 'visibility') loadVisibilityStats();
+        }
+        
+        // Load dashboard stats
+        async function loadDashboardStats() {
+            try {
+                const [statsRes, hrRes] = await Promise.all([
+                    apiRequest('/stats'),
+                    apiRequest('/hr-contacts/stats')
+                ]);
+                
+                const stats = await statsRes.json();
+                const hrStats = await hrRes.json();
+                
+                document.getElementById('stat-users').textContent = stats.users.total;
+                document.getElementById('stat-hr').textContent = hrStats.total_contacts;
+                document.getElementById('stat-companies').textContent = stats.companies.total;
+                
+                totalHRContacts = hrStats.total_contacts;
+                updateVisibilityCounts();
+            } catch (error) {
+                console.error('Failed to load stats:', error);
+            }
+        }
+        
+        // Load HR Contacts
+        async function loadHRContacts(page = 0) {
+            try {
+                const response = await apiRequest(`/hr-contacts/admin/all?skip=${page * 50}&limit=50`);
+                const data = await response.json();
+                
+                document.getElementById('hr-count').textContent = `${data.total} contacts`;
+                
+                const tbody = document.getElementById('hr-table-body');
+                tbody.innerHTML = '';
+                
+                data.contacts.forEach(contact => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="checkbox-cell"><input type="checkbox" data-id="${contact.id}"></td>
+                        <td>${contact.name}</td>
+                        <td>${contact.email}</td>
+                        <td>${contact.company_name || '-'}</td>
+                        <td>${contact.title || '-'}</td>
+                        <td>
+                            <select class="form-select" style="width: 120px; padding: 6px;" onchange="updateContactVisibility(${contact.id}, this.value)">
+                                <option value="all" ${contact.visibility === 'ALL' ? 'selected' : ''}>All</option>
+                                <option value="premium" ${contact.visibility === 'PREMIUM' ? 'selected' : ''}>Premium</option>
+                                <option value="pro" ${contact.visibility === 'PRO' ? 'selected' : ''}>Pro</option>
+                                <option value="hidden" ${contact.visibility === 'HIDDEN' ? 'selected' : ''}>Hidden</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-secondary" onclick="editContact(${contact.id})">Edit</button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Failed to load HR contacts:', error);
+            }
+        }
+        
+        // Update contact visibility
+        async function updateContactVisibility(id, visibility) {
+            try {
+                await apiRequest(`/hr-contacts/admin/${id}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ visibility })
+                });
+            } catch (error) {
+                console.error('Failed to update visibility:', error);
+                alert('Failed to update visibility');
+            }
+        }
+        
+        // Apply bulk visibility
+        async function applyBulkVisibility() {
+            const visibility = document.getElementById('bulk-visibility').value;
+            if (!visibility) return;
+            
+            const checkboxes = document.querySelectorAll('#hr-table-body input[type="checkbox"]:checked');
+            const ids = Array.from(checkboxes).map(cb => parseInt(cb.dataset.id));
+            
+            if (ids.length === 0) {
+                alert('Please select contacts first');
+                return;
+            }
+            
+            try {
+                await apiRequest('/hr-contacts/admin/bulk-visibility', {
+                    method: 'POST',
+                    body: JSON.stringify({ contact_ids: ids, visibility })
+                });
+                alert(`Updated ${ids.length} contacts`);
+                loadHRContacts();
+            } catch (error) {
+                console.error('Failed to apply bulk visibility:', error);
+            }
+        }
+        
+        // Visibility sliders
+        function updateVisibilityCounts() {
+            const free = document.getElementById('free-slider').value;
+            const premium = document.getElementById('premium-slider').value;
+            const pro = document.getElementById('pro-slider').value;
+            
+            document.getElementById('free-value').textContent = free + '%';
+            document.getElementById('premium-value').textContent = premium + '%';
+            document.getElementById('pro-value').textContent = pro + '%';
+            
+            document.getElementById('free-count').textContent = Math.round(totalHRContacts * free / 100);
+            document.getElementById('premium-count').textContent = Math.round(totalHRContacts * premium / 100);
+            document.getElementById('pro-count').textContent = Math.round(totalHRContacts * pro / 100);
+        }
+        
+        document.getElementById('free-slider').addEventListener('input', updateVisibilityCounts);
+        document.getElementById('premium-slider').addEventListener('input', updateVisibilityCounts);
+        document.getElementById('pro-slider').addEventListener('input', updateVisibilityCounts);
+        
+        async function applyVisibilitySettings() {
+            const free = document.getElementById('free-slider').value;
+            const premium = document.getElementById('premium-slider').value;
+            const pro = document.getElementById('pro-slider').value;
+            
+            if (!confirm('This will redistribute visibility for all HR contacts. Continue?')) return;
+            
+            try {
+                const response = await apiRequest(`/hr-contacts/admin/set-visibility-percentage?free_percentage=${free}&premium_percentage=${premium}&pro_percentage=${pro}`, {
+                    method: 'POST'
+                });
+                const result = await response.json();
+                alert(`Visibility updated! Free: ${result.free_can_see}, Premium: ${result.premium_can_see}, Pro: ${result.pro_can_see}`);
+            } catch (error) {
+                console.error('Failed to apply visibility settings:', error);
+                alert('Failed to apply settings');
+            }
+        }
+        
+        function loadVisibilityStats() {
+            updateVisibilityCounts();
+        }
+        
+        // Import modal
+        function openImportModal() {
+            document.getElementById('import-modal').classList.add('active');
+        }
+        
+        function closeImportModal() {
+            document.getElementById('import-modal').classList.remove('active');
+        }
+        
+        // Initialize
+        loadDashboardStats();
+    </script>
+</body>
+</html>
+
+

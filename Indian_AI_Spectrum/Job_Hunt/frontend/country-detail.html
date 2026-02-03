@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Country Migration Guide - AI Spectrum India</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0a0a0f 100%);
+            color: #e4e4e7;
+            min-height: 100vh;
+        }
+
+        /* Hero Section */
+        .country-hero {
+            position: relative;
+            padding: 5rem 0 3rem;
+            background: linear-gradient(180deg, rgba(15, 12, 41, 0.95) 0%, rgba(10, 10, 15, 1) 100%);
+            border-bottom: 1px solid rgba(0, 217, 255, 0.1);
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 217, 255, 0.15) 0%, transparent 70%);
+            top: -200px;
+            right: -100px;
+            animation: pulse 6s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .hero-main {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .country-flag {
+            font-size: 5rem;
+            line-height: 1;
+        }
+
+        .hero-info { flex: 1; min-width: 300px; }
+
+        .badges {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.75rem;
+        }
+
+        .badge {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-popular { background: linear-gradient(135deg, #f6d365, #fda085); color: #000; }
+        .badge-tax-free { background: rgba(0, 255, 136, 0.2); color: #00ff88; border: 1px solid rgba(0, 255, 136, 0.3); }
+        .badge-pr { background: rgba(0, 217, 255, 0.2); color: #00d9ff; border: 1px solid rgba(0, 217, 255, 0.3); }
+
+        .country-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .country-tagline {
+            font-size: 1.1rem;
+            color: #9ca3af;
+        }
+
+        /* Quick Stats */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .quick-stat {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .quick-stat:hover { border-color: rgba(0, 217, 255, 0.3); }
+        .quick-stat .icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .quick-stat .value { font-weight: 600; color: #fff; font-size: 0.95rem; display: block; }
+        .quick-stat .label { font-size: 0.75rem; color: #6b7280; }
+
+        /* Tab Navigation */
+        .tab-nav {
+            position: sticky;
+            top: 70px;
+            z-index: 100;
+            background: rgba(10, 10, 15, 0.98);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 1rem 0;
+        }
+
+        .tab-nav-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .tab-nav-inner::-webkit-scrollbar { display: none; }
+
+        .tab-btn {
+            padding: 0.6rem 1.2rem;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            color: #9ca3af;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover { border-color: rgba(0, 217, 255, 0.5); color: #fff; }
+        .tab-btn.active { background: rgba(0, 217, 255, 0.15); border-color: #00d9ff; color: #00d9ff; }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .tab-panel { display: none; animation: fadeIn 0.3s; }
+        .tab-panel.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Section */
+        .section { margin-bottom: 2.5rem; }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title .icon { font-size: 1.5rem; }
+
+        /* Grid Layouts */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1rem;
+        }
+
+        .info-card {
+            background: linear-gradient(145deg, rgba(20, 20, 30, 0.8), rgba(15, 15, 22, 0.9));
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 1.25rem;
+            transition: all 0.2s;
+        }
+
+        .info-card:hover { border-color: rgba(0, 217, 255, 0.3); transform: translateY(-2px); }
+
+        .info-card-label {
+            font-size: 0.75rem;
+            color: #00d9ff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.4rem;
+        }
+
+        .info-card-value {
+            font-size: 1rem;
+            color: #fff;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        /* Lists */
+        .list-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .list-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            transition: all 0.2s;
+        }
+
+        .list-item:hover { border-color: rgba(0, 217, 255, 0.2); background: rgba(0, 217, 255, 0.02); }
+        .list-item .icon { font-size: 1.1rem; flex-shrink: 0; }
+        .list-item .text { color: #d4d4d8; font-size: 0.9rem; line-height: 1.5; }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .data-table th {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(168, 85, 247, 0.05));
+            padding: 1rem 1.25rem;
+            text-align: left;
+            color: #00d9ff;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .data-table td {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #e4e4e7;
+        }
+
+        .data-table tr:last-child td { border-bottom: none; }
+        .data-table tr:hover td { background: rgba(255, 255, 255, 0.02); }
+        .data-table .total-row { background: rgba(0, 217, 255, 0.05); font-weight: 600; }
+        .data-table .total-row td { color: #00d9ff; }
+
+        /* Pros/Cons */
+        .pros-cons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .pros-box, .cons-box {
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .pros-box { background: rgba(0, 255, 136, 0.05); border: 1px solid rgba(0, 255, 136, 0.2); }
+        .cons-box { background: rgba(255, 59, 48, 0.05); border: 1px solid rgba(255, 59, 48, 0.2); }
+
+        .pros-box h4 { color: #00ff88; margin-bottom: 1rem; font-size: 1.1rem; }
+        .cons-box h4 { color: #ff3b30; margin-bottom: 1rem; font-size: 1.1rem; }
+
+        .pros-box ul, .cons-box ul { list-style: none; }
+
+        .pros-box li, .cons-box li {
+            padding: 0.6rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: #d4d4d8;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .pros-box li:last-child, .cons-box li:last-child { border-bottom: none; }
+        .pros-box li::before { content: '✓'; position: absolute; left: 0; color: #00ff88; font-weight: bold; }
+        .cons-box li::before { content: '✗'; position: absolute; left: 0; color: #ff3b30; font-weight: bold; }
+
+        /* City Cards */
+        .city-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .city-card {
+            background: linear-gradient(145deg, rgba(168, 85, 247, 0.08), rgba(168, 85, 247, 0.02));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+            transition: all 0.2s;
+        }
+
+        .city-card:hover { border-color: rgba(168, 85, 247, 0.5); transform: translateY(-2px); }
+        .city-card h5 { color: #a855f7; font-size: 1.05rem; margin-bottom: 0.5rem; }
+        .city-card p { color: #9ca3af; font-size: 0.9rem; line-height: 1.4; }
+
+        /* Visa Cards */
+        .visa-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1rem;
+        }
+
+        .visa-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .visa-card h4 { color: #00d9ff; font-size: 1.05rem; margin-bottom: 0.5rem; }
+        .visa-card .desc { color: #9ca3af; font-size: 0.9rem; margin-bottom: 0.75rem; }
+        .visa-card .time { color: #00ff88; font-size: 0.85rem; margin-bottom: 0.75rem; }
+        .visa-card .reqs { color: #d4d4d8; font-size: 0.85rem; }
+        .visa-card .reqs span { display: block; padding: 0.25rem 0; }
+
+        /* Agency Cards */
+        .agency-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1rem;
+        }
+
+        .agency-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 1.25rem;
+            transition: all 0.2s;
+        }
+
+        .agency-card:hover { border-color: rgba(0, 217, 255, 0.3); }
+        .agency-card h5 { color: #fff; font-size: 1rem; margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.5rem; }
+        .agency-card .spec { color: #00d9ff; font-size: 0.85rem; margin-bottom: 0.25rem; }
+        .agency-card .url { color: #6b7280; font-size: 0.8rem; }
+        .agency-card .verified { color: #00ff88; font-size: 0.75rem; }
+
+        /* Portal Cards */
+        .portal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .portal-card {
+            display: block;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .portal-card:hover { border-color: #00d9ff; transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0, 217, 255, 0.1); }
+        .portal-card h5 { color: #fff; font-size: 1rem; margin-bottom: 0.4rem; }
+        .portal-card p { color: #6b7280; font-size: 0.85rem; }
+
+        /* Tags */
+        .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+        .tag {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            color: #e4e4e7;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .tag:hover { border-color: #00d9ff; background: rgba(0, 217, 255, 0.1); }
+
+        /* Lifestyle Grid */
+        .lifestyle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .lifestyle-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+
+        .lifestyle-card h5 { color: #a855f7; font-size: 0.9rem; margin-bottom: 0.5rem; }
+        .lifestyle-card p { color: #d4d4d8; font-size: 0.9rem; line-height: 1.4; }
+
+        /* Footer */
+        .site-footer {
+            background: rgba(0, 0, 0, 0.5);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .footer-text { color: #6b7280; font-size: 0.85rem; }
+
+        @media (max-width: 768px) {
+            .country-name { font-size: 2.2rem; }
+            .country-flag { font-size: 4rem; }
+            .hero-main { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body data-page="abroad">
+    <script src="js/header.js"></script>
+
+    <section class="country-hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <a href="abroad.html" class="back-btn">← Back to All Countries</a>
+            <div class="hero-main">
+                <span class="country-flag" id="hero-flag">🌍</span>
+                <div class="hero-info">
+                    <div class="badges" id="badges"></div>
+                    <h1 class="country-name" id="hero-name">Loading...</h1>
+                    <p class="country-tagline" id="hero-tagline"></p>
+                </div>
+            </div>
+            <div class="quick-stats" id="quick-stats"></div>
+        </div>
+    </section>
+
+    <nav class="tab-nav">
+        <div class="tab-nav-inner">
+            <button class="tab-btn active" data-tab="overview">📋 Overview</button>
+            <button class="tab-btn" data-tab="proscons">⚖️ Pros & Cons</button>
+            <button class="tab-btn" data-tab="expenses">💰 Expenses</button>
+            <button class="tab-btn" data-tab="salary">📊 Salaries</button>
+            <button class="tab-btn" data-tab="visa">🎫 Visa Types</button>
+            <button class="tab-btn" data-tab="cities">🏙️ Best Cities</button>
+            <button class="tab-btn" data-tab="lifestyle">🏠 Lifestyle</button>
+            <button class="tab-btn" data-tab="portals">🌐 Job Portals</button>
+            <button class="tab-btn" data-tab="agencies">👔 Agencies</button>
+            <button class="tab-btn" data-tab="tips">💡 Pro Tips</button>
+        </div>
+    </nav>
+
+    <main class="main-content" id="main-content"></main>
+
+    <footer class="site-footer">
+        <p class="footer-text">© 2025 AI Spectrum India. Your gateway to global IT careers. 🚀</p>
+    </footer>
+
+    <!-- Load ALL Data Files -->
+    <script src="js/abroad-data.js"></script>
+    <script src="js/abroad-data-enhanced.js"></script>
+    <script src="js/abroad-data-enhanced-2.js"></script>
+    <script src="js/abroad-data-enhanced-3.js"></script>
+    <script src="js/abroad-data-enhanced-4.js"></script>
+    <script src="js/abroad-data-enhanced-5.js"></script>
+
+    <script>
+        const COUNTRY_META = {
+            'UAE': { flag: '🇦🇪', name: 'UAE / Dubai', tagline: 'Tax-free tech hub in Middle East', popular: true, taxFree: true },
+            'USA': { flag: '🇺🇸', name: 'United States', tagline: 'Tech capital of the world', popular: true, prFriendly: true },
+            'UK': { flag: '🇬🇧', name: 'United Kingdom', tagline: 'Historical tech powerhouse', popular: true, prFriendly: true },
+            'Canada': { flag: '🇨🇦', name: 'Canada', tagline: 'Most immigrant-friendly nation', popular: true, prFriendly: true },
+            'Germany': { flag: '🇩🇪', name: 'Germany', tagline: 'Europe\'s economic powerhouse', popular: true, prFriendly: true },
+            'Australia': { flag: '🇦🇺', name: 'Australia', tagline: 'Land of opportunities', popular: true, prFriendly: true },
+            'Singapore': { flag: '🇸🇬', name: 'Singapore', tagline: 'Asia\'s financial hub', popular: true },
+            'Netherlands': { flag: '🇳🇱', name: 'Netherlands', tagline: 'Startup paradise of Europe', prFriendly: true },
+            'Ireland': { flag: '🇮🇪', name: 'Ireland', tagline: 'European tech gateway', popular: true },
+            'Japan': { flag: '🇯🇵', name: 'Japan', tagline: 'Innovation meets tradition' },
+            'New Zealand': { flag: '🇳🇿', name: 'New Zealand', tagline: 'Work-life balance heaven', prFriendly: true },
+            'Sweden': { flag: '🇸🇪', name: 'Sweden', tagline: 'Innovation hub of Nordics', prFriendly: true },
+            'Switzerland': { flag: '🇨🇭', name: 'Switzerland', tagline: 'Highest salaries in Europe' },
+            'Qatar': { flag: '🇶🇦', name: 'Qatar', tagline: 'Richest country per capita', taxFree: true },
+            'Saudi Arabia': { flag: '🇸🇦', name: 'Saudi Arabia', tagline: 'Vision 2030 opportunities', taxFree: true },
+        };
+
+        let DATA = {};
+
+        function loadAllData() {
+            console.log('=== Loading Country Data ===');
+            
+            // Load from COMPREHENSIVE_COUNTRY_DATA (main data source)
+            if (window.COMPREHENSIVE_COUNTRY_DATA) {
+                console.log('Found COMPREHENSIVE_COUNTRY_DATA');
+                Object.assign(DATA, window.COMPREHENSIVE_COUNTRY_DATA);
+            } else {
+                console.log('COMPREHENSIVE_COUNTRY_DATA NOT found');
+            }
+            
+            // Also try COUNTRY_DATA
+            if (window.COUNTRY_DATA) {
+                console.log('Found COUNTRY_DATA');
+                Object.assign(DATA, window.COUNTRY_DATA);
+            } else {
+                console.log('COUNTRY_DATA NOT found');
+            }
+            
+            // Merge enhanced data
+            if (window.ENHANCED_COUNTRY_DATA_1) {
+                console.log('Found ENHANCED_COUNTRY_DATA_1');
+                Object.keys(window.ENHANCED_COUNTRY_DATA_1).forEach(k => DATA[k] = {...DATA[k], ...window.ENHANCED_COUNTRY_DATA_1[k]});
+            }
+            if (window.ENHANCED_COUNTRY_DATA_2) {
+                console.log('Found ENHANCED_COUNTRY_DATA_2');
+                Object.keys(window.ENHANCED_COUNTRY_DATA_2).forEach(k => DATA[k] = {...DATA[k], ...window.ENHANCED_COUNTRY_DATA_2[k]});
+            }
+            if (window.ENHANCED_COUNTRY_DATA_3) {
+                console.log('Found ENHANCED_COUNTRY_DATA_3');
+                Object.keys(window.ENHANCED_COUNTRY_DATA_3).forEach(k => DATA[k] = {...DATA[k], ...window.ENHANCED_COUNTRY_DATA_3[k]});
+            }
+            if (window.ENHANCED_COUNTRY_DATA_4) {
+                console.log('Found ENHANCED_COUNTRY_DATA_4');
+                Object.keys(window.ENHANCED_COUNTRY_DATA_4).forEach(k => DATA[k] = {...DATA[k], ...window.ENHANCED_COUNTRY_DATA_4[k]});
+            }
+            if (window.ENHANCED_COUNTRY_DATA_5) {
+                console.log('Found ENHANCED_COUNTRY_DATA_5');
+                Object.keys(window.ENHANCED_COUNTRY_DATA_5).forEach(k => DATA[k] = {...DATA[k], ...window.ENHANCED_COUNTRY_DATA_5[k]});
+            }
+            
+            console.log('=== Data Loading Complete ===');
+            console.log('Loaded countries:', Object.keys(DATA));
+            console.log('UAE data keys:', DATA['UAE'] ? Object.keys(DATA['UAE']) : 'UAE NOT FOUND');
+            if (DATA['UAE']) {
+                console.log('UAE pros:', DATA['UAE'].pros);
+                console.log('UAE agencies:', DATA['UAE'].agencies);
+            }
+        }
+
+        function getCountryCode() {
+            return new URLSearchParams(window.location.search).get('country') || 'UAE';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAllData();
+            const code = getCountryCode();
+            renderPage(code);
+            setupTabs();
+        });
+
+        function renderPage(code) {
+            const meta = COUNTRY_META[code] || { flag: '🌍', name: code, tagline: 'Complete migration guide' };
+            const d = DATA[code] || {};
+
+            console.log('Rendering page for:', code);
+            console.log('Data:', d);
+
+            document.getElementById('page-title').textContent = `${meta.name} Migration Guide - AI Spectrum India`;
+            document.getElementById('hero-flag').textContent = meta.flag;
+            document.getElementById('hero-name').textContent = meta.name;
+            document.getElementById('hero-tagline').textContent = meta.tagline;
+
+            document.getElementById('badges').innerHTML = `
+                ${meta.popular ? '<span class="badge badge-popular">🔥 Popular</span>' : ''}
+                ${meta.taxFree ? '<span class="badge badge-tax-free">💰 Tax-Free</span>' : ''}
+                ${meta.prFriendly ? '<span class="badge badge-pr">🏠 PR Pathway</span>' : ''}
+            `;
+
+            // Quick Stats from data
+            document.getElementById('quick-stats').innerHTML = `
+                <div class="quick-stat"><div class="icon">👥</div><span class="value">${d.indian_population || 'N/A'}</span><span class="label">Indians Living</span></div>
+                <div class="quick-stat"><div class="icon">💱</div><span class="value">${d.currency || 'N/A'}</span><span class="label">Currency</span></div>
+                <div class="quick-stat"><div class="icon">🕐</div><span class="value">${d.timezone || 'N/A'}</span><span class="label">Timezone</span></div>
+                <div class="quick-stat"><div class="icon">✈️</div><span class="value">${d.flight_time || 'N/A'}</span><span class="label">Flight Time</span></div>
+                <div class="quick-stat"><div class="icon">📋</div><span class="value">${d.visa_processing || 'N/A'}</span><span class="label">Visa Processing</span></div>
+                <div class="quick-stat"><div class="icon">💵</div><span class="value">${d.tax_rate || 'N/A'}</span><span class="label">Tax Rate</span></div>
+                <div class="quick-stat"><div class="icon">🌤️</div><span class="value">${(d.weather || '').substring(0, 30) + '...' || 'N/A'}</span><span class="label">Weather</span></div>
+                <div class="quick-stat"><div class="icon">🗣️</div><span class="value">${d.language || 'N/A'}</span><span class="label">Language</span></div>
+            `;
+
+            renderAllTabs(code, d);
+        }
+
+        function renderAllTabs(code, d) {
+            const container = document.getElementById('main-content');
+            
+            // Get all data
+            const pros = d.pros || [];
+            const cons = d.cons || [];
+            const bestCities = d.best_cities || [];
+            const lifestyle = d.lifestyle || {};
+            const expenses = d.expenses || {};
+            const initial = d.initial || {};
+            const salaries = d.salaries || {};
+            const savingsPot = d.savings_potential || {};
+            const taxes = d.taxes || {};
+            const visas = d.visas || [];
+            const agencies = d.agencies || [];
+            const portals = d.portals || [];
+            const tips = d.tips || [];
+            const interview = d.interview || [];
+            const network = d.network || [];
+
+            container.innerHTML = `
+                <!-- OVERVIEW TAB -->
+                <div class="tab-panel active" id="panel-overview">
+                    <div class="section">
+                        <h3 class="section-title"><span class="icon">📋</span> Basic Information</h3>
+                        <div class="info-grid">
+                            <div class="info-card"><div class="info-card-label">Indian Population</div><div class="info-card-value">${d.indian_population || 'N/A'}</div></div>
+                            <div class="info-card"><div class="info-card-label">Currency</div><div class="info-card-value">${d.currency || 'N/A'}</div></div>
+                            <div class="info-card"><div class="info-card-label">Language</div><div class="info-card-value">${d.language || 'N/A'}</div></div>
+                            <div class="info-card"><div class="info-card-label">Weather</div><div class="info-card-value">${d.weather || 'N/A'}</div></div>
+                            <div class="info-card"><div class="info-card-label">Timezone</div><div class="info-card-value">${d.timezone || 'N/A'}</div></div>
+                            <div class="info-card"><div class="info-card-label">Flight Time</div><div class="info-card-value">${d.flight_time || 'N/A'}</div></div>
+                            <div class="info-card"><div class="info-card-label">Visa Processing</div><div class="info-card-value">${d.visa_processing || 'N/A'}</div></div>
+                            <div class="info-card"><div class="info-card-label">Visa Cost</div><div class="info-card-value">${d.visa_cost || 'N/A'}</div></div>
+                            <div class="info-card"><div class="info-card-label">Tax Rate</div><div class="info-card-value">${d.tax_rate || 'N/A'}</div></div>
+                        </div>
+                    </div>
+
+                    ${Object.keys(taxes).length > 0 ? `
+                    <div class="section">
+                        <h3 class="section-title"><span class="icon">📊</span> Tax Information</h3>
+                        <div class="info-grid">
+                            ${Object.entries(taxes).map(([k,v]) => `<div class="info-card"><div class="info-card-label">${formatLabel(k)}</div><div class="info-card-value">${v}</div></div>`).join('')}
+                        </div>
+                    </div>` : ''}
+
+                    ${interview.length > 0 ? `
+                    <div class="section">
+                        <h3 class="section-title"><span class="icon">🎤</span> Interview Process</h3>
+                        <div class="list-grid">
+                            ${interview.map((t,i) => `<div class="list-item"><span class="icon">${i+1}️⃣</span><span class="text">${t}</span></div>`).join('')}
+                        </div>
+                    </div>` : ''}
+
+                    ${network.length > 0 ? `
+                    <div class="section">
+                        <h3 class="section-title"><span class="icon">🤝</span> Networking Communities</h3>
+                        <div class="tags">${network.map(n => `<span class="tag">${n}</span>`).join('')}</div>
+                    </div>` : ''}
+                </div>
+
+                <!-- PROS & CONS TAB -->
+                <div class="tab-panel" id="panel-proscons">
+                    <div class="section">
+                        <h3 class="section-title"><span class="icon">⚖️</span> Advantages & Challenges of Moving to ${code}</h3>
+                        <div class="pros-cons">
+                            <div class="pros-box">
+                                <h4>✅ Advantages (${pros.length})</h4>
+                                <ul>${pros.length > 0 ? pros.map(p => `<li>${p}</li>`).join('') : '<li>Information not available</li>'}</ul>
+                            </div>
+                            <div class="cons-box">
+                                <h4>❌ Challenges (${cons.length})</h4>
+                                <ul>${cons.length > 0 ? cons.map(c => `<li>${c}</li>`).join('') : '<li>Information not available</li>'}</ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EXPENSES TAB -->
+                <div class="tab-panel" id="panel-expenses">
+                    ${Object.keys(expenses).length > 0 ? `
+                    <div class="section">
+                        <h3 class="section-title"><span class="icon">💰</span> Monthly Expenses Breakdown</h3>
+                        <table class="data-table">
+                            <thead>
+                                <tr><th>Category</th><th>👤 Single</th><th>👨‍👩‍👧 Family</th></tr>
+                            </thead>
+                            <tbody>
+                                ${Object.entries(expenses).map(([k,v]) => `
+                                    <tr class="${k === 'total' ? 'total-row' : ''}">
+                                        <td>${formatLabel(k)}</td>
+                                        <td>${typeof v === 'object' ? v.s : v}</td>
+                                        <td>${typeof v === 'object' ? v.f : v}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>` : '<div class="section"><p style="color:#9ca3af">Expense data not available</p></div>'}
+
+                    ${Object.keys(initial).length > 0 ? `
+                    <div class="section">
+                        <h3 class="section-title"><span class="icon">🎯</span> Initial Setup Costs (One-time)</h3>
+                        <div class="info-grid">
+                            ${Object.entries(initial).map(([k,v]) => `
+                                <div class="info-card ${k === 'total' ? 'style="border-color:#00d9ff;"' : ''}">
+                                    <div class="info-card-label">${formatLabel(k)}</div>
+                                    <div class="info-card-value">${v}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>` : ''}
+
+                    ${Object.keys(savingsPot).length > 0 ? `
+                    <div class="section">
+                        <h3 class="section-title"><span class="icon">🏦</span> Savings Potential (Annual)</h3>
+                        <div class="info-grid">
+                            ${Object.entries(savingsPot).map(([k,v]) => `<div class="info-card"><div class="info-card-label">${formatLabel(k)} Level</div><div class="info-card-value">${v}</div></div>`).join('')}
+                        </div>
+                    </div>` : ''}
+                </div>
+
+                <!-- SALARY TAB -->
+                <div class="tab-panel" id="panel-salary">
+                    ${Object.keys(salaries).length > 0 ? `
+                    <div class="section">
+                        <h3 class="section-title"><span class="icon">📊</span> IT Salary Ranges (Annual)</h3>
+                        <table class="data-table">
+                            <thead><tr><th>Role / Experience</th><th>Salary (Local + INR)</th></tr></thead>
+                            <tbody>
+                                ${Object.entries(salaries).map(([role, sal]) => `<tr><td>${role}</td><td>${sal}</td></tr>`).join('')}
+                            </tbody>
+                        </table>
+                    </div>` : '<div class="section"><p style="color:#9ca3af">Salary data not available</p></div>'}
+                </div>
+
+                <!-- VISA TAB -->
+                <div class="tab-panel" id="panel-visa">
+                    ${visas.length > 0 ? `
+                    <div class="section">
+                        <h3 class="section-title"><span class="icon">🎫</span> Visa Types for IT Professionals</h3>
+                        <div class="visa-grid">
+                            ${visas.map(v => `
+                                <div class="visa-card">
+                                    <h4>📄 ${v.n}</h4>
+                                    <p class="desc">${v.d}</p>
+                                    <p class="time">⏱️ Processing: ${v.t}</p>
+                                    <div class="reqs">
+                                        <strong>Requirements:</strong>
+                                        ${v.r.map(r => `<span>• ${r}</span>`).join('')}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>` : '<div class="section"><p style="color:#9ca3af">Visa information not available</p></div>'}
+                </div>
+
+                <!-- CITIES TAB -->
+                <div class="tab-panel" id="panel-cities">
+                    ${bestCities.length > 0 ? `
+                    <div class="section">
+                        <h3 class="section-title"><span class="icon">🏙️</span> Best Cities for IT Professionals</h3>
+                        <div class="city-grid">
+                            ${bestCities.map(c => `
+                                <div class="city-card">
+                                    <h5>📍 ${c.name}</h5>
+                                    <p>${c.why}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>` : '<div class="section"><p style="color:#9ca3af">City information not available</p></div>'}
+                </div>
+
+                <!-- LIFESTYLE TAB -->
+                <div class="tab-panel" id="panel-lifestyle">
+                    ${Object.keys(lifestyle).length > 0 ? `
+                    <div class="section">
+                        <h3 class="section-title"><span class="icon">🏠</span> Living & Work Culture</h3>
+                        <div class="lifestyle-grid">
+                            ${lifestyle.work_hours ? `<div class="lifestyle-card"><h5>⏰ Work Hours</h5><p>${lifestyle.work_hours}</p></div>` : ''}
+                            ${lifestyle.weekend ? `<div class="lifestyle-card"><h5>📅 Weekend</h5><p>${lifestyle.weekend}</p></div>` : ''}
+                            ${lifestyle.dress_code ? `<div class="lifestyle-card"><h5>👔 Dress Code</h5><p>${lifestyle.dress_code}</p></div>` : ''}
+                            ${lifestyle.social_life ? `<div class="lifestyle-card"><h5>🎉 Social Life</h5><p>${lifestyle.social_life}</p></div>` : ''}
+                            ${lifestyle.indian_community ? `<div class="lifestyle-card"><h5>🇮🇳 Indian Community</h5><p>${lifestyle.indian_community}</p></div>` : ''}
+                            ${lifestyle.food ? `<div class="lifestyle-card"><h5>🍛 Indian Food</h5><p>${lifestyle.food}</p></div>` : ''}
+                        </div>
+                    </div>` : '<div class="section"><p style="color:#9ca3af">Lifestyle information not available</p></div>'}
+                </div>
+
+                <!-- JOB PORTALS TAB -->
+                <div class="tab-panel" id="panel-portals">
+                    ${portals.length > 0 ? `
+                    <div class="section">
+                        <h3 class="section-title"><span class="icon">🌐</span> Top Job Portals & Websites</h3>
+                        <div class="portal-grid">
+                            ${portals.map(p => `
+                                <a href="${p.u}" target="_blank" class="portal-card">
+                                    <h5>🔗 ${p.n}</h5>
+                                    <p>${p.d}</p>
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div>` : '<div class="section"><p style="color:#9ca3af">Portal information not available</p></div>'}
+                </div>
+
+                <!-- AGENCIES TAB -->
+                <div class="tab-panel" id="panel-agencies">
+                    ${agencies.length > 0 ? `
+                    <div class="section">
+                        <h3 class="section-title"><span class="icon">👔</span> Top Authorized Recruitment Agencies</h3>
+                        <div class="agency-grid">
+                            ${agencies.map(a => `
+                                <div class="agency-card">
+                                    <h5>${a.n} ${a.verified ? '<span class="verified">✅ Verified</span>' : ''}</h5>
+                                    <p class="spec">${a.s}</p>
+                                    <p class="url">${a.w}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>` : '<div class="section"><p style="color:#9ca3af">Agency information not available</p></div>'}
+                </div>
+
+                <!-- TIPS TAB -->
+                <div class="tab-panel" id="panel-tips">
+                    ${tips.length > 0 ? `
+                    <div class="section">
+                        <h3 class="section-title"><span class="icon">💡</span> Pro Tips from Indians in ${code}</h3>
+                        <div class="list-grid">
+                            ${tips.map((t,i) => `<div class="list-item"><span class="icon">${['🎯','💰','📱','🏠','📄','💳','👥','📞','🎓','🤝','🏦','✈️'][i%12]}</span><span class="text">${t}</span></div>`).join('')}
+                        </div>
+                    </div>` : '<div class="section"><p style="color:#9ca3af">Tips not available</p></div>'}
+                </div>
+            `;
+        }
+
+        function formatLabel(str) {
+            return str.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        }
+
+        function setupTabs() {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                    document.getElementById(`panel-${btn.dataset.tab}`)?.classList.add('active');
+                });
+            });
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+

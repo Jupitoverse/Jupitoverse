@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Modal</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        body { background: #0f0f23; color: white; padding: 50px; font-family: sans-serif; }
+        .test-btn { padding: 15px 30px; background: #6366f1; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin: 10px; }
+        .test-btn:hover { background: #4f46e5; }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s; }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal { background: #1e1e3f; border-radius: 16px; padding: 30px; max-width: 500px; width: 90%; }
+        .modal h3 { margin-bottom: 20px; }
+        .form-input { width: 100%; padding: 12px; margin: 10px 0; background: #2d2d5a; border: 1px solid #444; border-radius: 8px; color: white; }
+    </style>
+</head>
+<body>
+    <h1>Modal Test Page</h1>
+    <p>Click the buttons below to test if modals work:</p>
+    
+    <button class="test-btn" onclick="alert('Alert works!')">Test Alert</button>
+    <button class="test-btn" onclick="openTestModal()">Open Test Modal</button>
+    <button class="test-btn" onclick="testProfileTab()">Test Profile Function</button>
+    
+    <div id="result" style="margin-top: 20px; padding: 20px; background: #1e1e3f; border-radius: 8px;">
+        Results will appear here...
+    </div>
+
+    <!-- Simple Test Modal -->
+    <div class="modal-overlay" id="test-modal">
+        <div class="modal">
+            <h3>✅ Modal is Working!</h3>
+            <p>If you can see this, modals work correctly.</p>
+            <input type="text" class="form-input" placeholder="Test input field">
+            <br><br>
+            <button class="test-btn" onclick="closeTestModal()">Close Modal</button>
+        </div>
+    </div>
+
+    <script>
+        console.log('Test script loaded!');
+        document.getElementById('result').innerHTML = 'JavaScript is running! ✅';
+        
+        function openTestModal() {
+            console.log('Opening modal...');
+            document.getElementById('test-modal').classList.add('active');
+            document.getElementById('result').innerHTML += '<br>Modal opened!';
+        }
+        
+        function closeTestModal() {
+            document.getElementById('test-modal').classList.remove('active');
+            document.getElementById('result').innerHTML += '<br>Modal closed!';
+        }
+        
+        function testProfileTab() {
+            document.getElementById('result').innerHTML += '<br>Profile function called!';
+            alert('Profile function works!');
+        }
+        
+        // Close on overlay click
+        document.getElementById('test-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeTestModal();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,223 @@
+1.SQO Login
+============
+
+import requests
+import json
+
+url = "https://sqo.orion.comcast.com/securitymanagement-ms/v1/Login"
+
+payload = json.dumps({
+  "user": "ODOUser",
+  "password": "Unix11"
+})
+headers = {
+  'Content-Type': 'application/json',
+  'Cookie': '257df8186b610336b666f50f0ec4f85c=2035bd75361aa25bc53acc8ad8923971'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+
+
+
+
+2.Billing Manual Call
+============================
+
+import requests
+import json
+
+url = "https://sqo.orion.comcast.com/prod-delivery-ms/product-delivery/v1/products-billing-request"
+
+payload = json.dumps({
+  "correlationId": "CID:{1H4sIAAAAAAAAAB3LSwoDIQwA0CslwV+Wo3ag65bu/UQQrIKd3r/Qt38Q1q6yX7I/fU0AdMB9XrJbKgKID5n1uc7vaH2Mt8wL7D/cKyigw1sTbWDyUd0wMOuTDm2QTHSkPBJmKCkjU86mFhLNpbjkoBWVcv0BqzaEaX0AAAA=}",
+  "resend": False,
+  "products": [
+    {
+      "productId": "IProductAgreementItemInstance_5163333",
+      "version": "10",
+      "billingDate": "2025-12-05T04:13:52Z",
+      "action": "CREATE",
+      "subAction": "CE"
+    }
+  ]
+})
+headers = {
+  'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6InJ0c0ZULWItN0x1WTdEVlllU05LY0lKN1ZuYyJ9.eyJhdWQiOiI3NmQyNWExNy1mMDJiLTRmYjgtYmYyMy1mYjg4YzQ4ZTExMzUiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vOTA2YWVmZTktNzZhNy00ZjY1LWI4MmQtNWVjMjA3NzVkNWFhL3YyLjAiLCJpYXQiOjE3NjUzNjQwNTgsIm5iZiI6MTc2NTM2NDA1OCwiZXhwIjoxNzY1MzY3OTU4LCJhaW8iOiJrMkpnWU5CL2RrbVM5YWlXKzMvV0EzV3pwUEpLUHd1bmZ1V2UvT01OdDA3a2wrcWFucDhBIiwiYXpwIjoiZjM5NzRmMjItOGI5My00ZjBhLTkzNzItZjU4ZjMyMDYyM2Y3IiwiYXpwYWNyIjoiMSIsIm9pZCI6IjAxZmE4ZDFmLTUwM2ItNGFmOC04N2ZhLThiN2YxMTkzZTFiNyIsInJoIjoiMS5BUTBBNmU5cWtLZDJaVS00TFY3Q0IzWFZxaGRhMG5ZcjhMaFB2eVA3aU1TT0VUVU5BQUFOQUEuIiwicm9sZXMiOlsiU1FPX09ET0FjY2VzcyJdLCJzdWIiOiIwMWZhOGQxZi01MDNiLTRhZjgtODdmYS04YjdmMTE5M2UxYjciLCJ0aWQiOiI5MDZhZWZlOS03NmE3LTRmNjUtYjgyZC01ZWMyMDc3NWQ1YWEiLCJ1dGkiOiJhWjJvaGRkZVhreUtCN1dRU0RRb0FBIiwidmVyIjoiMi4wIiwieG1zX2Z0ZCI6Ii0tUUR1QVVHb1hZSERZSGpuU2FYbWk5allaN1pZcmJzY3VfUmhZUDlwMGNCZFhOM1pYTjBNeTFrYzIxeiJ9.fTDSOJWcU6OsawSa1-6joNMYTvSv48FRMUzIFLrZt02g2siSx0Njx_gfR3RwqnopYhTBGNJcWC9-IM-h8SZqc1m-Oh7ZoFruAqN4Vv2HRuVCV9iFkJc421s9uaOJuwaI69LFMILRBNo3GqBiaDJWlnwrsQFvQRaj-WoEqMtzvZWUx3nOOxo8Zhg7-70ep45QZZvzhhL3FX50R45rrm1pUAwC_Ruf0NXt46zH1-CSk3n8QAOOLJ9kP_gIZpi2RDutCIJgnsxDOSOlcFnL3Jsu-Us1rzJA_K5RXK0Hsjm2ErZI7IVYI1lgMssAxQVfusZ0dTCxyfW3NhbAdWHO9cs1mQ',
+  'Content-Type': 'application/json',
+  'Cookie': '257df8186b610336b666f50f0ec4f85c=2035bd75361aa25bc53acc8ad8923971'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+
+
+3.SQO to ODO login
+===================
+
+import requests
+import json
+
+url = "https://sqoapp.orion.comcast.com:443/securitymanagement-ms/Login"
+
+payload = json.dumps({
+  "user": "ODOUser",
+  "password": "Unix11"
+})
+headers = {
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+
+
+4.Submit to Delivery
+=====================
+
+import requests
+import json
+
+url = "https://sqo.orion.comcast.com/frameworkagreement-ms/framework-agreement-management/v1/delivery-request"
+
+payload = json.dumps({
+  "correlationId": "CID:{1H4sIAAAAAAAAADOwzMwrSS1KS0xONTA0CC5Nys0sCcl3Sc3JLEstqjQwzy9KSS3ydDEwMDMysjAwMAIAbHS9gzAAAAA=}",
+  "frameworkAgreementRef": {
+    "id": "IFrameworkAgreement_424633",
+    "version": 9
+  },
+  "productAgreementItems": [
+    {
+      "id": "IProductAgreementItemInstance_2731306",
+      "version": 2
+    },
+    {
+      "id": "IProductAgreementItemInstance_2823080",
+      "version": 3
+    },
+    {
+      "id": "IProductAgreementItemInstance_2731298",
+      "version": 3
+    }
+  ]
+})
+headers = {
+  'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ii1LSTNROW5OUjdiUm9meG1lWm9YcWJIWkdldyJ9.eyJhdWQiOiI3NmQyNWExNy1mMDJiLTRmYjgtYmYyMy1mYjg4YzQ4ZTExMzUiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vOTA2YWVmZTktNzZhNy00ZjY1LWI4MmQtNWVjMjA3NzVkNWFhL3YyLjAiLCJpYXQiOjE2OTA3OTkwMjUsIm5iZiI6MTY5MDc5OTAyNSwiZXhwIjoxNjkwODAyOTI1LCJhaW8iOiJFMkZnWU5odjhyRnMrUTNKU3QzalFta0prd3BMRW01T1QraVRqZ3phK25uU05QWmIxeHNBIiwiYXpwIjoiZjM5NzRmMjItOGI5My00ZjBhLTkzNzItZjU4ZjMyMDYyM2Y3IiwiYXpwYWNyIjoiMSIsIm9pZCI6IjAxZmE4ZDFmLTUwM2ItNGFmOC04N2ZhLThiN2YxMTkzZTFiNyIsInJoIjoiMC5BUTBBNmU5cWtLZDJaVS00TFY3Q0IzWFZxaGRhMG5ZcjhMaFB2eVA3aU1TT0VUVU5BQUEuIiwicm9sZXMiOlsiU1FPX09ET0FjY2VzcyJdLCJzdWIiOiIwMWZhOGQxZi01MDNiLTRhZjgtODdmYS04YjdmMTE5M2UxYjciLCJ0aWQiOiI5MDZhZWZlOS03NmE3LTRmNjUtYjgyZC01ZWMyMDc3NWQ1YWEiLCJ1dGkiOiIxakU2MUYyYTNFeVhrRkhVQmhjUkFBIiwidmVyIjoiMi4wIn0.QWIdbuGf_3Kpv5sYxfz6OfL_weGE_v0Y5Ld5BZwDY9vi1rSp1FJ83h8cHG827H3D5zmE5YK1JjxapqDukvKKL5Qy7TEgmFBoChaHbXe_Ht9ZFBI9GBMw7NXtthwwFKqhYZzhpTZPDks6jWg8xViij2LFyEb98ABh0yZOJ0opDJ2kPva2kYzZHPuIOf0t3Pj5ZEYHYdFrkNjdbhhHGBjxfLTmrnEi4VvdHW9XO70kmrBkXC2rB3s556J-VYICXjt67R43DDGw4abtcbZGoZA5txXw-03FXS5HJVm6qRvXYUNO-JClyUmBU0WbywxXGQowSV7fCkEcNgampg_63NyrMw',
+  'Content-Type': 'application/json',
+  'Cookie': '257df8186b610336b666f50f0ec4f85c=2035bd75361aa25bc53acc8ad8923971'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+
+
+5.Set Product Status
+=====================
+
+import requests
+import json
+
+url = "https://sqo.orion.comcast.com/prod-delivery-ms/product-delivery/v1/products-assignment-request"
+
+payload = json.dumps({
+  "products": [
+    {
+      "productId": "IProductAgreementItemInstance_2431057",
+      "version": "5"
+    },
+    {
+      "productId": "IProductAgreementItemInstance_2431005",
+      "version": "5"
+    },
+    {
+      "productId": "IProductAgreementItemInstance_2431056",
+      "version": "5"
+    }
+  ],
+  "correlationId": "CID:{1H4sIAAAAAAAAAA3HMQ7DIAwAwC/ZYCAeUaFSt0h5ARgjZWkk6vw/ve2Az6/pmk0UEA61fV3jFjus2f2DdK2h61OAAAkq15zIs6PXO2YKmGvBAg7KFh1jCpN96N2zxr6JDJ3copf+b5wP3FjNhGoAAAA=}"
+})
+headers = {
+  'Content-Type': 'application/json',
+  'Cookie': '257df8186b610336b666f50f0ec4f85c=2035bd75361aa25bc53acc8ad8923971'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+
+6.Send to Fulfillment
+=====================
+
+import requests
+import json
+
+url = "https://sqoapp.orion.comcast.com:443/prod-delivery-ms/product-delivery/v1/products-fulfillment-request"
+
+payload = json.dumps({
+  "products": [
+    {
+      "productId": "IProductAgreementItemInstance_2338736",
+      "action": "CREATE",
+      "version": "2",
+      "previousVersion": None,
+      "subAction": "CH"
+    },
+    {
+      "productId": "IProductAgreementItemInstance_2338737",
+      "action": "CREATE",
+      "version": "2",
+      "previousVersion": None,
+      "subAction": "NE"
+    },
+    {
+      "productId": "IProductAgreementItemInstance_2338735",
+      "action": "CREATE",
+      "version": "2",
+      "previousVersion": None,
+      "subAction": "NE"
+    }
+  ],
+  "correlationId": "CID:{1H4sIAAAAAAAAAAXBSwrDMAwFwCvJ8kf20k0a6Lq9gBM9QcB1wKT37wyVc9yY1g6Qc28M/Vzbr9vZ+xfjJrmmYr6UAnmRh6s11/rcwhK5VOElphTYZ7+uhRUiFmkPimTYI5gPQHIzbYXwB/hsDqJrAAAA}",
+  "fulfillmentGroupId": "1A856673E1CF4FFB9F8C8147F59CD652",
+  "fulfillmentGroupAction": "CREATE",
+  "fulfillmentGroupVersion": "1"
+})
+headers = {
+  'Content-Type': 'application/json',
+  'Authorization': 'Bearer Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ii1LSTNROW5OUjdiUm9meG1lWm9YcWJIWkdldyJ9.eyJhdWQiOiI3NmQyNWExNy1mMDJiLTRmYjgtYmYyMy1mYjg4YzQ4ZTExMzUiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vOTA2YWVmZTktNzZhNy00ZjY1LWI4MmQtNWVjMjA3NzVkNWFhL3YyLjAiLCJpYXQiOjE2ODQzMjcxOTEsIm5iZiI6MTY4NDMyNzE5MSwiZXhwIjoxNjg0MzMxODA2LCJhaW8iOiJBWlFBYS84VEFBQUEwTjRZaVFZR05LMHhGM1JTY2kzU3M3WmdvSjB4QStYOUU3M2hoMWNaYWpuNEJxK3VIbmNWSWNENHZiQTlpa0hwZkplS21rYnduQndNdm43SjR0VE95am5KdVhUZjYyanA3ZFIrd1hTVXB2L0JMMTU1TEpFTUFON1JzVWhadUtWUTRFaEQwRHZsTXhyS3J4ME10SWlobkxVU21NK2t5OHhRWG1YYk1PQVV1N0xvYlF5ZWJ0amt1RlJyTHRGbm5Ka0kiLCJhenAiOiI3NmQyNWExNy1mMDJiLTRmYjgtYmYyMy1mYjg4YzQ4ZTExMzUiLCJhenBhY3IiOiIxIiwibmFtZSI6Ik1haGFqYW4sIElzaGFuIChDb250cmFjdG9yKSIsIm9pZCI6IjA0MDUwN2Y2LTAwZWUtNDk1MS04OTFiLThmYmU0ZGE1YTE0YiIsInByZWZlcnJlZF91c2VybmFtZSI6ImlzaGFuX21haGFqYW5AY29tY2FzdC5jb20iLCJyaCI6IjAuQVEwQTZlOXFrS2QyWlUtNExWN0NCM1hWcWhkYTBuWXI4TGhQdnlQN2lNU09FVFVOQURBLiIsInJvbGVzIjpbIlNhbGVzX1JlcCJdLCJzY3AiOiJsaWNfc2NvcGUgc3NvX3Njb3BlIiwic3ViIjoiLTlVREZZdElsM0RxSXNwV3FyQnJMNndWZnhNWTZxU2U5NnlHWGZLUG1PMCIsInRpZCI6IjkwNmFlZmU5LTc2YTctNGY2NS1iODJkLTVlYzIwNzc1ZDVhYSIsInV0aSI6IlBpRmlZMTU1ZEVLS1hLUTVwbngyQUEiLCJ2ZXIiOiIyLjAiLCJvbnByZW1pc2Vzc2FtYWNjb3VudG5hbWUiOiJpbWFoYWo2NzAiLCJ1c2VycHJpbmNpcGFsbmFtZSI6ImltYWhhajY3MEBjYWJsZS5jb21jYXN0LmNvbSIsImdpdmVubmFtZSI6IklzaGFuIiwic3VybmFtZSI6Ik1haGFqYW4iLCJjb21jYXN0b2JqZWN0Z3VpZCI6ImYzNVA3NGhBOGsyNjhqY2lXZXBYb3c9PSIsImVtcGxveWVldHlwZSI6IkMiLCJjb21jYXN0Z3VpZCI6ImMzYzcxNTBiLTdiNzEtNGIwMS04MzlkLTVlYzY4MTJhMTE1NSIsIm9ucHJlbWlzZXNkaXN0aW5ndWlzaGVkbmFtZSI6IkNOPWltYWhhajY3MCxPVT1Vc2VycyxPVT1Db3Jwb3JhdGUsREM9Y2FibGUsREM9Y29tY2FzdCxEQz1jb20ifQ.JOoqxSs5fdwmoLmGEvvnmSbJsDUwMfSyEnQcQpBj0cunUUNk_JSwHqx5gsQWqvIPGF4bs0xtdas2Tf6FaQWk16xdlbNUq2ONUzu-rUp2qV-7gPV8HeeR8Q5v9aEAjPehkTpMF-TFv0FRdac_z14H73O8Ji2kTFCOPg8rlxQkVwDYu8ITalz80rLrJZ_27_398m0MKwsxzZkCNsFVgXb9qAoV7ZuRwFSJ_-FmRYHT-ivtoSW7QG3GeWJX13SE-cHxCJ1TwDjDU942Acv4BVPq5WdSxtcz_Eobsosa5PP8wp9hI4zaQC7UN3oTPagzBTWVnp_VepfAPK-Uz1TdsWjTMg'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+
+
+
+7.QuoteAlignment
+=================
+
+import requests
+import json
+
+url = "https://sqoapp.orion.comcast.com:443/product_quote_aligner-ms/product_quote_aligner-ms-management/v1/framework-agreement/IFrameworkAgreement_464924/align-quote"
+
+payload = json.dumps({
+  "requestType": "Quote"
+})
+headers = {
+  'Authorization': 'Bearer UXF_SessionToken:qvbxVQyiurPr5wZ+T2zTSQ==___currentencryptionkey___Bu3nJXReQpnz4H9JzP9WLFayTEJxaak/gR1vDr/spy8M7fydsWwn9b/O48yw7kIr6uzDeQRhu5Sv3ubQcInssV+yYb5fOriT5q3vGW8dPmqzFYDUSk8s3QURi8WTewSuK+mLQzQuy0e4yKmvu6L1SQ6NUCdUKZNh7BJ1wOB24zUotFrNOtxZu8ToOqdQ80ZsFP3Y2NpmYJsSYSGiRKpWRq1o/P0n2EbxvoQuNKcSbGZcCDJHp0V2V07DU9Qy/sfh1ZJ9gFzdUL7gCiKZVqLBYb81AAvP0nFnw/ID8Pt062g=',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+
+
+
+
+

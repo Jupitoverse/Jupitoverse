@@ -1,0 +1,520 @@
+{
+  "metadata": {
+    "source": "NASA/JPL Small Body Database",
+    "url": "https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html",
+    "description": "Real orbital data for featured asteroids and comets",
+    "date_generated": "2025-11-01",
+    "total_objects": 13
+  },
+  "asteroids": [
+    {
+      "name": "1 Ceres",
+      "full_name": "(1) Ceres",
+      "designation": "1",
+      "object_type": "Dwarf Planet",
+      "diameter_km": 939.4,
+      "mass_kg": 9.384e20,
+      "discovery_date": "1801-01-01",
+      "discoverer": "Giuseppe Piazzi",
+      "orbital_elements": {
+        "semi_major_axis_au": 2.767,
+        "eccentricity": 0.0758,
+        "inclination_deg": 10.59,
+        "ascending_node_deg": 80.3,
+        "perihelion_deg": 73.6,
+        "mean_anomaly_deg": 352.2,
+        "orbital_period_years": 4.60,
+        "perihelion_au": 2.558,
+        "aphelion_au": 2.976
+      },
+      "physical_properties": {
+        "rotation_period_hours": 9.07,
+        "albedo": 0.09,
+        "absolute_magnitude": 3.34,
+        "surface_temperature_k": 167
+      },
+      "classification": {
+        "orbit_class": "Main Belt",
+        "spectral_type": "C-type (carbonaceous)",
+        "is_nea": false,
+        "is_pha": false
+      },
+      "missions": [
+        "Dawn (2015)"
+      ],
+      "description": "Largest object in the asteroid belt between Mars and Jupiter. Contains about one-third of the belt's total mass. Classified as a dwarf planet."
+    },
+    {
+      "name": "4 Vesta",
+      "full_name": "(4) Vesta",
+      "designation": "4",
+      "object_type": "Asteroid",
+      "diameter_km": 525.4,
+      "mass_kg": 2.59e20,
+      "discovery_date": "1807-03-29",
+      "discoverer": "Heinrich Wilhelm Olbers",
+      "orbital_elements": {
+        "semi_major_axis_au": 2.362,
+        "eccentricity": 0.0887,
+        "inclination_deg": 7.14,
+        "ascending_node_deg": 103.9,
+        "perihelion_deg": 151.2,
+        "mean_anomaly_deg": 205.8,
+        "orbital_period_years": 3.63,
+        "perihelion_au": 2.152,
+        "aphelion_au": 2.572
+      },
+      "physical_properties": {
+        "rotation_period_hours": 5.34,
+        "albedo": 0.423,
+        "absolute_magnitude": 3.20,
+        "surface_temperature_k": 85
+      },
+      "classification": {
+        "orbit_class": "Main Belt",
+        "spectral_type": "V-type (basaltic)",
+        "is_nea": false,
+        "is_pha": false
+      },
+      "missions": [
+        "Dawn (2011-2012)"
+      ],
+      "description": "Second-largest asteroid in the solar system. Brightest asteroid visible from Earth. Has a giant crater at its south pole."
+    },
+    {
+      "name": "433 Eros",
+      "full_name": "(433) Eros",
+      "designation": "433",
+      "object_type": "Near-Earth Asteroid",
+      "diameter_km": 16.84,
+      "mass_kg": 6.687e15,
+      "discovery_date": "1898-08-13",
+      "discoverer": "Carl Gustav Witt",
+      "orbital_elements": {
+        "semi_major_axis_au": 1.458,
+        "eccentricity": 0.2229,
+        "inclination_deg": 10.83,
+        "ascending_node_deg": 304.4,
+        "perihelion_deg": 178.9,
+        "mean_anomaly_deg": 262.5,
+        "orbital_period_years": 1.76,
+        "perihelion_au": 1.133,
+        "aphelion_au": 1.783
+      },
+      "physical_properties": {
+        "rotation_period_hours": 5.27,
+        "albedo": 0.25,
+        "absolute_magnitude": 10.31,
+        "surface_temperature_k": 227
+      },
+      "classification": {
+        "orbit_class": "Amor (Near-Earth)",
+        "spectral_type": "S-type (silicaceous)",
+        "is_nea": true,
+        "is_pha": false
+      },
+      "missions": [
+        "NEAR Shoemaker (2000-2001, first asteroid landing)"
+      ],
+      "description": "First near-Earth asteroid discovered. First asteroid to be orbited and landed on by a spacecraft."
+    },
+    {
+      "name": "99942 Apophis",
+      "full_name": "(99942) Apophis",
+      "designation": "2004 MN4",
+      "object_type": "Potentially Hazardous Asteroid",
+      "diameter_km": 0.370,
+      "mass_kg": 2.7e10,
+      "discovery_date": "2004-06-19",
+      "discoverer": "Roy Tucker, David Tholen, Fabrizio Bernardi",
+      "orbital_elements": {
+        "semi_major_axis_au": 0.9224,
+        "eccentricity": 0.1911,
+        "inclination_deg": 3.331,
+        "ascending_node_deg": 204.4,
+        "perihelion_deg": 126.4,
+        "mean_anomaly_deg": 245.2,
+        "orbital_period_years": 0.89,
+        "perihelion_au": 0.746,
+        "aphelion_au": 1.099
+      },
+      "physical_properties": {
+        "rotation_period_hours": 30.4,
+        "albedo": 0.30,
+        "absolute_magnitude": 19.7,
+        "surface_temperature_k": 270
+      },
+      "classification": {
+        "orbit_class": "Aten (Near-Earth)",
+        "spectral_type": "Sq-type",
+        "is_nea": true,
+        "is_pha": true
+      },
+      "close_approaches": [
+        {
+          "date": "2029-04-13",
+          "distance_km": 31600,
+          "description": "Will pass within geostationary satellite orbit distance"
+        },
+        {
+          "date": "2036-04-13",
+          "distance_km": 49000000,
+          "description": "Much farther passage, no threat"
+        }
+      ],
+      "description": "Famous for briefly having a high probability of Earth impact in 2029. Will pass extremely close to Earth on April 13, 2029, within satellite orbits."
+    },
+    {
+      "name": "101955 Bennu",
+      "full_name": "(101955) Bennu",
+      "designation": "1999 RQ36",
+      "object_type": "Potentially Hazardous Asteroid",
+      "diameter_km": 0.492,
+      "mass_kg": 7.329e10,
+      "discovery_date": "1999-09-11",
+      "discoverer": "LINEAR",
+      "orbital_elements": {
+        "semi_major_axis_au": 1.126,
+        "eccentricity": 0.2037,
+        "inclination_deg": 6.035,
+        "ascending_node_deg": 2.06,
+        "perihelion_deg": 66.22,
+        "mean_anomaly_deg": 102.7,
+        "orbital_period_years": 1.20,
+        "perihelion_au": 0.897,
+        "aphelion_au": 1.356
+      },
+      "physical_properties": {
+        "rotation_period_hours": 4.297,
+        "albedo": 0.046,
+        "absolute_magnitude": 20.9,
+        "surface_temperature_k": 210
+      },
+      "classification": {
+        "orbit_class": "Apollo (Near-Earth)",
+        "spectral_type": "B-type (carbonaceous)",
+        "is_nea": true,
+        "is_pha": true
+      },
+      "missions": [
+        "OSIRIS-REx (2018-2021, sample return successful)"
+      ],
+      "description": "Target of NASA's OSIRIS-REx sample return mission. Samples returned to Earth on September 24, 2023. One of the most well-studied asteroids."
+    },
+    {
+      "name": "16 Psyche",
+      "full_name": "(16) Psyche",
+      "designation": "16",
+      "object_type": "Metal-Rich Asteroid",
+      "diameter_km": 226,
+      "mass_kg": 2.72e19,
+      "discovery_date": "1852-03-17",
+      "discoverer": "Annibale de Gasparis",
+      "orbital_elements": {
+        "semi_major_axis_au": 2.921,
+        "eccentricity": 0.1339,
+        "inclination_deg": 3.095,
+        "ascending_node_deg": 150.3,
+        "perihelion_deg": 228.0,
+        "mean_anomaly_deg": 93.7,
+        "orbital_period_years": 5.0,
+        "perihelion_au": 2.530,
+        "aphelion_au": 3.311
+      },
+      "physical_properties": {
+        "rotation_period_hours": 4.196,
+        "albedo": 0.12,
+        "absolute_magnitude": 5.90,
+        "surface_temperature_k": 170,
+        "composition": "Iron-Nickel (90% metal)"
+      },
+      "classification": {
+        "orbit_class": "Main Belt",
+        "spectral_type": "M-type (metallic)",
+        "is_nea": false,
+        "is_pha": false
+      },
+      "missions": [
+        "NASA Psyche Mission (launched 2023, arrival 2029)"
+      ],
+      "description": "Massive metallic asteroid, possibly the exposed core of a protoplanet. Target of NASA's Psyche mission to study planetary cores."
+    },
+    {
+      "name": "243 Ida",
+      "full_name": "(243) Ida",
+      "designation": "243",
+      "object_type": "Asteroid with Moon",
+      "diameter_km": 31.4,
+      "mass_kg": 4.2e16,
+      "discovery_date": "1884-09-29",
+      "discoverer": "Johann Palisa",
+      "orbital_elements": {
+        "semi_major_axis_au": 2.862,
+        "eccentricity": 0.0431,
+        "inclination_deg": 1.137,
+        "ascending_node_deg": 324.6,
+        "perihelion_deg": 109.3,
+        "mean_anomaly_deg": 159.1,
+        "orbital_period_years": 4.84,
+        "perihelion_au": 2.739,
+        "aphelion_au": 2.986
+      },
+      "physical_properties": {
+        "rotation_period_hours": 4.63,
+        "albedo": 0.238,
+        "absolute_magnitude": 9.94,
+        "surface_temperature_k": 200
+      },
+      "classification": {
+        "orbit_class": "Main Belt (Koronis family)",
+        "spectral_type": "S-type",
+        "is_nea": false,
+        "is_pha": false
+      },
+      "satellites": [
+        {
+          "name": "Dactyl",
+          "diameter_km": 1.4,
+          "discovery_date": "1993",
+          "orbital_period_hours": 20
+        }
+      ],
+      "missions": [
+        "Galileo (1993 flyby)"
+      ],
+      "description": "First asteroid discovered to have a natural satellite (moon). Visited by Galileo spacecraft in 1993."
+    },
+    {
+      "name": "162173 Ryugu",
+      "full_name": "(162173) Ryugu",
+      "designation": "1999 JU3",
+      "object_type": "Near-Earth Asteroid",
+      "diameter_km": 0.896,
+      "mass_kg": 4.5e11,
+      "discovery_date": "1999-05-10",
+      "discoverer": "LINEAR",
+      "orbital_elements": {
+        "semi_major_axis_au": 1.190,
+        "eccentricity": 0.1902,
+        "inclination_deg": 5.884,
+        "ascending_node_deg": 251.6,
+        "perihelion_deg": 211.4,
+        "mean_anomaly_deg": 34.1,
+        "orbital_period_years": 1.30,
+        "perihelion_au": 0.963,
+        "aphelion_au": 1.416
+      },
+      "physical_properties": {
+        "rotation_period_hours": 7.63,
+        "albedo": 0.047,
+        "absolute_magnitude": 19.3,
+        "surface_temperature_k": 300,
+        "shape": "Diamond-shaped spinning top"
+      },
+      "classification": {
+        "orbit_class": "Apollo (Near-Earth)",
+        "spectral_type": "Cg-type (carbonaceous)",
+        "is_nea": true,
+        "is_pha": false
+      },
+      "missions": [
+        "Hayabusa2 (2018-2019, sample return successful)"
+      ],
+      "description": "Target of JAXA's Hayabusa2 sample return mission. Samples returned to Earth on December 6, 2020."
+    }
+  ],
+  "comets": [
+    {
+      "name": "1P/Halley",
+      "full_name": "1P/Halley (Halley's Comet)",
+      "designation": "1P",
+      "object_type": "Periodic Comet",
+      "nucleus_diameter_km": 11,
+      "mass_kg": 2.2e14,
+      "discovery_date": "240 BC (ancient observations)",
+      "orbital_elements": {
+        "semi_major_axis_au": 17.8,
+        "eccentricity": 0.9671,
+        "inclination_deg": 162.26,
+        "ascending_node_deg": 58.42,
+        "perihelion_deg": 111.33,
+        "mean_anomaly_deg": 38.38,
+        "orbital_period_years": 75.32,
+        "perihelion_au": 0.586,
+        "aphelion_au": 35.08
+      },
+      "physical_properties": {
+        "rotation_period_hours": 52.8,
+        "albedo": 0.04,
+        "absolute_magnitude": 4.5,
+        "composition": "Ice, dust, rock"
+      },
+      "classification": {
+        "orbit_class": "Halley-type Comet",
+        "is_periodic": true,
+        "origin": "Kuiper Belt"
+      },
+      "apparitions": [
+        {
+          "date": "1986-02-09",
+          "perihelion_date": "1986-02-09"
+        },
+        {
+          "date": "2061-07-28",
+          "perihelion_date": "2061-07-28 (predicted)"
+        }
+      ],
+      "missions": [
+        "Giotto (1986)",
+        "Vega 1 & 2 (1986)",
+        "Suisei (1986)",
+        "Sakigake (1986)"
+      ],
+      "description": "Most famous comet, visible from Earth every 75-76 years. Last perihelion: 1986, next: 2061. Studied by multiple spacecraft in 1986."
+    },
+    {
+      "name": "67P/Churyumov-Gerasimenko",
+      "full_name": "67P/Churyumov-Gerasimenko",
+      "designation": "67P",
+      "object_type": "Jupiter-family Comet",
+      "nucleus_diameter_km": 4.1,
+      "mass_kg": 9.982e12,
+      "discovery_date": "1969-09-11",
+      "discoverer": "Klim Churyumov, Svetlana Gerasimenko",
+      "orbital_elements": {
+        "semi_major_axis_au": 3.463,
+        "eccentricity": 0.6410,
+        "inclination_deg": 7.041,
+        "ascending_node_deg": 50.15,
+        "perihelion_deg": 12.78,
+        "mean_anomaly_deg": 87.32,
+        "orbital_period_years": 6.45,
+        "perihelion_au": 1.243,
+        "aphelion_au": 5.683
+      },
+      "physical_properties": {
+        "rotation_period_hours": 12.4,
+        "albedo": 0.06,
+        "absolute_magnitude": 15.6,
+        "shape": "Duck or rubber ducky shape (two lobes)",
+        "composition": "Water ice, dust"
+      },
+      "classification": {
+        "orbit_class": "Jupiter-family Comet",
+        "is_periodic": true,
+        "origin": "Kuiper Belt"
+      },
+      "missions": [
+        "Rosetta (2014-2016, orbital mission)",
+        "Philae (2014, first comet landing)"
+      ],
+      "description": "Target of ESA's Rosetta mission. First comet to be orbited and landed on (Philae lander). Famous duck-shaped nucleus."
+    },
+    {
+      "name": "C/2020 F3 (NEOWISE)",
+      "full_name": "C/2020 F3 (NEOWISE)",
+      "designation": "C/2020 F3",
+      "object_type": "Long-period Comet",
+      "nucleus_diameter_km": 5,
+      "discovery_date": "2020-03-27",
+      "discoverer": "NEOWISE space telescope",
+      "orbital_elements": {
+        "semi_major_axis_au": 295,
+        "eccentricity": 0.9992,
+        "inclination_deg": 128.937,
+        "ascending_node_deg": 61.011,
+        "perihelion_deg": 37.278,
+        "orbital_period_years": 6766,
+        "perihelion_au": 0.2947,
+        "aphelion_au": 589
+      },
+      "physical_properties": {
+        "rotation_period_hours": 7.6,
+        "albedo": 0.04,
+        "absolute_magnitude": 8.1,
+        "composition": "Ice, dust, organic compounds"
+      },
+      "classification": {
+        "orbit_class": "Long-period Comet",
+        "is_periodic": false,
+        "origin": "Oort Cloud"
+      },
+      "apparitions": [
+        {
+          "date": "2020-07-03",
+          "perihelion_date": "2020-07-03",
+          "description": "Visible to naked eye in July 2020"
+        }
+      ],
+      "description": "Bright comet discovered during COVID-19 pandemic. Visible to naked eye in July 2020. Next return in ~6800 years."
+    },
+    {
+      "name": "2I/Borisov",
+      "full_name": "2I/Borisov (Interstellar Comet)",
+      "designation": "C/2019 Q4",
+      "object_type": "Interstellar Comet",
+      "nucleus_diameter_km": 0.4,
+      "discovery_date": "2019-08-30",
+      "discoverer": "Gennady Borisov",
+      "orbital_elements": {
+        "semi_major_axis_au": -0.85,
+        "eccentricity": 3.3579,
+        "inclination_deg": 44.053,
+        "orbital_period_years": "infinity (hyperbolic)",
+        "perihelion_au": 2.006
+      },
+      "physical_properties": {
+        "albedo": 0.04,
+        "absolute_magnitude": 22.1,
+        "composition": "Water ice, carbon monoxide"
+      },
+      "classification": {
+        "orbit_class": "Interstellar Object",
+        "is_periodic": false,
+        "origin": "Another star system"
+      },
+      "description": "Second confirmed interstellar object and first interstellar comet. Passed through solar system in 2019. Will never return."
+    }
+  ],
+  "classification_definitions": {
+    "Near-Earth Asteroid (NEA)": {
+      "definition": "Asteroid with perihelion distance < 1.3 AU",
+      "subclasses": {
+        "Atiras": "Semi-major axis < 1.0 AU and aphelion < 0.983 AU",
+        "Atens": "Semi-major axis < 1.0 AU and aphelion > 0.983 AU",
+        "Apollos": "Semi-major axis > 1.0 AU and perihelion < 1.017 AU",
+        "Amors": "Semi-major axis > 1.0 AU and perihelion between 1.017 and 1.3 AU"
+      }
+    },
+    "Potentially Hazardous Asteroid (PHA)": {
+      "definition": "NEA with MOID < 0.05 AU and absolute magnitude H < 22.0",
+      "criteria": [
+        "Minimum Orbit Intersection Distance (MOID) with Earth < 0.05 AU (7.5 million km)",
+        "Absolute magnitude H < 22.0 (diameter roughly > 140 meters)"
+      ]
+    },
+    "Main Belt Asteroid": {
+      "definition": "Asteroid orbiting between Mars and Jupiter",
+      "semi_major_axis_range": "2.0 - 3.2 AU"
+    },
+    "Comet Types": {
+      "Short-period": "Orbital period < 200 years",
+      "Long-period": "Orbital period > 200 years",
+      "Jupiter-family": "Orbital period < 20 years, Tisserand parameter > 2"
+    }
+  },
+  "data_sources": {
+    "primary": "NASA JPL Small Body Database (SBDB)",
+    "secondary": [
+      "IAU Minor Planet Center",
+      "NASA CNEOS",
+      "ESA NEO Coordination Centre"
+    ],
+    "verification_date": "2025-11-01"
+  }
+}
+
+
+
+
+

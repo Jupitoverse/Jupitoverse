@@ -1,0 +1,448 @@
+================================================================================
+OSO_Service_Activated.py - NEW FEATURES (Version 2.0)
+================================================================================
+
+Date: 2025-01-27
+Updates: Added Email Support, Toggles, Enhanced Logging, Date Execution Control
+
+================================================================================
+1. EMAIL FUNCTIONALITY
+================================================================================
+
+NEW: EmailMgr Class (Adapted from Outage_Report.py)
+  - Sends HTML formatted emails
+  - Attaches Excel file with ALL table data
+  - Uses SMTP localhost for sending
+  - Includes execution summary in email body
+
+Email Features:
+  - Professional HTML formatting
+  - Summary table with statistics
+  - Database information
+  - Execution date/time
+  - Styled tables and sections
+
+Default Recipients:
+  - TO: abhishek_agrahari@comcast.com
+  - CC: abhisha3@amdocs.com
+
+Email Subject:
+  "Comcast OSS || OSO Service Activated Report - YYYY-MM-DD"
+
+Email Contains:
+  - Execution summary (records fetched, inserted, skipped)
+  - Total records in tracking table
+  - Database connection details
+  - Excel attachment with ALL table data
+  - Next steps and instructions
+
+================================================================================
+2. CONFIGURATION TOGGLES (Top of Script)
+================================================================================
+
+A. SEND_EMAIL Toggle
+   - Default: True
+   - Set to False to disable email sending
+   - Useful for testing or scheduled runs without notifications
+
+B. DATE_EXECUTION_FREQUENCY
+   - Default: 1 (daily)
+   - Values: 1 = daily, 7 = weekly, 30 = monthly
+   - Script auto-skips if today is not execution day
+   - Uses: Todays_Date_DD % DATE_EXECUTION_FREQUENCY != 0
+
+C. EMAIL_RECIPIENTS (List)
+   - Primary recipients for the report
+   - Easily add/remove addresses
+
+D. EMAIL_CC_RECIPIENTS (List)
+   - CC recipients for the report
+   - Separate from primary recipients
+
+Example Configuration:
+```python
+SEND_EMAIL = True
+DATE_EXECUTION_FREQUENCY = 1
+EMAIL_RECIPIENTS = ['abhishek_agrahari@comcast.com']
+EMAIL_CC_RECIPIENTS = ['abhisha3@amdocs.com']
+```
+
+================================================================================
+3. ENHANCED LOGGING
+================================================================================
+
+NEW: Comprehensive logging throughout script
+
+Logging Format:
+  "%(asctime)s - %(levelname)s - %(message)s"
+  Example: 2025-01-27 10:30:15 - INFO - Database connection established
+
+Logging Levels Used:
+  - INFO: Normal operations
+  - WARNING: Non-critical issues
+  - ERROR: Failures and exceptions
+  - DEBUG: Detailed debug information
+
+Logged Operations:
+  - Script start/end with timestamps
+  - Date execution checks
+  - Database connections (success/failure)
+  - Query execution
+  - Record counts (fetched, inserted, skipped)
+  - Excel file creation
+  - Email sending status
+  - All errors with stack traces
+
+Example Log Output:
+```
+2025-01-27 10:30:00 - INFO - ================================================
+2025-01-27 10:30:00 - INFO - OSO_Service_Activated.py - Script Started
+2025-01-27 10:30:00 - INFO - Execution Date: 2025-01-27
+2025-01-27 10:30:00 - INFO - Execution Time: 2025-01-27 10:30:00
+2025-01-27 10:30:01 - INFO - [OK] psycopg2 imported successfully
+2025-01-27 10:30:01 - INFO - Connecting to READ database...
+2025-01-27 10:30:02 - INFO - [OK] READ database connection established
+...
+```
+
+================================================================================
+4. DATE/DAY EXECUTION CONTROL
+================================================================================
+
+NEW: Automatic execution frequency control
+
+Date Variables:
+  - Todays_Date_DD: Current day of month
+  - Execution_Date: YYYY-MM-DD format
+  - Execution_DateTime: YYYY-MM-DD HH:MM:SS format
+
+Auto-Skip Logic:
+  if Todays_Date_DD % DATE_EXECUTION_FREQUENCY != 0:
+      Script exits without running
+
+Examples:
+  - DATE_EXECUTION_FREQUENCY = 1: Runs every day
+  - DATE_EXECUTION_FREQUENCY = 2: Runs on days 2, 4, 6, 8... (even days)
+  - DATE_EXECUTION_FREQUENCY = 7: Runs on days 7, 14, 21, 28
+  - DATE_EXECUTION_FREQUENCY = 30: Runs on day 30 only
+
+Skip Message:
+  "Script is set to execute only on every Nth day of the month."
+  "Today is day X. Script will not execute."
+  "Next execution: Day Y"
+
+================================================================================
+5. IMPROVED COMMENTS & DOCUMENTATION
+================================================================================
+
+NEW: Extensive inline comments
+
+Comment Sections:
+  - Module-level docstring with full description
+  - Configuration section with toggle explanations
+  - Logging setup with format details
+  - Date execution check with examples
+  - Each function with detailed docstring
+  - Inline comments for complex logic
+  - Step-by-step execution comments
+
+Docstring Format:
+  """
+  Function description
+  
+  Args:
+      param1: Description
+      param2: Description
+  
+  Returns:
+      type: Description
+  """
+
+Section Headers:
+  # =================================================================
+  # SECTION NAME
+  # =================================================================
+
+================================================================================
+6. NEW DATA EXPORT FEATURE
+================================================================================
+
+NEW: fetch_all_table_data() Function
+
+Purpose:
+  - Fetches ALL records from tracking table
+  - Includes data columns + tracking columns + metadata
+  - Used for email attachment
+
+Difference from Previous:
+  BEFORE: Only fetched new records from READ DB
+  NOW: Also fetches complete table data for email
+
+Query:
+  SELECT * FROM OSO_Service_Activated_Data
+  ORDER BY created_at DESC, customer_id, site_id
+
+Result:
+  - Complete tracking table in Excel
+  - All columns including RCA, status, timestamps
+  - Sorted by creation date (newest first)
+
+================================================================================
+7. EXECUTION FLOW (Updated)
+================================================================================
+
+STEP 1: Check Date Execution Frequency
+  - Auto-skip if not execution day
+  - Log skip message and next execution date
+
+STEP 2: Test Database Connections
+  - READ DB connection test
+  - WRITE DB connection test
+  - Display versions and info
+
+STEP 3: Create/Verify Table Structure
+  - Create table if not exists
+  - Create indexes
+  - Verify schema
+
+STEP 4: Fetch Service Activation Data (READ DB)
+  - Execute complex SQL query
+  - Convert to DataFrame
+  - Log row count
+
+STEP 5: Insert New Records (WRITE DB)
+  - Check for duplicates
+  - Insert only new records
+  - Batch commit for performance
+  - Log inserted/skipped counts
+
+STEP 6: Fetch ALL Table Data
+  - Get complete tracking table
+  - Include all columns
+  - For email attachment
+
+STEP 7: Save to Excel
+  - Export all table data
+  - Timestamped filename
+  - Log file size and path
+
+STEP 8: Send Email Report (if toggle enabled)
+  - Create EmailMgr instance
+  - Attach Excel file
+  - Send via SMTP
+  - Log send status
+
+STEP 9: Final Summary
+  - Display execution statistics
+  - Log completion
+  - Exit cleanly
+
+================================================================================
+8. ERROR HANDLING ENHANCEMENTS
+================================================================================
+
+NEW: Comprehensive error handling
+
+Try-Except Blocks:
+  - Every database operation
+  - File operations
+  - Email sending
+  - Import statements
+
+Error Logging:
+  - Full stack traces with traceback.format_exc()
+  - User-friendly console messages
+  - Detailed logger.error() calls
+
+Rollback on Failure:
+  - Database rollback on insert errors
+  - Connection cleanup in finally blocks
+  - Graceful exits with sys.exit()
+
+================================================================================
+9. PERFORMANCE IMPROVEMENTS
+================================================================================
+
+NEW: Batch commit for inserts
+
+Batch Size: 100 records
+  - Commits every 100 inserts
+  - Reduces database overhead
+  - Improves insertion speed
+
+Logging:
+  - Batch progress: "Committed batch: 100 records inserted so far..."
+
+Benefits:
+  - Faster for large datasets
+  - Better transaction management
+  - Reduced lock contention
+
+================================================================================
+10. SUMMARY STATISTICS
+================================================================================
+
+NEW: Comprehensive execution statistics
+
+Summary Dict:
+  {
+      'total_records': Records fetched from READ DB,
+      'new_records': Records inserted to WRITE DB,
+      'existing_records': Records skipped (duplicates),
+      'table_total': Total records in tracking table
+  }
+
+Used For:
+  - Email body content
+  - Console summary
+  - Logging
+
+Example Output:
+```
+========================================================================
+[OK] ALL OPERATIONS COMPLETED!
+========================================================================
+Execution Date: 2025-01-27
+Execution Time: 2025-01-27 10:35:42
+------------------------------------------------------------------------
+Records fetched from READ DB: 156
+Records inserted: 45
+Records skipped: 111
+Total records in table: 892
+Excel file: C:\...\OSO_Service_Activated_20250127_103542.xlsx
+Email sent: Yes
+========================================================================
+```
+
+================================================================================
+COMPARISON: Version 1.0 vs Version 2.0
+================================================================================
+
+| Feature                     | V1.0  | V2.0  |
+|-----------------------------|-------|-------|
+| Database Operations         | Yes   | Yes   |
+| Table Creation              | Yes   | Yes   |
+| Duplicate Detection         | Yes   | Yes   |
+| Excel Export                | Yes   | Yes   |
+| Email Support               | NO    | YES   |
+| Email Toggle                | NO    | YES   |
+| Date Execution Control      | NO    | YES   |
+| Enhanced Logging            | Basic | Full  |
+| Detailed Comments           | Some  | Extensive |
+| Execution Statistics        | Basic | Detailed |
+| Batch Commits               | NO    | YES   |
+| Fetch All Table Data        | NO    | YES   |
+| HTML Email Formatting       | NO    | YES   |
+| Error Stack Traces          | NO    | YES   |
+
+================================================================================
+CONFIGURATION EXAMPLES
+================================================================================
+
+Example 1: Daily Run with Email
+```python
+SEND_EMAIL = True
+DATE_EXECUTION_FREQUENCY = 1
+```
+
+Example 2: Weekly Run without Email
+```python
+SEND_EMAIL = False
+DATE_EXECUTION_FREQUENCY = 7
+```
+
+Example 3: Monthly Run with Email
+```python
+SEND_EMAIL = True
+DATE_EXECUTION_FREQUENCY = 30
+```
+
+Example 4: Daily Run, Multiple Recipients
+```python
+SEND_EMAIL = True
+DATE_EXECUTION_FREQUENCY = 1
+EMAIL_RECIPIENTS = ['user1@comcast.com', 'user2@comcast.com']
+EMAIL_CC_RECIPIENTS = ['manager@comcast.com', 'admin@amdocs.com']
+```
+
+================================================================================
+FILES UPDATED/CREATED
+================================================================================
+
+UPDATED:
+  - OSO_Service_Activated.py (51,234 bytes - Version 2.0)
+  - OSO_README.txt (added toggles section)
+
+NEW:
+  - NEW_FEATURES.txt (this file)
+
+UNCHANGED:
+  - RUN_OSO_SCRIPT.bat
+  - RUN_OSO_DRY_RUN.bat
+  - INSTALL_PACKAGES.bat
+
+================================================================================
+TESTING RECOMMENDATIONS
+================================================================================
+
+1. Test Date Execution:
+   - Set DATE_EXECUTION_FREQUENCY to different values
+   - Verify script skips on non-execution days
+
+2. Test Email Toggle:
+   - Set SEND_EMAIL = False
+   - Verify email is skipped
+   - Check Excel is still created
+
+3. Test Dry Run:
+   - Run with --dry-run flag
+   - Verify no database insertions
+   - Verify no email sent
+
+4. Test Email:
+   - Run full script
+   - Check email received
+   - Verify Excel attachment
+   - Check email formatting
+
+5. Test Logging:
+   - Review console output
+   - Check for INFO/WARNING/ERROR messages
+   - Verify timestamps
+
+================================================================================
+NEXT STEPS FOR DEPLOYMENT
+================================================================================
+
+1. Update Configuration:
+   - Set EMAIL_RECIPIENTS to correct addresses
+   - Set DATE_EXECUTION_FREQUENCY as needed
+   - Set SEND_EMAIL toggle appropriately
+
+2. Test on Remote Desktop:
+   - Run with --dry-run first
+   - Verify database connections
+   - Check Excel generation
+
+3. Test Email:
+   - Run full script once
+   - Verify email received and formatted correctly
+
+4. Schedule:
+   - Use Windows Task Scheduler
+   - Set to run daily (or per frequency)
+   - Monitor for errors
+
+5. Monitor:
+   - Check logs daily
+   - Review email reports
+   - Update tracking columns as needed
+
+================================================================================
+AUTHOR: Abhishek
+DATE: 2025-01-27
+VERSION: 2.0
+STATUS: Ready for Deployment
+================================================================================
+
+

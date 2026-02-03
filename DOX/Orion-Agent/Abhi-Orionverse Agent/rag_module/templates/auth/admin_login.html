@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Analyser - Admin Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #1a1a1a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: #2d2d2d;
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            animation: slideIn 0.5s ease-out;
+            border: 2px solid #ff006e;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            font-size: 4em;
+            margin-bottom: 20px;
+            color: #ff006e;
+        }
+
+        h1 {
+            color: #ffffff;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            color: #cccccc;
+            margin-bottom: 40px;
+            font-size: 1em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #3d3d3d;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #ff006e;
+            box-shadow: 0 0 0 3px rgba(255, 0, 110, 0.2);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 0, 110, 0.5);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 0.95em;
+            font-weight: 500;
+        }
+
+        .message.show {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.success {
+            background: #1f4d1f;
+            color: #ccffcc;
+            border: 2px solid #66ff66;
+        }
+
+        .message.error {
+            background: #4d1f1f;
+            color: #ffcccc;
+            border: 2px solid #ff6666;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 10px 20px;
+            background: #3d3d3d;
+            color: #ff6b35;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background 0.3s;
+            font-weight: 500;
+            border: 1px solid #ff6b35;
+        }
+
+        .back-link:hover {
+            background: #4d4d4d;
+        }
+
+        .security-note {
+            margin-top: 25px;
+            padding: 15px;
+            background: #3d3d3d;
+            border-left: 4px solid #ff6b35;
+            border-radius: 5px;
+            text-align: left;
+            font-size: 0.9em;
+            color: #cccccc;
+        }
+
+        .security-note strong {
+            color: #ff6b35;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">🔐</div>
+        <h1>Admin Login</h1>
+        <p class="subtitle">Ticket Analyser</p>
+
+        <div id="messageArea" class="message"></div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    placeholder="Enter your username"
+                    required
+                    autocomplete="username"
+                    autofocus
+                />
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    placeholder="Enter your password"
+                    required
+                    autocomplete="current-password"
+                />
+            </div>
+
+            <button type="submit" class="login-btn" id="loginBtn">
+                Login
+            </button>
+        </form>
+
+        <a href="/" class="back-link">← Back to User Portal</a>
+
+        <div class="security-note">
+            <strong>🔒 Secure Area:</strong> Only authorized administrators can access the upload portal.
+        </div>
+    </div>
+
+    <script>
+        async function handleLogin(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const messageArea = document.getElementById('messageArea');
+
+            if (!username || !password) {
+                showMessage('Please enter both username and password', 'error');
+                return;
+            }
+
+            // Disable button and show loading
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<span class="spinner"></span>Logging in...';
+            hideMessage();
+
+            try {
+                const response = await fetch('/admin/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showMessage('✅ ' + data.message, 'success');
+                    
+                    // Redirect after 1 second
+                    setTimeout(() => {
+                        window.location.href = data.redirect;
+                    }, 1000);
+                } else {
+                    showMessage('❌ ' + (data.error || 'Login failed'), 'error');
+                    loginBtn.disabled = false;
+                    loginBtn.innerHTML = 'Login';
+                }
+            } catch (error) {
+                showMessage('❌ Network error: ' + error.message, 'error');
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = 'Login';
+            }
+        }
+
+        function showMessage(text, type) {
+            const messageArea = document.getElementById('messageArea');
+            messageArea.textContent = text;
+            messageArea.className = 'message ' + type + ' show';
+        }
+
+        function hideMessage() {
+            const messageArea = document.getElementById('messageArea');
+            messageArea.classList.remove('show');
+        }
+
+        // Clear message when user starts typing
+        document.getElementById('username').addEventListener('input', hideMessage);
+        document.getElementById('password').addEventListener('input', hideMessage);
+    </script>
+</body>
+</html>

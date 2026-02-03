@@ -1,0 +1,18 @@
+Tier1,Tier2,Tier3,PMR Masking,Status,Workaround comment
+MidMarket Amdocs Issue,Code Quality,Code Fix / Defect,Amdocs,pending verification of Fix,Code Changes 
+MidMarket Amdocs Issue,Code Quality,Inflight Order,Amdocs,pending verification of Fix,
+MidMarket Amdocs Issue,Code Quality,Amdocs Migration Issue,Amdocs,pending verification of Fix,Manual Changes Required
+MidMarket Amdocs Issue,Code Quality,Amdocs Design Gap,Amdocs,pending verification of Fix,Code Changes 
+MidMarket Amdocs Issue,Environment,Amdocs Outage,Amdocs,Customer Approval,Intermittent Issue needs retry
+MidMarket Amdocs Issue,Environment,Amdocs Downtime,Amdocs,Customer Approval,Intermittent Issue needs retry
+MidMarket Amdocs Issue,Environment,Configuration Issue,Amdocs,Customer Approval,
+MidMarket Amdocs Issue,Data,Data Mismatch,Amdocs,Customer Approval,Manual Changes Required
+MidMarket Amdocs Issue,Data,Manual Intervention,Amdocs,Customer Approval,Manual Changes Required
+MidMarket Amdocs Issue,Interface OT,MISC,Amdocs,Local Site Action Required,
+MidMarket Amdocs Issue,Interface OT,Code Fix,Amdocs,Local Site Action Required,Manual Changes Required
+MidMarket Amdocs Issue,Interface OT,Data Fix,Amdocs,Local Site Action Required,Manual Changes Required
+MidMarket Amdocs Issue,Interface OT,Environment,Amdocs,Local Site Action Required,
+MidMarket Amdocs Issue,Old Order,>240 Days Old Agreement Intermittent,Amdocs,Customer Approval,
+MidMarket Amdocs Issue,Not Reproducible,Intermittent,Amdocs,Customer Approval,
+MidMarket Amdocs Issue,Not Reproducible,RCA Inconclusive,Amdocs,Customer Approval,
+MidMarket Amdocs Issue,TBC,In Progress,Amdocs,Local Site Action Required,

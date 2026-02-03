@@ -1,0 +1,20 @@
+# Requirements for RAG Pipeline with Ollama
+# Simplified dependencies - No need for heavy transformers/torch!
+
+# Core Data Processing
+pandas>=2.0.0
+openpyxl>=3.1.0
+
+# HTTP requests for Ollama API
+requests>=2.31.0
+
+# Progress bar
+tqdm>=4.65.0
+
+# Utilities
+colorama>=0.4.6
+
+# Note: Ollama must be installed separately
+# Install Ollama from: https://ollama.ai
+# Then run: ollama pull deepseek-coder
+

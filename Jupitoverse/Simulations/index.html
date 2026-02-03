@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Simulations - Science Universe</title>
+    <meta name="description" content="Experience physics, chemistry, and astronomy through interactive 3D simulations. Atom builders, asteroid impacts, space elevators, and more.">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000000;
+            color: white;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: radial-gradient(ellipse at center, rgba(79, 70, 229, 0.15) 0%, transparent 70%),
+                        radial-gradient(ellipse at top right, rgba(236, 72, 153, 0.15) 0%, transparent 60%),
+                        #000000;
+            overflow: hidden;
+            padding: 100px 20px 60px;
+        }
+        
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+            max-width: 900px;
+        }
+        
+        .breadcrumb {
+            color: #9ca3af;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .breadcrumb a {
+            color: #4f46e5;
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            color: #ec4899;
+        }
+        
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(3rem, 7vw, 5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #4f46e5, #ec4899, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            color: #9ca3af;
+            margin-bottom: 30px;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 60px 20px;
+            background: linear-gradient(to bottom, #000000, #0f172a);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #4f46e5, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+        }
+        
+        .section-description {
+            text-align: center;
+            color: #9ca3af;
+            font-size: 1.1rem;
+            margin-bottom: 50px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Simulation Grid */
+        .simulation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .simulation-card {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(236, 72, 153, 0.1));
+            border: 2px solid rgba(79, 70, 229, 0.3);
+            border-radius: 20px;
+            padding: 0;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .simulation-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(236, 72, 153, 0.2));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .simulation-card:hover {
+            transform: translateY(-10px);
+            border-color: #4f46e5;
+            box-shadow: 0 20px 60px rgba(79, 70, 229, 0.4);
+        }
+        
+        .simulation-card:hover::before {
+            opacity: 1;
+        }
+        
+        .simulation-preview {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #1e1b4b, #312e81);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .simulation-content {
+            padding: 30px;
+            position: relative;
+            z-index: 1;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .simulation-badge {
+            display: inline-block;
+            background: rgba(79, 70, 229, 0.2);
+            border: 1px solid #4f46e5;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            width: fit-content;
+        }
+        
+        .simulation-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .simulation-description {
+            color: #9ca3af;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        
+        .simulation-features {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+        
+        .simulation-features li {
+            color: #9ca3af;
+            margin-bottom: 8px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .simulation-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #4f46e5;
+            font-weight: bold;
+        }
+        
+        .simulation-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #4f46e5;
+            font-weight: 700;
+            text-decoration: none;
+            padding: 12px 30px;
+            border: 2px solid #4f46e5;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            justify-content: center;
+        }
+        
+        .simulation-link:hover {
+            background: #4f46e5;
+            color: white;
+            gap: 15px;
+        }
+        
+        /* Categories */
+        .category-section {
+            margin-bottom: 80px;
+        }
+        
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .category-icon {
+            font-size: 3rem;
+        }
+        
+        .category-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: #4f46e5;
+        }
+        
+        /* Back Button */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #9ca3af;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            color: #4f46e5;
+            gap: 5px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .simulation-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero {
+                padding: 80px 20px 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="stars" id="stars"></div>
+        <div class="hero-content">
+            <div class="breadcrumb">
+                <a href="../HOME.html">Home</a> / Simulations
+            </div>
+            <h1 class="hero-title">Interactive Simulations</h1>
+            <p class="hero-subtitle">
+                Experience physics, chemistry, and astronomy through cutting-edge 3D simulations and visualizations. 
+                Learn by doing with our comprehensive collection of interactive tools.
+            </p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="main-content">
+        <div class="container">
+            <a href="../HOME.html" class="back-button">← Back to Home</a>
+            
+            <!-- Physics & Chemistry Simulations -->
+            <div class="category-section">
+                <div class="category-header">
+                    <div class="category-icon">⚛️</div>
+                    <h2 class="category-title">Physics & Chemistry</h2>
+                </div>
+                
+                <div class="simulation-grid">
+                    <!-- Atom Builder -->
+                    <div class="simulation-card" onclick="window.location.href='atom_builder.html'">
+                        <div class="simulation-preview">⚛️</div>
+                        <div class="simulation-content">
+                            <span class="simulation-badge">Most Popular</span>
+                            <h3 class="simulation-title">Atom Builder</h3>
+                            <p class="simulation-description">
+                                Build atoms from scratch! Explore all 118 elements with detailed properties, isotopes, and electron configurations.
+                            </p>
+                            <ul class="simulation-features">
+                                <li>All 118 Elements</li>
+                                <li>Interactive Particle Manipulation</li>
+                                <li>Real-time Isotope Stability</li>
+                                <li>Electron Configuration Visualization</li>
+                            </ul>
+                            <a href="atom_builder.html" class="simulation-link">Launch Simulator →</a>
+                        </div>
+                    </div>
+
+                    <!-- Atom Simulator (Quantum) -->
+                    <div class="simulation-card" onclick="window.location.href='atom_simulator.html'">
+                        <div class="simulation-preview">🌀</div>
+                        <div class="simulation-content">
+                            <span class="simulation-badge">Advanced</span>
+                            <h3 class="simulation-title">Quantum Atom Simulator</h3>
+                            <p class="simulation-description">
+                                Visualize quantum mechanics in action with animated electron orbits and quantum states.
+                            </p>
+                            <ul class="simulation-features">
+                                <li>18+ Element Models</li>
+                                <li>Quantum State Visualization</li>
+                                <li>Electron Orbit Animation</li>
+                                <li>Energy Level Diagrams</li>
+                            </ul>
+                            <a href="atom_simulator.html" class="simulation-link">Launch Simulator →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Space & Astronomy Simulations -->
+            <div class="category-section">
+                <div class="category-header">
+                    <div class="category-icon">🌌</div>
+                    <h2 class="category-title">Space & Astronomy</h2>
+                </div>
+                
+                <div class="simulation-grid">
+                    <!-- Asteroid Impact -->
+                    <div class="simulation-card" onclick="window.location.href='asteroid_impact.html'">
+                        <div class="simulation-preview">☄️</div>
+                        <div class="simulation-content">
+                            <span class="simulation-badge">Featured</span>
+                            <h3 class="simulation-title">Asteroid Impact Simulator</h3>
+                            <p class="simulation-description">
+                                Predict catastrophic asteroid impacts with scientific accuracy. Configure size, speed, angle, and composition.
+                            </p>
+                            <ul class="simulation-features">
+                                <li>Interactive World Map</li>
+                                <li>Real Physics Calculations</li>
+                                <li>Damage Zone Visualization</li>
+                                <li>Seismic Activity Prediction</li>
+                            </ul>
+                            <a href="asteroid_impact.html" class="simulation-link">Launch Simulator →</a>
+                        </div>
+                    </div>
+
+                    <!-- Asteroid Orbital Mechanics -->
+                    <div class="simulation-card" onclick="window.location.href='asteroid_simulator.html'">
+                        <div class="simulation-preview">🌠</div>
+                        <div class="simulation-content">
+                            <span class="simulation-badge">Educational</span>
+                            <h3 class="simulation-title">Asteroid Orbital Simulator</h3>
+                            <p class="simulation-description">
+                                Watch asteroids orbit the Sun following Kepler's laws. Add custom asteroids with adjustable parameters.
+                            </p>
+                            <ul class="simulation-features">
+                                <li>Realistic Orbital Mechanics</li>
+                                <li>Kepler's Laws in Action</li>
+                                <li>Custom Asteroid Creation</li>
+                                <li>Gravitational Physics</li>
+                            </ul>
+                            <a href="asteroid_simulator.html" class="simulation-link">Launch Simulator →</a>
+                        </div>
+                    </div>
+
+                    <!-- Space Elevator -->
+                    <div class="simulation-card" onclick="window.location.href='space_elevator.html'">
+                        <div class="simulation-preview">🚀</div>
+                        <div class="simulation-content">
+                            <span class="simulation-badge">Futuristic</span>
+                            <h3 class="simulation-title">Space Elevator</h3>
+                            <p class="simulation-description">
+                                Explore the concept of space elevators - a revolutionary way to reach orbit without rockets.
+                            </p>
+                            <ul class="simulation-features">
+                                <li>Engineering Visualization</li>
+                                <li>Material Science Data</li>
+                                <li>Cost Analysis</li>
+                                <li>Feasibility Study</li>
+                            </ul>
+                            <a href="space_elevator.html" class="simulation-link">Launch Simulator →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Earth Science Simulations -->
+            <div class="category-section">
+                <div class="category-header">
+                    <div class="category-icon">🌍</div>
+                    <h2 class="category-title">Earth Science</h2>
+                </div>
+                
+                <div class="simulation-grid">
+                    <!-- Altitude Explorer -->
+                    <div class="simulation-card" onclick="window.location.href='altitude_explorer.html'">
+                        <div class="simulation-preview">🏔️</div>
+                        <div class="simulation-content">
+                            <span class="simulation-badge">Interactive</span>
+                            <h3 class="simulation-title">Altitude Explorer</h3>
+                            <p class="simulation-description">
+                                Journey from sea level to space! Explore atmospheric layers, temperature, pressure, and what exists at each altitude.
+                            </p>
+                            <ul class="simulation-features">
+                                <li>0 to 100km+ Coverage</li>
+                                <li>Atmospheric Data</li>
+                                <li>Notable Landmarks</li>
+                                <li>Scientific Information</li>
+                            </ul>
+                            <a href="altitude_explorer.html" class="simulation-link">Launch Simulator →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coming Soon -->
+            <div class="category-section">
+                <div class="section-title">Coming Soon</div>
+                <p class="section-description">More exciting simulations are in development!</p>
+                
+                <div class="simulation-grid">
+                    <div class="simulation-card" style="opacity: 0.6; cursor: not-allowed;">
+                        <div class="simulation-preview">🕳️</div>
+                        <div class="simulation-content">
+                            <span class="simulation-badge">Coming Soon</span>
+                            <h3 class="simulation-title">Black Hole Simulator</h3>
+                            <p class="simulation-description">
+                                Explore the mysteries of black holes, event horizons, and gravitational lensing effects.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="simulation-card" style="opacity: 0.6; cursor: not-allowed;">
+                        <div class="simulation-preview">🧬</div>
+                        <div class="simulation-content">
+                            <span class="simulation-badge">Coming Soon</span>
+                            <h3 class="simulation-title">DNA Helix Builder</h3>
+                            <p class="simulation-description">
+                                Build and manipulate DNA sequences, explore genetic codes, and understand molecular biology.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="simulation-card" style="opacity: 0.6; cursor: not-allowed;">
+                        <div class="simulation-preview">🪐</div>
+                        <div class="simulation-content">
+                            <span class="simulation-badge">Coming Soon</span>
+                            <h3 class="simulation-title">Solar System Explorer</h3>
+                            <p class="simulation-description">
+                                Navigate through our solar system with accurate planetary positions and orbital mechanics.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Generate animated stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = Math.random() * 3 + 'px';
+            star.style.height = star.style.width;
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
+        }
+    </script>
+</body>
+</html>
+
+
+
+

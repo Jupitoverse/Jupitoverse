@@ -1,0 +1,31 @@
+Atomic Number,Symbol,Name,Atomic Mass,Group,Period,Block,Classification,Electron Config,Melting Point,Boiling Point,Density,Electronegativity,Atomic Radius,Oxidation States,Phase,Abundance,Origin,Daily Life,Human Body,Discoverer,Discovery Year
+1,H,Hydrogen,1.008,1,1,s,Nonmetal,1s¹,-259.14°C,-252.87°C,0.00008988 g/cm³,2.20,53 pm,"+1, -1",Gas,75% (universe),Big Bang nucleosynthesis,"Water, Fuels, Cleaning products",10% by mass,Henry Cavendish,1766
+2,He,Helium,4.003,18,1,s,Noble Gas,1s²,N/A,-268.93°C,0.0001785 g/cm³,0,31 pm,0,Gas,24% (universe),"Big Bang, Stellar fusion","Balloons, MRI machines",Trace,Pierre Janssen,1868
+3,Li,Lithium,6.94,1,2,s,Alkali Metal,[He] 2s¹,180.5°C,1342°C,0.534 g/cm³,0.98,167 pm,+1,Solid,20 ppm,Stellar nucleosynthesis,"Batteries, Medications",Trace,Johan August Arfwedson,1817
+4,Be,Beryllium,9.012,2,2,s,Alkaline Earth,[He] 2s²,1287°C,2469°C,1.85 g/cm³,1.57,112 pm,+2,Solid,2.8 ppm,Spallation,"Aerospace, X-ray windows",Trace,Louis Nicolas Vauquelin,1798
+5,B,Boron,10.81,13,2,p,Metalloid,[He] 2s² 2p¹,2075°C,4000°C,2.34 g/cm³,2.04,87 pm,+3,Solid,10 ppm,Spallation,"Glass, Detergents",Trace,Joseph Louis Gay-Lussac,1808
+6,C,Carbon,12.011,14,2,p,Nonmetal,[He] 2s² 2p²,3550°C,4827°C,2.267 g/cm³,2.55,67 pm,"+4, +2, -4",Solid,0.025% (crust),Triple-alpha process,"All organic compounds, Plastics",18% by mass,Ancient,Prehistoric
+7,N,Nitrogen,14.007,15,2,p,Nonmetal,[He] 2s² 2p³,-210°C,-195.8°C,0.001251 g/cm³,3.04,56 pm,"-3, +3, +5",Gas,78% (atmosphere),CNO cycle,"Air, Fertilizers, Proteins",3% by mass,Daniel Rutherford,1772
+8,O,Oxygen,15.999,16,2,p,Nonmetal,[He] 2s² 2p⁴,-218.79°C,-182.96°C,0.001429 g/cm³,3.44,48 pm,"-2, -1",Gas,46% (crust),Stellar nucleosynthesis,"Air, Water, Combustion",65% by mass,Joseph Priestley,1774
+9,F,Fluorine,18.998,17,2,p,Halogen,[He] 2s² 2p⁵,-219.67°C,-188.11°C,0.001696 g/cm³,3.98,42 pm,-1,Gas,585 ppm,Stellar nucleosynthesis,"Toothpaste, Teflon",Trace,Henri Moissan,1886
+10,Ne,Neon,20.180,18,2,p,Noble Gas,[He] 2s² 2p⁶,-248.59°C,-246.08°C,0.0009 g/cm³,0,38 pm,0,Gas,0.0018% (atmosphere),Stellar nucleosynthesis,"Neon signs, Lasers",None,William Ramsay,1898
+11,Na,Sodium,22.990,1,3,s,Alkali Metal,[Ne] 3s¹,97.72°C,883°C,0.971 g/cm³,0.93,190 pm,+1,Solid,2.36% (crust),Supernova,"Table salt, Soap",0.15% by mass,Humphry Davy,1807
+12,Mg,Magnesium,24.305,2,3,s,Alkaline Earth,[Ne] 3s²,650°C,1090°C,1.738 g/cm³,1.31,145 pm,+2,Solid,2.33% (crust),Supernova,"Alloys, Fireworks",0.05% by mass,Joseph Black,1755
+13,Al,Aluminum,26.982,13,3,p,Post-transition,[Ne] 3s² 3p¹,660.32°C,2519°C,2.70 g/cm³,1.61,118 pm,+3,Solid,8.23% (crust),Supernova,"Cans, Foil, Aircraft",Trace,Hans Christian Ørsted,1825
+14,Si,Silicon,28.085,14,3,p,Metalloid,[Ne] 3s² 3p²,1414°C,3265°C,2.3296 g/cm³,1.90,111 pm,"+4, -4",Solid,27.7% (crust),Supernova,"Electronics, Glass",Trace,Jöns Jacob Berzelius,1824
+15,P,Phosphorus,30.974,15,3,p,Nonmetal,[Ne] 3s² 3p³,44.15°C,280.5°C,1.82 g/cm³,2.19,98 pm,"+5, +3, -3",Solid,1050 ppm,Supernova,"Fertilizers, DNA",1% by mass,Hennig Brand,1669
+16,S,Sulfur,32.06,16,3,p,Nonmetal,[Ne] 3s² 3p⁴,115.21°C,444.6°C,2.067 g/cm³,2.58,88 pm,"+6, +4, -2",Solid,350 ppm,Supernova,"Sulfuric acid, Proteins",0.25% by mass,Ancient,Prehistoric
+17,Cl,Chlorine,35.45,17,3,p,Halogen,[Ne] 3s² 3p⁵,-101.5°C,-34.04°C,0.003214 g/cm³,3.16,79 pm,"-1, +1, +5",Gas,145 ppm,Supernova,"Bleach, PVC, Salt",0.15% by mass,Carl Wilhelm Scheele,1774
+18,Ar,Argon,39.948,18,3,p,Noble Gas,[Ne] 3s² 3p⁶,-189.34°C,-185.85°C,0.001784 g/cm³,0,71 pm,0,Gas,0.93% (atmosphere),Supernova,"Welding, Light bulbs",None,Lord Rayleigh,1894
+19,K,Potassium,39.098,1,4,s,Alkali Metal,[Ar] 4s¹,63.38°C,759°C,0.862 g/cm³,0.82,243 pm,+1,Solid,2.09% (crust),Supernova,"Fertilizers, Soap",0.25% by mass,Humphry Davy,1807
+20,Ca,Calcium,40.078,2,4,s,Alkaline Earth,[Ar] 4s²,842°C,1484°C,1.54 g/cm³,1.00,194 pm,+2,Solid,4.15% (crust),Supernova,"Bones, Cement",1.5% by mass,Humphry Davy,1808
+26,Fe,Iron,55.845,8,4,d,Transition Metal,[Ar] 3d⁶ 4s²,1538°C,2862°C,7.874 g/cm³,1.83,126 pm,"+2, +3",Solid,5% (crust),Supernova,"Steel, Construction",0.006% by mass,Ancient,~3500 BCE
+29,Cu,Copper,63.546,11,4,d,Transition Metal,[Ar] 3d¹⁰ 4s¹,1084.62°C,2562°C,8.96 g/cm³,1.90,128 pm,"+1, +2",Solid,60 ppm,Supernova,"Wiring, Coins",0.0001% by mass,Ancient,~9000 BCE
+47,Ag,Silver,107.868,11,5,d,Transition Metal,[Kr] 4d¹⁰ 5s¹,961.78°C,2162°C,10.501 g/cm³,1.93,153 pm,+1,Solid,0.075 ppm,Supernova,"Jewelry, Electronics",Trace,Ancient,~5000 BCE
+79,Au,Gold,196.967,11,6,d,Transition Metal,[Xe] 4f¹⁴ 5d¹⁰ 6s¹,1064.18°C,2856°C,19.32 g/cm³,2.54,134 pm,"+1, +3",Solid,0.004 ppm,Neutron star collisions,"Jewelry, Electronics",Trace,Ancient,~6000 BCE
+82,Pb,Lead,207.2,14,6,p,Post-transition,[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p²,327.46°C,1749°C,11.342 g/cm³,2.33,154 pm,"+2, +4",Solid,14 ppm,Supernova,"Batteries, Radiation shielding",0.00017% by mass,Ancient,~7000 BCE
+92,U,Uranium,238.029,3,7,f,Actinide,[Rn] 5f³ 6d¹ 7s²,1135°C,4131°C,19.05 g/cm³,1.38,156 pm,"+3, +4, +5, +6",Solid,2.7 ppm,r-process,"Nuclear power, Medical",Trace (radioactive),Martin Heinrich Klaproth,1789
+118,Og,Oganesson,294,18,7,p,Noble Gas,[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁶,Unknown,Unknown,Unknown,0,Unknown,Unknown,Unknown,Synthetic,Laboratory synthesis,Research only,None,Joint Institute for Nuclear Research,2002
+
+
+

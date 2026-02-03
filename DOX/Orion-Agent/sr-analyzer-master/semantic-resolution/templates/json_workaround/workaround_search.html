@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Analyser - Historical Workarounds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #1a1a1a;
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 80px;
+            color: #ffffff;
+        }
+
+        .container { max-width: 95%; margin: 0 auto; }
+
+        /* ========== NAVBAR STYLES ========== */
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0; height: 60px;
+            background: #2d2d2d; border-bottom: 2px solid #ff6b35;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 40px; z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        .nav-brand { display: flex; align-items: center; gap: 10px; }
+        .nav-brand-icon { font-size: 1.5em; }
+        .nav-brand-text {
+            font-size: 1.3em; font-weight: 700;
+            background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .nav-links { display: flex; align-items: center; gap: 5px; }
+        .nav-link {
+            color: #cccccc; text-decoration: none; padding: 10px 18px;
+            border-radius: 8px; font-weight: 500; font-size: 0.95em;
+            transition: all 0.3s; display: flex; align-items: center; gap: 6px;
+        }
+        .nav-link:hover { color: #ffffff; background: #3d3d3d; }
+        .nav-link.active { color: #ff6b35; background: rgba(255, 107, 53, 0.15); border-bottom: 2px solid #ff6b35; }
+        .nav-logout {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%);
+            color: white; text-decoration: none; padding: 8px 16px;
+            border-radius: 8px; font-weight: 600; font-size: 0.9em; transition: all 0.3s;
+        }
+        .nav-logout:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4); }
+        /* ========== END NAVBAR STYLES ========== */
+
+        /* Header */
+        .header {
+            background: #2d2d2d; padding: 25px; border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); margin-bottom: 20px;
+            text-align: center; border: 2px solid #ff6b35;
+        }
+        .header h1 { color: #ffffff; font-size: 2em; margin-bottom: 8px; }
+        .header p { color: #cccccc; font-size: 1em; }
+
+        /* Stats Banner */
+        .stats-banner {
+            display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;
+        }
+        .stat-box {
+            background: #2d2d2d; padding: 12px 20px; border-radius: 10px;
+            border: 2px solid #3d3d3d; flex: 1; min-width: 120px;
+            text-align: center; transition: all 0.3s;
+        }
+        .stat-box:hover { border-color: #ff6b35; }
+        .stat-value {
+            font-size: 1.5em; font-weight: 700;
+            background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .stat-label { color: #999; font-size: 0.8em; margin-top: 3px; }
+
+        /* Search/Filter Section */
+        .filter-section {
+            background: #2d2d2d; padding: 20px; border-radius: 12px;
+            margin-bottom: 20px; border: 2px solid #3d3d3d;
+        }
+        .filter-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 15px; cursor: pointer;
+        }
+        .filter-header h3 { color: #ff6b35; font-size: 1em; display: flex; align-items: center; gap: 8px; }
+        .filter-toggle { color: #999; font-size: 0.9em; }
+        .filter-form { display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end; }
+        .filter-group { flex: 1; min-width: 200px; }
+        .filter-group label { display: block; color: #999; font-size: 0.85em; margin-bottom: 5px; }
+        .filter-group input {
+            width: 100%; padding: 10px 15px; background: #1a1a1a;
+            border: 2px solid #3d3d3d; border-radius: 8px;
+            color: #ffffff; font-size: 0.95em;
+        }
+        .filter-group input:focus { outline: none; border-color: #ff6b35; }
+        .filter-btn {
+            padding: 10px 25px; background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%);
+            color: white; border: none; border-radius: 8px; cursor: pointer;
+            font-weight: 600; transition: all 0.3s;
+        }
+        .filter-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4); }
+        .clear-btn {
+            padding: 10px 20px; background: #3d3d3d; color: #ccc;
+            border: none; border-radius: 8px; cursor: pointer; font-weight: 500;
+            transition: all 0.3s; text-decoration: none;
+        }
+        .clear-btn:hover { background: #4d4d4d; }
+
+        /* Filter Active Badge */
+        .filter-badge {
+            background: #ff6b35; color: white; padding: 3px 10px;
+            border-radius: 12px; font-size: 0.75em; margin-left: 10px;
+        }
+
+        /* Error Message */
+        .error-message {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white; padding: 12px 18px; border-radius: 10px;
+            margin-bottom: 15px; display: flex; align-items: center; gap: 10px;
+        }
+
+        /* Results Table */
+        .results-section {
+            background: #2d2d2d; border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); border: 2px solid #ff6b35;
+            overflow: hidden;
+        }
+        .results-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 18px 25px; background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%);
+        }
+        .results-header h2 { color: white; font-size: 1.2em; margin: 0; }
+        .results-count { color: white; font-size: 0.95em; opacity: 0.9; }
+
+        /* Table Styles */
+        .workaround-table {
+            width: 100%; border-collapse: collapse; table-layout: fixed;
+        }
+        .workaround-table th {
+            background: #1a1a1a; color: #ff6b35; font-weight: 600;
+            text-align: left; padding: 12px 15px; font-size: 0.8em;
+            text-transform: uppercase; letter-spacing: 0.5px;
+            border-bottom: 2px solid #3d3d3d; position: sticky; top: 0;
+            z-index: 10;
+        }
+        .workaround-table td {
+            padding: 12px 15px; border-bottom: 1px solid #3d3d3d;
+            vertical-align: top; font-size: 0.85em; word-wrap: break-word;
+        }
+        .workaround-table tr:hover { background: rgba(255, 107, 53, 0.05); }
+        .workaround-table tr:last-child td { border-bottom: none; }
+
+        /* Table Column Widths - Fixed proportions */
+        .col-sr { width: 100px; }
+        .col-category { width: 100px; }
+        .col-description { width: 22%; }
+        .col-rca { width: 22%; }
+        .col-workaround { width: 30%; }
+
+        /* SR ID Link */
+        .sr-id {
+            color: #ff6b35; font-weight: 600; text-decoration: none;
+            display: inline-block; padding: 4px 10px; background: rgba(255, 107, 53, 0.1);
+            border-radius: 5px; transition: all 0.3s;
+        }
+        .sr-id:hover { background: rgba(255, 107, 53, 0.2); }
+
+        /* Category Badge */
+        .category-badge {
+            display: inline-block; padding: 4px 10px; background: #3d3d3d;
+            border-radius: 12px; font-size: 0.8em; color: #ccc;
+        }
+
+        /* Cell Content */
+        .cell-content {
+            color: #ccc; line-height: 1.5; max-height: 100px; overflow: hidden;
+            position: relative;
+        }
+        .cell-content.expanded { max-height: none; }
+        .cell-content.has-overflow::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+            height: 30px; background: linear-gradient(transparent, #2d2d2d);
+        }
+        .cell-content.expanded::after { display: none; }
+
+        /* Workaround Cell - Highlighted */
+        .workaround-cell {
+            background: rgba(16, 185, 129, 0.1); border-left: 3px solid #10b981;
+            padding-left: 17px !important;
+        }
+        .workaround-cell .cell-content { color: #a7f3d0; }
+
+        /* Empty State */
+        .empty-cell { color: #666; font-style: italic; }
+
+        /* Toggle Button */
+        .toggle-btn {
+            background: transparent; border: 1px solid #ff6b35; color: #ff6b35;
+            padding: 3px 8px; border-radius: 4px; font-size: 0.75em;
+            cursor: pointer; margin-top: 5px; transition: all 0.3s;
+        }
+        .toggle-btn:hover { background: rgba(255, 107, 53, 0.1); }
+
+        /* No Results */
+        .no-results {
+            text-align: center; padding: 60px 20px; color: #999;
+        }
+        .no-results-icon { font-size: 4em; margin-bottom: 15px; opacity: 0.5; }
+        .no-results h3 { color: #ccc; margin-bottom: 10px; }
+
+        /* Responsive Table Wrapper */
+        .table-wrapper {
+            overflow-x: auto; max-height: 65vh; overflow-y: auto;
+        }
+
+        /* Make sure nav-actions is visible */
+        .nav-actions { display: flex; align-items: center; gap: 15px; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 10px; height: 10px; }
+        ::-webkit-scrollbar-track { background: #2d2d2d; }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%);
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="nav-brand-icon">🎫</span>
+            <span class="nav-brand-text">Ticket Analyser</span>
+        </div>
+        <div class="nav-links">
+            <a href="/" class="nav-link">🏠 <span>Home</span></a>
+            <a href="/user" class="nav-link">👤 <span>User</span></a>
+            <a href="/skill" class="nav-link">👥 <span>Team</span></a>
+            <a href="/workaround" class="nav-link active">📚 <span>Workarounds</span></a>
+            <a href="/admin" class="nav-link">⚙️ <span>Admin</span></a>
+        </div>
+        <div class="nav-actions">
+            <a href="/" class="nav-logout">🏠 Home</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📚 Historical Workarounds</h1>
+            <p>Browse and search historical workarounds by description and RCA</p>
+        </div>
+
+        <!-- Stats Banner -->
+        <div class="stats-banner">
+            <div class="stat-box">
+                <div class="stat-value">{{ stats.total_records if stats else 0 }}</div>
+                <div class="stat-label">Total Records</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">{{ results|length }}</div>
+                <div class="stat-label">Showing</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">{{ stats.unique_categories if stats else 0 }}</div>
+                <div class="stat-label">Categories</div>
+            </div>
+        </div>
+
+        <!-- Error Message -->
+        {% if error %}
+        <div class="error-message">
+            <span>⚠️</span>
+            <span>{{ error }}</span>
+        </div>
+        {% endif %}
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-header" onclick="toggleFilter()">
+                <h3>
+                    🔍 Filter Workarounds
+                    {% if is_filtered %}
+                    <span class="filter-badge">Active</span>
+                    {% endif %}
+                </h3>
+                <span class="filter-toggle" id="filterToggle">▼</span>
+            </div>
+            <form class="filter-form" method="POST" action="/workaround/search" id="filterForm">
+                <div class="filter-group">
+                    <label for="description">Description Keywords</label>
+                    <input type="text" id="description" name="description" 
+                           placeholder="e.g., PTD, CLIPS, disconnect..." 
+                           value="{{ description_query }}">
+                </div>
+                <div class="filter-group">
+                    <label for="rca">RCA Keywords</label>
+                    <input type="text" id="rca" name="rca" 
+                           placeholder="e.g., database, project store..." 
+                           value="{{ rca_query }}">
+                </div>
+                <button type="submit" class="filter-btn">🔍 Filter</button>
+                {% if is_filtered %}
+                <a href="/workaround" class="clear-btn">✕ Clear</a>
+                {% endif %}
+            </form>
+        </div>
+
+        <!-- Results Table -->
+        <div class="results-section">
+            <div class="results-header">
+                <h2>📋 Workaround Records</h2>
+                <span class="results-count">
+                    {% if is_filtered %}
+                    Filtered: {{ results|length }} of {{ stats.total_records }}
+                    {% else %}
+                    All {{ results|length }} records
+                    {% endif %}
+                </span>
+            </div>
+
+            {% if results %}
+            <div class="table-wrapper">
+                <table class="workaround-table">
+                    <thead>
+                        <tr>
+                            <th class="col-sr">SR ID</th>
+                            <th class="col-category">Category</th>
+                            <th class="col-description">Description</th>
+                            <th class="col-rca">RCA</th>
+                            <th class="col-workaround">Workaround</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in results %}
+                        <tr>
+                            <td>
+                                <a href="/workaround/detail/{{ record.sr_id }}" class="sr-id">{{ record.sr_id or 'N/A' }}</a>
+                            </td>
+                            <td>
+                                {% if record.category %}
+                                <span class="category-badge">{{ record.category }}</span>
+                                {% else %}
+                                <span class="empty-cell">-</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="cell-content" id="desc-{{ loop.index }}">{{ record.description or '' }}</div>
+                                {% if record.description and record.description|length > 150 %}
+                                <button class="toggle-btn" onclick="toggleCell('desc-{{ loop.index }}', this)">More</button>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if record.rca %}
+                                <div class="cell-content" id="rca-{{ loop.index }}">{{ record.rca }}</div>
+                                {% if record.rca|length > 150 %}
+                                <button class="toggle-btn" onclick="toggleCell('rca-{{ loop.index }}', this)">More</button>
+                                {% endif %}
+                                {% else %}
+                                <span class="empty-cell">No RCA</span>
+                                {% endif %}
+                            </td>
+                            <td class="workaround-cell">
+                                {% if record.workaround %}
+                                <div class="cell-content" id="wa-{{ loop.index }}">{{ record.workaround }}</div>
+                                {% if record.workaround|length > 200 %}
+                                <button class="toggle-btn" onclick="toggleCell('wa-{{ loop.index }}', this)">More</button>
+                                {% endif %}
+                                {% else %}
+                                <span class="empty-cell">No workaround yet</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="no-results">
+                <div class="no-results-icon">📭</div>
+                <h3>No workarounds found</h3>
+                <p>{% if is_filtered %}Try different filter keywords{% else %}No data loaded{% endif %}</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        function toggleCell(id, btn) {
+            const el = document.getElementById(id);
+            if (el.classList.contains('expanded')) {
+                el.classList.remove('expanded');
+                btn.textContent = 'More';
+            } else {
+                el.classList.add('expanded');
+                btn.textContent = 'Less';
+            }
+        }
+
+        function toggleFilter() {
+            const form = document.getElementById('filterForm');
+            const toggle = document.getElementById('filterToggle');
+            if (form.style.display === 'none') {
+                form.style.display = 'flex';
+                toggle.textContent = '▼';
+            } else {
+                form.style.display = 'flex'; // Keep visible by default
+            }
+        }
+
+        // Mark cells with overflow
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.cell-content').forEach(function(el) {
+                if (el.scrollHeight > el.clientHeight) {
+                    el.classList.add('has-overflow');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

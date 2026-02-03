@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Recipe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="app-header">
+        <nav class="header-nav">
+            <a href="/">Home</a>
+            <a href="/rag-recipe" class="active">RAG Recipe</a>
+        </nav>
+    </header>
+    <main class="app-content">
+        <h1>RAG Recipe</h1>
+        <div class="recipe-actions">
+            <a href="/add-project" class="btn btn-primary" target="_blank">Add Project</a>
+        </div>
+        <p>Open <strong>Add Project</strong> to create a project, upload documents first, then set LLM, Embedding, Chunking, and build RAG. Each step shows metrics and pros/cons.</p>
+        <h2>Projects</h2>
+        <div id="project-list" class="project-list"></div>
+    </main>
+    <script src="/static/js/rag_recipe.js"></script>
+</body>
+</html>

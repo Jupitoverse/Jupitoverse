@@ -1,0 +1,165 @@
+<!-- SQO API Console -->
+<div class="page">
+    <h1>⚡ SQO API Console</h1>
+    <p class="subtitle">Product Delivery & Billing Operations</p>
+
+    <div style="margin-bottom: 20px;">
+        <span id="sqo-status"><span class="status-dot"></span> Checking...</span>
+    </div>
+
+    <!-- API Cards -->
+    <div class="api-grid">
+        <div class="api-card" data-api="billing-manual" onclick="SQOAPI.selectAPI('billing-manual')">
+            <div class="api-card-icon">💳</div>
+            <div class="api-card-name">Billing Manual</div>
+            <div class="api-card-desc">Execute billing request</div>
+        </div>
+        <div class="api-card" data-api="submit-delivery" onclick="SQOAPI.selectAPI('submit-delivery')">
+            <div class="api-card-icon">📦</div>
+            <div class="api-card-name">Submit Delivery</div>
+            <div class="api-card-desc">Submit for delivery</div>
+        </div>
+        <div class="api-card" data-api="set-product-status" onclick="SQOAPI.selectAPI('set-product-status')">
+            <div class="api-card-icon">🔄</div>
+            <div class="api-card-name">Product Status</div>
+            <div class="api-card-desc">Update assignment</div>
+        </div>
+        <div class="api-card" data-api="send-fulfillment" onclick="SQOAPI.selectAPI('send-fulfillment')">
+            <div class="api-card-icon">✅</div>
+            <div class="api-card-name">Fulfillment</div>
+            <div class="api-card-desc">Send to fulfillment</div>
+        </div>
+        <div class="api-card" data-api="quote-alignment" onclick="SQOAPI.selectAPI('quote-alignment')">
+            <div class="api-card-icon">📐</div>
+            <div class="api-card-name">Quote Align</div>
+            <div class="api-card-desc">Align quotes</div>
+        </div>
+    </div>
+
+    <!-- Form Section -->
+    <div class="form-container" id="form-section" style="display: none;">
+        <div class="form-header">
+            <h2 id="form-title">API Request</h2>
+            <button class="btn btn-secondary btn-sm" onclick="SQOAPI.closeForm()">✕ Close</button>
+        </div>
+        <div class="form-body">
+            <!-- Billing Manual Form -->
+            <div class="api-form" id="form-billing-manual" style="display: none;">
+                <div class="form-group">
+                    <label>Correlation ID *</label>
+                    <input type="text" id="billing-correlationId" placeholder="Enter correlation ID">
+                </div>
+                <div class="form-group">
+                    <label>Resend</label>
+                    <select id="billing-resend">
+                        <option value="false">No</option>
+                        <option value="true">Yes</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Products (JSON Array)</label>
+                    <textarea id="billing-products" placeholder='[{"productId": "123", "action": "bill"}]'></textarea>
+                </div>
+            </div>
+
+            <!-- Submit Delivery Form -->
+            <div class="api-form" id="form-submit-delivery" style="display: none;">
+                <div class="form-group">
+                    <label>Correlation ID *</label>
+                    <input type="text" id="delivery-correlationId" placeholder="Enter correlation ID">
+                </div>
+                <div class="form-group">
+                    <label>Framework Agreement ID *</label>
+                    <input type="text" id="delivery-faId" placeholder="FA-12345">
+                </div>
+                <div class="form-group">
+                    <label>FA Version</label>
+                    <input type="number" id="delivery-faVersion" value="1">
+                </div>
+                <div class="form-group">
+                    <label>Product Agreement Items (JSON Array)</label>
+                    <textarea id="delivery-items" placeholder='[{"itemId": "123"}]'></textarea>
+                </div>
+            </div>
+
+            <!-- Set Product Status Form -->
+            <div class="api-form" id="form-set-product-status" style="display: none;">
+                <div class="form-group">
+                    <label>Correlation ID *</label>
+                    <input type="text" id="status-correlationId" placeholder="Enter correlation ID">
+                </div>
+                <div class="form-group">
+                    <label>Products (JSON Array)</label>
+                    <textarea id="status-products" placeholder='[{"productId": "123", "status": "active"}]'></textarea>
+                </div>
+            </div>
+
+            <!-- Send Fulfillment Form -->
+            <div class="api-form" id="form-send-fulfillment" style="display: none;">
+                <div class="form-group">
+                    <label>Correlation ID *</label>
+                    <input type="text" id="fulfillment-correlationId" placeholder="Enter correlation ID">
+                </div>
+                <div class="form-group">
+                    <label>Fulfillment Group ID</label>
+                    <input type="text" id="fulfillment-groupId" placeholder="FG-12345">
+                </div>
+                <div class="form-group">
+                    <label>Action</label>
+                    <select id="fulfillment-action">
+                        <option value="CREATE">CREATE</option>
+                        <option value="UPDATE">UPDATE</option>
+                        <option value="DELETE">DELETE</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Version</label>
+                    <input type="text" id="fulfillment-version" value="1">
+                </div>
+                <div class="form-group">
+                    <label>Products (JSON Array)</label>
+                    <textarea id="fulfillment-products" placeholder='[{"productId": "123"}]'></textarea>
+                </div>
+            </div>
+
+            <!-- Quote Alignment Form -->
+            <div class="api-form" id="form-quote-alignment" style="display: none;">
+                <div class="form-group">
+                    <label>Framework Agreement ID *</label>
+                    <input type="text" id="quote-faId" placeholder="FA-12345">
+                </div>
+                <div class="form-group">
+                    <label>Request Type</label>
+                    <select id="quote-requestType">
+                        <option value="Quote">Quote</option>
+                        <option value="Order">Order</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn btn-primary" onclick="SQOAPI.execute()">🚀 Execute</button>
+                <button class="btn btn-secondary" onclick="SQOAPI.closeForm()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Response Section -->
+    <div class="response-container" id="response-section" style="display: none;">
+        <div class="response-header">
+            <div class="response-meta">
+                <span class="status-badge" id="response-status">-</span>
+                <span class="response-time" id="response-time">-</span>
+            </div>
+            <div class="response-actions">
+                <button class="btn btn-sm btn-secondary" onclick="SQOAPI.expandAll()">Expand</button>
+                <button class="btn btn-sm btn-secondary" onclick="SQOAPI.collapseAll()">Collapse</button>
+                <button class="btn btn-sm btn-secondary" onclick="SQOAPI.copyResponse()">📋 Copy</button>
+                <button class="btn btn-sm btn-secondary" onclick="SQOAPI.downloadResponse()">⬇️ Download</button>
+            </div>
+        </div>
+        <div class="response-body">
+            <div class="json-viewer" id="json-viewer"></div>
+        </div>
+    </div>
+</div>

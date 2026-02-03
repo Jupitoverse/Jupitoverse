@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Resources - AI Spectrum India</title>
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        .resources-hero {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(0, 217, 255, 0.1) 100%);
+            padding: 3rem 0;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .resources-hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+
+        .category-nav {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+        .category-btn {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 25px;
+            padding: 0.6rem 1.25rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .category-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+        .category-btn.active { border-color: var(--accent); background: rgba(0, 217, 255, 0.1); color: var(--accent); }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+        .resource-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.25s;
+            display: flex;
+            flex-direction: column;
+        }
+        .resource-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0, 217, 255, 0.1); }
+
+        .resource-header { display: flex; gap: 1rem; margin-bottom: 1rem; }
+        .resource-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        .resource-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.25rem; }
+        .resource-author { color: var(--text-muted); font-size: 0.85rem; }
+
+        .resource-desc { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.5; flex-grow: 1; }
+
+        .resource-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+        .resource-tag {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .tag-free { background: rgba(0, 255, 136, 0.15); color: var(--accent-success); }
+        .tag-paid { background: rgba(255, 165, 0, 0.15); color: var(--accent-warning); }
+        .tag-category { background: var(--bg-secondary); color: var(--text-secondary); }
+        .tag-indian { background: rgba(255, 153, 0, 0.15); color: #ff9900; }
+        .tag-recommended { background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); }
+
+        .resource-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border); }
+        .resource-rating { display: flex; align-items: center; gap: 0.5rem; }
+        .rating-stars { color: var(--accent-warning); }
+        .rating-count { color: var(--text-muted); font-size: 0.8rem; }
+
+        .resource-link {
+            background: var(--gradient-1);
+            color: #000;
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .resource-link:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0, 217, 255, 0.3); }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2.5rem 0 1.5rem;
+        }
+        .section-header h2 { font-size: 1.5rem; }
+
+        .featured-section { background: var(--bg-secondary); padding: 2rem 0; margin: 2rem 0; border-radius: 16px; }
+
+        .roadmap-card {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .roadmap-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+        .roadmap-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+        .roadmap-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .roadmap-desc { color: var(--text-muted); font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+    <script src="js/header.js"></script>
+
+    <main>
+        <section class="resources-hero">
+            <div class="container">
+                <h1>📚 Learning <span class="highlight">Resources</span></h1>
+                <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;">Curated courses, YouTube channels, and tutorials to accelerate your career in tech</p>
+            </div>
+        </section>
+
+        <div class="container">
+            <!-- Category Navigation -->
+            <div class="category-nav">
+                <button class="category-btn active" data-category="all">All Resources</button>
+                <button class="category-btn" data-category="dsa">🧮 DSA & Coding</button>
+                <button class="category-btn" data-category="system">🏗️ System Design</button>
+                <button class="category-btn" data-category="aiml">🤖 AI/ML</button>
+                <button class="category-btn" data-category="frontend">🎨 Frontend</button>
+                <button class="category-btn" data-category="backend">⚙️ Backend</button>
+                <button class="category-btn" data-category="devops">☁️ DevOps</button>
+                <button class="category-btn" data-category="career">💼 Career</button>
+            </div>
+
+            <!-- Featured Roadmaps -->
+            <div class="section-header">
+                <h2>🗺️ Career Roadmaps</h2>
+                <a href="roadmaps.html" class="btn btn-secondary btn-sm">View All →</a>
+            </div>
+            <div class="resources-grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));">
+                <div class="roadmap-card">
+                    <div class="roadmap-icon">👨‍💻</div>
+                    <div class="roadmap-title">Frontend Developer</div>
+                    <div class="roadmap-desc">HTML, CSS, JS, React</div>
+                </div>
+                <div class="roadmap-card">
+                    <div class="roadmap-icon">⚙️</div>
+                    <div class="roadmap-title">Backend Developer</div>
+                    <div class="roadmap-desc">Node, Python, Databases</div>
+                </div>
+                <div class="roadmap-card">
+                    <div class="roadmap-icon">🤖</div>
+                    <div class="roadmap-title">AI/ML Engineer</div>
+                    <div class="roadmap-desc">Python, TensorFlow, PyTorch</div>
+                </div>
+                <div class="roadmap-card">
+                    <div class="roadmap-icon">☁️</div>
+                    <div class="roadmap-title">DevOps Engineer</div>
+                    <div class="roadmap-desc">AWS, Docker, K8s</div>
+                </div>
+                <div class="roadmap-card">
+                    <div class="roadmap-icon">📊</div>
+                    <div class="roadmap-title">Data Scientist</div>
+                    <div class="roadmap-desc">Stats, SQL, Visualization</div>
+                </div>
+            </div>
+
+            <!-- Resources -->
+            <div class="section-header">
+                <h2>📖 Top Resources</h2>
+            </div>
+            <div class="resources-grid" id="resources-grid">
+                <!-- Will be populated by JS -->
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container"><p>&copy; 2024 AI Spectrum India. All rights reserved.</p></div>
+    </footer>
+
+    <script>
+        const RESOURCES = [
+            // DSA & Coding
+            { title: 'NeetCode 150', author: 'NeetCode', category: 'dsa', type: 'youtube', url: 'https://neetcode.io', description: 'Most recommended DSA patterns for FAANG interviews. 150 hand-picked problems with video explanations.', pricing: 'free', rating: 4.9, students: 500000, indian: false, recommended: true },
+            { title: 'Striver SDE Sheet', author: 'Striver (Raj Vikramaditya)', category: 'dsa', type: 'youtube', url: 'https://takeuforward.org/interviews/strivers-sde-sheet-top-coding-interview-problems', description: 'Most popular DSA sheet in India. 180 problems covering all patterns for product companies.', pricing: 'free', rating: 4.9, students: 1000000, indian: true, recommended: true },
+            { title: 'LeetCode Premium', author: 'LeetCode', category: 'dsa', type: 'platform', url: 'https://leetcode.com/subscribe/', description: 'Company-wise questions, premium solutions, and mock interviews. Essential for serious prep.', pricing: 'paid', rating: 4.7, students: 2000000, indian: false, recommended: true },
+            { title: 'Abdul Bari Algorithms', author: 'Abdul Bari', category: 'dsa', type: 'youtube', url: 'https://youtube.com/c/AbdulBari', description: 'In-depth algorithm explanations with animations. Best for understanding fundamentals.', pricing: 'free', rating: 4.8, students: 800000, indian: true, recommended: false },
+            { title: 'Aditya Verma DP Playlist', author: 'Aditya Verma', category: 'dsa', type: 'youtube', url: 'https://youtube.com/c/AdityaVermaTheProgrammingLord', description: 'Best Dynamic Programming tutorial in Hindi/English. Must-watch for DP mastery.', pricing: 'free', rating: 4.9, students: 600000, indian: true, recommended: true },
+            
+            // System Design
+            { title: 'System Design Primer', author: 'Donne Martin', category: 'system', type: 'github', url: 'https://github.com/donnemartin/system-design-primer', description: 'Comprehensive system design guide. 200K+ stars on GitHub. Free and complete.', pricing: 'free', rating: 4.9, students: 200000, indian: false, recommended: true },
+            { title: 'Gaurav Sen System Design', author: 'Gaurav Sen', category: 'system', type: 'youtube', url: 'https://youtube.com/c/GauravSensei', description: 'Clear system design explanations. Best Indian creator for HLD concepts.', pricing: 'free', rating: 4.8, students: 400000, indian: true, recommended: true },
+            { title: 'Alex Xu System Design Book', author: 'Alex Xu', category: 'system', type: 'book', url: 'https://amazon.com/System-Design-Interview-insiders-Second/dp/B08CMF2CQF', description: 'System Design Interview Vol 1 & 2. Industry standard book for senior roles.', pricing: 'paid', rating: 4.8, students: 100000, indian: false, recommended: true },
+            { title: 'ByteByteGo', author: 'Alex Xu', category: 'system', type: 'newsletter', url: 'https://bytebytego.com', description: 'Weekly system design newsletter with visual explanations. Great for continuous learning.', pricing: 'free', rating: 4.7, students: 300000, indian: false, recommended: false },
+            
+            // AI/ML
+            { title: 'Andrew Ng ML Course', author: 'Andrew Ng', category: 'aiml', type: 'course', url: 'https://coursera.org/learn/machine-learning', description: 'The original ML course. Perfect starting point for machine learning fundamentals.', pricing: 'free', rating: 4.9, students: 4000000, indian: false, recommended: true },
+            { title: 'Fast.ai', author: 'Jeremy Howard', category: 'aiml', type: 'course', url: 'https://fast.ai', description: 'Practical deep learning course. Top-down approach that gets you building quickly.', pricing: 'free', rating: 4.8, students: 500000, indian: false, recommended: true },
+            { title: 'Krish Naik ML', author: 'Krish Naik', category: 'aiml', type: 'youtube', url: 'https://youtube.com/user/krishnaaborern', description: 'Complete ML, DL, NLP playlists in Hindi/English. Best for Indian learners.', pricing: 'free', rating: 4.7, students: 700000, indian: true, recommended: true },
+            { title: 'StatQuest', author: 'Josh Starmer', category: 'aiml', type: 'youtube', url: 'https://youtube.com/c/joshstarmer', description: 'Statistics and ML concepts explained simply. "BAM!" moments guaranteed.', pricing: 'free', rating: 4.9, students: 800000, indian: false, recommended: true },
+            { title: 'Kaggle Learn', author: 'Kaggle', category: 'aiml', type: 'platform', url: 'https://kaggle.com/learn', description: 'Micro-courses on ML, Python, SQL. Hands-on with real datasets.', pricing: 'free', rating: 4.6, students: 1000000, indian: false, recommended: false },
+            
+            // Frontend
+            { title: 'JavaScript.info', author: 'Ilya Kantor', category: 'frontend', type: 'website', url: 'https://javascript.info', description: 'The modern JavaScript tutorial. Most comprehensive free JS resource.', pricing: 'free', rating: 4.9, students: 500000, indian: false, recommended: true },
+            { title: 'Frontend Masters', author: 'Frontend Masters', category: 'frontend', type: 'platform', url: 'https://frontendmasters.com', description: 'Expert-led frontend courses. React, Vue, TypeScript by top instructors.', pricing: 'paid', rating: 4.8, students: 200000, indian: false, recommended: true },
+            { title: 'Namaste JavaScript', author: 'Akshay Saini', category: 'frontend', type: 'youtube', url: 'https://youtube.com/c/AkshaySaini', description: 'Deep dive into JavaScript internals. Best JS foundation course for Indians.', pricing: 'free', rating: 4.9, students: 500000, indian: true, recommended: true },
+            { title: 'React Official Docs', author: 'React Team', category: 'frontend', type: 'docs', url: 'https://react.dev', description: 'New React docs with interactive examples. Start here for React learning.', pricing: 'free', rating: 4.8, students: 1000000, indian: false, recommended: true },
+            
+            // Backend
+            { title: 'freeCodeCamp Backend', author: 'freeCodeCamp', category: 'backend', type: 'course', url: 'https://freecodecamp.org/learn/back-end-development-and-apis', description: 'Free backend certification. Node.js, Express, MongoDB covered.', pricing: 'free', rating: 4.6, students: 500000, indian: false, recommended: false },
+            { title: 'Hussein Nasser', author: 'Hussein Nasser', category: 'backend', type: 'youtube', url: 'https://youtube.com/c/HusseinNasser-software-engineering', description: 'Deep backend engineering concepts. Databases, networking, protocols explained.', pricing: 'free', rating: 4.8, students: 300000, indian: false, recommended: true },
+            { title: 'Telusko Java', author: 'Navin Reddy', category: 'backend', type: 'youtube', url: 'https://youtube.com/c/Telusko', description: 'Java, Spring Boot tutorials. Popular among Indian learners.', pricing: 'free', rating: 4.6, students: 400000, indian: true, recommended: false },
+            
+            // DevOps
+            { title: 'KodeKloud', author: 'Mumshad Mannambeth', category: 'devops', type: 'platform', url: 'https://kodekloud.com', description: 'Hands-on DevOps labs. Docker, K8s, Ansible with practice environments.', pricing: 'paid', rating: 4.8, students: 200000, indian: true, recommended: true },
+            { title: 'TechWorld with Nana', author: 'Nana Janashia', category: 'devops', type: 'youtube', url: 'https://youtube.com/c/TechWorldwithNana', description: 'Clear DevOps tutorials. Docker, Kubernetes, CI/CD explained simply.', pricing: 'free', rating: 4.9, students: 400000, indian: false, recommended: true },
+            { title: 'AWS Free Tier', author: 'AWS', category: 'devops', type: 'platform', url: 'https://aws.amazon.com/free', description: 'Free tier to practice AWS services. 12 months free for hands-on learning.', pricing: 'free', rating: 4.5, students: 1000000, indian: false, recommended: false },
+            
+            // Career
+            { title: 'Tech Interview Handbook', author: 'Yangshun Tay', category: 'career', type: 'github', url: 'https://techinterviewhandbook.org', description: 'Complete interview prep guide. Resume tips, behavioral questions, negotiation.', pricing: 'free', rating: 4.8, students: 100000, indian: false, recommended: true },
+            { title: 'Levels.fyi', author: 'Levels.fyi', category: 'career', type: 'website', url: 'https://levels.fyi', description: 'Salary data for tech companies. Know your worth before negotiating.', pricing: 'free', rating: 4.7, students: 500000, indian: false, recommended: true },
+            { title: 'Blind', author: 'Blind', category: 'career', type: 'app', url: 'https://teamblind.com', description: 'Anonymous tech professional community. Real salary and interview insights.', pricing: 'free', rating: 4.5, students: 300000, indian: false, recommended: false },
+        ];
+
+        let currentCategory = 'all';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderResources();
+            setupCategoryNav();
+        });
+
+        function setupCategoryNav() {
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentCategory = this.dataset.category;
+                    renderResources();
+                });
+            });
+        }
+
+        function renderResources() {
+            const grid = document.getElementById('resources-grid');
+            const filtered = currentCategory === 'all' ? RESOURCES : RESOURCES.filter(r => r.category === currentCategory);
+            
+            grid.innerHTML = filtered.map(r => `
+                <div class="resource-card">
+                    <div class="resource-header">
+                        <div class="resource-icon">${getIcon(r.type)}</div>
+                        <div>
+                            <div class="resource-title">${r.title}</div>
+                            <div class="resource-author">${r.author}</div>
+                        </div>
+                    </div>
+                    <p class="resource-desc">${r.description}</p>
+                    <div class="resource-tags">
+                        <span class="resource-tag ${r.pricing === 'free' ? 'tag-free' : 'tag-paid'}">${r.pricing === 'free' ? '✅ Free' : '💰 Paid'}</span>
+                        <span class="resource-tag tag-category">${getCategoryLabel(r.category)}</span>
+                        ${r.indian ? '<span class="resource-tag tag-indian">🇮🇳 Indian</span>' : ''}
+                        ${r.recommended ? '<span class="resource-tag tag-recommended">⭐ Recommended</span>' : ''}
+                    </div>
+                    <div class="resource-footer">
+                        <div class="resource-rating">
+                            <span class="rating-stars">⭐ ${r.rating}</span>
+                            <span class="rating-count">${formatNumber(r.students)} learners</span>
+                        </div>
+                        <a href="${r.url}" target="_blank" class="resource-link">Open →</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getIcon(type) {
+            const icons = { youtube: '📺', course: '📚', platform: '💻', github: '🐙', book: '📖', website: '🌐', newsletter: '📧', docs: '📄', app: '📱' };
+            return icons[type] || '📄';
+        }
+
+        function getCategoryLabel(cat) {
+            const labels = { dsa: 'DSA', system: 'System Design', aiml: 'AI/ML', frontend: 'Frontend', backend: 'Backend', devops: 'DevOps', career: 'Career' };
+            return labels[cat] || cat;
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(0) + 'K';
+            return num;
+        }
+    </script>
+</body>
+</html>

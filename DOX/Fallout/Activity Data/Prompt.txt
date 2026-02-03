@@ -1,0 +1,64 @@
+
+Hi I am having excel at C:\Users\abhisha3\Desktop\Projects\Fallout\Activity Data\OSO_activity_data.xlsx under "Activity Data" folder which is having table with below column header:-
+
+spec_ver_id, name, interface,profile,wbs,implementation,class,Time Frame
+
+Now so this table "oss_activity_instance" keeps the record of activity and i want to get a avg time in hours for each spec_ver_id that would represent the avg time any activity takes with respective spec_ver_id.
+
+Idea is any other instance which will crose that time limit will trigger some alert.
+
+So your job is to create a python script to run on company server where db connection can be set or can be run in same netwrok where db is present.
+
+
+1. Read excel file esp. "spec_ver_id" and "Time Frame"
+2. set db connection
+3.you have to pass "spec_ver_id" in sql query one by one as we have around 4000+ "spec_ver_id"
+4.now below query will get the single column with time frame for 400 instance
+
+Query:-
+
+WITH filtered AS (
+    SELECT
+        actual_start_date,
+        actual_end_date
+    FROM oss_activity_instance
+    WHERE spec_ver_id = '410e8485-cb0b-4a5b-8957-f24bf2ad352e'
+      AND state = 'Completed'
+      AND prev_state = 'In Progress'
+    ORDER BY create_date DESC
+    LIMIT 400
+)
+SELECT
+    EXTRACT(EPOCH FROM (actual_end_date - actual_start_date)) / 3600 AS time_frame_hours
+FROM filtered;
+
+
+5.Now you have get a single number that will kind of avg or number which lies mostly in that value in order to get a picture that any activity with respective spec_ver_id takes that "time frame" to get complete.
+
+6. Now you have to store that value in the last column of the excel "Time Frame"
+
+
+
+
+
+
+ 
+Here i am fetching below data in postgres query:-
+ 
+time_frame :- taking the actual completion time using formula: oai.actual_end_date - oai.actual_start_date as time_frame
+ 
+Here my end goal is to get calculate the average time_frame value for each oai.spec_ver_id (having 4000+ in excel right now)
+ 
+So i have to pass oai.spec_ver_id in python script and then for each oai.spec_ver_id i will run provided query and then store avg_time_frame for each spec id .
+ 
+First check the query and enhance it to keep it optimised as well change the time_frame format in a way to use it in most efficient way.
+ 
+oai.actual_start_date,     oai.actual_end_date ,       oai.actual_end_date - oai.actual_start_date as time_frame 
+
+2018-10-29 13:57:01.084	  2018-10-31 13:49:22.885	   1 day 23:52:21.801
+ 
+ 
+select oai.spec_ver_id , oai.actual_start_date, oai.actual_end_date ,oai.actual_end_date - oai.actual_start_date as time_frame   from oss_activity_instance oai 
+
+where oai.spec_ver_id  = '410e8485-cb0b-4a5b-8957-f24bf2ad352e' and oai.state = 'Completed' and oai.prev_state ='In Progress' limit 500 order by oai.create_date desc;
+ 

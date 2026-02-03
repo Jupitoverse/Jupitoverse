@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Spectrum - 5000+ AI Tools Directory | AI Spectrum India</title>
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        .ai-hero {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(0, 217, 255, 0.1) 50%, rgba(0, 255, 136, 0.1) 100%);
+            padding: 4rem 0 3rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+        .ai-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 50%);
+            animation: rotate 30s linear infinite;
+        }
+        @keyframes rotate { to { transform: rotate(360deg); } }
+        .ai-hero h1 { font-size: 3rem; margin-bottom: 1rem; position: relative; }
+        .ai-hero h1 span { background: linear-gradient(135deg, #a855f7, #00d9ff, #00ff88); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .ai-hero p { color: var(--text-secondary); max-width: 700px; margin: 0 auto 2rem; position: relative; font-size: 1.1rem; }
+
+        .hero-stats { display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; position: relative; }
+        .hero-stat { text-align: center; }
+        .hero-stat .value { font-size: 2.5rem; font-weight: 700; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-stat .label { color: var(--text-muted); font-size: 0.9rem; }
+
+        .filters-section { background: var(--bg-secondary); padding: 1.5rem 0; position: sticky; top: 70px; z-index: 100; border-bottom: 1px solid var(--border); }
+        .search-box { display: flex; gap: 1rem; margin-bottom: 1rem; }
+        .search-input { flex: 1; max-width: 500px; background: var(--bg-card); border: 2px solid var(--border); border-radius: 50px; padding: 0.9rem 1.5rem; color: var(--text-primary); font-size: 1rem; transition: all 0.2s; }
+        .search-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 20px rgba(0, 217, 255, 0.2); }
+        .search-input::placeholder { color: var(--text-muted); }
+
+        .filter-row { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+        .filter-btn { background: var(--bg-card); border: 1px solid var(--border); border-radius: 25px; padding: 0.5rem 1rem; color: var(--text-secondary); cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+        .filter-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+        .filter-btn.active { background: rgba(0, 217, 255, 0.15); border-color: var(--accent); color: var(--accent); }
+        .filter-select { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; color: var(--text-secondary); font-size: 0.85rem; }
+
+        .categories-row { display: flex; gap: 0.5rem; overflow-x: auto; padding: 1rem 0; margin-bottom: 1rem; }
+        .category-chip { background: var(--bg-card); border: 2px solid var(--border); border-radius: 25px; padding: 0.6rem 1.25rem; color: var(--text-secondary); cursor: pointer; font-weight: 500; white-space: nowrap; transition: all 0.2s; display: flex; align-items: center; gap: 0.5rem; }
+        .category-chip:hover { border-color: var(--accent); transform: translateY(-2px); }
+        .category-chip.active { background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(0, 217, 255, 0.2)); border-color: var(--accent); color: var(--accent); }
+        .category-chip .icon { font-size: 1.1rem; }
+        .category-chip .count { background: rgba(0, 217, 255, 0.2); padding: 0.15rem 0.5rem; border-radius: 10px; font-size: 0.75rem; }
+
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.25rem; }
+        .tool-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; transition: all 0.3s; position: relative; overflow: hidden; }
+        .tool-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: var(--gradient-1); opacity: 0; transition: opacity 0.3s; }
+        .tool-card:hover { transform: translateY(-6px); border-color: var(--accent); box-shadow: 0 20px 40px rgba(0, 217, 255, 0.15); }
+        .tool-card:hover::before { opacity: 1; }
+        .tool-card.featured { border-color: rgba(168, 85, 247, 0.3); }
+        .tool-card.featured::before { opacity: 1; background: linear-gradient(90deg, #a855f7, #00d9ff); }
+
+        .tool-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+        .tool-info { display: flex; gap: 1rem; flex: 1; }
+        .tool-icon { width: 50px; height: 50px; background: linear-gradient(135deg, var(--bg-secondary), var(--bg-hover)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; }
+        .tool-title { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.25rem; }
+        .tool-category { color: var(--accent-purple); font-size: 0.8rem; font-weight: 500; }
+        .featured-badge { background: linear-gradient(135deg, #a855f7, #ec4899); color: white; font-size: 0.7rem; padding: 0.25rem 0.6rem; border-radius: 20px; font-weight: 600; }
+
+        .tool-desc { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1rem; min-height: 45px; }
+        .tool-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+        .tool-tag { background: var(--bg-secondary); color: var(--text-muted); padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.75rem; }
+
+        .tool-meta { display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 1px solid var(--border); }
+        .tool-rating { display: flex; align-items: center; gap: 0.5rem; }
+        .rating-stars { color: var(--accent-warning); font-weight: 600; }
+        .rating-users { color: var(--text-muted); font-size: 0.8rem; }
+
+        .tool-pricing { padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .pricing-free { background: rgba(0, 255, 136, 0.15); color: var(--accent-success); }
+        .pricing-freemium { background: rgba(0, 217, 255, 0.15); color: var(--accent); }
+        .pricing-paid { background: rgba(255, 165, 0, 0.15); color: var(--accent-warning); }
+        .pricing-enterprise, .pricing-pay-per-use { background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); }
+
+        .tool-link { display: block; text-align: center; background: var(--gradient-1); color: #000; padding: 0.6rem 1rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; margin-top: 1rem; transition: all 0.2s; }
+        .tool-link:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 217, 255, 0.3); }
+
+        .results-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding: 1rem; background: var(--bg-secondary); border-radius: 12px; }
+        .results-count { color: var(--text-secondary); }
+        .results-count strong { color: var(--accent); }
+
+        .empty-state { text-align: center; padding: 4rem 2rem; color: var(--text-muted); }
+        .empty-state .icon { font-size: 4rem; margin-bottom: 1rem; }
+
+        .load-more { display: block; width: 100%; max-width: 300px; margin: 2rem auto; padding: 1rem 2rem; background: var(--bg-card); border: 2px solid var(--accent); border-radius: 50px; color: var(--accent); font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .load-more:hover { background: var(--accent); color: #000; }
+    </style>
+</head>
+<body>
+    <script src="js/header.js"></script>
+    <!-- Original data files -->
+    <script src="js/ai-tools-data.js"></script>
+    <script src="js/ai-tools-data-2.js"></script>
+    <script src="js/ai-tools-data-3.js"></script>
+    <!-- Phase data files -->
+    <script src="js/ai-tools-phase1.js"></script>
+    <script src="js/ai-tools-phase2.js"></script>
+    <script src="js/ai-tools-phase3.js"></script>
+    <script src="js/ai-tools-phase4.js"></script>
+    <script src="js/ai-tools-phase5.js"></script>
+    <script src="js/ai-tools-phase6.js"></script>
+    <script src="js/ai-tools-phase7.js"></script>
+    <script src="js/ai-tools-phase8.js"></script>
+    <script src="js/ai-tools-phase9.js"></script>
+    <script src="js/ai-tools-phase10.js"></script>
+    <script src="js/ai-tools-phase11.js"></script>
+    <script src="js/ai-tools-phase12.js"></script>
+    <script src="js/ai-tools-phase13.js"></script>
+    <script src="js/ai-tools-phase14.js"></script>
+    <script src="js/ai-tools-phase15.js"></script>
+    <script src="js/ai-tools-phase16.js"></script>
+    <script src="js/ai-tools-phase17.js"></script>
+    <script src="js/ai-tools-phase18.js"></script>
+    <script src="js/ai-tools-phase19.js"></script>
+    <script src="js/ai-tools-phase20.js"></script>
+    <script src="js/ai-tools-phase21.js"></script>
+    <script src="js/ai-tools-phase22.js"></script>
+    <script src="js/ai-tools-phase23.js"></script>
+    <script src="js/ai-tools-phase24.js"></script>
+    <script src="js/ai-tools-phase25.js"></script>
+    <script src="js/ai-tools-phase26.js"></script>
+    <script src="js/ai-tools-phase27.js"></script>
+    <script src="js/ai-tools-phase28.js"></script>
+    <script src="js/ai-tools-phase29.js"></script>
+    <script src="js/ai-tools-phase30.js"></script>
+    <script src="js/ai-tools-phase31.js"></script>
+    <script src="js/ai-tools-phase32.js"></script>
+    <script src="js/ai-tools-phase33.js"></script>
+    <script src="js/ai-tools-phase34.js"></script>
+    <script src="js/ai-tools-phase35.js"></script>
+    <script src="js/ai-tools-phase36.js"></script>
+    <script src="js/ai-tools-phase37.js"></script>
+    <script src="js/ai-tools-phase38.js"></script>
+    <script src="js/ai-tools-phase39.js"></script>
+    <script src="js/ai-tools-phase40.js"></script>
+    <script src="js/ai-tools-phase41.js"></script>
+    <script src="js/ai-tools-phase42.js"></script>
+    <script src="js/ai-tools-phase43.js"></script>
+    <script src="js/ai-tools-phase44.js"></script>
+    <script src="js/ai-tools-phase45.js"></script>
+    <script src="js/ai-tools-phase46.js"></script>
+    <script src="js/ai-tools-phase47.js"></script>
+    <script src="js/ai-tools-phase48.js"></script>
+    <script src="js/ai-tools-phase49.js"></script>
+    <script src="js/ai-tools-phase50.js"></script>
+    <script src="js/ai-tools-phase51.js"></script>
+    <script src="js/ai-tools-phase52.js"></script>
+    <script src="js/ai-tools-phase53.js"></script>
+    <script src="js/ai-tools-phase54.js"></script>
+    <script src="js/ai-tools-phase55.js"></script>
+    <script src="js/ai-tools-phase56.js"></script>
+    <script src="js/ai-tools-phase57.js"></script>
+    <script src="js/ai-tools-phase58.js"></script>
+    <script src="js/ai-tools-phase59.js"></script>
+    <script src="js/ai-tools-phase60.js"></script>
+    <script src="js/ai-tools-phase61.js"></script>
+    <script src="js/ai-tools-phase62.js"></script>
+    <script src="js/ai-tools-phase63.js"></script>
+    <script src="js/ai-tools-phase64.js"></script>
+    <script src="js/ai-tools-phase65.js"></script>
+    <script src="js/ai-tools-phase66.js"></script>
+    <script src="js/ai-tools-phase67.js"></script>
+    <script src="js/ai-tools-phase68.js"></script>
+    <script src="js/ai-tools-phase69.js"></script>
+    <script src="js/ai-tools-phase70.js"></script>
+    <script src="js/ai-tools-phase71.js"></script>
+    <script src="js/ai-tools-phase72.js"></script>
+    <script src="js/ai-tools-phase73.js"></script>
+    <script src="js/ai-tools-phase74.js"></script>
+    <script src="js/ai-tools-phase75.js"></script>
+    <script src="js/ai-tools-phase76.js"></script>
+    <script src="js/ai-tools-phase77.js"></script>
+    <script src="js/ai-tools-phase78.js"></script>
+    <script src="js/ai-tools-phase79.js"></script>
+    <script src="js/ai-tools-phase80.js"></script>
+    <script src="js/ai-tools-phase81.js"></script>
+
+    <main>
+        <section class="ai-hero">
+            <div class="container">
+                <h1>🤖 <span>AI Spectrum</span> Directory</h1>
+                <p>Discover 5000+ cutting-edge AI tools across 150+ categories. The most comprehensive AI tools repository for developers, creators, marketers, and businesses.</p>
+                <div class="hero-stats">
+                    <div class="hero-stat"><div class="value" id="total-tools">5000+</div><div class="label">AI Tools</div></div>
+                    <div class="hero-stat"><div class="value" id="total-categories">150+</div><div class="label">Categories</div></div>
+                    <div class="hero-stat"><div class="value" id="free-tools">1500+</div><div class="label">Free Tools</div></div>
+                    <div class="hero-stat"><div class="value">⭐ 4.5+</div><div class="label">Avg Rating</div></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="filters-section">
+            <div class="container">
+                <div class="search-box">
+                    <input type="text" class="search-input" id="search-input" placeholder="🔍 Search AI tools by name, category, or feature...">
+                </div>
+                <div class="filter-row">
+                    <select class="filter-select" id="pricing-filter">
+                        <option value="">All Pricing</option>
+                        <option value="Free">Free</option>
+                        <option value="Freemium">Freemium</option>
+                        <option value="Paid">Paid</option>
+                        <option value="Enterprise">Enterprise</option>
+                    </select>
+                    <select class="filter-select" id="sort-filter">
+                        <option value="featured">Featured First</option>
+                        <option value="rating">Highest Rated</option>
+                        <option value="name">A-Z</option>
+                        <option value="users">Most Users</option>
+                    </select>
+                    <button class="filter-btn" id="featured-filter" data-active="false">⭐ Featured Only</button>
+                </div>
+            </div>
+        </section>
+
+        <div class="container" style="padding-top: 1rem;">
+            <div class="categories-row" id="categories-row"></div>
+        </div>
+
+        <section style="padding: 1rem 0 4rem;">
+            <div class="container">
+                <div class="results-info">
+                    <span class="results-count">Showing <strong id="results-count">0</strong> tools</span>
+                </div>
+                <div class="tools-grid" id="tools-grid"></div>
+                <button class="load-more" id="load-more" style="display:none;">Load More Tools</button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container"><p>&copy; 2024 AI Spectrum India. All rights reserved.</p></div>
+    </footer>
+
+    <script>
+        // Merge all databases
+        let ALL_TOOLS = [];
+        
+        function loadTools() {
+            // From original databases
+            if (window.AI_TOOLS_DATABASE) {
+                const db1 = window.AI_TOOLS_DATABASE;
+                Object.values(db1).forEach(arr => { if (Array.isArray(arr)) ALL_TOOLS.push(...arr); });
+            }
+            if (window.AI_TOOLS_DATABASE_2) {
+                const db2 = window.AI_TOOLS_DATABASE_2;
+                Object.values(db2).forEach(arr => { if (Array.isArray(arr)) ALL_TOOLS.push(...arr); });
+            }
+            if (window.AI_TOOLS_DATABASE_3) {
+                const db3 = window.AI_TOOLS_DATABASE_3;
+                Object.values(db3).forEach(arr => { if (Array.isArray(arr)) ALL_TOOLS.push(...arr); });
+            }
+            
+            // Load all phase data (phases 1-80)
+            const phaseArrays = [
+                window.AI_TOOLS_PHASE1, window.AI_TOOLS_PHASE2, window.AI_TOOLS_PHASE3,
+                window.AI_TOOLS_PHASE4, window.AI_TOOLS_PHASE5, window.AI_TOOLS_PHASE6,
+                window.AI_TOOLS_PHASE7, window.AI_TOOLS_PHASE8, window.AI_TOOLS_PHASE9,
+                window.AI_TOOLS_PHASE10, window.AI_TOOLS_PHASE11, window.AI_TOOLS_PHASE12,
+                window.AI_TOOLS_PHASE13, window.AI_TOOLS_PHASE14, window.AI_TOOLS_PHASE15,
+                window.AI_TOOLS_PHASE16, window.AI_TOOLS_PHASE17, window.AI_TOOLS_PHASE18,
+                window.AI_TOOLS_PHASE19, window.AI_TOOLS_PHASE20, window.AI_TOOLS_PHASE21,
+                window.AI_TOOLS_PHASE22, window.AI_TOOLS_PHASE23, window.AI_TOOLS_PHASE24,
+                window.AI_TOOLS_PHASE25, window.AI_TOOLS_PHASE26, window.AI_TOOLS_PHASE27,
+                window.AI_TOOLS_PHASE28, window.AI_TOOLS_PHASE29, window.AI_TOOLS_PHASE30,
+                window.AI_TOOLS_PHASE31, window.AI_TOOLS_PHASE32, window.AI_TOOLS_PHASE33,
+                window.AI_TOOLS_PHASE34, window.AI_TOOLS_PHASE35, window.AI_TOOLS_PHASE36,
+                window.AI_TOOLS_PHASE37, window.AI_TOOLS_PHASE38, window.AI_TOOLS_PHASE39,
+                window.AI_TOOLS_PHASE40, window.AI_TOOLS_PHASE41, window.AI_TOOLS_PHASE42,
+                window.AI_TOOLS_PHASE43, window.AI_TOOLS_PHASE44, window.AI_TOOLS_PHASE45,
+                window.AI_TOOLS_PHASE46, window.AI_TOOLS_PHASE47, window.AI_TOOLS_PHASE48,
+                window.AI_TOOLS_PHASE49, window.AI_TOOLS_PHASE50, window.AI_TOOLS_PHASE51,
+                window.AI_TOOLS_PHASE52, window.AI_TOOLS_PHASE53, window.AI_TOOLS_PHASE54,
+                window.AI_TOOLS_PHASE55, window.AI_TOOLS_PHASE56, window.AI_TOOLS_PHASE57,
+                window.AI_TOOLS_PHASE58, window.AI_TOOLS_PHASE59, window.AI_TOOLS_PHASE60,
+                window.AI_TOOLS_PHASE61, window.AI_TOOLS_PHASE62, window.AI_TOOLS_PHASE63,
+                window.AI_TOOLS_PHASE64, window.AI_TOOLS_PHASE65, window.AI_TOOLS_PHASE66,
+                window.AI_TOOLS_PHASE67, window.AI_TOOLS_PHASE68, window.AI_TOOLS_PHASE69,
+                window.AI_TOOLS_PHASE70, window.AI_TOOLS_PHASE71, window.AI_TOOLS_PHASE72,
+                window.AI_TOOLS_PHASE73, window.AI_TOOLS_PHASE74, window.AI_TOOLS_PHASE75,
+                window.AI_TOOLS_PHASE76, window.AI_TOOLS_PHASE77, window.AI_TOOLS_PHASE78,
+                window.AI_TOOLS_PHASE79, window.AI_TOOLS_PHASE80, window.AI_TOOLS_PHASE81
+            ];
+            phaseArrays.forEach(arr => { if (Array.isArray(arr)) ALL_TOOLS.push(...arr); });
+            
+            // Normalize tool structure
+            ALL_TOOLS = ALL_TOOLS.map(t => ({
+                name: t.name,
+                category: t.category,
+                subcategory: t.sub || t.subcategory || '',
+                description: t.desc || t.description || '',
+                url: t.url?.startsWith('http') ? t.url : 'https://' + t.url,
+                pricing: t.pricing || 'Free',
+                rating: t.rating || 4.0,
+                users: t.users || '10K+',
+                tags: t.tags || [],
+                featured: t.featured || false,
+                icon: t.icon || '🤖'
+            }));
+            
+            // Remove duplicates by name
+            const seen = new Set();
+            ALL_TOOLS = ALL_TOOLS.filter(t => {
+                const key = t.name.toLowerCase();
+                if (seen.has(key)) return false;
+                seen.add(key);
+                return true;
+            });
+        }
+
+        const CATEGORY_ICONS = {
+            "All": "🌟", "Chatbot": "💬", "Search": "🔍", "Writing": "✍️", "Image": "🎨",
+            "Video": "🎬", "Audio": "🎵", "Coding": "💻", "Productivity": "📊", "Design": "🎯",
+            "Research": "🔬", "Data": "📈", "Marketing": "📢", "Support": "🤝", "Sales": "💼",
+            "Education": "🎓", "3D": "🎲", "Automation": "⚡", "Agents": "🤖", "API": "🔌",
+            "HR": "👥", "Legal": "⚖️"
+        };
+
+        let currentCategory = "All";
+        let currentPricing = "";
+        let currentSort = "featured";
+        let searchQuery = "";
+        let featuredOnly = false;
+        let displayCount = 50;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTools();
+            renderCategories();
+            renderTools();
+            setupEventListeners();
+            updateStats();
+        });
+
+        function setupEventListeners() {
+            document.getElementById('search-input').addEventListener('input', (e) => {
+                searchQuery = e.target.value.toLowerCase();
+                displayCount = 50;
+                renderTools();
+            });
+            document.getElementById('pricing-filter').addEventListener('change', (e) => {
+                currentPricing = e.target.value;
+                displayCount = 50;
+                renderTools();
+            });
+            document.getElementById('sort-filter').addEventListener('change', (e) => {
+                currentSort = e.target.value;
+                renderTools();
+            });
+            document.getElementById('featured-filter').addEventListener('click', (e) => {
+                featuredOnly = !featuredOnly;
+                e.target.classList.toggle('active', featuredOnly);
+                displayCount = 50;
+                renderTools();
+            });
+            document.getElementById('load-more').addEventListener('click', () => {
+                displayCount += 50;
+                renderTools();
+            });
+        }
+
+        function renderCategories() {
+            const categories = ["All", ...new Set(ALL_TOOLS.map(t => t.category))].filter(Boolean);
+            const container = document.getElementById('categories-row');
+            container.innerHTML = categories.map(cat => {
+                const count = cat === "All" ? ALL_TOOLS.length : ALL_TOOLS.filter(t => t.category === cat).length;
+                return `<button class="category-chip ${cat === currentCategory ? 'active' : ''}" data-category="${cat}">
+                    <span class="icon">${CATEGORY_ICONS[cat] || '📁'}</span>
+                    <span>${cat}</span>
+                    <span class="count">${count}</span>
+                </button>`;
+            }).join('');
+            
+            container.querySelectorAll('.category-chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    currentCategory = chip.dataset.category;
+                    container.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    displayCount = 50;
+                    renderTools();
+                });
+            });
+        }
+
+        function renderTools() {
+            let filtered = [...ALL_TOOLS];
+            
+            if (currentCategory !== "All") filtered = filtered.filter(t => t.category === currentCategory);
+            if (currentPricing) filtered = filtered.filter(t => t.pricing === currentPricing);
+            if (featuredOnly) filtered = filtered.filter(t => t.featured);
+            if (searchQuery) {
+                filtered = filtered.filter(t => 
+                    t.name.toLowerCase().includes(searchQuery) ||
+                    t.category.toLowerCase().includes(searchQuery) ||
+                    t.description.toLowerCase().includes(searchQuery) ||
+                    (t.subcategory && t.subcategory.toLowerCase().includes(searchQuery)) ||
+                    t.tags.some(tag => tag.toLowerCase().includes(searchQuery))
+                );
+            }
+            
+            // Sort
+            if (currentSort === 'featured') filtered.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+            else if (currentSort === 'rating') filtered.sort((a, b) => b.rating - a.rating);
+            else if (currentSort === 'name') filtered.sort((a, b) => a.name.localeCompare(b.name));
+            else if (currentSort === 'users') filtered.sort((a, b) => parseUsers(b.users) - parseUsers(a.users));
+            
+            document.getElementById('results-count').textContent = filtered.length;
+            
+            const grid = document.getElementById('tools-grid');
+            const loadMoreBtn = document.getElementById('load-more');
+            
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div class="empty-state"><div class="icon">🔍</div><p>No tools found matching your criteria</p></div>';
+                loadMoreBtn.style.display = 'none';
+                return;
+            }
+            
+            const toDisplay = filtered.slice(0, displayCount);
+            loadMoreBtn.style.display = filtered.length > displayCount ? 'block' : 'none';
+            
+            grid.innerHTML = toDisplay.map(tool => `
+                <div class="tool-card ${tool.featured ? 'featured' : ''}">
+                    <div class="tool-header">
+                        <div class="tool-info">
+                            <div class="tool-icon">${tool.icon}</div>
+                            <div>
+                                <div class="tool-title">${tool.name}</div>
+                                <div class="tool-category">${tool.category}${tool.subcategory ? ' • ' + tool.subcategory : ''}</div>
+                            </div>
+                        </div>
+                        ${tool.featured ? '<span class="featured-badge">⭐ Featured</span>' : ''}
+                    </div>
+                    <p class="tool-desc">${tool.description}</p>
+                    <div class="tool-tags">${tool.tags.slice(0, 4).map(t => `<span class="tool-tag">${t}</span>`).join('')}</div>
+                    <div class="tool-meta">
+                        <div class="tool-rating">
+                            <span class="rating-stars">⭐ ${tool.rating}</span>
+                            <span class="rating-users">${tool.users} users</span>
+                        </div>
+                        <span class="tool-pricing pricing-${tool.pricing.toLowerCase().replace(/[^a-z]/g, '')}">${tool.pricing}</span>
+                    </div>
+                    <a href="${tool.url}" target="_blank" class="tool-link">Try ${tool.name} →</a>
+                </div>
+            `).join('');
+        }
+
+        function parseUsers(str) {
+            if (!str) return 0;
+            const num = parseFloat(str);
+            if (str.includes('M')) return num * 1000000;
+            if (str.includes('K')) return num * 1000;
+            return num;
+        }
+
+        function updateStats() {
+            document.getElementById('total-tools').textContent = ALL_TOOLS.length + '+';
+            document.getElementById('total-categories').textContent = new Set(ALL_TOOLS.map(t => t.category)).size;
+            document.getElementById('free-tools').textContent = ALL_TOOLS.filter(t => t.pricing === 'Free' || t.pricing === 'Freemium').length + '+';
+        }
+    </script>
+</body>
+</html>

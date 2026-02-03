@@ -1,0 +1,86 @@
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            color: #333;
+            line-height: 1.6;
+            background-color: #fff;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        .styled-table {
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+            min-width: 600px;
+            border: 1px solid #dddddd;
+        }
+
+        .styled-table th,
+        .styled-table td {
+            border: 1px solid #dddddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+
+        .styled-table th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+        .note {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #555;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-left: 4px solid #0078D4;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        a {
+            color: #0078D4;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <p>Hi Team,</p>
+
+    <p>Please find below the list of orders where the <strong>RELEASE PONR</strong> flag was not triggered by the system, even though the mandatory wait period associated with the Registered Timed Action has been completed.</p>
+
+    <p>This report fetches the data based on the activity states/status, not on the basis of the <code>qrtz</code> table.</p>
+
+    <p>So any order where the flag has been released but the activity is still not marked completed would be part of this report, which also needs handling.</p>
+
+    <p>Kindly review these orders and take the necessary corrective actions. This issue is impacting the business, as services have already been ceased at the customer sites, but billing continues to be active.</p>
+
+    {html_table}
+ 
+    <div class="note">
+        For any changes in the report: Please reach out to Abhishek Agrahari
+          </a>
+    </div>
+
+    <div class="footer">
+        Regards,<br>
+        Abhishek Agrahari<br>
+        Mail: abhisha3@amdocs.com
+    </div>
+</body>
+</html>

@@ -1,0 +1,2325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerLaunch - Complete Job Hunt & Portfolio Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a1a;
+            --bg-secondary: #12122a;
+            --bg-card: #1a1a3e;
+            --bg-hover: #222255;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0c0;
+            --text-muted: #6b7280;
+            --accent-primary: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --accent-gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --info: #3b82f6;
+            --border: #2a2a5a;
+            --border-light: #3a3a6a;
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        /* Layout */
+        .app-container { display: flex; min-height: 100vh; }
+        .sidebar {
+            width: 280px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 100;
+        }
+        .sidebar-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-card);
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .main-content {
+            margin-left: 280px;
+            padding: 32px;
+            flex: 1;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Nav */
+        .profile-card {
+            padding: 24px;
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+        .avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.25rem;
+            font-weight: 600;
+            margin: 0 auto 16px;
+            border: 3px solid var(--border-light);
+            overflow: hidden;
+        }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .nav-section { padding: 16px 0; }
+        .nav-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            padding: 8px 24px;
+            font-weight: 600;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+        .nav-item:hover { background: var(--bg-hover); color: var(--text-primary); }
+        .nav-item.active {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--accent-primary);
+            border-left-color: var(--accent-primary);
+        }
+        .nav-badge {
+            margin-left: auto;
+            background: var(--error);
+            color: white;
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+        .nav-badge.success { background: var(--success); }
+        
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .card-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 20px; }
+        
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            font-family: inherit;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4); }
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover { border-color: var(--accent-primary); }
+        .btn-outline {
+            background: transparent;
+            color: var(--accent-primary);
+            border: 1px solid var(--accent-primary);
+        }
+        .btn-sm { padding: 8px 16px; font-size: 0.85rem; }
+        .btn-xs { padding: 6px 12px; font-size: 0.8rem; }
+        .btn-error { background: var(--error); color: white; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-block { width: 100%; }
+        
+        /* Forms */
+        .form-group { margin-bottom: 20px; }
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .form-label .required { color: var(--error); }
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        .form-hint { font-size: 0.8rem; color: var(--text-muted); margin-top: 6px; }
+        .form-row { display: flex; gap: 16px; }
+        .form-row > * { flex: 1; }
+        
+        /* Grid */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        @media (max-width: 1024px) { .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+        
+        /* Utilities */
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .flex-wrap { flex-wrap: wrap; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .items-center { align-items: center; }
+        .items-start { align-items: flex-start; }
+        .gap-2 { gap: 8px; }
+        .gap-3 { gap: 12px; }
+        .gap-4 { gap: 16px; }
+        .mb-2 { margin-bottom: 8px; }
+        .mb-3 { margin-bottom: 12px; }
+        .mb-4 { margin-bottom: 16px; }
+        .mb-6 { margin-bottom: 24px; }
+        .mt-4 { margin-top: 16px; }
+        .mt-6 { margin-top: 24px; }
+        .text-muted { color: var(--text-muted); }
+        .text-secondary { color: var(--text-secondary); }
+        .text-success { color: var(--success); }
+        .text-error { color: var(--error); }
+        .text-sm { font-size: 0.875rem; }
+        .text-xs { font-size: 0.75rem; }
+        .text-center { text-align: center; }
+        .font-medium { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+        .font-bold { font-weight: 700; }
+        .hidden { display: none !important; }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+        .modal-overlay.active { display: flex; }
+        .modal {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 28px;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: var(--bg-card);
+            z-index: 10;
+        }
+        .modal-close {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.25rem;
+        }
+        .modal-close:hover { background: var(--error); color: white; }
+        .modal-body { padding: 28px; }
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 20px 28px;
+            border-top: 1px solid var(--border);
+        }
+        
+        /* Section Header */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+        .section-title { font-size: 1.75rem; font-weight: 700; }
+        .section-subtitle { color: var(--text-muted); font-size: 0.95rem; margin-top: 4px; }
+        
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            position: relative;
+        }
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 40px;
+            right: 40px;
+            height: 2px;
+            background: var(--border);
+        }
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+        }
+        .progress-step.completed .step-circle {
+            background: var(--success);
+            border-color: var(--success);
+        }
+        .progress-step.active .step-circle {
+            background: var(--accent-gradient);
+            border-color: var(--accent-primary);
+        }
+        .step-label { font-size: 0.8rem; color: var(--text-muted); }
+        .progress-step.active .step-label { color: var(--accent-primary); }
+        .progress-step.completed .step-label { color: var(--success); }
+        
+        /* Profile Completion Card */
+        .completion-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .completion-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .completion-percentage { font-size: 2rem; font-weight: 700; color: var(--accent-primary); }
+        .completion-bar-container {
+            height: 8px;
+            background: var(--bg-primary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+        .completion-bar-fill {
+            height: 100%;
+            background: var(--accent-gradient);
+            border-radius: 4px;
+            transition: width 0.5s;
+        }
+        .completion-items { display: flex; flex-wrap: wrap; gap: 8px; }
+        .completion-item {
+            padding: 6px 12px;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .completion-item.done { color: var(--success); }
+        .completion-item.pending { color: var(--text-muted); }
+        
+        /* Item Cards (Experience, Education, etc.) */
+        .item-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 16px;
+            position: relative;
+            transition: all 0.2s;
+        }
+        .item-card:hover { border-color: var(--accent-primary); }
+        .item-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--accent-gradient);
+            border-radius: 3px 0 0 3px;
+        }
+        .item-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .item-title { font-weight: 600; margin-bottom: 4px; }
+        .item-subtitle { color: var(--accent-primary); font-size: 0.95rem; }
+        .item-meta { color: var(--text-muted); font-size: 0.85rem; margin-top: 8px; }
+        .item-desc { color: var(--text-secondary); font-size: 0.9rem; margin-top: 12px; line-height: 1.6; }
+        .item-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+        .item-tag {
+            padding: 4px 10px;
+            background: var(--bg-card);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        .item-actions { display: flex; gap: 8px; margin-top: 12px; }
+        
+        /* Skills Section */
+        .skill-category { margin-bottom: 24px; }
+        .skill-category-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 12px; color: var(--text-secondary); }
+        .skill-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+        .skill-tag {
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .skill-tag:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
+        .skill-tag.selected {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+        .skill-tag .remove {
+            margin-left: 6px;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+        .skill-tag .remove:hover { opacity: 1; }
+        
+        /* Portfolio Templates */
+        .template-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .template-card {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .template-card:hover { border-color: var(--accent-primary); transform: translateY(-4px); }
+        .template-card.selected { border-color: var(--accent-primary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); }
+        .template-preview {
+            height: 200px;
+            background: var(--bg-card);
+            position: relative;
+            overflow: hidden;
+        }
+        .template-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .template-info { padding: 16px; }
+        .template-name { font-weight: 600; margin-bottom: 4px; }
+        .template-desc { font-size: 0.85rem; color: var(--text-muted); }
+        .template-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 10px;
+            background: var(--accent-gradient);
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        
+        /* Portfolio Preview */
+        .portfolio-preview-container {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+        .preview-header {
+            background: var(--bg-card);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+        .preview-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .preview-dot.red { background: #ff5f56; }
+        .preview-dot.yellow { background: #ffbd2e; }
+        .preview-dot.green { background: #27ca3f; }
+        .preview-url {
+            flex: 1;
+            background: var(--bg-secondary);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-left: 12px;
+        }
+        .preview-frame {
+            min-height: 500px;
+            background: white;
+        }
+        .preview-frame iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+        }
+        
+        /* Social Link Input */
+        .social-input-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            margin-bottom: 12px;
+            transition: all 0.2s;
+        }
+        .social-input-group:hover { border-color: var(--border-light); }
+        .social-input-group.connected { border-color: var(--success); background: rgba(16, 185, 129, 0.05); }
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        .social-icon.linkedin { background: #0077b5; }
+        .social-icon.github { background: #333; }
+        .social-icon.kaggle { background: #20beff; }
+        .social-icon.huggingface { background: #ff9d00; }
+        .social-icon.twitter { background: #1da1f2; }
+        .social-icon.portfolio { background: var(--accent-primary); }
+        .social-input-group input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            outline: none;
+        }
+        .social-input-group input::placeholder { color: var(--text-muted); }
+        .social-status {
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .social-status.connected { color: var(--success); }
+        .social-status.pending { color: var(--text-muted); }
+        
+        /* Toggle */
+        .toggle-container { display: flex; align-items: center; gap: 12px; }
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 28px;
+        }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--bg-primary);
+            border: 2px solid var(--border);
+            transition: 0.3s;
+            border-radius: 28px;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 2px;
+            background-color: var(--text-muted);
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+        .toggle-switch input:checked + .toggle-slider {
+            background: var(--accent-gradient);
+            border-color: var(--accent-primary);
+        }
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(22px);
+            background-color: white;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 48px 24px;
+            color: var(--text-muted);
+        }
+        .empty-icon { font-size: 3rem; margin-bottom: 16px; opacity: 0.5; }
+        .empty-title { font-size: 1.1rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 8px; }
+        .empty-desc { font-size: 0.9rem; margin-bottom: 20px; }
+        
+        /* Share Link */
+        .share-link-box {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .share-link-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--accent-primary);
+            font-size: 0.95rem;
+            outline: none;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-secondary);
+            padding: 6px;
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+        }
+        .tab {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .tab:hover { color: var(--text-primary); }
+        .tab.active {
+            background: var(--accent-gradient);
+            color: white;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Image Upload */
+        .image-upload {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .image-upload:hover { border-color: var(--accent-primary); }
+        .image-upload.has-image { border-style: solid; padding: 0; }
+        .image-upload img { max-width: 100%; border-radius: var(--radius-md); }
+        
+        /* Checkbox Grid */
+        .checkbox-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .checkbox-item:hover { border-color: var(--accent-primary); }
+        .checkbox-item input[type="checkbox"] { accent-color: var(--accent-primary); }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-in { animation: fadeIn 0.3s ease; }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .animate-pulse { animation: pulse 2s infinite; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">🚀 CareerLaunch</div>
+                <div class="text-xs text-muted mt-1">Complete Job Hunt Platform</div>
+            </div>
+            
+            <div class="profile-card">
+                <div class="avatar" id="avatar">U</div>
+                <div class="font-semibold" id="user-name">Complete Your Profile</div>
+                <div class="text-sm text-muted" id="user-headline">Add your details</div>
+            </div>
+            
+            <nav class="nav-section">
+                <div class="nav-title">Dashboard</div>
+                <div class="nav-item active" data-section="overview">📊 Overview</div>
+                <div class="nav-item" data-section="interviews">📋 Interviews</div>
+            </nav>
+            
+            <nav class="nav-section">
+                <div class="nav-title">Profile</div>
+                <div class="nav-item" data-section="profile">
+                    👤 My Profile
+                    <span class="nav-badge" id="profile-badge">25%</span>
+                </div>
+                <div class="nav-item" data-section="portfolio">
+                    🎨 Portfolio Builder
+                    <span class="nav-badge success">NEW</span>
+                </div>
+            </nav>
+            
+            <nav class="nav-section">
+                <div class="nav-title">Community</div>
+                <div class="nav-item" data-section="questions">❓ Questions</div>
+                <div class="nav-item" data-section="roadmap">🗺️ Roadmaps</div>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <!-- Overview Section -->
+            <section id="section-overview" class="animate-in">
+                <div class="section-header">
+                    <div>
+                        <h1 class="section-title">Welcome! 👋</h1>
+                        <p class="section-subtitle">Complete your profile to unlock all features</p>
+                    </div>
+                </div>
+                
+                <!-- Profile Completion -->
+                <div class="completion-card">
+                    <div class="completion-header">
+                        <div>
+                            <div class="font-semibold mb-1">Profile Completion</div>
+                            <div class="text-sm text-muted">Complete your profile to generate portfolio</div>
+                        </div>
+                        <div class="completion-percentage" id="completion-percent">25%</div>
+                    </div>
+                    <div class="completion-bar-container">
+                        <div class="completion-bar-fill" id="completion-bar" style="width: 25%"></div>
+                    </div>
+                    <div class="completion-items" id="completion-items">
+                        <span class="completion-item done">✅ Basic Info</span>
+                        <span class="completion-item pending">⏳ Education</span>
+                        <span class="completion-item pending">⏳ Experience</span>
+                        <span class="completion-item pending">⏳ Skills</span>
+                        <span class="completion-item pending">⏳ Projects</span>
+                        <span class="completion-item pending">⏳ Social Links</span>
+                    </div>
+                    <button class="btn btn-primary mt-4" onclick="showSection('profile')">Complete Profile →</button>
+                </div>
+                
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-title">🎨 Generate Portfolio</div>
+                        <p class="text-muted mb-4">Create a stunning portfolio website from your profile data</p>
+                        <button class="btn btn-outline btn-block" onclick="showSection('portfolio')">Build Portfolio</button>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">📋 Track Interviews</div>
+                        <p class="text-muted mb-4">Manage all your interviews and applications</p>
+                        <button class="btn btn-outline btn-block" onclick="showSection('interviews')">View Interviews</button>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Profile Section -->
+            <section id="section-profile" class="hidden">
+                <div class="section-header">
+                    <div>
+                        <h1 class="section-title">Complete Your Profile</h1>
+                        <p class="section-subtitle">Fill in all details to generate your portfolio</p>
+                    </div>
+                </div>
+                
+                <!-- Progress Steps -->
+                <div class="progress-steps">
+                    <div class="progress-step completed" data-step="1">
+                        <div class="step-circle">✓</div>
+                        <span class="step-label">Basic</span>
+                    </div>
+                    <div class="progress-step active" data-step="2">
+                        <div class="step-circle">2</div>
+                        <span class="step-label">Education</span>
+                    </div>
+                    <div class="progress-step" data-step="3">
+                        <div class="step-circle">3</div>
+                        <span class="step-label">Experience</span>
+                    </div>
+                    <div class="progress-step" data-step="4">
+                        <div class="step-circle">4</div>
+                        <span class="step-label">Projects</span>
+                    </div>
+                    <div class="progress-step" data-step="5">
+                        <div class="step-circle">5</div>
+                        <span class="step-label">Skills</span>
+                    </div>
+                    <div class="progress-step" data-step="6">
+                        <div class="step-circle">6</div>
+                        <span class="step-label">Social</span>
+                    </div>
+                </div>
+                
+                <!-- Tabs -->
+                <div class="tabs">
+                    <button class="tab active" data-tab="basic">Basic Info</button>
+                    <button class="tab" data-tab="education">Education</button>
+                    <button class="tab" data-tab="experience">Experience</button>
+                    <button class="tab" data-tab="projects">Projects</button>
+                    <button class="tab" data-tab="skills">Skills</button>
+                    <button class="tab" data-tab="achievements">Achievements</button>
+                    <button class="tab" data-tab="social">Social Links</button>
+                </div>
+                
+                <!-- Basic Info Tab -->
+                <div class="tab-content active" id="tab-basic">
+                    <div class="card">
+                        <div class="card-title">👤 Personal Information</div>
+                        
+                        <div class="flex gap-4 mb-6">
+                            <div class="image-upload" id="profile-photo-upload" style="width: 150px; height: 150px;">
+                                <div class="text-muted">
+                                    <div style="font-size: 2rem;">📷</div>
+                                    <div class="text-sm mt-2">Upload Photo</div>
+                                </div>
+                                <input type="file" id="profile-photo" accept="image/*" style="display: none;">
+                            </div>
+                            <div style="flex: 1;">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">First Name <span class="required">*</span></label>
+                                        <input type="text" id="first-name" class="form-input" placeholder="John">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Last Name <span class="required">*</span></label>
+                                        <input type="text" id="last-name" class="form-input" placeholder="Doe">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Professional Headline <span class="required">*</span></label>
+                                    <input type="text" id="headline" class="form-input" placeholder="Senior Software Engineer | Full Stack Developer | 5+ Years Experience">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Email <span class="required">*</span></label>
+                                <input type="email" id="email" class="form-input" placeholder="john@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Phone</label>
+                                <input type="tel" id="phone" class="form-input" placeholder="+91 98765 43210">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Current Location</label>
+                                <input type="text" id="location" class="form-input" placeholder="Bangalore, India">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Date of Birth</label>
+                                <input type="date" id="dob" class="form-input">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Professional Summary / Bio <span class="required">*</span></label>
+                            <textarea id="bio" class="form-input" rows="5" placeholder="Write a compelling summary about yourself, your experience, skills, and career goals. This will appear at the top of your portfolio..."></textarea>
+                            <div class="form-hint">Aim for 150-300 words. Highlight your expertise, achievements, and what makes you unique.</div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Years of Experience</label>
+                                <select id="experience-years" class="form-select">
+                                    <option value="">Select</option>
+                                    <option value="0-1">0-1 Years (Fresher)</option>
+                                    <option value="1-3">1-3 Years</option>
+                                    <option value="3-5">3-5 Years</option>
+                                    <option value="5-8">5-8 Years</option>
+                                    <option value="8-12">8-12 Years</option>
+                                    <option value="12+">12+ Years</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Current Role</label>
+                                <input type="text" id="current-role" class="form-input" placeholder="Software Engineer">
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary" id="save-basic">Save & Continue →</button>
+                    </div>
+                </div>
+                
+                <!-- Education Tab -->
+                <div class="tab-content" id="tab-education">
+                    <div class="card">
+                        <div class="flex justify-between items-center mb-4">
+                            <div class="card-title" style="margin: 0;">🎓 Education</div>
+                            <button class="btn btn-sm btn-primary" id="add-education-btn">+ Add Education</button>
+                        </div>
+                        
+                        <div id="education-list">
+                            <div class="empty-state">
+                                <div class="empty-icon">🎓</div>
+                                <div class="empty-title">No education added</div>
+                                <div class="empty-desc">Add your educational qualifications</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="flex justify-between items-center mb-4">
+                            <div class="card-title" style="margin: 0;">📜 Certifications</div>
+                            <button class="btn btn-sm btn-primary" id="add-cert-btn">+ Add Certification</button>
+                        </div>
+                        
+                        <div id="cert-list">
+                            <div class="empty-state">
+                                <div class="empty-icon">📜</div>
+                                <div class="empty-title">No certifications added</div>
+                                <div class="empty-desc">Add AWS, GCP, Azure, Coursera certificates, etc.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="save-education">Save & Continue →</button>
+                </div>
+                
+                <!-- Experience Tab -->
+                <div class="tab-content" id="tab-experience">
+                    <div class="card">
+                        <div class="flex justify-between items-center mb-4">
+                            <div class="card-title" style="margin: 0;">💼 Work Experience</div>
+                            <button class="btn btn-sm btn-primary" id="add-experience-btn">+ Add Experience</button>
+                        </div>
+                        
+                        <div id="experience-list">
+                            <div class="empty-state">
+                                <div class="empty-icon">💼</div>
+                                <div class="empty-title">No work experience added</div>
+                                <div class="empty-desc">Add your professional journey</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="save-experience">Save & Continue →</button>
+                </div>
+                
+                <!-- Projects Tab -->
+                <div class="tab-content" id="tab-projects">
+                    <div class="card">
+                        <div class="flex justify-between items-center mb-4">
+                            <div class="card-title" style="margin: 0;">🚀 Projects</div>
+                            <button class="btn btn-sm btn-primary" id="add-project-btn">+ Add Project</button>
+                        </div>
+                        
+                        <div class="text-muted text-sm mb-4">
+                            Showcase your best work. Include personal projects, open source contributions, and significant work projects.
+                        </div>
+                        
+                        <div id="project-list">
+                            <div class="empty-state">
+                                <div class="empty-icon">🚀</div>
+                                <div class="empty-title">No projects added</div>
+                                <div class="empty-desc">Add projects to showcase your skills</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="save-projects">Save & Continue →</button>
+                </div>
+                
+                <!-- Skills Tab -->
+                <div class="tab-content" id="tab-skills">
+                    <div class="card">
+                        <div class="card-title">💻 Technical Skills</div>
+                        
+                        <div class="skill-category">
+                            <div class="skill-category-title">Programming Languages</div>
+                            <div class="skill-tags" id="lang-skills">
+                                <span class="skill-tag" data-skill="javascript">JavaScript</span>
+                                <span class="skill-tag" data-skill="python">Python</span>
+                                <span class="skill-tag" data-skill="java">Java</span>
+                                <span class="skill-tag" data-skill="typescript">TypeScript</span>
+                                <span class="skill-tag" data-skill="cpp">C++</span>
+                                <span class="skill-tag" data-skill="csharp">C#</span>
+                                <span class="skill-tag" data-skill="go">Go</span>
+                                <span class="skill-tag" data-skill="rust">Rust</span>
+                                <span class="skill-tag" data-skill="ruby">Ruby</span>
+                                <span class="skill-tag" data-skill="php">PHP</span>
+                                <span class="skill-tag" data-skill="kotlin">Kotlin</span>
+                                <span class="skill-tag" data-skill="swift">Swift</span>
+                                <span class="skill-tag" data-skill="scala">Scala</span>
+                                <span class="skill-tag" data-skill="r">R</span>
+                            </div>
+                        </div>
+                        
+                        <div class="skill-category">
+                            <div class="skill-category-title">Frontend</div>
+                            <div class="skill-tags" id="frontend-skills">
+                                <span class="skill-tag" data-skill="react">React</span>
+                                <span class="skill-tag" data-skill="vue">Vue.js</span>
+                                <span class="skill-tag" data-skill="angular">Angular</span>
+                                <span class="skill-tag" data-skill="nextjs">Next.js</span>
+                                <span class="skill-tag" data-skill="svelte">Svelte</span>
+                                <span class="skill-tag" data-skill="html">HTML5</span>
+                                <span class="skill-tag" data-skill="css">CSS3</span>
+                                <span class="skill-tag" data-skill="sass">SASS/SCSS</span>
+                                <span class="skill-tag" data-skill="tailwind">Tailwind CSS</span>
+                                <span class="skill-tag" data-skill="bootstrap">Bootstrap</span>
+                                <span class="skill-tag" data-skill="redux">Redux</span>
+                                <span class="skill-tag" data-skill="graphql">GraphQL</span>
+                            </div>
+                        </div>
+                        
+                        <div class="skill-category">
+                            <div class="skill-category-title">Backend</div>
+                            <div class="skill-tags" id="backend-skills">
+                                <span class="skill-tag" data-skill="nodejs">Node.js</span>
+                                <span class="skill-tag" data-skill="express">Express.js</span>
+                                <span class="skill-tag" data-skill="django">Django</span>
+                                <span class="skill-tag" data-skill="flask">Flask</span>
+                                <span class="skill-tag" data-skill="fastapi">FastAPI</span>
+                                <span class="skill-tag" data-skill="spring">Spring Boot</span>
+                                <span class="skill-tag" data-skill="dotnet">.NET Core</span>
+                                <span class="skill-tag" data-skill="rails">Ruby on Rails</span>
+                                <span class="skill-tag" data-skill="laravel">Laravel</span>
+                                <span class="skill-tag" data-skill="nest">NestJS</span>
+                            </div>
+                        </div>
+                        
+                        <div class="skill-category">
+                            <div class="skill-category-title">Database</div>
+                            <div class="skill-tags" id="db-skills">
+                                <span class="skill-tag" data-skill="postgresql">PostgreSQL</span>
+                                <span class="skill-tag" data-skill="mysql">MySQL</span>
+                                <span class="skill-tag" data-skill="mongodb">MongoDB</span>
+                                <span class="skill-tag" data-skill="redis">Redis</span>
+                                <span class="skill-tag" data-skill="elasticsearch">Elasticsearch</span>
+                                <span class="skill-tag" data-skill="dynamodb">DynamoDB</span>
+                                <span class="skill-tag" data-skill="cassandra">Cassandra</span>
+                                <span class="skill-tag" data-skill="oracle">Oracle</span>
+                                <span class="skill-tag" data-skill="sqlserver">SQL Server</span>
+                                <span class="skill-tag" data-skill="firebase">Firebase</span>
+                            </div>
+                        </div>
+                        
+                        <div class="skill-category">
+                            <div class="skill-category-title">Cloud & DevOps</div>
+                            <div class="skill-tags" id="cloud-skills">
+                                <span class="skill-tag" data-skill="aws">AWS</span>
+                                <span class="skill-tag" data-skill="gcp">Google Cloud</span>
+                                <span class="skill-tag" data-skill="azure">Azure</span>
+                                <span class="skill-tag" data-skill="docker">Docker</span>
+                                <span class="skill-tag" data-skill="kubernetes">Kubernetes</span>
+                                <span class="skill-tag" data-skill="terraform">Terraform</span>
+                                <span class="skill-tag" data-skill="jenkins">Jenkins</span>
+                                <span class="skill-tag" data-skill="github-actions">GitHub Actions</span>
+                                <span class="skill-tag" data-skill="ansible">Ansible</span>
+                                <span class="skill-tag" data-skill="nginx">Nginx</span>
+                                <span class="skill-tag" data-skill="linux">Linux</span>
+                            </div>
+                        </div>
+                        
+                        <div class="skill-category">
+                            <div class="skill-category-title">AI/ML & Data Science</div>
+                            <div class="skill-tags" id="ml-skills">
+                                <span class="skill-tag" data-skill="tensorflow">TensorFlow</span>
+                                <span class="skill-tag" data-skill="pytorch">PyTorch</span>
+                                <span class="skill-tag" data-skill="sklearn">Scikit-learn</span>
+                                <span class="skill-tag" data-skill="pandas">Pandas</span>
+                                <span class="skill-tag" data-skill="numpy">NumPy</span>
+                                <span class="skill-tag" data-skill="opencv">OpenCV</span>
+                                <span class="skill-tag" data-skill="nlp">NLP</span>
+                                <span class="skill-tag" data-skill="langchain">LangChain</span>
+                                <span class="skill-tag" data-skill="huggingface">Hugging Face</span>
+                                <span class="skill-tag" data-skill="spark">Apache Spark</span>
+                                <span class="skill-tag" data-skill="kafka">Apache Kafka</span>
+                            </div>
+                        </div>
+                        
+                        <div class="skill-category">
+                            <div class="skill-category-title">Tools & Others</div>
+                            <div class="skill-tags" id="tool-skills">
+                                <span class="skill-tag" data-skill="git">Git</span>
+                                <span class="skill-tag" data-skill="jira">JIRA</span>
+                                <span class="skill-tag" data-skill="figma">Figma</span>
+                                <span class="skill-tag" data-skill="postman">Postman</span>
+                                <span class="skill-tag" data-skill="vscode">VS Code</span>
+                                <span class="skill-tag" data-skill="intellij">IntelliJ</span>
+                                <span class="skill-tag" data-skill="agile">Agile/Scrum</span>
+                                <span class="skill-tag" data-skill="rest">REST APIs</span>
+                                <span class="skill-tag" data-skill="microservices">Microservices</span>
+                                <span class="skill-tag" data-skill="system-design">System Design</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group mt-4">
+                            <label class="form-label">Add Custom Skills</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="custom-skill-input" class="form-input" placeholder="Type a skill and press Enter">
+                                <button class="btn btn-secondary" id="add-custom-skill">Add</button>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <div class="text-sm font-semibold mb-2">Selected Skills (<span id="selected-skills-count">0</span>)</div>
+                            <div class="skill-tags" id="selected-skills"></div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="save-skills">Save & Continue →</button>
+                </div>
+                
+                <!-- Achievements Tab -->
+                <div class="tab-content" id="tab-achievements">
+                    <div class="card">
+                        <div class="flex justify-between items-center mb-4">
+                            <div class="card-title" style="margin: 0;">🏆 Awards & Achievements</div>
+                            <button class="btn btn-sm btn-primary" id="add-award-btn">+ Add Award</button>
+                        </div>
+                        
+                        <div id="award-list">
+                            <div class="empty-state">
+                                <div class="empty-icon">🏆</div>
+                                <div class="empty-title">No awards added</div>
+                                <div class="empty-desc">Add your achievements, hackathon wins, etc.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="flex justify-between items-center mb-4">
+                            <div class="card-title" style="margin: 0;">📝 Publications & Talks</div>
+                            <button class="btn btn-sm btn-primary" id="add-publication-btn">+ Add Publication</button>
+                        </div>
+                        
+                        <div id="publication-list">
+                            <div class="empty-state">
+                                <div class="empty-icon">📝</div>
+                                <div class="empty-title">No publications added</div>
+                                <div class="empty-desc">Add blog posts, papers, conference talks</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="save-achievements">Save & Continue →</button>
+                </div>
+                
+                <!-- Social Links Tab -->
+                <div class="tab-content" id="tab-social">
+                    <div class="card">
+                        <div class="card-title">🔗 Social & Professional Links</div>
+                        <p class="text-muted text-sm mb-4">Connect your profiles to auto-import data and enhance your portfolio</p>
+                        
+                        <div class="social-input-group" id="linkedin-group">
+                            <div class="social-icon linkedin">in</div>
+                            <div style="flex: 1;">
+                                <div class="text-sm font-medium mb-1">LinkedIn</div>
+                                <input type="url" id="linkedin-url" placeholder="https://linkedin.com/in/yourprofile">
+                            </div>
+                            <button class="btn btn-xs btn-outline" onclick="importFromLinkedIn()">Import</button>
+                            <span class="social-status pending" id="linkedin-status">Not connected</span>
+                        </div>
+                        
+                        <div class="social-input-group" id="github-group">
+                            <div class="social-icon github">🐙</div>
+                            <div style="flex: 1;">
+                                <div class="text-sm font-medium mb-1">GitHub</div>
+                                <input type="url" id="github-url" placeholder="https://github.com/yourusername">
+                            </div>
+                            <button class="btn btn-xs btn-outline" onclick="importFromGitHub()">Import</button>
+                            <span class="social-status pending" id="github-status">Not connected</span>
+                        </div>
+                        
+                        <div class="social-input-group" id="kaggle-group">
+                            <div class="social-icon kaggle">K</div>
+                            <div style="flex: 1;">
+                                <div class="text-sm font-medium mb-1">Kaggle</div>
+                                <input type="url" id="kaggle-url" placeholder="https://kaggle.com/yourusername">
+                            </div>
+                            <button class="btn btn-xs btn-outline" onclick="importFromKaggle()">Import</button>
+                            <span class="social-status pending" id="kaggle-status">Not connected</span>
+                        </div>
+                        
+                        <div class="social-input-group" id="huggingface-group">
+                            <div class="social-icon huggingface">🤗</div>
+                            <div style="flex: 1;">
+                                <div class="text-sm font-medium mb-1">Hugging Face</div>
+                                <input type="url" id="huggingface-url" placeholder="https://huggingface.co/yourusername">
+                            </div>
+                            <span class="social-status pending">Not connected</span>
+                        </div>
+                        
+                        <div class="social-input-group">
+                            <div class="social-icon twitter">𝕏</div>
+                            <div style="flex: 1;">
+                                <div class="text-sm font-medium mb-1">Twitter / X</div>
+                                <input type="url" id="twitter-url" placeholder="https://twitter.com/yourusername">
+                            </div>
+                        </div>
+                        
+                        <div class="social-input-group">
+                            <div class="social-icon portfolio">🌐</div>
+                            <div style="flex: 1;">
+                                <div class="text-sm font-medium mb-1">Personal Website / Portfolio</div>
+                                <input type="url" id="website-url" placeholder="https://yourwebsite.com">
+                            </div>
+                        </div>
+                        
+                        <div class="social-input-group">
+                            <div class="social-icon" style="background: #ff4500;">📰</div>
+                            <div style="flex: 1;">
+                                <div class="text-sm font-medium mb-1">Medium / Blog</div>
+                                <input type="url" id="blog-url" placeholder="https://medium.com/@yourusername">
+                            </div>
+                        </div>
+                        
+                        <div class="social-input-group">
+                            <div class="social-icon" style="background: #ffa116;">LC</div>
+                            <div style="flex: 1;">
+                                <div class="text-sm font-medium mb-1">LeetCode</div>
+                                <input type="url" id="leetcode-url" placeholder="https://leetcode.com/yourusername">
+                            </div>
+                        </div>
+                        
+                        <div class="social-input-group">
+                            <div class="social-icon" style="background: #2ec866;">HR</div>
+                            <div style="flex: 1;">
+                                <div class="text-sm font-medium mb-1">HackerRank</div>
+                                <input type="url" id="hackerrank-url" placeholder="https://hackerrank.com/yourusername">
+                            </div>
+                        </div>
+                        
+                        <div class="social-input-group">
+                            <div class="social-icon" style="background: #1DA1F2;">SO</div>
+                            <div style="flex: 1;">
+                                <div class="text-sm font-medium mb-1">Stack Overflow</div>
+                                <input type="url" id="stackoverflow-url" placeholder="https://stackoverflow.com/users/123456">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">📄 Resume</div>
+                        <div class="image-upload" id="resume-upload-box" style="height: auto; padding: 32px;">
+                            <div class="text-muted">
+                                <div style="font-size: 2rem;">📄</div>
+                                <div class="text-sm mt-2">Upload Resume (PDF, DOC)</div>
+                                <div class="text-xs mt-1">Max 5MB</div>
+                            </div>
+                            <input type="file" id="resume-upload" accept=".pdf,.doc,.docx" style="display: none;">
+                        </div>
+                        <div id="resume-preview" class="mt-4 hidden"></div>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="save-social">Save & Generate Portfolio →</button>
+                </div>
+            </section>
+            
+            <!-- Portfolio Builder Section -->
+            <section id="section-portfolio" class="hidden">
+                <div class="section-header">
+                    <div>
+                        <h1 class="section-title">🎨 Portfolio Builder</h1>
+                        <p class="section-subtitle">Create a stunning portfolio from your profile</p>
+                    </div>
+                </div>
+                
+                <!-- Step 1: Choose Template -->
+                <div id="portfolio-step-1">
+                    <div class="card">
+                        <div class="card-title">Step 1: Choose a Template</div>
+                        <p class="text-muted text-sm mb-6">Select a design that matches your style</p>
+                        
+                        <div class="template-grid">
+                            <div class="template-card selected" data-template="developer-dark">
+                                <div class="template-preview" style="background: linear-gradient(135deg, #0f0f23, #1a1a3e);">
+                                    <div class="template-badge">Popular</div>
+                                    <div style="padding: 20px; color: white;">
+                                        <div style="width: 60px; height: 60px; background: var(--accent-gradient); border-radius: 50%; margin-bottom: 12px;"></div>
+                                        <div style="height: 16px; background: rgba(255,255,255,0.8); width: 60%; border-radius: 4px; margin-bottom: 8px;"></div>
+                                        <div style="height: 12px; background: rgba(255,255,255,0.4); width: 80%; border-radius: 4px;"></div>
+                                    </div>
+                                </div>
+                                <div class="template-info">
+                                    <div class="template-name">Developer Dark</div>
+                                    <div class="template-desc">Modern dark theme for developers</div>
+                                </div>
+                            </div>
+                            
+                            <div class="template-card" data-template="minimal-light">
+                                <div class="template-preview" style="background: linear-gradient(135deg, #ffffff, #f5f5f5);">
+                                    <div style="padding: 20px;">
+                                        <div style="width: 60px; height: 60px; background: #333; border-radius: 50%; margin-bottom: 12px;"></div>
+                                        <div style="height: 16px; background: #333; width: 60%; border-radius: 4px; margin-bottom: 8px;"></div>
+                                        <div style="height: 12px; background: #999; width: 80%; border-radius: 4px;"></div>
+                                    </div>
+                                </div>
+                                <div class="template-info">
+                                    <div class="template-name">Minimal Light</div>
+                                    <div class="template-desc">Clean and professional look</div>
+                                </div>
+                            </div>
+                            
+                            <div class="template-card" data-template="gradient-modern">
+                                <div class="template-preview" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                                    <div class="template-badge">New</div>
+                                    <div style="padding: 20px; color: white;">
+                                        <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 50%; margin-bottom: 12px;"></div>
+                                        <div style="height: 16px; background: rgba(255,255,255,0.9); width: 60%; border-radius: 4px; margin-bottom: 8px;"></div>
+                                        <div style="height: 12px; background: rgba(255,255,255,0.5); width: 80%; border-radius: 4px;"></div>
+                                    </div>
+                                </div>
+                                <div class="template-info">
+                                    <div class="template-name">Gradient Modern</div>
+                                    <div class="template-desc">Eye-catching gradient design</div>
+                                </div>
+                            </div>
+                            
+                            <div class="template-card" data-template="creative-portfolio">
+                                <div class="template-preview" style="background: linear-gradient(135deg, #ff6b6b, #feca57);">
+                                    <div style="padding: 20px; color: white;">
+                                        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                                            <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.3); border-radius: 8px;"></div>
+                                            <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.3); border-radius: 8px;"></div>
+                                        </div>
+                                        <div style="height: 16px; background: rgba(255,255,255,0.9); width: 70%; border-radius: 4px;"></div>
+                                    </div>
+                                </div>
+                                <div class="template-info">
+                                    <div class="template-name">Creative Portfolio</div>
+                                    <div class="template-desc">Perfect for designers & creatives</div>
+                                </div>
+                            </div>
+                            
+                            <div class="template-card" data-template="terminal-style">
+                                <div class="template-preview" style="background: #1e1e1e;">
+                                    <div style="padding: 12px;">
+                                        <div style="display: flex; gap: 6px; margin-bottom: 12px;">
+                                            <div style="width: 10px; height: 10px; background: #ff5f56; border-radius: 50%;"></div>
+                                            <div style="width: 10px; height: 10px; background: #ffbd2e; border-radius: 50%;"></div>
+                                            <div style="width: 10px; height: 10px; background: #27ca3f; border-radius: 50%;"></div>
+                                        </div>
+                                        <div style="font-family: monospace; color: #4ec9b0; font-size: 10px;">
+                                            > whoami<br>
+                                            <span style="color: #fff;">developer</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="template-info">
+                                    <div class="template-name">Terminal Style</div>
+                                    <div class="template-desc">For the command-line lovers</div>
+                                </div>
+                            </div>
+                            
+                            <div class="template-card" data-template="glassmorphism">
+                                <div class="template-preview" style="background: linear-gradient(135deg, #a855f7, #3b82f6);">
+                                    <div style="padding: 20px;">
+                                        <div style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius: 12px; padding: 16px; border: 1px solid rgba(255,255,255,0.2);">
+                                            <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.3); border-radius: 50%; margin-bottom: 8px;"></div>
+                                            <div style="height: 12px; background: rgba(255,255,255,0.8); width: 60%; border-radius: 4px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="template-info">
+                                    <div class="template-name">Glassmorphism</div>
+                                    <div class="template-desc">Modern glass effect design</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary mt-6" id="generate-portfolio-btn">Generate Portfolio →</button>
+                    </div>
+                </div>
+                
+                <!-- Step 2: Preview & Customize -->
+                <div id="portfolio-step-2" class="hidden">
+                    <div class="card mb-4">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <div class="card-title" style="margin: 0;">Preview Your Portfolio</div>
+                                <p class="text-muted text-sm">Review and customize before publishing</p>
+                            </div>
+                            <div class="flex gap-3">
+                                <button class="btn btn-secondary" onclick="showPortfolioStep(1)">← Change Template</button>
+                                <button class="btn btn-primary" id="publish-portfolio-btn">🚀 Publish Portfolio</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="portfolio-preview-container">
+                        <div class="preview-header">
+                            <div class="preview-dot red"></div>
+                            <div class="preview-dot yellow"></div>
+                            <div class="preview-dot green"></div>
+                            <div class="preview-url">careerlaunch.io/<span id="preview-username">yourname</span></div>
+                        </div>
+                        <div class="preview-frame" id="portfolio-preview">
+                            <!-- Portfolio preview will be rendered here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Published -->
+                <div id="portfolio-step-3" class="hidden">
+                    <div class="card text-center" style="padding: 48px;">
+                        <div style="font-size: 4rem; margin-bottom: 20px;">🎉</div>
+                        <h2 style="margin-bottom: 12px;">Your Portfolio is Live!</h2>
+                        <p class="text-muted mb-6">Share your portfolio with the world</p>
+                        
+                        <div class="share-link-box" style="max-width: 500px; margin: 0 auto 24px;">
+                            <span style="color: var(--text-muted);">🔗</span>
+                            <input type="text" id="portfolio-url" value="https://careerlaunch.io/yourname" readonly>
+                            <button class="btn btn-sm btn-primary" onclick="copyPortfolioLink()">Copy</button>
+                        </div>
+                        
+                        <div class="flex justify-center gap-3 mb-6">
+                            <button class="btn btn-secondary" onclick="shareOnLinkedIn()">Share on LinkedIn</button>
+                            <button class="btn btn-secondary" onclick="shareOnTwitter()">Share on Twitter</button>
+                            <button class="btn btn-outline" onclick="window.open(document.getElementById('portfolio-url').value)">Open Portfolio ↗</button>
+                        </div>
+                        
+                        <div class="toggle-container justify-center">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="portfolio-public" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <span>Make portfolio public and discoverable</span>
+                        </div>
+                    </div>
+                    
+                    <div class="grid-3 mt-4">
+                        <div class="card text-center">
+                            <div style="font-size: 2rem; margin-bottom: 8px;">👁️</div>
+                            <div class="font-bold" style="font-size: 1.5rem;">0</div>
+                            <div class="text-muted text-sm">Profile Views</div>
+                        </div>
+                        <div class="card text-center">
+                            <div style="font-size: 2rem; margin-bottom: 8px;">🔗</div>
+                            <div class="font-bold" style="font-size: 1.5rem;">0</div>
+                            <div class="text-muted text-sm">Link Clicks</div>
+                        </div>
+                        <div class="card text-center">
+                            <div style="font-size: 2rem; margin-bottom: 8px;">📥</div>
+                            <div class="font-bold" style="font-size: 1.5rem;">0</div>
+                            <div class="text-muted text-sm">Resume Downloads</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Interviews Section (Simplified) -->
+            <section id="section-interviews" class="hidden">
+                <div class="section-header">
+                    <div>
+                        <h1 class="section-title">Interview Tracker</h1>
+                        <p class="section-subtitle">Track all your interviews</p>
+                    </div>
+                    <button class="btn btn-primary" id="add-interview-btn">+ Add Interview</button>
+                </div>
+                <div class="card">
+                    <div class="empty-state">
+                        <div class="empty-icon">📋</div>
+                        <div class="empty-title">No interviews yet</div>
+                        <div class="empty-desc">Start tracking your interview journey</div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Questions Section -->
+            <section id="section-questions" class="hidden">
+                <div class="section-header">
+                    <div>
+                        <h1 class="section-title">Interview Questions</h1>
+                        <p class="section-subtitle">Browse and share interview questions</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <p class="text-muted">Coming soon - community interview questions database</p>
+                </div>
+            </section>
+            
+            <!-- Roadmaps Section -->
+            <section id="section-roadmap" class="hidden">
+                <div class="section-header">
+                    <div>
+                        <h1 class="section-title">Career Roadmaps</h1>
+                        <p class="section-subtitle">Structured learning paths</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <p class="text-muted">Coming soon - career roadmaps for different roles</p>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <!-- Modals will be added dynamically -->
+    <div class="modal-overlay" id="modal-education">
+        <div class="modal">
+            <div class="modal-header">
+                <span class="font-semibold">🎓 Add Education</span>
+                <button class="modal-close" onclick="closeModal('modal-education')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Degree/Course <span class="required">*</span></label>
+                    <input type="text" id="edu-degree" class="form-input" placeholder="e.g., B.Tech in Computer Science">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Institution <span class="required">*</span></label>
+                    <input type="text" id="edu-institution" class="form-input" placeholder="e.g., IIT Delhi">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Start Year</label>
+                        <input type="number" id="edu-start" class="form-input" placeholder="2018">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">End Year</label>
+                        <input type="number" id="edu-end" class="form-input" placeholder="2022">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Grade/CGPA</label>
+                    <input type="text" id="edu-grade" class="form-input" placeholder="e.g., 8.5 CGPA">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea id="edu-desc" class="form-input" rows="3" placeholder="Relevant coursework, achievements, etc."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('modal-education')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveEducation()">Save</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="modal-experience">
+        <div class="modal">
+            <div class="modal-header">
+                <span class="font-semibold">💼 Add Experience</span>
+                <button class="modal-close" onclick="closeModal('modal-experience')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Job Title <span class="required">*</span></label>
+                    <input type="text" id="exp-title" class="form-input" placeholder="e.g., Senior Software Engineer">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Company <span class="required">*</span></label>
+                    <input type="text" id="exp-company" class="form-input" placeholder="e.g., Google">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Location</label>
+                    <input type="text" id="exp-location" class="form-input" placeholder="e.g., Bangalore, India">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Start Date</label>
+                        <input type="month" id="exp-start" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">End Date</label>
+                        <input type="month" id="exp-end" class="form-input">
+                        <label class="flex items-center gap-2 mt-2 text-sm">
+                            <input type="checkbox" id="exp-current"> Currently working here
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description <span class="required">*</span></label>
+                    <textarea id="exp-desc" class="form-input" rows="4" placeholder="• Describe your key responsibilities&#10;• Highlight achievements with metrics&#10;• Mention technologies used"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tech Stack Used</label>
+                    <input type="text" id="exp-tech" class="form-input" placeholder="React, Node.js, AWS, PostgreSQL">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('modal-experience')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveExperience()">Save</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="modal-project">
+        <div class="modal">
+            <div class="modal-header">
+                <span class="font-semibold">🚀 Add Project</span>
+                <button class="modal-close" onclick="closeModal('modal-project')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Project Name <span class="required">*</span></label>
+                    <input type="text" id="proj-name" class="form-input" placeholder="e.g., E-commerce Platform">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Short Description <span class="required">*</span></label>
+                    <textarea id="proj-desc" class="form-input" rows="3" placeholder="What does this project do? What problem does it solve?"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Live URL</label>
+                        <input type="url" id="proj-url" class="form-input" placeholder="https://myproject.com">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">GitHub URL</label>
+                        <input type="url" id="proj-github" class="form-input" placeholder="https://github.com/user/repo">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tech Stack</label>
+                    <input type="text" id="proj-tech" class="form-input" placeholder="React, Node.js, MongoDB">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Project Image</label>
+                    <div class="image-upload" id="proj-image-upload" style="height: 150px;">
+                        <div class="text-muted">
+                            <div style="font-size: 1.5rem;">🖼️</div>
+                            <div class="text-sm mt-2">Upload screenshot</div>
+                        </div>
+                        <input type="file" id="proj-image" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Key Features / Highlights</label>
+                    <textarea id="proj-features" class="form-input" rows="3" placeholder="• Feature 1&#10;• Feature 2&#10;• Feature 3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('modal-project')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveProject()">Save</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="modal-cert">
+        <div class="modal">
+            <div class="modal-header">
+                <span class="font-semibold">📜 Add Certification</span>
+                <button class="modal-close" onclick="closeModal('modal-cert')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Certification Name <span class="required">*</span></label>
+                    <input type="text" id="cert-name" class="form-input" placeholder="e.g., AWS Solutions Architect">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Issuing Organization</label>
+                    <input type="text" id="cert-org" class="form-input" placeholder="e.g., Amazon Web Services">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Issue Date</label>
+                        <input type="month" id="cert-date" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Expiry Date (if applicable)</label>
+                        <input type="month" id="cert-expiry" class="form-input">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Credential URL</label>
+                    <input type="url" id="cert-url" class="form-input" placeholder="https://credential.verify.com/...">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Certificate Image (optional)</label>
+                    <div class="image-upload" id="cert-image-upload" style="height: 120px;">
+                        <div class="text-muted">
+                            <div style="font-size: 1.5rem;">📄</div>
+                            <div class="text-sm mt-2">Upload certificate</div>
+                        </div>
+                        <input type="file" id="cert-image" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('modal-cert')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveCertification()">Save</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="modal-award">
+        <div class="modal">
+            <div class="modal-header">
+                <span class="font-semibold">🏆 Add Award/Achievement</span>
+                <button class="modal-close" onclick="closeModal('modal-award')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Award/Achievement Title <span class="required">*</span></label>
+                    <input type="text" id="award-title" class="form-input" placeholder="e.g., Winner - HackMIT 2023">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Issuer/Organization</label>
+                    <input type="text" id="award-org" class="form-input" placeholder="e.g., MIT">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Date</label>
+                    <input type="month" id="award-date" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea id="award-desc" class="form-input" rows="3" placeholder="Describe the achievement..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Certificate/Proof Image</label>
+                    <div class="image-upload" id="award-image-upload" style="height: 120px;">
+                        <div class="text-muted">
+                            <div style="font-size: 1.5rem;">🏆</div>
+                            <div class="text-sm mt-2">Upload image</div>
+                        </div>
+                        <input type="file" id="award-image" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('modal-award')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveAward()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log('CareerLaunch v2 Loading...');
+        
+        // ==================== STATE ====================
+        let profileData = {
+            basic: {},
+            education: [],
+            certifications: [],
+            experience: [],
+            projects: [],
+            skills: [],
+            achievements: [],
+            publications: [],
+            social: {}
+        };
+        let selectedTemplate = 'developer-dark';
+        
+        // Load from localStorage
+        function loadProfileData() {
+            const saved = localStorage.getItem('careerlaunch_profile');
+            if (saved) {
+                profileData = JSON.parse(saved);
+                populateFormFields();
+                renderAllLists();
+                updateCompletion();
+            }
+        }
+        
+        function saveProfileData() {
+            localStorage.setItem('careerlaunch_profile', JSON.stringify(profileData));
+            updateCompletion();
+        }
+        
+        // ==================== NAVIGATION ====================
+        function showSection(name) {
+            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+            document.getElementById('section-' + name).classList.remove('hidden');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            const navItem = document.querySelector(`[data-section="${name}"]`);
+            if (navItem) navItem.classList.add('active');
+        }
+        window.showSection = showSection;
+        
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => showSection(item.dataset.section));
+        });
+        
+        // ==================== TABS ====================
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabId = this.dataset.tab;
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                document.getElementById('tab-' + tabId)?.classList.add('active');
+            });
+        });
+        
+        // ==================== MODAL FUNCTIONS ====================
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        window.openModal = openModal;
+        window.closeModal = closeModal;
+        
+        // Modal triggers
+        document.getElementById('add-education-btn')?.addEventListener('click', () => openModal('modal-education'));
+        document.getElementById('add-experience-btn')?.addEventListener('click', () => openModal('modal-experience'));
+        document.getElementById('add-project-btn')?.addEventListener('click', () => openModal('modal-project'));
+        document.getElementById('add-cert-btn')?.addEventListener('click', () => openModal('modal-cert'));
+        document.getElementById('add-award-btn')?.addEventListener('click', () => openModal('modal-award'));
+        
+        // ==================== SAVE FUNCTIONS ====================
+        function saveEducation() {
+            const edu = {
+                id: Date.now(),
+                degree: document.getElementById('edu-degree').value,
+                institution: document.getElementById('edu-institution').value,
+                startYear: document.getElementById('edu-start').value,
+                endYear: document.getElementById('edu-end').value,
+                grade: document.getElementById('edu-grade').value,
+                description: document.getElementById('edu-desc').value
+            };
+            if (!edu.degree || !edu.institution) { alert('Please fill required fields'); return; }
+            profileData.education.push(edu);
+            saveProfileData();
+            renderEducationList();
+            closeModal('modal-education');
+            clearModalFields('modal-education');
+        }
+        window.saveEducation = saveEducation;
+        
+        function saveExperience() {
+            const exp = {
+                id: Date.now(),
+                title: document.getElementById('exp-title').value,
+                company: document.getElementById('exp-company').value,
+                location: document.getElementById('exp-location').value,
+                startDate: document.getElementById('exp-start').value,
+                endDate: document.getElementById('exp-current')?.checked ? 'Present' : document.getElementById('exp-end').value,
+                description: document.getElementById('exp-desc').value,
+                techStack: document.getElementById('exp-tech').value
+            };
+            if (!exp.title || !exp.company) { alert('Please fill required fields'); return; }
+            profileData.experience.push(exp);
+            saveProfileData();
+            renderExperienceList();
+            closeModal('modal-experience');
+            clearModalFields('modal-experience');
+        }
+        window.saveExperience = saveExperience;
+        
+        function saveProject() {
+            const proj = {
+                id: Date.now(),
+                name: document.getElementById('proj-name').value,
+                description: document.getElementById('proj-desc').value,
+                url: document.getElementById('proj-url').value,
+                github: document.getElementById('proj-github').value,
+                techStack: document.getElementById('proj-tech').value,
+                features: document.getElementById('proj-features').value
+            };
+            if (!proj.name || !proj.description) { alert('Please fill required fields'); return; }
+            profileData.projects.push(proj);
+            saveProfileData();
+            renderProjectList();
+            closeModal('modal-project');
+            clearModalFields('modal-project');
+        }
+        window.saveProject = saveProject;
+        
+        function saveCertification() {
+            const cert = {
+                id: Date.now(),
+                name: document.getElementById('cert-name').value,
+                organization: document.getElementById('cert-org').value,
+                date: document.getElementById('cert-date').value,
+                expiry: document.getElementById('cert-expiry').value,
+                url: document.getElementById('cert-url').value
+            };
+            if (!cert.name) { alert('Please fill certification name'); return; }
+            profileData.certifications.push(cert);
+            saveProfileData();
+            renderCertList();
+            closeModal('modal-cert');
+            clearModalFields('modal-cert');
+        }
+        window.saveCertification = saveCertification;
+        
+        function saveAward() {
+            const award = {
+                id: Date.now(),
+                title: document.getElementById('award-title').value,
+                organization: document.getElementById('award-org').value,
+                date: document.getElementById('award-date').value,
+                description: document.getElementById('award-desc').value
+            };
+            if (!award.title) { alert('Please fill award title'); return; }
+            profileData.achievements.push(award);
+            saveProfileData();
+            renderAwardList();
+            closeModal('modal-award');
+            clearModalFields('modal-award');
+        }
+        window.saveAward = saveAward;
+        
+        function clearModalFields(modalId) {
+            document.querySelectorAll(`#${modalId} input, #${modalId} textarea`).forEach(el => el.value = '');
+        }
+        
+        // ==================== RENDER LISTS ====================
+        function renderEducationList() {
+            const container = document.getElementById('education-list');
+            if (profileData.education.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-icon">🎓</div><div class="empty-title">No education added</div></div>';
+                return;
+            }
+            container.innerHTML = profileData.education.map(edu => `
+                <div class="item-card">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">${edu.degree}</div>
+                            <div class="item-subtitle">${edu.institution}</div>
+                        </div>
+                        <button class="btn btn-xs btn-error" onclick="deleteEducation(${edu.id})">Delete</button>
+                    </div>
+                    <div class="item-meta">${edu.startYear} - ${edu.endYear} ${edu.grade ? '• ' + edu.grade : ''}</div>
+                    ${edu.description ? `<div class="item-desc">${edu.description}</div>` : ''}
+                </div>
+            `).join('');
+        }
+        window.deleteEducation = (id) => { profileData.education = profileData.education.filter(e => e.id !== id); saveProfileData(); renderEducationList(); };
+        
+        function renderExperienceList() {
+            const container = document.getElementById('experience-list');
+            if (profileData.experience.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-icon">💼</div><div class="empty-title">No experience added</div></div>';
+                return;
+            }
+            container.innerHTML = profileData.experience.map(exp => `
+                <div class="item-card">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">${exp.title}</div>
+                            <div class="item-subtitle">${exp.company}</div>
+                        </div>
+                        <button class="btn btn-xs btn-error" onclick="deleteExperience(${exp.id})">Delete</button>
+                    </div>
+                    <div class="item-meta">${exp.startDate} - ${exp.endDate} ${exp.location ? '• ' + exp.location : ''}</div>
+                    <div class="item-desc">${exp.description}</div>
+                    ${exp.techStack ? `<div class="item-tags">${exp.techStack.split(',').map(t => `<span class="item-tag">${t.trim()}</span>`).join('')}</div>` : ''}
+                </div>
+            `).join('');
+        }
+        window.deleteExperience = (id) => { profileData.experience = profileData.experience.filter(e => e.id !== id); saveProfileData(); renderExperienceList(); };
+        
+        function renderProjectList() {
+            const container = document.getElementById('project-list');
+            if (profileData.projects.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-icon">🚀</div><div class="empty-title">No projects added</div></div>';
+                return;
+            }
+            container.innerHTML = profileData.projects.map(proj => `
+                <div class="item-card">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">${proj.name}</div>
+                            <div class="flex gap-2 mt-1">
+                                ${proj.url ? `<a href="${proj.url}" target="_blank" class="text-xs text-muted">🔗 Live</a>` : ''}
+                                ${proj.github ? `<a href="${proj.github}" target="_blank" class="text-xs text-muted">📁 GitHub</a>` : ''}
+                            </div>
+                        </div>
+                        <button class="btn btn-xs btn-error" onclick="deleteProject(${proj.id})">Delete</button>
+                    </div>
+                    <div class="item-desc">${proj.description}</div>
+                    ${proj.techStack ? `<div class="item-tags">${proj.techStack.split(',').map(t => `<span class="item-tag">${t.trim()}</span>`).join('')}</div>` : ''}
+                </div>
+            `).join('');
+        }
+        window.deleteProject = (id) => { profileData.projects = profileData.projects.filter(p => p.id !== id); saveProfileData(); renderProjectList(); };
+        
+        function renderCertList() {
+            const container = document.getElementById('cert-list');
+            if (profileData.certifications.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-icon">📜</div><div class="empty-title">No certifications added</div></div>';
+                return;
+            }
+            container.innerHTML = profileData.certifications.map(cert => `
+                <div class="item-card">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">${cert.name}</div>
+                            <div class="item-subtitle">${cert.organization || ''}</div>
+                        </div>
+                        <button class="btn btn-xs btn-error" onclick="deleteCert(${cert.id})">Delete</button>
+                    </div>
+                    <div class="item-meta">${cert.date || ''} ${cert.url ? `• <a href="${cert.url}" target="_blank">Verify</a>` : ''}</div>
+                </div>
+            `).join('');
+        }
+        window.deleteCert = (id) => { profileData.certifications = profileData.certifications.filter(c => c.id !== id); saveProfileData(); renderCertList(); };
+        
+        function renderAwardList() {
+            const container = document.getElementById('award-list');
+            if (profileData.achievements.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-icon">🏆</div><div class="empty-title">No awards added</div></div>';
+                return;
+            }
+            container.innerHTML = profileData.achievements.map(award => `
+                <div class="item-card">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">${award.title}</div>
+                            <div class="item-subtitle">${award.organization || ''}</div>
+                        </div>
+                        <button class="btn btn-xs btn-error" onclick="deleteAward(${award.id})">Delete</button>
+                    </div>
+                    <div class="item-meta">${award.date || ''}</div>
+                    ${award.description ? `<div class="item-desc">${award.description}</div>` : ''}
+                </div>
+            `).join('');
+        }
+        window.deleteAward = (id) => { profileData.achievements = profileData.achievements.filter(a => a.id !== id); saveProfileData(); renderAwardList(); };
+        
+        function renderAllLists() {
+            renderEducationList();
+            renderExperienceList();
+            renderProjectList();
+            renderCertList();
+            renderAwardList();
+        }
+        
+        // ==================== SKILLS ====================
+        document.querySelectorAll('.skill-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                updateSelectedSkills();
+            });
+        });
+        
+        function updateSelectedSkills() {
+            const selected = Array.from(document.querySelectorAll('.skill-tag.selected')).map(t => t.dataset.skill);
+            profileData.skills = selected;
+            document.getElementById('selected-skills-count').textContent = selected.length;
+            document.getElementById('selected-skills').innerHTML = selected.map(s => 
+                `<span class="skill-tag selected">${s}</span>`
+            ).join('');
+            saveProfileData();
+        }
+        
+        // ==================== SAVE BASIC INFO ====================
+        document.getElementById('save-basic')?.addEventListener('click', function() {
+            profileData.basic = {
+                firstName: document.getElementById('first-name').value,
+                lastName: document.getElementById('last-name').value,
+                headline: document.getElementById('headline').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                location: document.getElementById('location').value,
+                dob: document.getElementById('dob').value,
+                bio: document.getElementById('bio').value,
+                experienceYears: document.getElementById('experience-years').value,
+                currentRole: document.getElementById('current-role').value
+            };
+            saveProfileData();
+            updateProfileDisplay();
+            
+            // Move to next tab
+            document.querySelector('[data-tab="education"]').click();
+            alert('Basic info saved!');
+        });
+        
+        // ==================== PROFILE COMPLETION ====================
+        function updateCompletion() {
+            let completed = 0;
+            const items = [];
+            
+            if (profileData.basic?.firstName) { completed++; items.push({ name: 'Basic Info', done: true }); }
+            else items.push({ name: 'Basic Info', done: false });
+            
+            if (profileData.education?.length > 0) { completed++; items.push({ name: 'Education', done: true }); }
+            else items.push({ name: 'Education', done: false });
+            
+            if (profileData.experience?.length > 0) { completed++; items.push({ name: 'Experience', done: true }); }
+            else items.push({ name: 'Experience', done: false });
+            
+            if (profileData.skills?.length > 0) { completed++; items.push({ name: 'Skills', done: true }); }
+            else items.push({ name: 'Skills', done: false });
+            
+            if (profileData.projects?.length > 0) { completed++; items.push({ name: 'Projects', done: true }); }
+            else items.push({ name: 'Projects', done: false });
+            
+            if (profileData.social?.linkedin || profileData.social?.github) { completed++; items.push({ name: 'Social Links', done: true }); }
+            else items.push({ name: 'Social Links', done: false });
+            
+            const percent = Math.round((completed / 6) * 100);
+            document.getElementById('completion-percent').textContent = percent + '%';
+            document.getElementById('completion-bar').style.width = percent + '%';
+            document.getElementById('profile-badge').textContent = percent + '%';
+            
+            document.getElementById('completion-items').innerHTML = items.map(i => 
+                `<span class="completion-item ${i.done ? 'done' : 'pending'}">${i.done ? '✅' : '⏳'} ${i.name}</span>`
+            ).join('');
+        }
+        
+        function updateProfileDisplay() {
+            if (profileData.basic?.firstName) {
+                const fullName = `${profileData.basic.firstName} ${profileData.basic.lastName || ''}`.trim();
+                document.getElementById('user-name').textContent = fullName;
+                document.getElementById('avatar').textContent = profileData.basic.firstName.charAt(0).toUpperCase();
+            }
+            if (profileData.basic?.headline) {
+                document.getElementById('user-headline').textContent = profileData.basic.headline;
+            }
+        }
+        
+        function populateFormFields() {
+            if (profileData.basic) {
+                if (profileData.basic.firstName) document.getElementById('first-name').value = profileData.basic.firstName;
+                if (profileData.basic.lastName) document.getElementById('last-name').value = profileData.basic.lastName;
+                if (profileData.basic.headline) document.getElementById('headline').value = profileData.basic.headline;
+                if (profileData.basic.email) document.getElementById('email').value = profileData.basic.email;
+                if (profileData.basic.phone) document.getElementById('phone').value = profileData.basic.phone;
+                if (profileData.basic.location) document.getElementById('location').value = profileData.basic.location;
+                if (profileData.basic.dob) document.getElementById('dob').value = profileData.basic.dob;
+                if (profileData.basic.bio) document.getElementById('bio').value = profileData.basic.bio;
+                if (profileData.basic.experienceYears) document.getElementById('experience-years').value = profileData.basic.experienceYears;
+                if (profileData.basic.currentRole) document.getElementById('current-role').value = profileData.basic.currentRole;
+            }
+            if (profileData.skills) {
+                profileData.skills.forEach(skill => {
+                    const tag = document.querySelector(`.skill-tag[data-skill="${skill}"]`);
+                    if (tag) tag.classList.add('selected');
+                });
+                updateSelectedSkills();
+            }
+        }
+        
+        // ==================== PORTFOLIO TEMPLATES ====================
+        document.querySelectorAll('.template-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.template-card').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedTemplate = this.dataset.template;
+            });
+        });
+        
+        function showPortfolioStep(step) {
+            document.getElementById('portfolio-step-1').classList.toggle('hidden', step !== 1);
+            document.getElementById('portfolio-step-2').classList.toggle('hidden', step !== 2);
+            document.getElementById('portfolio-step-3').classList.toggle('hidden', step !== 3);
+        }
+        window.showPortfolioStep = showPortfolioStep;
+        
+        document.getElementById('generate-portfolio-btn')?.addEventListener('click', function() {
+            if (!profileData.basic?.firstName) {
+                alert('Please complete your basic profile first!');
+                showSection('profile');
+                return;
+            }
+            generatePortfolioPreview();
+            showPortfolioStep(2);
+        });
+        
+        document.getElementById('publish-portfolio-btn')?.addEventListener('click', function() {
+            const username = (profileData.basic.firstName + profileData.basic.lastName).toLowerCase().replace(/\s/g, '');
+            document.getElementById('portfolio-url').value = `https://careerlaunch.io/${username}`;
+            showPortfolioStep(3);
+            alert('Portfolio published successfully! 🎉');
+        });
+        
+        function generatePortfolioPreview() {
+            const preview = document.getElementById('portfolio-preview');
+            const username = profileData.basic?.firstName?.toLowerCase() || 'yourname';
+            document.getElementById('preview-username').textContent = username;
+            
+            // Generate portfolio HTML based on template
+            preview.innerHTML = generatePortfolioHTML();
+        }
+        
+        function generatePortfolioHTML() {
+            const p = profileData;
+            const fullName = `${p.basic?.firstName || ''} ${p.basic?.lastName || ''}`.trim() || 'Your Name';
+            
+            return `
+                <div style="font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #0f0f23, #1a1a3e); color: white; min-height: 500px; padding: 40px;">
+                    <div style="max-width: 800px; margin: 0 auto;">
+                        <div style="text-align: center; margin-bottom: 40px;">
+                            <div style="width: 120px; height: 120px; background: linear-gradient(135deg, #6366f1, #8b5cf6); border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: bold;">
+                                ${fullName.charAt(0)}
+                            </div>
+                            <h1 style="font-size: 2rem; margin-bottom: 8px;">${fullName}</h1>
+                            <p style="color: #a0a0b0; font-size: 1.1rem;">${p.basic?.headline || 'Software Developer'}</p>
+                            <p style="color: #6b7280; margin-top: 8px;">${p.basic?.location || ''}</p>
+                        </div>
+                        
+                        ${p.basic?.bio ? `
+                        <div style="background: rgba(255,255,255,0.05); padding: 24px; border-radius: 12px; margin-bottom: 24px;">
+                            <h3 style="margin-bottom: 12px; color: #8b5cf6;">About Me</h3>
+                            <p style="color: #b0b0c0; line-height: 1.7;">${p.basic.bio}</p>
+                        </div>
+                        ` : ''}
+                        
+                        ${p.skills?.length > 0 ? `
+                        <div style="margin-bottom: 24px;">
+                            <h3 style="margin-bottom: 12px; color: #8b5cf6;">Skills</h3>
+                            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                                ${p.skills.map(s => `<span style="padding: 6px 14px; background: rgba(99,102,241,0.2); border-radius: 20px; font-size: 0.85rem;">${s}</span>`).join('')}
+                            </div>
+                        </div>
+                        ` : ''}
+                        
+                        ${p.experience?.length > 0 ? `
+                        <div style="margin-bottom: 24px;">
+                            <h3 style="margin-bottom: 12px; color: #8b5cf6;">Experience</h3>
+                            ${p.experience.map(exp => `
+                                <div style="background: rgba(255,255,255,0.03); padding: 16px; border-radius: 8px; margin-bottom: 12px; border-left: 3px solid #6366f1;">
+                                    <div style="font-weight: 600;">${exp.title}</div>
+                                    <div style="color: #8b5cf6;">${exp.company}</div>
+                                    <div style="color: #6b7280; font-size: 0.85rem;">${exp.startDate} - ${exp.endDate}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        ` : ''}
+                        
+                        ${p.projects?.length > 0 ? `
+                        <div>
+                            <h3 style="margin-bottom: 12px; color: #8b5cf6;">Projects</h3>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                                ${p.projects.map(proj => `
+                                    <div style="background: rgba(255,255,255,0.03); padding: 16px; border-radius: 8px;">
+                                        <div style="font-weight: 600; margin-bottom: 8px;">${proj.name}</div>
+                                        <p style="color: #a0a0b0; font-size: 0.9rem;">${proj.description?.substring(0, 100)}...</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+        
+        function copyPortfolioLink() {
+            const url = document.getElementById('portfolio-url');
+            url.select();
+            document.execCommand('copy');
+            alert('Link copied to clipboard!');
+        }
+        window.copyPortfolioLink = copyPortfolioLink;
+        
+        // ==================== IMPORT FUNCTIONS (Simulated) ====================
+        function importFromGitHub() {
+            const url = document.getElementById('github-url').value;
+            if (!url) { alert('Please enter your GitHub URL first'); return; }
+            document.getElementById('github-status').textContent = '✓ Connected';
+            document.getElementById('github-status').className = 'social-status connected';
+            document.getElementById('github-group').classList.add('connected');
+            alert('GitHub profile imported! We\'ve added your repositories as projects.');
+        }
+        window.importFromGitHub = importFromGitHub;
+        
+        function importFromLinkedIn() {
+            const url = document.getElementById('linkedin-url').value;
+            if (!url) { alert('Please enter your LinkedIn URL first'); return; }
+            document.getElementById('linkedin-status').textContent = '✓ Connected';
+            document.getElementById('linkedin-status').className = 'social-status connected';
+            document.getElementById('linkedin-group').classList.add('connected');
+            alert('LinkedIn connected! Note: Due to LinkedIn restrictions, we can only import basic public info.');
+        }
+        window.importFromLinkedIn = importFromLinkedIn;
+        
+        function importFromKaggle() {
+            const url = document.getElementById('kaggle-url').value;
+            if (!url) { alert('Please enter your Kaggle URL first'); return; }
+            document.getElementById('kaggle-status').textContent = '✓ Connected';
+            document.getElementById('kaggle-status').className = 'social-status connected';
+            document.getElementById('kaggle-group').classList.add('connected');
+            alert('Kaggle profile imported! We\'ve added your competitions and notebooks.');
+        }
+        window.importFromKaggle = importFromKaggle;
+        
+        // ==================== IMAGE UPLOADS ====================
+        document.getElementById('profile-photo-upload')?.addEventListener('click', () => {
+            document.getElementById('profile-photo').click();
+        });
+        document.getElementById('resume-upload-box')?.addEventListener('click', () => {
+            document.getElementById('resume-upload').click();
+        });
+        
+        // ==================== INIT ====================
+        loadProfileData();
+        updateProfileDisplay();
+        
+        console.log('CareerLaunch v2 Loaded!');
+    </script>
+</body>
+</html>

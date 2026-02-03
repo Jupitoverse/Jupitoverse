@@ -1,0 +1,15 @@
+{
+  "last_updated": "2026-01-09T16:15:59.892642",
+  "last_run": {
+    "total_calls": 373,
+    "input_tokens": 575607,
+    "output_tokens": 110563,
+    "cost": 2.035717999999999,
+    "srs_processed": 87
+  },
+  "cumulative": {
+    "total_cost": 11.418236,
+    "total_tokens": 3579994,
+    "total_calls": 1988
+  }
+}

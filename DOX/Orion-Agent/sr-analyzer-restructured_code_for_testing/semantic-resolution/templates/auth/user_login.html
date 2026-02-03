@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Analyser - User Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #1a1a1a;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 450px;
+            width: 100%;
+        }
+
+        .login-card {
+            background: #2d2d2d;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            border: 2px solid #ff6b35;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header .icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+            color: #ff6b35;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #cccccc;
+            font-size: 1em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #3d3d3d;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.5);
+        }
+
+        .btn-login:disabled {
+            background: #555;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 0.95em;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.error {
+            background: #4d1f1f;
+            color: #ffcccc;
+            border: 1px solid #ff6666;
+        }
+
+        .message.success {
+            background: #1f4d1f;
+            color: #ccffcc;
+            border: 1px solid #66ff66;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: #ff6b35;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .back-link a:hover {
+            color: #ff006e;
+            text-decoration: underline;
+        }
+
+        .demo-credentials {
+            background: #3d3d3d;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 0.9em;
+            border: 1px solid #ff6b35;
+        }
+
+        .demo-credentials h3 {
+            color: #ffffff;
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+
+        .demo-credentials p {
+            color: #cccccc;
+            margin: 5px 0;
+        }
+
+        .demo-credentials code {
+            background: #1a1a1a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #ff6b35;
+            font-weight: 600;
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 1.6em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-card">
+            <!-- Header -->
+            <div class="header">
+                <div class="icon">👤</div>
+                <h1>User Login</h1>
+                <p>Access Ticket Analyser</p>
+            </div>
+
+            <!-- Message Area -->
+            <div id="messageArea" class="message"></div>
+
+            <!-- Login Form -->
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        placeholder="Enter your username"
+                        required
+                        autocomplete="username"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="Enter your password"
+                        required
+                        autocomplete="current-password"
+                    >
+                </div>
+
+                <button type="submit" class="btn-login" id="loginBtn">
+                    🔓 Login
+                </button>
+            </form>
+
+            <!-- Demo Credentials -->
+            <div class="demo-credentials">
+                <h3>📝 Demo Credentials:</h3>
+                <p>Username: <code>user1</code> / Password: <code>user123</code></p>
+                <p>Username: <code>user2</code> / Password: <code>pass123</code></p>
+            </div>
+
+            <!-- Back Link -->
+            <div class="back-link">
+                <a href="/">← Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function handleLogin(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const messageArea = document.getElementById('messageArea');
+
+            // Disable button
+            loginBtn.disabled = true;
+            loginBtn.textContent = '🔄 Logging in...';
+
+            // Clear previous messages
+            messageArea.classList.remove('show', 'error', 'success');
+
+            // Send login request
+            fetch('/user/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Success
+                    showMessage('✅ ' + data.message, 'success');
+                    setTimeout(() => {
+                        window.location.href = data.redirect;
+                    }, 500);
+                } else {
+                    // Error
+                    showMessage('❌ ' + data.error, 'error');
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = '🔓 Login';
+                }
+            })
+            .catch(error => {
+                showMessage('❌ Login failed. Please try again.', 'error');
+                loginBtn.disabled = false;
+                loginBtn.textContent = '🔓 Login';
+                console.error('Login error:', error);
+            });
+        }
+
+        function showMessage(text, type) {
+            const messageArea = document.getElementById('messageArea');
+            messageArea.textContent = text;
+            messageArea.className = 'message ' + type + ' show';
+        }
+
+        // Focus username on load
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('username').focus();
+        });
+    </script>
+</body>
+</html>
+

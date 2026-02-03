@@ -1,0 +1,182 @@
+================================================================================
+                    DEPLOYMENT INSTRUCTIONS
+================================================================================
+
+FILE TO DEPLOY: checkUserPendingTask_converted.py
+
+This is your SINGLE, COMPLETE, PRODUCTION-READY file.
+Everything you need is in this one file!
+
+================================================================================
+STEP-BY-STEP DEPLOYMENT
+================================================================================
+
+1. UPLOAD THE FILE
+   ---------------
+   Upload: checkUserPendingTask_converted.py
+   To: Your server at /path/to/your/scripts/
+
+2. INSTALL DEPENDENCIES (One-time only)
+   ------------------------------------
+   Run on server:
+   pip install pandas psycopg2-binary openpyxl
+
+3. TEST RUN
+   --------
+   cd /path/to/your/scripts/
+   python checkUserPendingTask_converted.py
+
+4. VERIFY SUCCESS
+   -------------
+   Check for:
+   ✓ LOGS/ directory created
+   ✓ Log file with detailed execution
+   ✓ HTML report generated
+   ✓ Excel file generated (.xlsx)  ✨ NEW
+   ✓ Email received by all 13 recipients
+   ✓ Excel file attached to email  ✨ NEW
+
+5. SCHEDULE IT (Optional)
+   ----------------------
+   Linux/Unix - Add to crontab:
+   0 2 * * * /usr/bin/python3 /path/to/checkUserPendingTask_converted.py
+
+   Windows - Use Task Scheduler (see FINAL_SCRIPT_SUMMARY.md)
+
+================================================================================
+WHAT THIS SCRIPT DOES
+================================================================================
+
+✓ Runs every 5th day of month (configurable)
+✓ Queries database for pending tasks (30+ days old)
+✓ Uses smart batching to avoid timeout
+✓ Generates professional HTML report
+✓ Exports complete data to Excel (.xlsx)  ✨ NEW
+✓ Emails report to 13 recipients WITH Excel attachment  ✨ UPDATED
+✓ Automatically cleans up old logs (30+ days)
+✓ Comprehensive error logging
+
+================================================================================
+KEY FIXES INCLUDED
+================================================================================
+
+✓ Fixed "tuple index out of range" error (SQL query optimized)
+✓ Fixed email sending (matches working Outage_Report.py)
+✓ Fixed query timeout (batching by spec_ver_id)
+✓ Added comprehensive logging
+✓ Added automatic cleanup
+
+================================================================================
+CONFIGURATION (Edit if needed)
+================================================================================
+
+Open the file and find these sections at the top:
+
+# Database (Lines 31-37)
+DB_CONFIG = {
+    'database': 'prodossdb',
+    'user': 'ossdb01uams',
+    'password': 'Pr0d_ossdb01uams',
+    'host': 'oso-pstgr-rd.orion.comcast.com',
+    'port': '6432'
+}
+
+# Email Recipients (Lines 39-58)
+EMAIL_CONFIG = {
+    'recipients': [
+        'abhisha3@amdocs.com',
+        'prateek.jain5@amdocs.com',
+        # ... 11 more recipients
+    ],
+    'from': 'noreplyreports@amdocs.com',
+    'error_recipients': ['abhisha3@amdocs.com']
+}
+
+# Execution Frequency (Line 61)
+EXECUTION_FREQUENCY = 5  # Every 5th day
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+Problem: No email received
+Solution: Check LOGS/ directory for error details
+          Verify SMTP server is running: telnet localhost 25
+
+Problem: Database connection failed
+Solution: Verify network connectivity
+          Check credentials in DB_CONFIG
+
+Problem: Script not running on schedule
+Solution: Verify cron/Task Scheduler configuration
+          Check script has execute permissions
+
+================================================================================
+FILES CREATED BY SCRIPT
+================================================================================
+
+checkUserPendingTask_converted.py    ← Your main script (deploy this!)
+LOGS/
+  ├── checkUserPendingTask_YYYYMMDD_HHMMSS.log   ← Execution log
+  ├── checkUserPendingTask_YYYYMMDD_HHMMSS.html  ← Report HTML
+  └── checkUserPendingTask_YYYYMMDD_HHMMSS.xlsx  ← Excel export ✨ NEW
+
+Old files automatically deleted after 30 days.
+
+================================================================================
+TESTING CHECKLIST
+================================================================================
+
+Before production deployment:
+
+[ ] Script runs without errors
+[ ] Database connection successful
+[ ] Data fetched (check log: "Total records fetched: X")
+[ ] HTML report generated and looks good
+[ ] Excel report generated (.xlsx file exists)  ✨ NEW
+[ ] Email sent to all recipients
+[ ] Email HTML formatting is correct
+[ ] Excel file attached to email  ✨ NEW
+[ ] LOGS/ directory created
+[ ] Log file contains detailed execution info
+
+================================================================================
+SUPPORT
+================================================================================
+
+Questions or Issues?
+Contact: abhisha3@amdocs.com
+
+Always include:
+- The log file from LOGS/ directory
+- Description of the issue
+- Any error messages
+
+================================================================================
+QUICK REFERENCE
+================================================================================
+
+Run manually:
+  python checkUserPendingTask_converted.py
+
+View latest log:
+  cat LOGS/checkUserPendingTask_*.log | tail -n 50
+
+Check if script is scheduled:
+  Linux: crontab -l
+  Windows: Task Scheduler GUI
+
+Test email only (without running full script):
+  Edit EXECUTION_FREQUENCY to 1 temporarily
+  Run script
+  Change back to 5 after test
+
+================================================================================
+
+                    YOU'RE ALL SET! 🎉
+
+         Just upload checkUserPendingTask_converted.py
+                    and run it!
+
+================================================================================
+

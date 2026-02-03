@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Analyser - Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #1a1a1a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-top: 60px;
+        }
+
+        /* ========== NAVBAR STYLES ========== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: #2d2d2d;
+            border-bottom: 2px solid #ff6b35;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 40px;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .nav-brand-icon { font-size: 1.5em; }
+        .nav-brand-text {
+            font-size: 1.4em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        /* ========== END NAVBAR STYLES ========== */
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: #ffffff;
+            opacity: 0.9;
+        }
+
+        .login-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .login-card {
+            background: #2d2d2d;
+            border-radius: 15px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            border: 2px solid #ff6b35;
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(255, 107, 53, 0.6);
+            border-color: #ff006e;
+        }
+
+        .login-card .icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            color: #ff6b35;
+        }
+
+        .login-card h2 {
+            color: #ffffff;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .login-card:hover h2 {
+            color: #ff6b35;
+        }
+
+        .login-card p {
+            color: #cccccc;
+            font-size: 1em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .login-card .btn {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-block;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .login-card .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 0, 110, 0.6);
+        }
+
+        .user-card {
+            border-top: 5px solid #ff6b35;
+        }
+
+        .user-card .icon {
+            color: #ff6b35;
+        }
+
+        .admin-card {
+            border-top: 5px solid #ff006e;
+        }
+
+        .admin-card .icon {
+            color: #ff006e;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 30px;
+            opacity: 0.9;
+        }
+
+        .footer p {
+            font-size: 0.95em;
+        }
+
+        .stats-banner {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            color: white;
+            text-align: center;
+            border: 2px solid #ff6b35;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .stats-banner h3 {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            background: #3d3d3d;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ff6b35;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5);
+            background: #4d4d4d;
+        }
+
+        .stat-item .number {
+            font-size: 1.8em;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .stat-item .label {
+            font-size: 0.85em;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .login-options {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="nav-brand-icon">🎫</span>
+            <span class="nav-brand-text">Ticket Analyser</span>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="container">
+            <!-- Header -->
+            <div class="header">
+                <h1>Welcome</h1>
+                <p>Choose your portal to continue</p>
+            </div>
+
+            <!-- Login Options -->
+            <div class="login-options">
+            <!-- User Portal -->
+            <a href="/user/login" class="login-card user-card">
+                <div class="icon">👤</div>
+                <h2>User Portal</h2>
+                <p>Search SRs, view AI-generated workarounds, and provide feedback on solutions.</p>
+                <span class="btn">User Login →</span>
+            </a>
+
+            <!-- Admin Portal -->
+            <a href="/admin/login" class="login-card admin-card">
+                <div class="icon">🔐</div>
+                <h2>Admin Portal</h2>
+                <p>Upload SR data, manage historical records, and view system analytics.</p>
+                <span class="btn">Admin Login →</span>
+            </a>
+        </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <p>🌟 AI-Powered Ticket Analyser</p>
+                <p style="font-size: 0.85em; margin-top: 10px; opacity: 0.8;">
+                    Built with advanced semantic search and continuous learning
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load system statistics
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStats();
+        });
+
+        function loadStats() {
+            // Get upload info
+            fetch('/get_upload_info')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.has_upload) {
+                        document.getElementById('historicalCount').textContent = data.sr_count.toLocaleString();
+                        document.getElementById('lastUpload').textContent = formatDate(data.upload_date);
+                    } else {
+                        document.getElementById('historicalCount').textContent = '0';
+                        document.getElementById('lastUpload').textContent = 'Never';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading stats:', error);
+                    document.getElementById('historicalCount').textContent = 'N/A';
+                    document.getElementById('lastUpload').textContent = 'N/A';
+                });
+
+            // Get feedback stats
+            fetch('/feedback_stats')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('feedbackCount').textContent = data.total_feedback || '0';
+                })
+                .catch(error => {
+                    console.error('Error loading feedback stats:', error);
+                    document.getElementById('feedbackCount').textContent = 'N/A';
+                });
+        }
+
+        function formatDate(dateStr) {
+            // If it's already formatted nicely, return as is
+            if (dateStr.includes('at')) {
+                return dateStr.split('at')[0].trim();
+            }
+            return dateStr;
+        }
+    </script>
+</body>
+</html>
+

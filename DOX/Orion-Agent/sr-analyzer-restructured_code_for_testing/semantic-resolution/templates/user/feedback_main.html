@@ -1,0 +1,2614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Analyser - User Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #1a1a1a;
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 80px;
+        }
+
+        .container {
+            max-width: 80%;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: #2d2d2d;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+            text-align: center;
+            border: 2px solid #ff6b35;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #cccccc;
+            font-size: 1.1em;
+        }
+
+        .info-banner {
+            background: #2d2d2d;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ff6b35;
+            border: 2px solid #ff6b35;
+        }
+
+        .info-banner h3 {
+            color: #ff6b35;
+            margin-bottom: 5px;
+        }
+
+        .info-banner p {
+            color: #cccccc;
+            margin: 0;
+        }
+
+        .search-section {
+            background: #2d2d2d;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+            border: 2px solid #ff006e;
+        }
+
+        .search-section h2 {
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 15px;
+            font-size: 1.1em;
+            border: 2px solid #3d3d3d;
+            border-radius: 10px;
+            transition: border-color 0.3s;
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .search-box button {
+            padding: 15px 40px;
+            font-size: 1.1em;
+            background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .search-box button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.5);
+        }
+
+        .search-hint {
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .sr-details {
+            background: #2d2d2d;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            display: none;
+            border: 2px solid #ff6b35;
+        }
+
+        .sr-details.show {
+            display: block;
+        }
+
+        .detail-row {
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #3d3d3d;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #ff6b35;
+            margin-bottom: 4px;
+            font-size: 0.95em;
+        }
+
+        .detail-value {
+            color: #ffffff;
+            line-height: 1.5;
+            font-size: 0.9em;
+        }
+
+        /* Main Container Card */
+        .workarounds-main-card {
+            background: #000000;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.4);
+            margin: 20px 0;
+            padding: 20px;
+            position: relative;
+            overflow: visible;
+        }
+
+        .main-card-header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .main-card-header h3 {
+            color: white;
+            font-size: 1.5em;
+            margin: 0;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            letter-spacing: -0.5px;
+        }
+
+        /* Inner Cards Container */
+        .workarounds-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        /* Inner Workaround Cards */
+        .inner-workaround-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: none;
+            position: relative;
+        }
+
+        .inner-workaround-card:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .ai-card {
+            border-top: 5px solid #1e40af;
+        }
+
+        .user-card {
+            border-top: 5px solid #10b981;
+        }
+
+        /* Inner Card Headers */
+        .inner-card-header {
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: none;
+            background: transparent;
+        }
+
+        .ai-header {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+        }
+
+        .user-header {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        }
+
+        .card-icon {
+            font-size: 1.5em;
+            filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.1));
+        }
+
+        .ai-header .card-icon {
+            color: #1e40af;
+        }
+
+        .user-header .card-icon {
+            color: #10b981;
+        }
+
+        .card-title {
+            flex: 1;
+            font-size: 1em;
+            font-weight: 700;
+            color: #333;
+            letter-spacing: -0.2px;
+        }
+
+        .card-badge {
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.7em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .ai-header .card-badge {
+            background: linear-gradient(135deg, #1e40af 0%, #1e40af 100%);
+            color: white;
+            box-shadow: 0 1px 4px rgba(14, 165, 233, 0.4);
+        }
+
+        .user-header .card-badge {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 1px 4px rgba(16, 185, 129, 0.3);
+        }
+
+        .workaround-content {
+            background: #000000;
+            padding: 12px 14px;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            color: #ffffff;
+            font-size: 0.92em;
+        }
+        
+        .workaround-content::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        .workaround-content::-webkit-scrollbar-track {
+            background: #2d2d2d;
+            border-radius: 5px;
+        }
+        
+        .workaround-content::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%);
+            border-radius: 5px;
+        }
+        
+        .workaround-content::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #ff006e 0%, #ff6b35 100%);
+        }
+
+        .workaround-box {
+            background: #1a1a1a;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 0;
+            white-space: pre-wrap;
+            border: none;
+        }
+        
+        .workaround-box::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .workaround-box::-webkit-scrollbar-track {
+            background: #2d2d2d;
+            border-radius: 4px;
+        }
+        
+        .workaround-box::-webkit-scrollbar-thumb {
+            background: #ff6b35;
+            border-radius: 4px;
+        }
+        
+        .workaround-box::-webkit-scrollbar-thumb:hover {
+            background: #ff8854;
+        }
+
+        /* Vote Buttons */
+        .vote-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+
+        .vote-btn.vote-up {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .vote-btn.vote-up:hover {
+            background: #a7f3d0;
+        }
+
+        .vote-btn.vote-down {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .vote-btn.vote-down:hover {
+            background: #fecaca;
+        }
+
+        .vote-score {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+        }
+
+        .field-with-edit {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .field-with-edit .detail-value {
+            flex: 1;
+        }
+
+        .btn-edit {
+            padding: 6px 15px;
+            font-size: 0.9em;
+            background: linear-gradient(135deg, #1e40af 0%, #1e40af 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-edit:hover {
+            background: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%);
+            box-shadow: 0 3px 10px rgba(14, 165, 233, 0.5);
+        }
+
+        .field-correction-area {
+            display: none;
+            margin-top: 10px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 8px;
+        }
+
+        .field-correction-area.show {
+            display: block;
+        }
+
+        .field-correction-area input {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+        }
+
+        .field-correction-area input:focus {
+            outline: none;
+            border-color: #1e40af;
+        }
+
+        .user-corrected-badge {
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            margin-left: 10px;
+        }
+
+        .feedback-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #eee;
+        }
+
+        .feedback-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            font-size: 1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.5);
+        }
+
+        .btn-warning {
+            background: #ff9800;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #e68900;
+        }
+
+        .correction-area {
+            display: none;
+        }
+
+        .correction-area.show {
+            display: block;
+        }
+
+        .correction-area textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            font-size: 1em;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .correction-area textarea:focus {
+            outline: none;
+            border-color: #1e40af;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #1e40af 0%, #1e40af 100%);
+            color: white;
+            margin-top: 15px;
+        }
+
+        .btn-submit:hover {
+            background: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%);
+            box-shadow: 0 5px 15px rgba(14, 165, 233, 0.5);
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .manage-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 15px 25px;
+            background: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+        }
+
+        .manage-btn:hover {
+            background: #e68900;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+        }
+
+        .inline-error {
+            display: none;
+            padding: 12px 15px;
+            margin: 10px 0;
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 8px;
+            font-size: 0.95em;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .inline-error.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes blink-warning {
+            0%, 100% { opacity: 1; box-shadow: 0 0 20px rgba(255, 0, 0, 0.5); }
+            50% { opacity: 0.7; box-shadow: 0 0 40px rgba(255, 0, 0, 1); }
+        }
+        
+        /* 🆕 Vote Button Styles */
+        .vote-buttons-container {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .vote-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #374151;
+        }
+        
+        .vote-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .vote-btn.vote-up:hover {
+            border-color: #10b981;
+            background: #ecfdf5;
+            color: #059669;
+        }
+        
+        .vote-btn.vote-down:hover {
+            border-color: #ef4444;
+            background: #fef2f2;
+            color: #dc2626;
+        }
+        
+        .vote-btn:active {
+            transform: translateY(0);
+        }
+        
+        .vote-icon {
+            font-size: 1.2em;
+        }
+        
+        .vote-score {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95em;
+        }
+        
+        .vote-score strong {
+            color: #1f2937;
+        }
+        
+        /* ========== NAVBAR STYLES ========== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: #2d2d2d;
+            border-bottom: 2px solid #ff6b35;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .nav-brand-icon {
+            font-size: 1.5em;
+        }
+        .nav-brand-text {
+            font-size: 1.3em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .nav-link {
+            color: #cccccc;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.95em;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-link:hover { color: #ffffff; background: #3d3d3d; }
+        .nav-link.active {
+            color: #ff6b35;
+            background: rgba(255, 107, 53, 0.15);
+            border-bottom: 2px solid #ff6b35;
+        }
+        .nav-actions { display: flex; align-items: center; gap: 15px; }
+        .nav-logout {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%);
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+        .nav-logout:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4); }
+        @media (max-width: 768px) {
+            .navbar { padding: 0 15px; }
+            .nav-brand-text { display: none; }
+            .nav-link { padding: 8px 12px; font-size: 0.85em; }
+            .nav-link span { display: none; }
+        }
+        /* ========== END NAVBAR STYLES ========== */
+
+        /* ========== SUMMARIZED WORKAROUND STYLES ========== */
+        .summarized-workaround-section {
+            background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
+            border: 2px solid #4CAF50;
+            border-radius: 12px;
+            margin: 15px 0;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(76, 175, 80, 0.15);
+        }
+
+        .summarized-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            padding: 15px 20px;
+        }
+
+        .summarized-header-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .summarized-header-title .icon {
+            font-size: 1.3em;
+        }
+
+        .similar-count-badge {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+
+        .summarized-content {
+            padding: 20px;
+            color: #e0e0e0;
+            font-size: 14px;
+            line-height: 1.9;
+            white-space: pre-line;
+            font-family: 'Segoe UI', 'Poppins', sans-serif;
+        }
+
+        .summarized-content-empty {
+            color: #888;
+            font-style: italic;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .summarized-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 30px;
+            color: #4CAF50;
+        }
+
+        .summarized-loading .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #4CAF50;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* ========== END SUMMARIZED WORKAROUND STYLES ========== */
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="nav-brand-icon">🎫</span>
+            <span class="nav-brand-text">Ticket Analyser</span>
+        </div>
+        <div class="nav-links">
+            <a href="/" class="nav-link">🏠 <span>Home</span></a>
+            <a href="/user" class="nav-link active">👤 <span>User</span></a>
+        </div>
+        <div class="nav-actions">
+            <a href="/user/logout" class="nav-logout" onclick="return confirm('Are you sure you want to logout?')">🚪 Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Search Section -->
+        <div class="search-section">
+            <h2>🔍 Search for Ticket</h2>
+            <div class="search-box">
+                <input 
+                    type="text" 
+                    id="srIdInput" 
+                    placeholder="Enter Ticket ID (e.g., CAS123456)" 
+                    onkeypress="if(event.key==='Enter') searchSR()"
+                >
+                <button onclick="searchSR()">Search</button>
+            </div>
+            <div class="search-hint">
+                💡 Enter the Call ID / Ticket ID to view its AI-generated workaround
+            </div>
+            <div id="historicalDataInfo" style="margin-top: 12px; padding: 10px 15px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border-radius: 8px; border: 1px solid #ff6b35; display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.5em;">📚</span>
+                <span style="color: #ffffff;">Knowledge Base: <strong style="color: #ff6b35; font-size: 1.2em;" id="historicalCount">Loading...</strong> historical records</span>
+            </div>
+        </div>
+
+        <!-- Message Area -->
+        <div id="messageArea" class="message"></div>
+
+        <!-- SR Details Section -->
+        <div id="srDetails" class="sr-details">
+            <h2 style="color: #ffffff;">📋 Ticket Details: <span id="srIdDisplay"></span></h2>
+            
+            <div id="uploadInfoBanner" class="detail-row" style="background: #e3f2fd; padding: 10px; border-radius: 8px; margin-bottom: 15px; display: none;">
+                <div class="detail-label" style="color: #1976d2;">📅 Found in Upload:</div>
+                <div class="detail-value" id="foundInUpload" style="color: #1976d2; font-weight: bold;"></div>
+            </div>
+            
+            <div class="detail-row">
+                <div class="detail-label">Priority:</div>
+                <div class="detail-value" id="srPriority"></div>
+            </div>
+
+            <!-- Hidden: Age and Difficulty fields
+            <div class="detail-row">
+                <div class="detail-label">Age (Business Days):</div>
+                <div class="detail-value" id="srAge" style="font-weight: 600;"></div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Difficulty:</div>
+                <div class="detail-value" id="srDifficulty"></div>
+            </div>
+            -->
+
+            <div class="detail-row">
+                <div class="detail-label">Assigned To:</div>
+                <div class="detail-value" id="srAssignedTo" style="font-family: 'Courier New', monospace; background: #2d2d2d; padding: 8px; border-radius: 5px; color: #ff6b35; font-weight: 600;"></div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Description:</div>
+                <div class="detail-value" id="srDescription"></div>
+            </div>
+
+            <!-- Hidden: Notes/Summary field
+            <div class="detail-row">
+                <div class="detail-label">Notes/Summary:</div>
+                <div class="detail-value" id="srNotes"></div>
+            </div>
+            -->
+
+            <!-- Hidden: Resolution Categorization and SLA Resolution fields
+            <div class="detail-row">
+                <div class="detail-label">Resolution Categorization:</div>
+                <div class="field-with-edit">
+                    <div class="detail-value" id="srResolutionCat" style="font-family: 'Courier New', monospace; background: #f0f9ff; padding: 8px; border-radius: 5px; color: #0369a1;"></div>
+                </div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">SLA Resolution:</div>
+                <div class="field-with-edit">
+                    <div class="detail-value" id="srSLAResolution" style="font-family: 'Courier New', monospace; background: #fef3c7; padding: 8px; border-radius: 5px; color: #92400e;"></div>
+                </div>
+            </div>
+            -->
+
+            <!-- Note: Old single categorization field replaced with two separate fields above -->
+
+            <!-- 🆕 Summarized Semantic Workaround Section - NEW LLM-POWERED -->
+            <div class="summarized-workaround-section" id="summarizedWorkaroundSection" style="display: none;">
+                <div class="summarized-header">
+                    <div class="summarized-header-title">
+                        <span class="icon">📋</span>
+                        <span>Previously Similar SRs Were Solved Via:</span>
+                    </div>
+                    <span class="similar-count-badge" id="similarCountBadge">Based on 0 similar SRs</span>
+                </div>
+                <div class="summarized-content" id="summarizedWorkaroundContent">
+                    <!-- LLM-summarized steps will appear here -->
+                </div>
+            </div>
+
+            <!-- ⚠️ WARNING BANNER - Reference Only (BLINKING) -->
+            <div style="background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%); color: white; padding: 15px 20px; border-radius: 10px; margin-bottom: 15px; border: 3px solid #ff0000; box-shadow: 0 0 20px rgba(255, 0, 0, 0.5); animation: blink-warning 1s infinite;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 2em;">⚠️</span>
+                    <div>
+                        <div style="font-weight: 700; font-size: 1.1em; text-transform: uppercase; letter-spacing: 1px;">Warning: Reference Only</div>
+                        <div style="font-size: 0.95em; margin-top: 3px;">These workarounds are for reference purposes only. <strong>Do NOT apply blindly</strong> — always verify and test before implementing.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Semantic Workarounds Section - REDESIGNED DARK THEME -->
+            <div class="detail-row" id="semanticWorkaroundsRow" style="background: #2d2d2d; border-radius: 10px; border: 2px solid #ff6b35;">
+                <div class="detail-label" style="color: #ff6b35; font-size: 1.1em; margin-bottom: 0; font-weight: 600;">
+                    🔍 Similar Historical Tickets
+                </div>
+                <div class="workaround-box" id="srSemanticWorkarounds" style="background: #1a1a1a;"></div>
+            </div>
+
+            <!-- 🆕 HIDE: Previous AI Workarounds Section (keeping for backward compatibility but hidden) -->
+            <div class="detail-row" id="aiWorkaroundsRow" style="display: none;">
+                <div class="workaround-box" id="srAIWorkarounds"></div>
+            </div>
+
+            <!-- 🆕 HIDE: User Corrections from Similar SRs Section (keeping for backward compatibility but hidden) -->
+            <div class="detail-row" id="userCorrectionsRow" style="display: none;">
+                <div class="workaround-box" id="srUserCorrections"></div>
+            </div>
+
+            <!-- Workarounds Section - Main Container Card -->
+            <div class="workarounds-main-card">
+                <div class="workarounds-container">
+                    <!-- User-Corrected Workaround Inner Card (Shows first if available) - DARK THEME -->
+                    <div class="inner-workaround-card user-card" id="userCorrectedCard" style="display: none; background: #2d2d2d; border: 2px solid #ff006e;">
+                        <div class="inner-card-header user-header" style="background: linear-gradient(135deg, #ff006e 0%, #ff6b35 100%); padding: 15px; border-radius: 8px 8px 0 0;">
+                            <div class="card-icon" style="font-size: 1.5em;">🌟</div>
+                            <div class="card-title" style="color: white; font-weight: 600; font-size: 1.1em;">User-Corrected Workaround</div>
+                            <div class="card-badge" style="background: white; color: #ff006e; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600;">✓ Verified</div>
+                        </div>
+                        <div class="workaround-content" style="padding: 20px; color: #ffffff;">
+                            <div id="userWorkaroundText" style="line-height: 1.7; white-space: pre-wrap;"></div>
+                        </div>
+                        <!-- 🆕 Vote Buttons for User Workaround -->
+                        <div class="vote-buttons-container" style="margin-top: 15px; padding: 12px; background: #f0fdf4; border-radius: 8px; border: 1px solid #bbf7d0;">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <div style="display: flex; gap: 10px;">
+                                    <button class="vote-btn vote-up" onclick="voteWorkaround('user_corrected', 'up')" title="Upvote this workaround">
+                                        <span class="vote-icon">👍</span>
+                                        <span id="user_corrected_upvotes">0</span>
+                                    </button>
+                                    <button class="vote-btn vote-down" onclick="voteWorkaround('user_corrected', 'down')" title="Downvote this workaround">
+                                        <span class="vote-icon">👎</span>
+                                        <span id="user_corrected_downvotes">0</span>
+                                    </button>
+                                </div>
+                                <div class="vote-score" id="user_corrected_score_display">
+                                    <span id="user_corrected_score_emoji">📊</span>
+                                    <strong>Score: <span id="user_corrected_score">0</span></strong>
+                                    <span id="user_corrected_score_label" style="font-size: 0.85em; color: #666;">(Not Rated)</span>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+
+                    <!-- AI-Generated Workaround Inner Card (From RAG Pipeline) - DARK THEME -->
+                    <div class="inner-workaround-card ai-card" id="aiGeneratedCard" style="background: #2d2d2d; border: 2px solid #ff6b35;">
+                        <div class="inner-card-header" style="background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%); padding: 15px; border-radius: 8px 8px 0 0;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div class="card-icon" style="font-size: 1.5em;">🤖</div>
+                                <div class="card-title" style="color: white; font-weight: 600; font-size: 1.1em;">AI-Generated Workaround</div>
+                        </div>
+                        </div>
+                        <div class="workaround-content" style="padding: 20px; color: #ffffff;">
+                            <div id="aiGeneratedText" style="line-height: 1.7; white-space: pre-wrap;"></div>
+                            <div id="aiGenerateButton" style="display: none; text-align: center; padding: 40px;">
+                                <p style="color: #999; margin-bottom: 15px;">No AI-generated workaround available yet.</p>
+                                <button class="btn" onclick="generateAIWorkaround()" style="background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%); color: white; padding: 15px 30px; font-size: 1.1em; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                                    🤖 Generate AI Workaround
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Vote Buttons for AI Workaround -->
+                        <div id="aiVoteButtons" class="vote-buttons-container" style="margin: 15px; padding: 12px; background: #f0fdf4; border-radius: 8px; border: 1px solid #bbf7d0; display: none;">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <div style="display: flex; gap: 10px;">
+                                    <button class="vote-btn vote-up" onclick="voteWorkaround('ai', 'up')" title="Upvote this AI workaround">
+                                        <span class="vote-icon">👍</span>
+                                        <span id="ai_upvotes">0</span>
+                            </button>
+                                    <button class="vote-btn vote-down" onclick="voteWorkaround('ai', 'down')" title="Downvote this AI workaround">
+                                        <span class="vote-icon">👎</span>
+                                        <span id="ai_downvotes">0</span>
+                                    </button>
+                                </div>
+                                <div class="vote-score" id="ai_score_display">
+                                    <span id="ai_score_emoji">📊</span>
+                                    <strong>Score: <span id="ai_score">0</span></strong>
+                                    <span id="ai_score_label" style="font-size: 0.85em; color: #666;">(Not Rated)</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Regenerate and Save Buttons -->
+                        <div class="feedback-buttons" id="aiGeneratedFeedback" style="margin-top: 15px; padding: 15px; background: #1a1a1a; border-radius: 0 0 8px 8px; display: none;">
+                            <div style="display: flex; gap: 10px;">
+                                <button class="btn" onclick="regenerateAIWorkaround()" style="flex: 1; background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%); color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1em;">
+                                    🔄 Regenerate
+                                </button>
+                                <button class="btn" id="saveRegeneratedBtn" onclick="saveRegeneratedWorkaround()" style="flex: 1; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1em; display: none;">
+                                    ✅ This is helpful
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- 🆕 NEW: Vote Section - DARK THEME -->
+            <div class="vote-section" style="background: #2d2d2d; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #ff6b35;">
+                <h3 style="color: #ff6b35; margin-bottom: 15px; font-size: 1.2em;">📊 Rate This Workaround</h3>
+                
+                <!-- Vote Counts Display -->
+                <div style="display: flex; justify-content: center; gap: 30px; margin-bottom: 15px; padding: 15px; background: #1a1a1a; border-radius: 8px;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 2em; color: #4ade80;">👍</div>
+                        <div style="color: #ffffff; font-size: 1.5em; font-weight: bold; margin: 5px 0;">
+                            <span id="overall_upvotes">0</span>
+                        </div>
+                        <div style="color: #cccccc; font-size: 0.85em;">Helpful</div>
+                    </div>
+                    <div style="border-left: 2px solid #3d3d3d;"></div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 2em; color: #f87171;">👎</div>
+                        <div style="color: #ffffff; font-size: 1.5em; font-weight: bold; margin: 5px 0;">
+                            <span id="overall_downvotes">0</span>
+                        </div>
+                        <div style="color: #cccccc; font-size: 0.85em;">Not Helpful</div>
+                    </div>
+                    <div style="border-left: 2px solid #3d3d3d;"></div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 2em;">
+                            <span id="overall_score_emoji">📊</span>
+                        </div>
+                        <div style="color: #ffffff; font-size: 1.5em; font-weight: bold; margin: 5px 0;">
+                            <span id="overall_score">0</span>
+                        </div>
+                        <div style="color: #cccccc; font-size: 0.85em;">
+                            <span id="overall_score_label">Net Score</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Vote Buttons -->
+                <div style="display: flex; gap: 15px; justify-content: center;">
+                    <button onclick="voteWorkaround('overall', 'up')" style="flex: 1; padding: 15px; background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1em;">
+                        👍 Helpful
+                    </button>
+                    <button onclick="voteWorkaround('overall', 'down')" style="flex: 1; padding: 15px; background: #3d3d3d; color: white; border: 2px solid #ff6b35; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1em;">
+                        👎 Not Helpful
+                    </button>
+                </div>
+                <div id="voteStatus" style="text-align: center; margin-top: 15px; color: #999; font-size: 0.9em;"></div>
+            </div>
+
+            <!-- Feedback Section - DARK THEME -->
+            <div class="feedback-section" style="background: #2d2d2d; padding: 20px; border-radius: 10px; border: 2px solid #ff006e;">
+                <h3 style="color: #ff006e; margin-bottom: 15px; font-size: 1.2em;">💬 Is workaround not good? Give your workaround</h3>
+                <div class="feedback-buttons" style="display: flex; gap: 15px;">
+                    <button class="btn btn-warning" onclick="showCorrectionArea()" style="flex: 1; padding: 15px; background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1em;">
+                        ✏️ I need to correct this
+                    </button>
+                </div>
+
+                <div id="correctionArea" class="correction-area" style="background: #1a1a1a; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                    <h4 style="color: #ff6b35; margin-bottom: 15px;">Please provide the correct workaround:</h4>
+                    <div style="margin-bottom: 15px;">
+                        <label style="color: #ff6b35; font-weight: 600; display: block; margin-bottom: 5px;">👤 Your Name (required):</label>
+                        <input type="text" id="correctionName" placeholder="Enter your name" style="width: 100%; padding: 12px; font-size: 1em; border: 2px solid #3d3d3d; border-radius: 8px; background: #2d2d2d; color: #fff; box-sizing: border-box;">
+                    </div>
+                    <p style="color: #999; font-size: 0.9em; margin-bottom: 10px;">
+                        💡 Tip: Each line will automatically become a step. Or use "Option 1:", "Option 2:" format for more control.
+                    </p>
+                    <textarea 
+                        id="correctionText" 
+                        placeholder="Example (each line becomes a step):&#10;Check the logs in /var/log/system.log&#10;Restart the service using systemctl restart service-name&#10;Verify the service is running&#10;&#10;Or use:&#10;Option 1: First step here&#10;Option 2: Second step here"
+                    ></textarea>
+                    <div id="correctionError" class="inline-error"></div>
+                    <button class="btn btn-submit" onclick="submitCorrection()">
+                        Submit Correction
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Status - Bottom of Page -->
+        <div class="info-banner" id="infoBanner" style="margin-top: 30px;">
+            <h3>📊 System Status</h3>
+            <p id="uploadInfo">Loading...</p>
+        </div>
+    </div>
+
+    <script>
+        let currentSrData = null;
+
+        // 🆕 Global variable to track AI workaround versions
+        let aiWorkaroundVersions = {
+            original: null,          // From database
+            versions: [],            // Array of all versions (index 0 = original)
+            currentVersion: 0,       // Index of currently displayed version
+            approvedVersion: null    // Which version user marked as helpful
+        };
+
+        /**
+         * Format workaround text for better readability
+         * Handles both old format (with | separators) and new format (with newlines)
+         * Adds visual separation and structure
+         */
+        function formatWorkaround(workaround) {
+            if (!workaround || workaround === 'NA') {
+                return '<div style="color: #999; font-style: italic;">No workaround available</div>';
+            }
+            
+            // Check if this is old format with pipe separators
+            if (workaround.includes(' | ') && workaround.includes('Possible Workarounds')) {
+                // Split by pipe separator
+                const sections = workaround.split(' | ');
+                let formatted = '';
+                
+                sections.forEach((section, index) => {
+                    if (section.trim()) {
+                        // Add separator between sections
+                        if (index > 0) {
+                            formatted += '<div style="height: 20px;"></div>';
+                        }
+                        
+                        // Parse similarity percentage and SR ID
+                        const matchSimilarity = section.match(/\((\d+%)\)/);
+                        const matchSRID = section.match(/SR\s+([A-Z0-9]+)/);
+                        
+                        if (matchSimilarity && matchSRID) {
+                            const similarity = matchSimilarity[1];
+                            const srId = matchSRID[1];
+                            
+                            // Extract and format the content (remove header text)
+                            let content = section.replace(/\(\d+%\)\s+SR\s+[A-Z0-9]+\s+-\s+Possible Workarounds \(try one of these\):\s*/, '');
+                            
+                            // Parse options from the content
+                            const optionPattern = /Option\s+(\d+):\s*([^\n]*(?:\n(?!\s*Option\s+\d+:)[^\n]*)*)/gi;
+                            let optionMatch;
+                            let formattedOptions = '';
+                            
+                            while ((optionMatch = optionPattern.exec(content)) !== null) {
+                                const optionNum = optionMatch[1];
+                                const optionText = optionMatch[2].trim();
+                                formattedOptions += `<div style="margin-bottom: 6px; padding: 8px 12px; background: #2d2d2d; border-radius: 4px; border-left: 3px solid #ff6b35;"><span style="color: #ffffff; line-height: 1.6;">${optionText.replace(/\n/g, '<br>')}</span></div>`;
+                            }
+                            
+                            // If no options were parsed, just display the raw content - DARK THEME
+                            if (!formattedOptions) {
+                                formattedOptions = `<div style="padding: 10px; background: #2d2d2d; border-radius: 6px; border-left: 3px solid #ff6b35;"><div style="color: #ffffff; line-height: 1.7;">${content.replace(/\n/g, '<br>')}</div></div>`;
+                            }
+                            
+                            // Create header - COMPACT VERSION - DARK THEME
+                            formatted += `<div style="border: 2px solid #ff6b35; border-radius: 8px; padding: 10px; margin-bottom: 10px; background: #1a1a1a;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; padding-bottom: 6px; border-bottom: 2px solid #ff6b35;"><span style="font-weight: bold; color: #ff6b35; font-size: 1em;">📊 Similar Ticket #${index + 1}</span><span style="background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%); color: white; padding: 3px 10px; border-radius: 12px; font-weight: bold; font-size: 0.85em;">${similarity} Match</span></div><div style="margin-bottom: 6px; padding: 5px; background: #2d2d2d; border-radius: 4px;"><span style="font-weight: bold; color: #ff6b35; font-size: 0.9em;">Ticket:</span> <span style="color: #ff6b35; font-family: 'Courier New', monospace; font-size: 0.95em; font-weight: 600;">${srId}</span></div><div style="margin-top: 6px; padding-top: 6px; border-top: 1px solid #3d3d3d;"><div style="font-weight: bold; color: #ffffff; margin-bottom: 6px; font-size: 0.95em;">💡 Workarounds:</div>${formattedOptions}</div></div>`;
+                        } else {
+                            // Fallback: just display the section with nice formatting - DARK THEME
+                            formatted += `<div style="border: 2px solid #ff6b35; border-radius: 10px; padding: 18px; margin-bottom: 18px; background: #1a1a1a; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);"><div style="padding: 10px; background: #2d2d2d; border-radius: 6px; border-left: 3px solid #ff6b35;"><div style="line-height: 1.7; color: #ffffff;">${section.replace(/\n/g, '<br>')}</div></div></div>`;
+                        }
+                    }
+                });
+                
+                return formatted;
+            }
+            
+            // Check if this is new format with separator lines (═════)
+            else if (workaround.includes('════')) {
+                // Already formatted with separators - preserve structure
+                return workaround
+                    .replace(/\n/g, '<br>')
+                    .replace(/════+/g, '<hr style="border: 2px solid #1e40af; margin: 10px 0;">');
+            }
+            
+            // Check if this has multiple similar SRs but no pipes (newline separated)
+            else if (workaround.match(/\(\d+%\).*SR.*Possible Workarounds/gi) && workaround.split(/\(\d+%\).*SR/gi).length > 2) {
+                // Multiple SRs separated by newlines
+                const srPattern = /\((\d+%)\)\s+SR\s+([A-Z0-9]+)\s+-\s+Possible Workarounds[^:]*:\s*([\s\S]*?)(?=\(\d+%\)\s+SR|$)/gi;
+                let formatted = '';
+                let match;
+                let index = 1;
+                
+                while ((match = srPattern.exec(workaround)) !== null) {
+                    const similarity = match[1];
+                    const srId = match[2];
+                    const content = match[3].trim();
+                    
+                    // Parse options from content
+                    const optionPattern = /Option\s+(\d+):\s*([^\n]*(?:\n(?!\s*Option\s+\d+:)[^\n]*)*)/gi;
+                    let optionMatch;
+                    let formattedOptions = '';
+                    
+                    while ((optionMatch = optionPattern.exec(content)) !== null) {
+                        const optionNum = optionMatch[1];
+                        const optionText = optionMatch[2].trim();
+                        formattedOptions += `<div style="margin-bottom: 6px; padding: 8px 12px; background: #2d2d2d; border-radius: 4px; border-left: 3px solid #ff6b35;"><span style="color: #ffffff; line-height: 1.6;">${optionText.replace(/\n/g, '<br>')}</span></div>`;
+                    }
+                    
+                    // If no options parsed, display raw content - DARK THEME
+                    if (!formattedOptions) {
+                        formattedOptions = `<div style="padding: 10px; background: #2d2d2d; border-radius: 6px; border-left: 3px solid #ff6b35;"><div style="color: #ffffff; line-height: 1.7;">${content.replace(/\n/g, '<br>')}</div></div>`;
+                    }
+                    
+                    formatted += `<div style="border: 2px solid #ff6b35; border-radius: 8px; padding: 10px; margin-bottom: 10px; background: #1a1a1a;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; padding-bottom: 6px; border-bottom: 2px solid #ff6b35;"><span style="font-weight: bold; color: #ff6b35; font-size: 1em;">📊 Similar Ticket #${index}</span><span style="background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%); color: white; padding: 3px 10px; border-radius: 12px; font-weight: bold; font-size: 0.85em;">${similarity} Match</span></div><div style="margin-bottom: 6px; padding: 5px; background: #2d2d2d; border-radius: 4px;"><span style="font-weight: bold; color: #ff6b35; font-size: 0.9em;">Ticket:</span> <span style="color: #ff6b35; font-family: 'Courier New', monospace; font-size: 0.95em; font-weight: 600;">${srId}</span></div><div style="margin-top: 6px; padding-top: 6px; border-top: 1px solid #3d3d3d;"><div style="font-weight: bold; color: #ffffff; margin-bottom: 6px; font-size: 0.95em;">💡 Workarounds:</div>${formattedOptions}</div></div>`;
+                    index++;
+                }
+                
+                return formatted || workaround.replace(/\n/g, '<br>');
+            }
+            
+            // Default: just preserve newlines and add nice styling
+            else {
+                // Try to parse options even in plain text
+                const optionPattern = /Option\s+(\d+):\s*([^\n]*(?:\n(?!\s*Option\s+\d+:)[^\n]*)*)/gi;
+                let optionMatch;
+                let formattedContent = '';
+                let hasOptions = false;
+                
+                while ((optionMatch = optionPattern.exec(workaround)) !== null) {
+                    hasOptions = true;
+                    const optionNum = optionMatch[1];
+                    const optionText = optionMatch[2].trim();
+                    formattedContent += `<div style="margin-bottom: 6px; padding: 8px 12px; background: #2d2d2d; border-radius: 4px; border-left: 3px solid #ff6b35;"><span style="color: #ffffff; line-height: 1.6;">${optionText.replace(/\n/g, '<br>')}</span></div>`;
+                }
+                
+                if (hasOptions) {
+                    return `<div style="border: 2px solid #ff6b35; border-radius: 8px; padding: 10px; background: #1a1a1a;"><div style="font-weight: bold; color: #ffffff; margin-bottom: 6px; font-size: 0.95em;">💡 Workarounds:</div>${formattedContent}</div>`;
+                } else {
+                    // Try to auto-structure plain text into steps
+                    const lines = workaround.split('\n').filter(line => line.trim());
+                    
+                    if (lines.length > 1) {
+                        // Multiple lines - display each without step numbers
+                        let autoSteps = '';
+                        lines.forEach((line, index) => {
+                            const trimmedLine = line.trim();
+                            if (trimmedLine) {
+                                autoSteps += `<div style="margin-bottom: 6px; padding: 8px 12px; background: #2d2d2d; border-radius: 4px; border-left: 3px solid #ff6b35;"><span style="color: #ffffff; line-height: 1.6;">${trimmedLine.replace(/\n/g, '<br>')}</span></div>`;
+                            }
+                        });
+                        return `<div style="border: 2px solid #ff6b35; border-radius: 8px; padding: 10px; background: #1a1a1a;"><div style="font-weight: bold; color: #ffffff; margin-bottom: 6px; font-size: 0.95em;">💡 Workarounds:</div>${autoSteps}</div>`;
+                    } else {
+                        // Single line or paragraph - display without step number
+                        return `<div style="border: 2px solid #ff6b35; border-radius: 8px; padding: 10px; background: #1a1a1a;"><div style="font-weight: bold; color: #ffffff; margin-bottom: 6px; font-size: 0.95em;">💡 Workaround:</div><div style="margin-bottom: 6px; padding: 8px 12px; background: #2d2d2d; border-radius: 4px; border-left: 3px solid #ff6b35;"><span style="color: #ffffff; line-height: 1.6;">${workaround.trim().replace(/\n/g, '<br>')}</span></div></div>`;
+                    }
+                }
+            }
+        }
+
+        /**
+         * Format semantic workarounds for display - DARK THEME COMPACT DESIGN
+         * Handles both array format (new) and text format (legacy)
+         */
+        function formatSemanticWorkarounds(data) {
+            if (!data || data === 'No semantic matches found') {
+                return '<div style="color: #999; font-style: italic; text-align: center;">No semantic matches found</div>';
+            }
+
+            // Handle array format (new)
+            if (Array.isArray(data)) {
+                if (data.length === 0) {
+                    return '<div style="color: #999; font-style: italic; text-align: center;">No semantic matches found</div>';
+                }
+                
+                let formatted = '';
+                const totalItems = data.length;
+                data.forEach((match, idx) => {
+                    const similarity = match.similarity || 0;
+                    let workaround = match.workaround || '';
+                    const srId = match.sr_id || 'Unknown';
+                    const resolution = match.resolution || 'Unknown';
+                    const slaResolution = match.sla_resolution || 'Unknown';
+                    
+                    // Check if workaround is garbage
+                    const isGarbage = !workaround || workaround === 'N/A' || workaround === 'NA' || workaround === 'null' || !workaround.trim();
+                    
+                    // Color based on similarity
+                    let bgGradient = similarity >= 70 ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : similarity >= 60 ? 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' : 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
+                    
+                    // Margin between cards only
+                    const marginStyle = idx < totalItems - 1 ? 'margin-bottom: 8px;' : '';
+                    
+                    formatted += `
+                        <div style="border: 2px solid #ff6b35; border-radius: 8px; ${marginStyle} background: #3d3d3d;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-weight: bold; color: #ffffff; font-size: 0.95em;">${srId}</span>
+                                <span style="background: ${bgGradient}; color: white; padding: 2px 8px; border-radius: 10px; font-weight: bold; font-size: 0.8em;">${similarity}%</span>
+                            </div>
+                            <div style="color: #ffffff; font-size: 0.88em; line-height: 1.3; margin-top: 4px;">${isGarbage 
+                                ? '<span style="color: #999; font-style: italic;">📝 Workaround: Not recorded</span>'
+                                : `<span style="color: #ff6b35; font-weight: 600;">Workaround:</span> <span style="color: #f59e0b;">${workaround.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span>`
+                            }</div>
+                            <div style="margin-top: 6px; background: #f0fdf4; border-radius: 6px; display: flex; align-items: center; justify-content: space-between;">
+                                <div style="display: flex; gap: 8px;">
+                                    <button class="vote-btn vote-up" onclick="voteSimilarSR('${srId}', 'upvote')" title="Upvote">👍 <span id="similar-upvotes-${srId}">0</span></button>
+                                    <button class="vote-btn vote-down" onclick="voteSimilarSR('${srId}', 'downvote')" title="Downvote">👎 <span id="similar-downvotes-${srId}">0</span></button>
+                            </div>
+                                <div style="font-size: 0.85em;">📊 Score: <strong id="similar-score-${srId}">0</strong> <span id="similar-status-${srId}" style="color: #666;">(Not Rated)</span></div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Load votes for this similar SR after rendering
+                    setTimeout(() => loadSimilarSRVotes(srId), 100 * idx);
+                });
+                
+                return formatted || '<div style="color: #999; font-style: italic; text-align: center;">No similar tickets found</div>';
+            }
+
+            // Handle text format (legacy)
+            const text = data;
+            // Split by SR ID entries
+            const srPattern = /SR ID:\s*([^\n]+)\n/g;
+            const sections = text.split(srPattern);
+            
+            let formatted = '';
+            
+            // Process in pairs (sr_id, content)
+            for (let i = 1; i < sections.length; i += 2) {
+                const srId = sections[i].trim();
+                const content = sections[i + 1] || '';
+                
+                // Extract similarity if present
+                const similarityMatch = content.match(/Similarity:\s*([^\n]+)/);
+                const similarity = similarityMatch ? similarityMatch[1].trim() : '';
+                
+                // Extract Resolution Categorization
+                const resCatMatch = content.match(/Resolution Categorization:\s*([^\n]+)/);
+                const resCat = resCatMatch ? resCatMatch[1].trim() : 'N/A';
+                
+                // Extract SLA Resolution
+                const slaResMatch = content.match(/SLA Resolution:\s*([^\n]+)/);
+                const slaRes = slaResMatch ? slaResMatch[1].trim() : 'N/A';
+                
+                // Extract Original Workaround
+                const origWorkaroundMatch = content.match(/Original Workaround:\s*([^\n]+(?:\n(?!(?:AI Workaround|User Correction|SR ID):).*)*)/);
+                const origWorkaround = origWorkaroundMatch ? origWorkaroundMatch[1].trim() : null;
+                
+                // Extract AI Workaround
+                const aiWorkaroundMatch = content.match(/AI Workaround:\s*([^\n]+(?:\n(?!(?:Original Workaround|User Correction|SR ID):).*)*)/);
+                const aiWorkaround = aiWorkaroundMatch ? aiWorkaroundMatch[1].trim() : null;
+                
+                // Extract User Correction
+                const userCorrectionMatch = content.match(/User Correction:\s*([^\n]+(?:\n(?!(?:Original Workaround|AI Workaround|SR ID):).*)*)/);
+                const userCorrection = userCorrectionMatch ? userCorrectionMatch[1].trim() : null;
+                
+                // Build workarounds section with all available types
+                let workaroundsHtml = '';
+                
+                // Check if original workaround exists
+                const hasOrigWorkaround = origWorkaround && origWorkaround !== 'NA' && origWorkaround !== 'N/A';
+                const hasAIWorkaround = aiWorkaround && aiWorkaround !== 'NA' && aiWorkaround !== 'N/A';
+                const hasUserCorrection = userCorrection && userCorrection !== 'NA' && userCorrection !== 'N/A';
+                
+                // Original Workaround - show "Not recorded" if missing but AI exists
+                if (hasOrigWorkaround) {
+                    workaroundsHtml += `<div style="margin-bottom: 6px;"><span style="color: #ff6b35; font-weight: 600;">Workaround:</span> <span style="color: #ffffff;">${origWorkaround.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span></div>`;
+                } else if (hasAIWorkaround || hasUserCorrection) {
+                    // Show "Not recorded" message when original is missing but AI/User workaround exists
+                    workaroundsHtml += `<div style="margin-bottom: 6px;"><span style="color: #999; font-style: italic;">📝 Workaround: Not recorded</span></div>`;
+                }
+                
+                // AI Workaround (if exists and different from original)
+                if (hasAIWorkaround && aiWorkaround !== origWorkaround) {
+                    workaroundsHtml += `<div style="margin-bottom: 6px;"><span style="color: #f59e0b; font-weight: 600;">🤖 AI Workaround:</span> <span style="color: #ffffff;">${aiWorkaround.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span></div>`;
+                }
+                
+                // User Workaround (if exists)
+                if (hasUserCorrection) {
+                    workaroundsHtml += `<div style="margin-bottom: 6px;"><span style="color: #10b981; font-weight: 600;">👤 User Workaround:</span> <span style="color: #ffffff;">${userCorrection.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span></div>`;
+                }
+                
+                // Fallback if no workarounds at all
+                if (!workaroundsHtml) {
+                    workaroundsHtml = '<div style="color: #999; font-style: italic;">No workaround available</div>';
+                }
+                
+                // COMPACT DESIGN with all workaround types
+                formatted += `<div style="border: 2px solid #ff6b35; border-radius: 8px; padding: 8px; margin-bottom: 8px; background: #3d3d3d; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px;"><span style="font-weight: bold; color: #ffffff; font-size: 0.95em;">${srId}</span>${similarity ? `<span style="background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%); color: white; padding: 2px 8px; border-radius: 10px; font-weight: bold; font-size: 0.8em;">${similarity}</span>` : ''}</div><div style="color: #ffffff; font-size: 0.88em; line-height: 1.4; margin: 4px 0 0 0;">${workaroundsHtml}</div><div style="margin-top: 6px; padding: 8px; background: #f0fdf4; border-radius: 6px; border: 1px solid #bbf7d0;"><div style="display: flex; align-items: center; justify-content: space-between;"><div style="display: flex; gap: 8px;"><button class="vote-btn vote-up" onclick="voteWorkaround('semantic_${srId.replace(/[^a-zA-Z0-9]/g, '_')}', 'up')" title="Upvote this workaround"><span class="vote-icon">👍</span><span id="semantic_${srId.replace(/[^a-zA-Z0-9]/g, '_')}_upvotes">0</span></button><button class="vote-btn vote-down" onclick="voteWorkaround('semantic_${srId.replace(/[^a-zA-Z0-9]/g, '_')}', 'down')" title="Downvote this workaround"><span class="vote-icon">👎</span><span id="semantic_${srId.replace(/[^a-zA-Z0-9]/g, '_')}_downvotes">0</span></button></div><div class="vote-score" id="semantic_${srId.replace(/[^a-zA-Z0-9]/g, '_')}_score_display"><span id="semantic_${srId.replace(/[^a-zA-Z0-9]/g, '_')}_score_emoji">📊</span><strong>Score: <span id="semantic_${srId.replace(/[^a-zA-Z0-9]/g, '_')}_score">0</span></strong><span id="semantic_${srId.replace(/[^a-zA-Z0-9]/g, '_')}_score_label" style="font-size: 0.85em; color: #666;"></span></div></div></div></div>`;
+            }
+            
+            return formatted || text.replace(/\n/g, '<br>').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        /**
+         * Format AI workarounds from historical matches for display
+         * Parses the format with SR IDs and similarity scores
+         * Only shows if AI workarounds exist (not "NA")
+         */
+        function formatAIWorkarounds(text) {
+            if (!text || text === 'No AI workarounds found' || text.trim() === '') {
+                return null;  // Return null to hide the section
+            }
+
+            // Split by SR ID entries
+            const srPattern = /SR ID:\s*([^\n]+)\n/g;
+            const sections = text.split(srPattern);
+            
+            let formatted = '';
+            let hasContent = false;
+            
+            // Process in pairs (sr_id, content)
+            for (let i = 1; i < sections.length; i += 2) {
+                const srId = sections[i].trim();
+                const content = sections[i + 1] || '';
+                
+                // Extract similarity if present
+                const similarityMatch = content.match(/Similarity:\s*([^\n]+)/);
+                const similarity = similarityMatch ? similarityMatch[1].trim() : '';
+                
+                // Extract AI workaround content
+                const workaroundMatch = content.match(/AI Workaround:\s*([\s\S]*?)(?=\n\nSR ID:|$)/);
+                const workaroundContent = workaroundMatch ? workaroundMatch[1].trim() : '';
+                
+                if (workaroundContent && workaroundContent.toUpperCase() !== 'NA' && workaroundContent.toLowerCase() !== 'nan' && workaroundContent.toUpperCase() !== 'N/A') {
+                    hasContent = true;
+                    // Format this SR entry with distinct styling
+                    formatted += `
+                        <div style="border: 2px solid #f59e0b; border-radius: 10px; padding: 12px; margin-bottom: 12px; background: white; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 2px solid #f59e0b;">
+                                <span style="font-weight: bold; color: #92400e; font-size: 1em;">🤖 ${srId}</span>
+                                ${similarity ? `<span style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 4px 12px; border-radius: 12px; font-weight: bold; font-size: 0.85em;">${similarity}</span>` : ''}
+                            </div>
+                            <div style="margin-top: 8px;">
+                                <div style="font-weight: 600; color: #333; margin-bottom: 6px; font-size: 0.95em;">🧠 AI Workaround:</div>
+                                <div style="padding: 10px; background: #fef9e7; border-radius: 6px; border-left: 3px solid #f59e0b; white-space: pre-wrap; line-height: 1.6; color: #444; font-size: 0.9em;">${workaroundContent.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            
+            return hasContent ? formatted : null;
+        }
+
+        /**
+         * Format AI Workaround with Troubleshooting Steps
+         * Combines both AI workaround and troubleshooting steps in a single display
+         */
+        function formatAIWorkaroundWithSteps(aiWorkaround, troubleshootingSteps) {
+            let html = '';
+            
+            // 1. AI Workaround Section - Just text directly, no extra formatting
+            if (aiWorkaround && aiWorkaround !== 'NA' && aiWorkaround.trim() !== '') {
+                html += `<div style="margin-bottom: 20px; color: #ffffff; line-height: 1.7; white-space: pre-wrap;">${aiWorkaround.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>`;
+            } else {
+                html += '<div style="color: #999; font-style: italic; margin-bottom: 20px;">No AI workaround available</div>';
+            }
+            
+            // 2. Troubleshooting Steps Section - DARK THEME
+            if (troubleshootingSteps && troubleshootingSteps !== 'NA' && troubleshootingSteps.trim() !== '') {
+                html += `
+                    <div style="margin-bottom: 10px;">
+                        <div style="background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%); color: white; padding: 10px 15px; border-radius: 8px 8px 0 0; font-weight: 600; font-size: 1em;">
+                            🔧 Troubleshooting Steps
+                        </div>
+                        <div style="border: 2px solid #ff6b35; border-top: none; border-radius: 0 0 8px 8px; padding: 15px; background: #1a1a1a; color: #ffffff;">
+                            ${formatTroubleshootingSteps(troubleshootingSteps)}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            return html || '<div style="color: #999; font-style: italic;">No workaround or troubleshooting steps available</div>';
+        }
+
+        /**
+         * Format troubleshooting steps for better readability
+         */
+        function formatTroubleshootingSteps(steps) {
+            if (!steps || steps === 'NA') {
+                return '<div style="color: #999; font-style: italic;">No troubleshooting steps available</div>';
+            }
+            
+            // Split by newlines and number each step
+            const stepLines = steps.split('\n').filter(line => line.trim());
+            
+            if (stepLines.length === 1) {
+                // Single step - just display it - DARK THEME
+                return `<div style="color: #ffffff; line-height: 1.6;">${steps.replace(/\n/g, '<br>')}</div>`;
+            }
+            
+            // Multiple steps - format as list without step numbers - DARK THEME
+            let formatted = '<div style="color: #ffffff;">';
+            stepLines.forEach((step, index) => {
+                const trimmedStep = step.trim();
+                if (trimmedStep) {
+                    formatted += `
+                        <div style="margin-bottom: 8px; padding: 10px 12px; background: #2d2d2d; border-radius: 6px; border-left: 3px solid #ff6b35;">
+                            <span style="line-height: 1.6; color: #ffffff;">${trimmedStep}</span>
+                        </div>
+                    `;
+                }
+            });
+            formatted += '</div>';
+            
+            return formatted;
+        }
+
+        // Load upload info on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUploadInfo();
+            document.getElementById('srIdInput').focus();
+            
+            // Check for sr_id URL parameter and auto-search
+            const urlParams = new URLSearchParams(window.location.search);
+            const srIdFromUrl = urlParams.get('sr_id');
+            if (srIdFromUrl) {
+                document.getElementById('srIdInput').value = srIdFromUrl;
+                searchSR();  // Auto-trigger search
+            }
+            
+            // Clear inline error when user starts typing in correction text
+            document.getElementById('correctionText').addEventListener('input', function() {
+                hideInlineError();
+            });
+        });
+
+        function loadUploadInfo() {
+            fetch('/get_upload_info')
+                .then(response => response.json())
+                .then(data => {
+                    const infoElement = document.getElementById('uploadInfo');
+                    const historicalCountEl = document.getElementById('historicalCount');
+                    
+                    // Update historical count from ChromaDB
+                    if (historicalCountEl) {
+                        if (data.historical_count) {
+                            historicalCountEl.textContent = data.historical_count.toLocaleString();
+                        } else {
+                            historicalCountEl.textContent = '0';
+                        }
+                    }
+                    
+                    if (data.has_upload) {
+                        infoElement.innerHTML = `
+                            ✅ <strong>${data.message}</strong><br>
+                            📅 Last upload: ${data.upload_date}
+                        `;
+                    } else {
+                        infoElement.innerHTML = `
+                            ⚠️ ${data.message}
+                        `;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading upload info:', error);
+                    const historicalCountEl = document.getElementById('historicalCount');
+                    if (historicalCountEl) {
+                        historicalCountEl.textContent = 'N/A';
+                    }
+                });
+        }
+
+        function searchSR() {
+            const srId = document.getElementById('srIdInput').value.trim();
+            
+            if (!srId) {
+                showMessage('Please enter an SR ID', 'error');
+                return;
+            }
+
+            // Show loading
+            showMessage('🔍 Searching for SR ' + srId + '...', 'success');
+            document.getElementById('srDetails').classList.remove('show');
+
+            // Search
+            fetch('/search_sr', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ sr_id: srId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    showMessage('❌ ' + data.error, 'error');
+                    if (data.suggestion) {
+                        showMessage('💡 ' + data.suggestion, 'error');
+                    }
+                } else {
+                    // Unwrap the 'sr' object from the response
+                    const srData = data.sr || data;
+                    srData.source = data.source;  // Preserve source info
+                    displaySRDetails(srData);
+                    hideMessage();
+                }
+            })
+            .catch(error => {
+                showMessage('❌ Error: ' + error.message, 'error');
+            });
+        }
+
+        function displaySRDetails(data) {
+            currentSrData = data;
+
+            // Populate fields with null checks
+            const srIdDisplay = document.getElementById('srIdDisplay');
+            const srPriority = document.getElementById('srPriority');
+            const srStatus = document.getElementById('srStatus');
+            const srDescription = document.getElementById('srDescription');
+            const srNotes = document.getElementById('srNotes');
+            
+            if (srIdDisplay) srIdDisplay.textContent = data.sr_id;
+            if (srPriority) srPriority.textContent = data.priority;
+            
+            // 🆕 Age and Difficulty - Hidden from user portal
+            // const srAge = document.getElementById('srAge');
+            // const srDifficulty = document.getElementById('srDifficulty');
+            // (Code hidden - these fields are not displayed in user portal)
+            
+            // Get assigned_to field from backend (skill-based assignment)
+            const srAssignedTo = document.getElementById('srAssignedTo');
+            if (srAssignedTo) {
+                // ✅ Use the skill-based assignment from backend
+                const assignedPerson = data['Assigned To'] || data.assigned_to || 'Not Assigned';
+                
+                srAssignedTo.textContent = assignedPerson;
+                
+                // Add styling based on assignment status
+                if (assignedPerson === 'Not Assigned' || assignedPerson.includes('No available') || assignedPerson.includes('Error')) {
+                    srAssignedTo.style.color = '#ff6b6b';  // Red for unassigned/error
+                } else {
+                    srAssignedTo.style.color = '#4ecdc4';  // Green for successfully assigned
+                }
+            }
+            
+            if (srDescription) srDescription.textContent = data.description;
+            if (srNotes) srNotes.textContent = data.notes || 'N/A';
+            
+            // 🆕 Show which upload this SR came from
+            // Upload info banner
+            const uploadInfoBanner = document.getElementById('uploadInfoBanner');
+            const foundInUploadEl = document.getElementById('foundInUpload');
+            
+            if (data.found_in_upload) {
+                if (foundInUploadEl) foundInUploadEl.textContent = data.found_in_upload;
+                if (uploadInfoBanner) uploadInfoBanner.style.display = 'block';
+            } else {
+                if (uploadInfoBanner) uploadInfoBanner.style.display = 'none';
+            }
+            
+            // TWO SEPARATE categorization fields
+            const resolutionCatElement = document.getElementById('srResolutionCat');
+            const slaResolutionElement = document.getElementById('srSLAResolution');
+            
+            // Resolution Categorization (resolution_categorization > resolution_categorization_tier3)
+            const resolutionDisplay = data.resolution_categorization_display || data.resolution_categories || 'N/A';
+            if (resolutionCatElement) resolutionCatElement.textContent = resolutionDisplay;
+            
+            // SLA Resolution (sla_resolution_categorization_t1 > sla_resolution_category)
+            const slaDisplay = data.sla_resolution_display || data.status_reasons || 'N/A';
+            if (slaResolutionElement) slaResolutionElement.textContent = slaDisplay;
+
+            // Hide separate summarized section (content now shown in Similar Historical Tickets)
+            const summarizedSection = document.getElementById('summarizedWorkaroundSection');
+            if (summarizedSection) {
+                summarizedSection.style.display = 'none';
+            }
+
+            // 🆕 CHANGED: Show SUMMARIZED text in Similar Historical Tickets instead of raw workarounds
+            const semanticWorkaroundsElement = document.getElementById('srSemanticWorkarounds');
+            const semanticWorkaroundsRow = document.getElementById('semanticWorkaroundsRow');
+            
+            if (semanticWorkaroundsElement && semanticWorkaroundsRow) {
+                if (data.has_summarized_workaround && data.summarized_semantic_workaround) {
+                    // Show LLM-summarized steps instead of raw workarounds
+                    const summaryHtml = `
+                        <div style="padding: 8px 15px; color: #e0e0e0; line-height: 1.9; white-space: pre-line; font-size: 14px;">
+                            <div style="color: #4CAF50; font-weight: 600; margin-bottom: 6px; font-size: 1.1em;">
+                                📋 Based on ${data.similar_sr_count || 0} similar SRs:
+                            </div>
+                            ${data.summarized_semantic_workaround.replace(/</g, '&lt;').replace(/>/g, '&gt;')}
+                        </div>
+                    `;
+                    semanticWorkaroundsElement.innerHTML = summaryHtml;
+                    semanticWorkaroundsRow.style.display = 'block';
+                } else if (data.semantic_workarounds_list && data.semantic_workarounds_list !== 'No semantic matches found') {
+                    // Fallback: show raw workarounds if summarization failed
+                semanticWorkaroundsElement.innerHTML = formatSemanticWorkarounds(data.semantic_workarounds_list);
+                semanticWorkaroundsRow.style.display = 'block';
+                    loadSemanticVotes(data.semantic_workarounds_list, data.sr_id);
+            } else {
+                    semanticWorkaroundsElement.innerHTML = '<div style="color: #999; font-style: italic; text-align: center;">No semantic matches found for this SR</div>';
+                semanticWorkaroundsRow.style.display = 'block';
+                }
+            }
+
+            // 🆕 REMOVED: Duplicate AI Workarounds display
+            // AI workarounds are now shown within the Semantic Workarounds section above
+            const aiWorkaroundsRow = document.getElementById('aiWorkaroundsRow');
+            if (aiWorkaroundsRow) {
+                aiWorkaroundsRow.style.display = 'none';  // Always hide - workarounds shown in semantic section
+            }
+
+            // 🆕 REMOVED: Duplicate User Corrections display
+            // User corrections are now shown within the Semantic Workarounds section above
+            const userCorrectionsRow = document.getElementById('userCorrectionsRow');
+            if (userCorrectionsRow) {
+                userCorrectionsRow.style.display = 'none';  // Always hide - workarounds shown in semantic section
+            }
+
+            // 🆕 THREE SEPARATE WORKAROUND CARDS
+            
+            // 1. User-Corrected Workaround (shows first if available)
+            const userCorrectedCard = document.getElementById('userCorrectedCard');
+            const userWorkaroundText = document.getElementById('userWorkaroundText');
+            
+            if (userCorrectedCard && userWorkaroundText) {
+            if (data.is_user_corrected && data.corrected_workaround) {
+                userCorrectedCard.style.display = 'block';
+                userWorkaroundText.innerHTML = `<div style="color: #ffffff; line-height: 1.7; white-space: pre-wrap;">${data.corrected_workaround.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>`;
+            } else {
+                userCorrectedCard.style.display = 'none';
+                }
+            }
+            
+            // 2. AI-Generated Workaround (from RAG pipeline)
+            const aiGeneratedCard = document.getElementById('aiGeneratedCard');
+            const aiGeneratedText = document.getElementById('aiGeneratedText');
+            const aiGenerateButton = document.getElementById('aiGenerateButton');
+            const aiGeneratedFeedback = document.getElementById('aiGeneratedFeedback');
+            
+            if (aiGeneratedCard && aiGeneratedText && aiGenerateButton && aiGeneratedFeedback) {
+            if (data.ai_workaround_available && data.ai_workaround) {
+                // 🆕 Initialize version tracking with original from database
+                aiWorkaroundVersions.original = data.ai_workaround;
+                aiWorkaroundVersions.versions = [data.ai_workaround];  // Index 0 = original
+                aiWorkaroundVersions.currentVersion = 0;
+                aiWorkaroundVersions.approvedVersion = null;
+                
+                // AI workaround exists - show it with troubleshooting steps
+                aiGeneratedText.innerHTML = formatAIWorkaroundWithSteps(data.ai_workaround, data.troubleshooting);
+                aiGeneratedText.style.display = 'block';
+                aiGenerateButton.style.display = 'none';
+                aiGeneratedFeedback.style.display = 'block';
+                    
+                    // Show AI vote buttons
+                    const aiVoteButtons = document.getElementById('aiVoteButtons');
+                    if (aiVoteButtons) aiVoteButtons.style.display = 'block';
+            } else {
+                // No AI workaround - reset version tracking and show generate button
+                aiWorkaroundVersions.original = null;
+                aiWorkaroundVersions.versions = [];
+                aiWorkaroundVersions.currentVersion = 0;
+                aiWorkaroundVersions.approvedVersion = null;
+                
+                aiGeneratedText.style.display = 'none';
+                aiGenerateButton.style.display = 'block';
+                aiGeneratedFeedback.style.display = 'none';
+                    
+                    // Hide AI vote buttons
+                    const aiVoteButtons = document.getElementById('aiVoteButtons');
+                    if (aiVoteButtons) aiVoteButtons.style.display = 'none';
+                }
+            }
+
+            // Show details
+            document.getElementById('srDetails').classList.add('show');
+            
+            // 🆕 Load votes for this SR
+            loadVotesForSR(data.sr_id);
+            
+            // Reset feedback section - restore original form if it was replaced by success message
+            const correctionArea = document.getElementById('correctionArea');
+            correctionArea.classList.remove('show');
+            
+            // Check if correctionText exists, if not, restore the original HTML
+            if (!document.getElementById('correctionText')) {
+                correctionArea.innerHTML = `
+                    <h4 style="color: #ff6b35; margin-bottom: 15px;">Please provide the correct workaround:</h4>
+                    <div style="margin-bottom: 15px;">
+                        <label style="color: #ff6b35; font-weight: 600; display: block; margin-bottom: 5px;">👤 Your Name (required):</label>
+                        <input type="text" id="correctionName" placeholder="Enter your name" style="width: 100%; padding: 12px; font-size: 1em; border: 2px solid #3d3d3d; border-radius: 8px; background: #2d2d2d; color: #fff; box-sizing: border-box;">
+                    </div>
+                    <p style="color: #999; font-size: 0.9em; margin-bottom: 10px;">
+                        💡 Tip: Each line will automatically become a step. Or use "Option 1:", "Option 2:" format for more control.
+                    </p>
+                    <textarea 
+                        id="correctionText" 
+                        placeholder="Example (each line becomes a step):
+Check the logs in /var/log/system.log
+Restart the service using systemctl restart service-name
+Verify the service is running
+
+Or use:
+Option 1: First step here
+Option 2: Second step here"
+                    ></textarea>
+                    <div id="correctionError" class="inline-error"></div>
+                    <button class="btn btn-submit" onclick="submitCorrection()">
+                        Submit Correction
+                    </button>
+                `;
+                
+                // Re-attach event listener for the new textarea
+                document.getElementById('correctionText').addEventListener('input', function() {
+                    hideInlineError();
+                });
+            } else {
+                document.getElementById('correctionText').value = '';
+                const nameEl = document.getElementById('correctionName');
+                if (nameEl) nameEl.value = '';
+            }
+            
+            // Note: Categories edit area removed - no longer using these elements
+            // Commenting out to prevent errors
+            /*
+            document.getElementById('categoriesEditArea').classList.remove('show');
+            const categoriesInput = document.getElementById('categoriesEditInput');
+            if (categoriesInput) {
+                categoriesInput.value = '';
+            }
+            */
+
+            // Scroll to details
+            document.getElementById('srDetails').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Categories edit functions removed - categorization fields are now read-only
+        /*
+        function showCategoriesEdit() {
+            const editArea = document.getElementById('categoriesEditArea');
+            const input = document.getElementById('categoriesEditInput');
+            
+            editArea.classList.add('show');
+            input.value = currentSrData.resolution_categories;
+            input.focus();
+        }
+
+        function submitCategoriesCorrection() {
+            const correctedCategories = document.getElementById('categoriesEditInput').value.trim();
+            
+            if (!correctedCategories) {
+                showMessage('❌ Please enter correct resolution categories', 'error');
+                return;
+            }
+
+            if (correctedCategories === currentSrData.resolution_categories) {
+                showMessage('⚠️ Categories are the same, no changes made', 'error');
+                return;
+            }
+
+            showMessage('💾 Saving categories correction...', 'success');
+
+            fetch('/submit_interface_correction', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    sr_id: currentSrData.sr_id,
+                    corrected_interface: correctedCategories,
+                    original_interface: currentSrData.resolution_categories,
+                    original_description: currentSrData.description,
+                    original_notes: currentSrData.notes || '',
+                    corrected_by: 'user'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage('✅ ' + data.message, 'success');
+                    
+                    // Update display
+                    currentSrData.resolution_categories = correctedCategories;
+                    currentSrData.is_interface_corrected = true;
+                    document.getElementById('srCategories').innerHTML = correctedCategories + '<span class="user-corrected-badge">🌟 User-Corrected</span>';
+                    document.getElementById('categoriesEditArea').classList.remove('show');
+                    
+                    setTimeout(() => {
+                        hideMessage();
+                    }, 3000);
+                } else {
+                    showMessage('❌ ' + (data.error || 'Failed to save categories correction'), 'error');
+                }
+            })
+            .catch(error => {
+                showMessage('❌ Error: ' + error.message, 'error');
+            });
+        }
+        */
+
+        function showCorrectionArea() {
+            document.getElementById('correctionArea').classList.add('show');
+            document.getElementById('correctionText').focus();
+            hideInlineError();  // Clear any previous errors
+        }
+
+        function showInlineError(message) {
+            const errorElement = document.getElementById('correctionError');
+            errorElement.textContent = message;
+            errorElement.classList.add('show');
+        }
+
+        function hideInlineError() {
+            const errorElement = document.getElementById('correctionError');
+            errorElement.textContent = '';
+            errorElement.classList.remove('show');
+        }
+
+        function markSatisfied() {
+            // Vote on the AI-generated workaround (if available) or overall
+            const workaroundType = currentSrData && currentSrData.ai_workaround ? 'ai' : 'overall';
+            
+            // Submit upvote
+            voteWorkaround(workaroundType, 'up').then(() => {
+            showMessage('✅ Thank you for your feedback!', 'success');
+            setTimeout(() => {
+                hideMessage();
+                document.getElementById('srIdInput').value = '';
+                document.getElementById('srIdInput').focus();
+                document.getElementById('srDetails').classList.remove('show');
+            }, 2000);
+            });
+        }
+
+        function submitCorrection() {
+            const correctionTextEl = document.getElementById('correctionText');
+            const correctionNameEl = document.getElementById('correctionName');
+            
+            if (!correctionTextEl || !correctionNameEl) {
+                console.error('Form elements not found');
+                return;
+            }
+            
+            const correctedWorkaround = correctionTextEl.value.trim();
+            const userName = correctionNameEl.value.trim();
+            
+            // Clear previous errors
+            hideInlineError();
+            
+            // Validate name first
+            if (!userName) {
+                showInlineError('❌ Please enter your name');
+                correctionNameEl.focus();
+                return;
+            }
+            
+            // Validate workaround
+            if (!correctedWorkaround) {
+                showInlineError('❌ Please enter a corrected workaround');
+                correctionTextEl.focus();
+                return;
+            }
+
+            // Show loading state (but not error message at top)
+            correctionTextEl.disabled = true;
+            correctionNameEl.disabled = true;
+
+            fetch('/submit_feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    sr_id: currentSrData.sr_id,
+                    is_satisfied: false,
+                    corrected_workaround: correctedWorkaround,
+                    original_description: currentSrData.description,
+                    original_notes: currentSrData.notes || '',
+                    original_workaround: currentSrData.workaround,
+                    corrected_by: userName
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Re-enable form elements if they still exist
+                const textareaEl = document.getElementById('correctionText');
+                const nameEl = document.getElementById('correctionName');
+                if (textareaEl) textareaEl.disabled = false;
+                if (nameEl) nameEl.disabled = false;
+                
+                if (data.success) {
+                    // Success - show message at top
+                    showMessage('✅ ' + data.message + ' - Refreshing SR data...', 'success');
+                    
+                    // Hide correction area
+                    const correctionArea = document.getElementById('correctionArea');
+                    if (correctionArea) {
+                        correctionArea.classList.remove('show');
+                    }
+                    
+                    // Reload the SR to show updated user-corrected workaround
+                    setTimeout(() => {
+                        hideMessage();
+                        // Re-fetch SR data to display the new user-corrected workaround
+                        const srId = currentSrData.sr_id;
+                        if (srId) {
+                            fetch('/search_sr', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ sr_id: srId })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    displaySR(data);
+                                    // Scroll to user-corrected workaround card
+                                    setTimeout(() => {
+                                        const userCard = document.getElementById('userCorrectedCard');
+                                        if (userCard) {
+                                            userCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                        }
+                                    }, 300);
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error reloading SR:', error);
+                            });
+                        }
+                    }, 2000);
+                } else {
+                    // Error - show inline next to textarea
+                    showInlineError('❌ ' + (data.error || 'Failed to save feedback'));
+                }
+            })
+            .catch(error => {
+                // Re-enable form elements if they still exist
+                const textareaEl = document.getElementById('correctionText');
+                const nameEl = document.getElementById('correctionName');
+                if (textareaEl) textareaEl.disabled = false;
+                if (nameEl) nameEl.disabled = false;
+                // Network error - show inline
+                showInlineError('❌ Error: ' + error.message);
+            });
+        }
+
+        function showMessage(text, type) {
+            const messageArea = document.getElementById('messageArea');
+            messageArea.textContent = text;
+            messageArea.className = 'message ' + type + ' show';
+        }
+
+        function hideMessage() {
+            const messageArea = document.getElementById('messageArea');
+            messageArea.classList.remove('show');
+        }
+
+        // 🆕 Mark semantic workaround as helpful
+        function markSemanticHelpful() {
+            showMessage('✅ Thank you for your feedback on the semantic workaround!', 'success');
+            
+            fetch('/submit_feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    sr_id: currentSrData.sr_id,
+                    is_satisfied: true,
+                    workaround_type: 'semantic'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Success already shown
+                } else {
+                    showMessage('❌ ' + (data.error || 'Failed to submit feedback'), 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error submitting feedback:', error);
+            });
+        }
+
+        // 🆕 Mark AI-generated workaround as helpful
+        function markAIHelpful() {
+            if (!currentSrData) {
+                showMessage('❌ No SR data available', 'error');
+                return;
+            }
+            
+            const currentVersionIndex = aiWorkaroundVersions.currentVersion;
+            const currentWorkaround = aiWorkaroundVersions.versions[currentVersionIndex];
+            const isRegeneratedVersion = currentVersionIndex > 0;
+            
+            // Mark this version as approved
+            aiWorkaroundVersions.approvedVersion = currentVersionIndex;
+            
+            if (isRegeneratedVersion) {
+                // User approved a regenerated version - UPDATE DATABASE
+                showMessage('✅ Thank you! Updating database with the new AI workaround...', 'success');
+                
+                fetch('/api/update_ai_workaround_in_db', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        sr_id: currentSrData.sr_id,
+                        ai_workaround: currentWorkaround,
+                        version_number: currentVersionIndex + 1,
+                        original_workaround: aiWorkaroundVersions.original
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update display to show it's saved (without version label)
+                        const aiGeneratedText = document.getElementById('aiGeneratedText');
+                        
+                        aiGeneratedText.innerHTML = `
+                            <div style="background: #d1fae5; padding: 8px 12px; border-radius: 6px; margin-bottom: 10px; border-left: 4px solid #10b981;">
+                                <strong>✅ Saved to Database</strong> <span style="color: #065f46;">(Regenerated workaround saved successfully)</span>
+                            </div>
+                            ${formatAIWorkaroundWithSteps(currentWorkaround, currentSrData.troubleshooting)}
+                        `;
+                        
+                        showMessage('✅ Database updated with the new AI workaround! Similar SRs will now see this version.', 'success');
+                    } else {
+                        showMessage('❌ ' + (data.error || 'Failed to update database'), 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating database:', error);
+                    showMessage('❌ Error updating database: ' + error.message, 'error');
+                });
+            } else {
+                // User approved original version - just log feedback
+            showMessage('✅ Thank you for your feedback on the AI workaround!', 'success');
+            
+            fetch('/submit_feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    sr_id: currentSrData.sr_id,
+                    is_satisfied: true,
+                    workaround_type: 'ai_generated'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                    if (!data.success) {
+                    showMessage('❌ ' + (data.error || 'Failed to submit feedback'), 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error submitting feedback:', error);
+            });
+            }
+        }
+
+        // 🆕 Generate AI workaround (when not available)
+        function generateAIWorkaround() {
+            if (!currentSrData) {
+                showMessage('❌ No SR data available', 'error');
+                return;
+            }
+
+            // Show loading
+            const aiGenerateButton = document.getElementById('aiGenerateButton');
+            const originalHTML = aiGenerateButton.innerHTML;
+            aiGenerateButton.innerHTML = '<p style="color: #666;">🔄 Generating AI workaround... This may take 15-20 minutes...</p>';
+            
+            showMessage('🤖 Generating AI workaround using RAG pipeline... Please wait...', 'success');
+
+            fetch('/api/regenerate_ai_workaround', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    sr_id: currentSrData.sr_id,
+                    description: currentSrData.description,
+                    notes: currentSrData.notes
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update display with new AI workaround
+                    const aiGeneratedText = document.getElementById('aiGeneratedText');
+                    const aiGenerateButton = document.getElementById('aiGenerateButton');
+                    const aiGeneratedFeedback = document.getElementById('aiGeneratedFeedback');
+                    
+                    aiGeneratedText.innerHTML = formatAIWorkaroundWithSteps(data.ai_workaround, data.troubleshooting || currentSrData.troubleshooting);
+                    aiGeneratedText.style.display = 'block';
+                    aiGenerateButton.style.display = 'none';
+                    aiGeneratedFeedback.style.display = 'block';
+                    
+                    // Show AI vote buttons
+                    const aiVoteButtons = document.getElementById('aiVoteButtons');
+                    if (aiVoteButtons) aiVoteButtons.style.display = 'block';
+                    
+                    // Update current data
+                    currentSrData.ai_workaround = data.ai_workaround;
+                    currentSrData.ai_workaround_available = true;
+                    if (data.troubleshooting) {
+                        currentSrData.troubleshooting = data.troubleshooting;
+                    }
+                    
+                    showMessage('✅ ' + data.message, 'success');
+                } else {
+                    aiGenerateButton.innerHTML = originalHTML;
+                    showMessage('❌ ' + (data.error || 'Failed to generate AI workaround'), 'error');
+                }
+            })
+            .catch(error => {
+                aiGenerateButton.innerHTML = originalHTML;
+                showMessage('❌ Error: ' + error.message, 'error');
+            });
+        }
+
+        // 🆕 Regenerate AI workaround (when user is not satisfied)
+        function regenerateAIWorkaround() {
+            if (!currentSrData) {
+                showMessage('❌ No SR data available', 'error');
+                return;
+            }
+
+            if (!confirm('This will generate a new AI workaround. Continue?')) {
+                return;
+            }
+
+            // Show loading
+            const aiGeneratedText = document.getElementById('aiGeneratedText');
+            const originalHTML = aiGeneratedText.innerHTML;
+            aiGeneratedText.innerHTML = '<div style="text-align: center; padding: 40px; color: #666;">🔄 Regenerating AI workaround... This may take 15-20 minutes...</div>';
+            
+            showMessage('🤖 Regenerating AI workaround using RAG pipeline... Please wait...', 'success');
+
+            fetch('/api/regenerate_ai_workaround', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    sr_id: currentSrData.sr_id,
+                    description: currentSrData.description,
+                    notes: currentSrData.notes
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // 🆕 ADD NEW VERSION TO TRACKING
+                    aiWorkaroundVersions.versions.push(data.ai_workaround);
+                    aiWorkaroundVersions.currentVersion = aiWorkaroundVersions.versions.length - 1;
+                    
+                    // Update display
+                    aiGeneratedText.innerHTML = formatAIWorkaroundWithSteps(data.ai_workaround, data.troubleshooting || currentSrData.troubleshooting);
+                    
+                    // Update current data (for display only, not saved)
+                    currentSrData.ai_workaround = data.ai_workaround;
+                    if (data.troubleshooting) {
+                        currentSrData.troubleshooting = data.troubleshooting;
+                    }
+                    
+                    // Show "This is helpful" button after regeneration
+                    const saveBtn = document.getElementById('saveRegeneratedBtn');
+                    if (saveBtn) {
+                        saveBtn.style.display = 'block';
+                    }
+                    
+                    showMessage(`✅ AI workaround regenerated! Click "This is helpful" to save it.`, 'success');
+                } else {
+                    aiGeneratedText.innerHTML = originalHTML;
+                    showMessage('❌ ' + (data.error || 'Failed to regenerate AI workaround'), 'error');
+                }
+            })
+            .catch(error => {
+                aiGeneratedText.innerHTML = originalHTML;
+                showMessage('❌ Error: ' + error.message, 'error');
+            });
+        }
+        
+        // 🆕 Save regenerated workaround to database
+        function saveRegeneratedWorkaround() {
+            if (!currentSrData || !currentSrData.sr_id) {
+                alert('Please search for a Ticket first!');
+                return;
+            }
+            
+            const saveBtn = document.getElementById('saveRegeneratedBtn');
+            if (saveBtn) {
+                saveBtn.disabled = true;
+                saveBtn.innerHTML = '⏳ Saving...';
+            }
+            
+            // Call API to save the regenerated workaround
+            fetch('/api/update_ai_workaround_in_db', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    sr_id: currentSrData.sr_id,
+                    ai_workaround: currentSrData.ai_workaround,
+                    version_number: aiWorkaroundVersions.currentVersion + 1
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage('✅ Workaround saved to database successfully!', 'success');
+                    if (saveBtn) {
+                        saveBtn.innerHTML = '✅ Saved!';
+                        saveBtn.style.background = '#059669';
+                        setTimeout(() => {
+                            saveBtn.style.display = 'none';
+                            saveBtn.innerHTML = '✅ This is helpful';
+                            saveBtn.disabled = false;
+                        }, 2000);
+                    }
+                } else {
+                    showMessage('❌ ' + (data.error || 'Failed to save workaround'), 'error');
+                    if (saveBtn) {
+                        saveBtn.disabled = false;
+                        saveBtn.innerHTML = '✅ This is helpful';
+                    }
+                }
+            })
+            .catch(error => {
+                showMessage('❌ Error: ' + error.message, 'error');
+                if (saveBtn) {
+                    saveBtn.disabled = false;
+                    saveBtn.innerHTML = '✅ This is helpful';
+                }
+            });
+        }
+        
+        // 🆕 =================================================================
+        // VOTE FUNCTIONS - Workaround Feedback System
+        // =================================================================
+        
+        /**
+         * Vote on a workaround (upvote or downvote)
+         */
+        async function voteWorkaround(workaroundType, voteType) {
+            if (!currentSrData || !currentSrData.sr_id) {
+                alert('Please search for a Ticket first!');
+                return;
+            }
+            
+            const endpoint = voteType === 'up' ? '/api/vote/upvote' : '/api/vote/downvote';
+            const sr_id = currentSrData.sr_id;
+            
+            // Get workaround text based on type
+            let workaroundText = '';
+            if (workaroundType === 'ai') {
+                workaroundText = currentSrData.ai_workaround || '';
+            } else if (workaroundType === 'original') {
+                workaroundText = currentSrData.semantic_workaround || '';
+            } else if (workaroundType === 'user_corrected') {
+                workaroundText = currentSrData.user_corrected_workaround || '';
+            }
+            
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        sr_id: sr_id,
+                        workaround_type: workaroundType,
+                        workaround_text: workaroundText
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Update vote display
+                    updateVoteDisplay(workaroundType, result.votes);
+                } else {
+                    console.error('Vote failed:', result.error);
+                }
+            } catch (error) {
+                console.error('Error voting:', error);
+            }
+        }
+        
+        /**
+         * Update vote display with new counts
+         */
+        function updateVoteDisplay(workaroundType, votes) {
+            const upvotesEl = document.getElementById(`${workaroundType}_upvotes`);
+            const downvotesEl = document.getElementById(`${workaroundType}_downvotes`);
+            const scoreEl = document.getElementById(`${workaroundType}_score`);
+            const emojiEl = document.getElementById(`${workaroundType}_score_emoji`);
+            const labelEl = document.getElementById(`${workaroundType}_score_label`);
+            
+            if (upvotesEl) upvotesEl.textContent = votes.upvotes;
+            if (downvotesEl) downvotesEl.textContent = votes.downvotes;
+            if (scoreEl) scoreEl.textContent = votes.score > 0 ? `+${votes.score}` : votes.score;
+            
+            // Update emoji and label based on score
+            if (emojiEl && labelEl) {
+                if (votes.score > 5) {
+                    emojiEl.textContent = '🔥';
+                    labelEl.textContent = '(Highly Validated)';
+                    if (labelEl.style) labelEl.style.color = '#059669';
+                } else if (votes.score > 0) {
+                    emojiEl.textContent = '✅';
+                    labelEl.textContent = '(Validated)';
+                    if (labelEl.style) labelEl.style.color = '#10b981';
+                } else if (votes.score === 0 && (votes.upvotes > 0 || votes.downvotes > 0)) {
+                    emojiEl.textContent = '⚖️';
+                    labelEl.textContent = '(Mixed)';
+                    if (labelEl.style) labelEl.style.color = '#f59e0b';
+                } else if (votes.score < 0) {
+                    emojiEl.textContent = '⚠️';
+                    labelEl.textContent = '(Problematic)';
+                    if (labelEl.style) labelEl.style.color = '#dc2626';
+                } else {
+                    emojiEl.textContent = '📊';
+                    labelEl.textContent = '(Not Rated)';
+                    if (labelEl.style) labelEl.style.color = '#666';
+                }
+            }
+        }
+        
+        /**
+         * Vote on a similar SR workaround
+         */
+        async function voteSimilarSR(srId, voteType) {
+            const endpoint = voteType === 'upvote' ? '/api/vote/upvote' : '/api/vote/downvote';
+            
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        sr_id: srId,
+                        workaround_type: 'semantic'
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    updateSimilarSRVoteDisplay(srId, result);
+                }
+            } catch (error) {
+                console.error('Error voting on similar SR:', error);
+            }
+        }
+        
+        /**
+         * Load votes for a similar SR
+         */
+        async function loadSimilarSRVotes(srId) {
+            try {
+                const response = await fetch('/api/vote/get_votes', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        sr_id: srId,
+                        workaround_type: 'semantic'
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    updateSimilarSRVoteDisplay(srId, result);
+                }
+            } catch (error) {
+                console.error('Error loading votes for similar SR:', error);
+            }
+        }
+        
+        /**
+         * Update vote display for a similar SR
+         */
+        function updateSimilarSRVoteDisplay(srId, votes) {
+            const upvotesEl = document.getElementById(`similar-upvotes-${srId}`);
+            const downvotesEl = document.getElementById(`similar-downvotes-${srId}`);
+            const scoreEl = document.getElementById(`similar-score-${srId}`);
+            const statusEl = document.getElementById(`similar-status-${srId}`);
+            
+            const upvotes = votes.upvotes || 0;
+            const downvotes = votes.downvotes || 0;
+            const score = upvotes - downvotes;
+            
+            if (upvotesEl) upvotesEl.textContent = upvotes;
+            if (downvotesEl) downvotesEl.textContent = downvotes;
+            if (scoreEl) scoreEl.textContent = score;
+            
+            if (statusEl) {
+                if (score > 0) {
+                    statusEl.textContent = '(Validated)';
+                    statusEl.style.color = '#10b981';
+                } else if (score < 0) {
+                    statusEl.textContent = '(Problematic)';
+                    statusEl.style.color = '#dc2626';
+                } else if (upvotes > 0 || downvotes > 0) {
+                    statusEl.textContent = '(Mixed)';
+                    statusEl.style.color = '#f59e0b';
+                } else {
+                    statusEl.textContent = '(Not Rated)';
+                    statusEl.style.color = '#888';
+                }
+            }
+        }
+        
+        /**
+         * Load votes for current SR when displaying workarounds
+         */
+        async function loadVotesForSR(sr_id) {
+            if (!sr_id) return;
+            
+            const workaroundTypes = ['overall', 'ai', 'original', 'user_corrected'];
+            
+            for (const type of workaroundTypes) {
+                try {
+                    const response = await fetch('/api/vote/get_votes', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            sr_id: sr_id,
+                            workaround_type: type
+                        })
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        // API returns upvotes/downvotes at top level, not nested in 'votes'
+                        const votes = {
+                            upvotes: result.upvotes || 0,
+                            downvotes: result.downvotes || 0,
+                            score: (result.upvotes || 0) - (result.downvotes || 0)
+                        };
+                        updateVoteDisplay(type, votes);
+                    }
+                } catch (error) {
+                    console.error(`Error loading votes for ${type}:`, error);
+                }
+            }
+        }
+        
+        /**
+         * Load votes for semantic workarounds (each similar SR)
+         */
+        async function loadSemanticVotes(semanticWorkaroundsText, currentSrId) {
+            if (!semanticWorkaroundsText || semanticWorkaroundsText === 'No semantic matches found') return;
+            
+            // Extract SR IDs from the text
+            const srPattern = /SR ID:\s*([^\n]+)/g;
+            let match;
+            const srIds = [];
+            
+            while ((match = srPattern.exec(semanticWorkaroundsText)) !== null) {
+                srIds.push(match[1].trim());
+            }
+            
+            // Load votes for each semantic SR
+            for (const srId of srIds) {
+                const cleanSrId = srId.replace(/[^a-zA-Z0-9]/g, '_');
+                const workaroundType = `semantic_${cleanSrId}`;
+                
+                try {
+                    const response = await fetch('/api/vote/get_votes', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            sr_id: currentSrId,  // Use current SR ID for context
+                            workaround_type: workaroundType
+                        })
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        updateVoteDisplay(workaroundType, result.votes);
+                    }
+                } catch (error) {
+                    console.error(`Error loading votes for semantic ${srId}:`, error);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Orionverse Hub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    
+    <link rel="stylesheet" href="static/css/style.css">
+
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+</head>
+<body>
+    <header class="app-header">
+        <nav class="header-nav" id="main-nav"></nav>
+        <div id="user-actions-container"></div>
+    </header>
+
+    <main class="app-content" id="app-content"></main>
+
+    <footer class="app-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Orionverse Hub</h4>
+                <p>Your centralized portal for all Orion operations</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="#home">Home</a>
+                <a href="#dashboard">Dashboard</a>
+                <a href="#search-anything">Search</a>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <a href="#training">Training</a>
+                <a href="#welcome-kit">Welcome Kit</a>
+                <a href="#links">Important Links</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p>Amdocs Orion Team</p>
+                <p>&copy; 2025 Orionverse Hub v4.0</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="auth-modal-container"></div>
+    <div id="workaround-modal-container"></div>
+    
+    <script src="static/js/abbreviations.js"></script>
+    <script src="static/js/api.js"></script>
+    <script src="static/js/auth.js"></script>
+    <script src="static/js/search.js"></script>
+    <script src="static/js/bulk_handling.js"></script>
+    <script src="static/js/main.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Example: Ensure tab event listeners are set up
+        if (typeof setupTabs === 'function') {
+          setupTabs();
+        }
+      });
+    </script>
+</body>
+</html>
+

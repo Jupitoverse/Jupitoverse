@@ -1,0 +1,21 @@
+Tier1,Tier2,Tier3,PMR Masking,Status,Workaround comment
+MidMarket Customer Issue,Environment,Access / Roles,Comcast,Customer Approval,
+MidMarket Customer Issue,Environment,Hardware/Capacity,Comcast,Customer Approval,
+MidMarket Customer Issue,Migration,Missing Requirement,Comcast,Customer Approval,
+MidMarket Customer Issue,Migration,Comcast Data issue,Comcast,Customer Approval,
+MidMarket Customer Issue,Migration,Comcast Migration Defect,Comcast,Customer Approval,
+MidMarket Customer Issue,TBD,To Discuss,Comcast,Local Site Action,
+MidMarket Customer Issue,TBD,Approval Required,Comcast,Local Site Action,Approval from Management Required
+MidMarket Customer Issue,TBD,For VDA,Comcast,Local Site Action,
+MidMarket Customer Issue,TBD,Customer Info,Comcast,Local Site Action,Need Information from User
+MidMarket Customer Issue,Interface,Interface(Any Interface/Team),Comcast,Local Site Action,
+MidMarket Customer Issue,User Education,User Error,Comcast,Local Site Action,User will do the changes
+MidMarket Customer Issue,User Education,Working as Designed,Comcast,Local Site Action,Flow is working fine 
+MidMarket Customer Issue,Design Gap,Enhancement/Needs CR,Comcast / Amdocs,Required Site Action if no PF Implementation,
+MidMarket Customer Issue,Design Gap,Design Gap,Comcast / Amdocs,Required Site Action if no PF Implementation,Code changes required
+MidMarket Customer Issue,Duplicate,Duplicate,Comcast / Amdocs / MISC,Customer Approval,
+MidMarket Customer Issue,No Action Taken,No Action Taken,Comcast / Amdocs / MISC,Customer Approval,No action taken from OSO end
+MidMarket Customer Issue,Service Request,Test Customer,MISC,Customer Approval,
+MidMarket Customer Issue,Service Request,User Service Request,MISC,Customer Approval,User asked us to apply the WA changes
+MidMarket Customer Issue,Service Request,Code Fix / Defect,Comcast,Customer Approval,Code changes required
+MidMarket Customer Issue,CoDev,Inflight Order,Comcast,Customer Approval,Code changes required

@@ -1,0 +1,200 @@
+<div class="page">
+    <h1>📊 Dashboard</h1>
+    <p class="subtitle">Real-time analytics and performance metrics</p>
+
+    <div class="dashboard-grid">
+        <!-- Stats Cards -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-icon">⚡</div>
+                <div class="stat-info">
+                    <h3 id="total-orders">-</h3>
+                    <p>Total Orders</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⏳</div>
+                <div class="stat-info">
+                    <h3 id="pending-orders">-</h3>
+                    <p>Pending Orders</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">✅</div>
+                <div class="stat-info">
+                    <h3 id="completed-orders">-</h3>
+                    <p>Completed Today</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">❌</div>
+                <div class="stat-info">
+                    <h3 id="failed-orders">-</h3>
+                    <p>Failed Orders</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Chart Section -->
+        <div class="dashboard-section">
+            <h2>📈 Order Activity (Last 7 Days)</h2>
+            <div class="chart-container">
+                <canvas id="activityChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Top Categories -->
+        <div class="dashboard-section">
+            <h2>🏆 Top Categories</h2>
+            <div id="top-categories" class="category-list">
+                <div class="category-item">
+                    <span class="category-name">Interface Issues</span>
+                    <span class="category-count">45</span>
+                </div>
+                <div class="category-item">
+                    <span class="category-name">User Education</span>
+                    <span class="category-count">32</span>
+                </div>
+                <div class="category-item">
+                    <span class="category-name">Old Orders</span>
+                    <span class="category-count">28</span>
+                </div>
+                <div class="category-item">
+                    <span class="category-name">SNP Callback</span>
+                    <span class="category-count">15</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="dashboard-section">
+            <h2>🔔 Recent Activity</h2>
+            <div id="recent-activity" class="activity-feed">
+                <div class="activity-item">
+                    <span class="activity-time">2 mins ago</span>
+                    <span class="activity-desc">Bulk Retry completed for 15 orders</span>
+                </div>
+                <div class="activity-item">
+                    <span class="activity-time">15 mins ago</span>
+                    <span class="activity-desc">New SR added: SR#123456</span>
+                </div>
+                <div class="activity-item">
+                    <span class="activity-time">1 hour ago</span>
+                    <span class="activity-desc">Dashboard refresh completed</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.dashboard-grid {
+    display: grid;
+    gap: 20px;
+}
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+.stat-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: all 0.3s;
+}
+.stat-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent-primary);
+    box-shadow: 0 8px 25px var(--shadow-color);
+}
+.stat-icon {
+    font-size: 3rem;
+}
+.stat-info h3 {
+    font-size: 2.5rem;
+    margin: 0;
+    color: var(--accent-primary);
+}
+.stat-info p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+.dashboard-section {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    padding: 24px;
+}
+.chart-container {
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    border: 1px dashed var(--border-primary);
+    border-radius: 8px;
+    margin-top: 20px;
+}
+.category-list {
+    margin-top: 20px;
+}
+.category-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    border-bottom: 1px solid var(--border-primary);
+}
+.category-name {
+    color: var(--text-primary);
+}
+.category-count {
+    background: var(--accent-gradient);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+.activity-feed {
+    margin-top: 20px;
+}
+.activity-item {
+    display: flex;
+    gap: 15px;
+    padding: 12px;
+    border-bottom: 1px solid var(--border-primary);
+}
+.activity-time {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    min-width: 100px;
+}
+.activity-desc {
+    color: var(--text-primary);
+}
+</style>
+
+<script>
+document.addEventListener('pageLoaded', function(e) {
+    if (e.detail.pageId === 'dashboard') {
+        loadDashboardData();
+    }
+});
+
+function loadDashboardData() {
+    // Simulate loading data
+    document.getElementById('total-orders').textContent = '1,234';
+    document.getElementById('pending-orders').textContent = '89';
+    document.getElementById('completed-orders').textContent = '156';
+    document.getElementById('failed-orders').textContent = '23';
+}
+</script>
+
+
+

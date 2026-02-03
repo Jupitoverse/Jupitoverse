@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your SRs - Ticket Analyser</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #1a1a1a; min-height: 100vh; padding-top: 70px; color: #ffffff; }
+        .container { max-width: 90%; margin: 0 auto; padding: 20px; }
+        
+        /* ========== NAVBAR STYLES ========== */
+        .navbar { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: #2d2d2d; border-bottom: 2px solid #ff6b35; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; z-index: 1000; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); }
+        .nav-brand { display: flex; align-items: center; gap: 10px; }
+        .nav-brand-icon { font-size: 1.5em; }
+        .nav-brand-text { font-size: 1.3em; font-weight: 700; background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .nav-links { display: flex; align-items: center; gap: 5px; }
+        .nav-link { color: #cccccc; text-decoration: none; padding: 10px 18px; border-radius: 8px; font-weight: 500; font-size: 0.95em; transition: all 0.3s; display: flex; align-items: center; gap: 6px; }
+        .nav-link:hover { color: #ffffff; background: #3d3d3d; }
+        .nav-link.active { color: #ff6b35; background: rgba(255, 107, 53, 0.15); border-bottom: 2px solid #ff6b35; }
+        .nav-actions { display: flex; align-items: center; gap: 15px; }
+        .nav-logout { background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%); color: white; text-decoration: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 0.9em; transition: all 0.3s; }
+        .nav-logout:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4); }
+        
+        .header { background: #2d2d2d; padding: 25px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); margin-bottom: 25px; border: 2px solid #ff6b35; }
+        .header h1 { font-size: 2em; color: #ffffff; margin-bottom: 8px; }
+        .header p { color: #cccccc; font-size: 0.95em; }
+        .user-info { background: #1a1a1a; padding: 10px 15px; border-radius: 8px; margin-top: 10px; display: inline-block; }
+        .user-info span { color: #4ade80; font-weight: 600; }
+        
+        .stats-overview { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .stat-card { background: #2d2d2d; padding: 20px; border-radius: 10px; border: 2px solid #3d3d3d; text-align: center; transition: all 0.3s; }
+        .stat-card:hover { border-color: #ff6b35; transform: translateY(-3px); }
+        .stat-value { font-size: 2em; font-weight: 700; background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .stat-label { color: #cccccc; font-size: 0.85em; margin-top: 5px; }
+        
+        .date-group { background: #2d2d2d; border-radius: 12px; margin-bottom: 20px; overflow: hidden; border: 2px solid #3d3d3d; }
+        .date-header { background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%); padding: 12px 20px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+        .date-count { background: rgba(255, 255, 255, 0.2); padding: 4px 12px; border-radius: 20px; font-size: 0.85em; }
+        
+        .sr-table { width: 100%; border-collapse: collapse; }
+        .sr-table th { text-align: left; padding: 12px 15px; background: #1a1a1a; color: #999; font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px; }
+        .sr-table td { padding: 12px 15px; border-bottom: 1px solid #3d3d3d; font-size: 0.9em; }
+        .sr-table tr:last-child td { border-bottom: none; }
+        .sr-table tr:hover { background: #3d3d3d; }
+        
+        .sr-id { color: #ff6b35; font-weight: 600; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+        .sr-id:hover { color: #ff006e; text-decoration: underline; }
+        
+        .priority-badge { padding: 4px 10px; border-radius: 15px; font-size: 0.75em; font-weight: 600; text-transform: uppercase; }
+        .priority-P1, .priority-1 { background: #ef4444; color: white; }
+        .priority-P2, .priority-2 { background: #f97316; color: white; }
+        .priority-P3, .priority-3 { background: #eab308; color: #000; }
+        .priority-P4, .priority-4 { background: #22c55e; color: white; }
+        
+        .status-badge { padding: 4px 10px; border-radius: 15px; font-size: 0.75em; font-weight: 500; }
+        .status-open { background: #3b82f6; color: white; }
+        .status-resolved { background: #22c55e; color: white; }
+        .status-closed { background: #6b7280; color: white; }
+        .status-pending { background: #f59e0b; color: #000; }
+        
+        .workaround-icons { display: flex; gap: 8px; }
+        .workaround-icon { padding: 4px 8px; border-radius: 6px; font-size: 0.75em; }
+        .workaround-icon.ai { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .workaround-icon.user { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
+        
+        /* Aging SR styles */
+        .aging-badge { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; padding: 4px 10px; border-radius: 15px; font-size: 0.7em; font-weight: 600; animation: pulse 2s infinite; display: inline-flex; align-items: center; gap: 4px; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        .sr-table tr.aging-row { background: rgba(239, 68, 68, 0.1); border-left: 3px solid #ef4444; }
+        .sr-table tr.aging-row:hover { background: rgba(239, 68, 68, 0.2); }
+        .age-display { font-size: 0.8em; color: #999; }
+        .age-display.aging { color: #ef4444; font-weight: 600; }
+        .stat-card.aging { border-color: #ef4444; }
+        .stat-card.aging .stat-value { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .loading { text-align: center; padding: 60px; color: #999; }
+        .loading-spinner { display: inline-block; width: 40px; height: 40px; border: 4px solid #3d3d3d; border-top-color: #ff6b35; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .empty-state { text-align: center; padding: 60px; color: #999; }
+        .empty-state-icon { font-size: 4em; margin-bottom: 15px; }
+        
+        .message { padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; display: none; }
+        .message.show { display: block; }
+        .message.success { background: rgba(34, 197, 94, 0.2); border: 1px solid #22c55e; color: #4ade80; }
+        .message.error { background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #f87171; }
+        
+        /* Mark Done button */
+        .btn-mark-done { background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.75em; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .btn-mark-done:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4); }
+        .btn-mark-done:disabled { background: #3d3d3d; color: #666; cursor: not-allowed; transform: none; box-shadow: none; }
+        .status-done, .status-resolved { background: #22c55e; color: white; }
+        
+        @media (max-width: 768px) {
+            .container { max-width: 100%; padding: 10px; }
+            .sr-table { font-size: 0.8em; }
+            .sr-table th, .sr-table td { padding: 8px; }
+            .stats-overview { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="nav-brand-icon">🎫</span>
+            <span class="nav-brand-text">Ticket Analyser</span>
+        </div>
+        <div class="nav-links">
+            <a href="/user" class="nav-link">🔍 <span>Search SR</span></a>
+            <a href="/user/my_srs" class="nav-link active">📋 <span>Your SRs</span></a>
+        </div>
+        <div class="nav-actions">
+            <a href="/user/logout" class="nav-logout">🚪 Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📋 Your Assigned SRs</h1>
+            <p>View all Service Requests assigned to you, organized by date</p>
+            <div class="user-info">
+                👤 Logged in as: <span id="loggedInUser">{{ logged_in_user }}</span>
+                {% if logged_in_email %}<span style="color: #999;"> ({{ logged_in_email }})</span>{% endif %}
+            </div>
+        </div>
+        
+        <!-- Message Display -->
+        <div class="message" id="messageBox"></div>
+        
+        <!-- Stats Overview -->
+        <div class="stats-overview">
+            <div class="stat-card">
+                <div class="stat-value" id="totalSRs">-</div>
+                <div class="stat-label">Total Assigned SRs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="openSRs">-</div>
+                <div class="stat-label">Open SRs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="highPriority">-</div>
+                <div class="stat-label">P1/P2 Priority</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="withWorkaround">-</div>
+                <div class="stat-label">With AI Workaround</div>
+            </div>
+            <div class="stat-card aging" id="agingCard" style="display: none;">
+                <div class="stat-value" id="agingSRs">0</div>
+                <div class="stat-label">⚠️ Aging SRs (&gt;3 days)</div>
+            </div>
+        </div>
+        
+        <!-- SR List Container -->
+        <div id="srListContainer">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <p>Loading your assigned SRs...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load SRs on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMySRs();
+        });
+        
+        function showMessage(text, type) {
+            const msgBox = document.getElementById('messageBox');
+            msgBox.textContent = text;
+            msgBox.className = `message show ${type}`;
+            setTimeout(() => { msgBox.classList.remove('show'); }, 5000);
+        }
+        
+        function loadMySRs() {
+            fetch('/api/my_srs')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        renderSRs(data);
+                        updateStats(data);
+                    } else {
+                        showMessage('❌ ' + data.error, 'error');
+                        document.getElementById('srListContainer').innerHTML = `
+                            <div class="empty-state">
+                                <div class="empty-state-icon">⚠️</div>
+                                <p>Error loading SRs: ${data.error}</p>
+                            </div>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    showMessage('❌ Error: ' + error.message, 'error');
+                    document.getElementById('srListContainer').innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">❌</div>
+                            <p>Failed to load SRs. Please try again.</p>
+                        </div>
+                    `;
+                });
+        }
+        
+        function updateStats(data) {
+            const srs = data.srs || [];
+            document.getElementById('totalSRs').textContent = srs.length;
+            
+            const openSRs = srs.filter(sr => 
+                !['resolved', 'closed', 'completed', 'done'].includes((sr.status || '').toLowerCase())
+            ).length;
+            document.getElementById('openSRs').textContent = openSRs;
+            
+            const highPriority = srs.filter(sr => 
+                ['P1', 'P2', '1', '2'].includes(sr.priority)
+            ).length;
+            document.getElementById('highPriority').textContent = highPriority;
+            
+            const withWorkaround = srs.filter(sr => sr.has_ai_workaround).length;
+            document.getElementById('withWorkaround').textContent = withWorkaround;
+            
+            // Count aging SRs
+            const agingSRs = srs.filter(sr => sr.is_aging).length;
+            document.getElementById('agingSRs').textContent = agingSRs;
+            if (agingSRs > 0) {
+                document.getElementById('agingCard').style.display = 'block';
+            }
+        }
+        
+        function renderSRs(data) {
+            const container = document.getElementById('srListContainer');
+            const grouped = data.grouped_by_date || {};
+            const dates = Object.keys(grouped).sort().reverse();
+            
+            if (dates.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <p>No SRs assigned to you yet.</p>
+                        <p style="font-size: 0.85em; color: #666; margin-top: 10px;">
+                            SRs will appear here when they are assigned to "${data.user}"
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            dates.forEach(date => {
+                const srs = grouped[date];
+                const displayDate = formatDate(date);
+                
+                html += `
+                    <div class="date-group">
+                        <div class="date-header">
+                            <span>📅 ${displayDate}</span>
+                            <span class="date-count">${srs.length} SR${srs.length > 1 ? 's' : ''}</span>
+                        </div>
+                        <table class="sr-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 9%;">SR ID</th>
+                                    <th style="width: 22%;">Description</th>
+                                    <th style="width: 6%;">Priority</th>
+                                    <th style="width: 5%;">Age</th>
+                                    <th style="width: 10%;">Category</th>
+                                    <th style="width: 7%;">Status</th>
+                                    <th style="width: 9%;">Application</th>
+                                    <th style="width: 10%;">Workaround</th>
+                                    <th style="width: 8%;">Aging</th>
+                                    <th style="width: 8%;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                srs.forEach(sr => {
+                    const priorityClass = 'priority-' + (sr.priority || 'P3');
+                    const statusClass = 'status-' + (sr.status || 'open').toLowerCase().replace(/\s+/g, '-');
+                    const rowClass = sr.is_aging ? 'aging-row' : '';
+                    const ageClass = sr.is_aging ? 'aging' : '';
+                    const ageDays = sr.business_days_age || 0;
+                    const ageDisplay = ageDays === 0 ? '0 days' : ageDays === 1 ? '1 day' : `${ageDays} days`;
+                    
+                    // Truncate category for display
+                    const categoryDisplay = sr.categorization_tier3 || sr.category || '-';
+                    const categoryShort = categoryDisplay.length > 20 ? categoryDisplay.substring(0, 20) + '...' : categoryDisplay;
+                    
+                    html += `
+                        <tr class="${rowClass}">
+                            <td>
+                                <a href="/user?sr_id=${sr.sr_id}" class="sr-id" title="Click to view details">${sr.sr_id}</a>
+                            </td>
+                            <td style="color: #ccc;">${escapeHtml(sr.description || 'No description')}</td>
+                            <td><span class="priority-badge ${priorityClass}">${sr.priority || 'P3'}</span></td>
+                            <td><span class="age-display ${ageClass}">${ageDisplay}</span></td>
+                            <td style="color: #888; font-size: 0.8em;" title="${escapeHtml(categoryDisplay)}">${escapeHtml(categoryShort)}</td>
+                            <td><span class="status-badge ${statusClass}">${sr.status || 'Open'}</span></td>
+                            <td style="color: #999;">${sr.application || '-'}</td>
+                            <td>
+                                <div class="workaround-icons">
+                                    ${sr.has_ai_workaround ? '<span class="workaround-icon ai">🤖 AI</span>' : ''}
+                                    ${sr.has_user_correction ? '<span class="workaround-icon user">✅ User</span>' : ''}
+                                    ${!sr.has_ai_workaround && !sr.has_user_correction ? '<span style="color: #666;">-</span>' : ''}
+                                </div>
+                            </td>
+                            <td>
+                                ${sr.is_aging ? '<span class="aging-badge" title="' + escapeHtml(sr.aging_reason || '') + '">⚠️ AGING</span>' : '<span style="color: #4ade80;">✓ OK</span>'}
+                            </td>
+                            <td>
+                                ${['done', 'resolved', 'closed', 'completed'].includes((sr.status || '').toLowerCase())
+                                    ? '<span style="color: #4ade80; font-weight: bold;">✓ Resolved</span>' 
+                                    : '<button class="btn-mark-done" onclick="markSRDone(\'' + sr.sr_id + '\', this)" title="Mark this SR as Resolved">Resolve</button>'}
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                html += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        function formatDate(dateStr) {
+            if (!dateStr || dateStr === 'Unknown') return 'Unknown Date';
+            try {
+                const date = new Date(dateStr);
+                const today = new Date();
+                const yesterday = new Date(today);
+                yesterday.setDate(yesterday.getDate() - 1);
+                
+                if (date.toDateString() === today.toDateString()) {
+                    return 'Today';
+                } else if (date.toDateString() === yesterday.toDateString()) {
+                    return 'Yesterday';
+                } else {
+                    return date.toLocaleDateString('en-US', { 
+                        weekday: 'short', 
+                        year: 'numeric', 
+                        month: 'short', 
+                        day: 'numeric' 
+                    });
+                }
+            } catch (e) {
+                return dateStr;
+            }
+        }
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        async function markSRDone(srId, buttonElement) {
+            if (!confirm(`Mark SR ${srId} as Resolved?\n\nThis will update your open SR count and team load.`)) {
+                return;
+            }
+            
+            // Disable button and show loading
+            buttonElement.disabled = true;
+            buttonElement.textContent = 'Updating...';
+            
+            try {
+                const response = await fetch('/api/mark_sr_done', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sr_id: srId })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Replace button with Resolved status
+                    const td = buttonElement.parentElement;
+                    td.innerHTML = '<span style="color: #4ade80; font-weight: bold;">✓ Resolved</span>';
+                    
+                    // Update the status badge in the row
+                    const row = td.parentElement;
+                    const statusCell = row.querySelector('.status-badge');
+                    if (statusCell) {
+                        statusCell.className = 'status-badge status-resolved';
+                        statusCell.textContent = 'Resolved';
+                    }
+                    
+                    // Remove aging styling if present
+                    row.classList.remove('aging-row');
+                    
+                    // Update stats
+                    const openSRsEl = document.getElementById('openSRs');
+                    if (openSRsEl) {
+                        const current = parseInt(openSRsEl.textContent) || 0;
+                        openSRsEl.textContent = Math.max(0, current - 1);
+                    }
+                    
+                    showMessage(`SR ${srId} marked as Resolved!`, 'success');
+                } else {
+                    buttonElement.disabled = false;
+                    buttonElement.textContent = 'Mark Done';
+                    showMessage(data.error || 'Failed to mark SR as done', 'error');
+                }
+            } catch (error) {
+                buttonElement.disabled = false;
+                buttonElement.textContent = 'Mark Done';
+                showMessage('Error: ' + error.message, 'error');
+            }
+        }
+        
+        function showMessage(msg, type) {
+            const msgBox = document.getElementById('messageBox');
+            msgBox.textContent = msg;
+            msgBox.className = 'message show ' + type;
+            setTimeout(() => { msgBox.classList.remove('show'); }, 4000);
+        }
+    </script>
+</body>
+</html>

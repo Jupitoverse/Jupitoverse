@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove SR - Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #1a1a1a;
+            min-height: 100vh;
+            padding-top: 70px;
+        }
+
+        /* ========== NAVBAR STYLES ========== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: #2d2d2d;
+            border-bottom: 2px solid #ff6b35;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .nav-brand-icon { font-size: 1.5em; }
+        .nav-brand-text {
+            font-size: 1.3em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .nav-link {
+            color: #cccccc;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.95em;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-link:hover { color: #ffffff; background: #3d3d3d; }
+        .nav-link.active {
+            color: #ff6b35;
+            background: rgba(255, 107, 53, 0.15);
+            border-bottom: 2px solid #ff6b35;
+        }
+        .nav-actions { display: flex; align-items: center; gap: 15px; }
+        .nav-logout {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%);
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+        .nav-logout:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4); }
+
+        .container {
+            max-width: 90%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: #2d2d2d;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+            text-align: center;
+            border: 2px solid #e74c3c;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #cccccc;
+            font-size: 1em;
+        }
+
+        .date-filter-section {
+            background: #2d2d2d;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+            border: 2px solid #3498db;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .date-filter-section label {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .date-input {
+            padding: 12px 20px;
+            font-size: 1em;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            background: #3d3d3d;
+            color: #ffffff;
+            cursor: pointer;
+        }
+
+        .date-input:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-size: 1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.5);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.5);
+        }
+
+        .btn-danger:disabled {
+            background: #555;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #2d2d2d;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #444;
+        }
+
+        .stats-info {
+            color: #cccccc;
+            font-size: 1em;
+        }
+
+        .stats-info strong {
+            color: #3498db;
+        }
+
+        .select-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 0.9em;
+        }
+
+        .sr-table-container {
+            background: #2d2d2d;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            border: 2px solid #444;
+        }
+
+        .sr-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .sr-table th {
+            background: #3d3d3d;
+            color: #ff6b35;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #ff6b35;
+        }
+
+        .sr-table td {
+            padding: 15px;
+            color: #cccccc;
+            border-bottom: 1px solid #444;
+        }
+
+        .sr-table tbody tr:hover {
+            background: #3d3d3d;
+        }
+
+        .sr-table tbody tr.selected {
+            background: rgba(231, 76, 60, 0.2);
+        }
+
+        .sr-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #e74c3c;
+        }
+
+        .sr-id-link {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .sr-id-link:hover {
+            text-decoration: underline;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .badge-user {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+        }
+
+        .badge-ai {
+            background: rgba(52, 152, 219, 0.2);
+            color: #3498db;
+        }
+
+        .badge-priority-p1 {
+            background: rgba(231, 76, 60, 0.3);
+            color: #e74c3c;
+        }
+
+        .badge-priority-p2 {
+            background: rgba(241, 196, 15, 0.3);
+            color: #f1c40f;
+        }
+
+        .badge-priority-p3 {
+            background: rgba(52, 152, 219, 0.3);
+            color: #3498db;
+        }
+
+        .badge-priority-p4 {
+            background: rgba(149, 165, 166, 0.3);
+            color: #95a5a6;
+        }
+
+        .btn-delete-single {
+            background: transparent;
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.3s;
+        }
+
+        .btn-delete-single:hover {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888;
+        }
+
+        .no-data-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #3498db;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 4px solid #3d3d3d;
+            border-top-color: #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .message {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .message.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.success {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+            border: 1px solid #2ecc71;
+        }
+
+        .message.error {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+        }
+
+        .delete-confirmation-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .delete-confirmation-modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #2d2d2d;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            border: 2px solid #e74c3c;
+            text-align: center;
+        }
+
+        .modal-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            color: #ffffff;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .modal-text {
+            color: #cccccc;
+            margin-bottom: 25px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .description-cell {
+            max-width: 400px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .navbar { padding: 0 15px; }
+            .nav-brand-text { display: none; }
+            .nav-link { padding: 8px 12px; font-size: 0.85em; }
+            .nav-link span { display: none; }
+            .date-filter-section { flex-direction: column; align-items: stretch; }
+            .container { max-width: 100%; padding: 10px; }
+            .sr-table { font-size: 0.85em; }
+            .sr-table th, .sr-table td { padding: 10px 8px; }
+            .description-cell { max-width: 150px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="nav-brand-icon">🎫</span>
+            <span class="nav-brand-text">Ticket Analyser</span>
+        </div>
+        <div class="nav-links">
+            <a href="/" class="nav-link">🏠 <span>Home</span></a>
+            <a href="/user" class="nav-link">👤 <span>User</span></a>
+            <a href="/skill" class="nav-link">👥 <span>Team</span></a>
+            <a href="/admin" class="nav-link">⚙️ <span>Admin</span></a>
+            <a href="/admin/remove_sr" class="nav-link active">🗑️ <span>Tickets</span></a>
+        </div>
+        <div class="nav-actions">
+            <a href="/admin/logout" class="nav-logout" onclick="return confirm('Are you sure you want to logout?')">🚪 Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🗑️ Remove Tickets</h1>
+            <p>View and remove Tickets uploaded on a specific date</p>
+        </div>
+
+        <!-- Message Area -->
+        <div id="messageArea" class="message"></div>
+
+        <!-- Date Filter Section -->
+        <div class="date-filter-section">
+            <label for="dateFilter">📅 Select Date:</label>
+            <input type="date" id="dateFilter" class="date-input" onchange="loadSRsByDate()">
+            <button class="btn btn-primary" onclick="loadSRsByDate()">
+                🔍 Load Tickets
+            </button>
+            <button class="btn btn-primary" onclick="setToday()" style="background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);">
+                📆 Today
+            </button>
+            <button class="btn btn-primary" onclick="loadAllSRs()" style="background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);">
+                📋 Show All
+            </button>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stats-info">
+                📊 Found <strong id="srCount">0</strong> Tickets for <strong id="selectedDate">-</strong>
+            </div>
+            <div class="select-actions">
+                <button class="btn btn-sm btn-primary" onclick="selectAll()">☑️ Select All</button>
+                <button class="btn btn-sm btn-primary" onclick="deselectAll()" style="background: #555;">☐ Deselect All</button>
+                <button class="btn btn-sm btn-danger" id="deleteSelectedBtn" onclick="deleteSelected()" disabled>
+                    🗑️ Delete Selected (<span id="selectedCount">0</span>)
+                </button>
+            </div>
+        </div>
+
+        <!-- SR Table -->
+        <div class="sr-table-container">
+            <div id="loadingArea" class="loading" style="display: none;">
+                <div class="loading-spinner"></div>
+                <p style="margin-top: 15px;">Loading Tickets...</p>
+            </div>
+            
+            <div id="noDataArea" class="no-data" style="display: none;">
+                <div class="no-data-icon">📭</div>
+                <h3>No Tickets Found</h3>
+                <p>No Tickets were uploaded or created on the selected date.</p>
+            </div>
+
+            <table class="sr-table" id="srTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th style="width: 50px;">
+                            <input type="checkbox" class="sr-checkbox" id="selectAllCheckbox" onchange="toggleSelectAll()">
+                        </th>
+                        <th>Ticket ID</th>
+                        <th>Priority</th>
+                        <th>Assigned To</th>
+                        <th style="width: 100px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="srTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="delete-confirmation-modal">
+        <div class="modal-content">
+            <div class="modal-icon">⚠️</div>
+            <h2 class="modal-title">Confirm Deletion</h2>
+            <p class="modal-text" id="modalText">Are you sure you want to delete the selected Tickets? This action cannot be undone.</p>
+            <div class="modal-actions">
+                <button class="btn" style="background: #555;" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-danger" id="confirmDeleteBtn" onclick="confirmDelete()">🗑️ Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSRs = [];
+        let selectedSRs = new Set();
+        let deleteAction = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setToday();
+        });
+
+        function setToday() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('dateFilter').value = today;
+            loadSRsByDate();
+        }
+
+        function loadSRsByDate() {
+            const date = document.getElementById('dateFilter').value;
+            if (!date) {
+                showMessage('Please select a date', 'error');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('loadingArea').style.display = 'block';
+            document.getElementById('noDataArea').style.display = 'none';
+            document.getElementById('srTable').style.display = 'none';
+
+            // Format date for display
+            const displayDate = new Date(date + 'T00:00:00').toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            document.getElementById('selectedDate').textContent = displayDate;
+
+            fetch(`/admin/get_srs_by_date?date=${date}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('loadingArea').style.display = 'none';
+
+                    if (data.success) {
+                        currentSRs = data.srs;
+                        document.getElementById('srCount').textContent = data.count;
+                        selectedSRs.clear();
+                        updateSelectedCount();
+
+                        if (data.count > 0) {
+                            renderTable(data.srs);
+                            document.getElementById('srTable').style.display = 'table';
+                        } else {
+                            document.getElementById('noDataArea').style.display = 'block';
+                        }
+                    } else {
+                        showMessage(data.error || 'Failed to load SRs', 'error');
+                        document.getElementById('noDataArea').style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('loadingArea').style.display = 'none';
+                    document.getElementById('noDataArea').style.display = 'block';
+                    showMessage('Error loading SRs: ' + error.message, 'error');
+                });
+        }
+
+        function loadAllSRs() {
+            // Show loading
+            document.getElementById('loadingArea').style.display = 'block';
+            document.getElementById('noDataArea').style.display = 'none';
+            document.getElementById('srTable').style.display = 'none';
+            document.getElementById('selectedDate').textContent = 'All Dates (Vectorstore)';
+
+            fetch(`/admin/get_srs_by_date?show_all=true`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('loadingArea').style.display = 'none';
+
+                    if (data.success) {
+                        currentSRs = data.srs;
+                        document.getElementById('srCount').textContent = data.count;
+                        selectedSRs.clear();
+                        updateSelectedCount();
+
+                        if (data.count > 0) {
+                            renderTable(data.srs);
+                            document.getElementById('srTable').style.display = 'table';
+                        } else {
+                            document.getElementById('noDataArea').style.display = 'block';
+                        }
+                    } else {
+                        showMessage(data.error || 'Failed to load SRs', 'error');
+                        document.getElementById('noDataArea').style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('loadingArea').style.display = 'none';
+                    document.getElementById('noDataArea').style.display = 'block';
+                    showMessage('Error loading SRs: ' + error.message, 'error');
+                });
+        }
+
+        function renderTable(srs) {
+            const tbody = document.getElementById('srTableBody');
+            tbody.innerHTML = '';
+
+            srs.forEach(sr => {
+                const row = document.createElement('tr');
+                row.id = `row-${sr.sr_id}`;
+                
+                const priorityClass = `badge-priority-${sr.priority.toLowerCase()}`;
+                
+                let workaroundBadges = '';
+                if (sr.has_user_feedback) {
+                    workaroundBadges += '<span class="badge badge-user">👤 User</span> ';
+                }
+                if (sr.has_ai_workaround) {
+                    workaroundBadges += '<span class="badge badge-ai">🤖 AI</span>';
+                }
+                if (!workaroundBadges) {
+                    workaroundBadges = '<span style="color: #666;">-</span>';
+                }
+
+                row.innerHTML = `
+                    <td>
+                        <input type="checkbox" class="sr-checkbox" 
+                               data-sr-id="${sr.sr_id}" 
+                               onchange="toggleSelection('${sr.sr_id}')">
+                    </td>
+                    <td>
+                        <a href="#" class="sr-id-link" onclick="viewSR('${sr.sr_id}'); return false;">
+                            ${sr.sr_id}
+                        </a>
+                    </td>
+                    <td><span class="badge ${priorityClass}">${sr.priority}</span></td>
+                    <td>${escapeHtml(sr.assigned_to)}</td>
+                    <td>
+                        <button class="btn-delete-single" onclick="deleteSingle('${sr.sr_id}')">
+                            🗑️ Delete
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text || '';
+            return div.innerHTML;
+        }
+
+        function toggleSelection(srId) {
+            if (selectedSRs.has(srId)) {
+                selectedSRs.delete(srId);
+                document.getElementById(`row-${srId}`).classList.remove('selected');
+            } else {
+                selectedSRs.add(srId);
+                document.getElementById(`row-${srId}`).classList.add('selected');
+            }
+            updateSelectedCount();
+        }
+
+        function selectAll() {
+            currentSRs.forEach(sr => {
+                selectedSRs.add(sr.sr_id);
+                const checkbox = document.querySelector(`input[data-sr-id="${sr.sr_id}"]`);
+                if (checkbox) checkbox.checked = true;
+                document.getElementById(`row-${sr.sr_id}`)?.classList.add('selected');
+            });
+            document.getElementById('selectAllCheckbox').checked = true;
+            updateSelectedCount();
+        }
+
+        function deselectAll() {
+            selectedSRs.clear();
+            document.querySelectorAll('.sr-checkbox').forEach(cb => cb.checked = false);
+            document.querySelectorAll('#srTableBody tr').forEach(row => row.classList.remove('selected'));
+            updateSelectedCount();
+        }
+
+        function toggleSelectAll() {
+            const selectAllCb = document.getElementById('selectAllCheckbox');
+            if (selectAllCb.checked) {
+                selectAll();
+            } else {
+                deselectAll();
+            }
+        }
+
+        function updateSelectedCount() {
+            const count = selectedSRs.size;
+            document.getElementById('selectedCount').textContent = count;
+            document.getElementById('deleteSelectedBtn').disabled = count === 0;
+        }
+
+        function deleteSingle(srId) {
+            deleteAction = { type: 'single', srId: srId };
+            document.getElementById('modalText').textContent = 
+                `Are you sure you want to delete SR "${srId}"? This action cannot be undone.`;
+            document.getElementById('deleteModal').classList.add('show');
+        }
+
+        function deleteSelected() {
+            if (selectedSRs.size === 0) return;
+            
+            deleteAction = { type: 'multiple', srIds: Array.from(selectedSRs) };
+            document.getElementById('modalText').textContent = 
+                `Are you sure you want to delete ${selectedSRs.size} selected SRs? This action cannot be undone.`;
+            document.getElementById('deleteModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('deleteModal').classList.remove('show');
+            deleteAction = null;
+        }
+
+        function confirmDelete() {
+            if (!deleteAction) return;
+
+            document.getElementById('confirmDeleteBtn').disabled = true;
+            document.getElementById('confirmDeleteBtn').textContent = '⏳ Deleting...';
+
+            if (deleteAction.type === 'single') {
+                fetch('/admin/delete_sr', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sr_id: deleteAction.srId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    closeModal();
+                    resetDeleteButton();
+                    
+                    if (data.success) {
+                        showMessage(`✅ ${data.message}`, 'success');
+                        loadSRsByDate(); // Reload the list
+                    } else {
+                        showMessage(`❌ ${data.error}`, 'error');
+                    }
+                })
+                .catch(error => {
+                    closeModal();
+                    resetDeleteButton();
+                    showMessage(`❌ Error: ${error.message}`, 'error');
+                });
+            } else if (deleteAction.type === 'multiple') {
+                fetch('/admin/delete_multiple_srs', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sr_ids: deleteAction.srIds })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    closeModal();
+                    resetDeleteButton();
+                    
+                    if (data.success) {
+                        let message = `✅ ${data.message}`;
+                        if (data.not_found && data.not_found.length > 0) {
+                            message += ` (${data.not_found.length} not found in vectorstore)`;
+                        }
+                        showMessage(message, 'success');
+                        loadSRsByDate(); // Reload the list
+                    } else {
+                        showMessage(`❌ ${data.error}`, 'error');
+                    }
+                })
+                .catch(error => {
+                    closeModal();
+                    resetDeleteButton();
+                    showMessage(`❌ Error: ${error.message}`, 'error');
+                });
+            }
+        }
+
+        function resetDeleteButton() {
+            document.getElementById('confirmDeleteBtn').disabled = false;
+            document.getElementById('confirmDeleteBtn').textContent = '🗑️ Delete';
+        }
+
+        function viewSR(srId) {
+            // Navigate to user portal with SR ID (same tab)
+            window.location.href = `/user?sr_id=${srId}`;
+        }
+
+        function showMessage(text, type) {
+            const messageArea = document.getElementById('messageArea');
+            messageArea.textContent = text;
+            messageArea.className = `message ${type} show`;
+            
+            setTimeout(() => {
+                messageArea.classList.remove('show');
+            }, 5000);
+        }
+
+    </script>
+</body>
+</html>
+

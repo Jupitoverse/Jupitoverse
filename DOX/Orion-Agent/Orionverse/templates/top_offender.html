@@ -1,0 +1,322 @@
+<div class="page">
+    <h1>🏆 Top Offender Analysis</h1>
+    <p class="subtitle">Identify recurring issues and problem areas</p>
+
+    <!-- Date Range Filter -->
+    <div class="sa-search-engine">
+        <div class="sa-filter-group">
+            <label for="date-range">Date Range:</label>
+            <select id="date-range" class="filter-input">
+                <option value="7">Last 7 Days</option>
+                <option value="30" selected>Last 30 Days</option>
+                <option value="90">Last 90 Days</option>
+                <option value="custom">Custom Range</option>
+            </select>
+        </div>
+        <div class="sa-filter-group">
+            <label for="category-select">Category:</label>
+            <select id="category-select" class="filter-input">
+                <option value="">All Categories</option>
+                <option value="interface">Interface</option>
+                <option value="user-education">User Education</option>
+                <option value="old-order">Old Order</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <button class="primary-btn" onclick="loadOffenderData()">
+            🔍 Analyze
+        </button>
+        <button class="secondary-btn" onclick="exportOffenderReport()">
+            📊 Export Report
+        </button>
+    </div>
+
+    <!-- Tabs for Different Views -->
+    <div class="offender-tabs" style="margin-top: 30px;">
+        <button class="tab-btn active" onclick="switchOffenderTab('customers')">👥 Top Customers</button>
+        <button class="tab-btn" onclick="switchOffenderTab('sites')">📍 Top Sites</button>
+        <button class="tab-btn" onclick="switchOffenderTab('errors')">❌ Top Errors</button>
+        <button class="tab-btn" onclick="switchOffenderTab('services')">⚙️ Top Services</button>
+    </div>
+
+    <!-- Top Customers Tab -->
+    <div id="customers-tab" class="offender-content active">
+        <h2>Top Customers by Issue Count</h2>
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Customer ID</th>
+                        <th>Issue Count</th>
+                        <th>Primary Category</th>
+                        <th>Last Issue Date</th>
+                        <th>Trend</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="customers-tbody">
+                    <tr><td colspan="7" class="no-data">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Top Sites Tab -->
+    <div id="sites-tab" class="offender-content">
+        <h2>Top Sites by Issue Count</h2>
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Site ID</th>
+                        <th>Issue Count</th>
+                        <th>Primary Category</th>
+                        <th>Last Issue Date</th>
+                        <th>Trend</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="sites-tbody">
+                    <tr><td colspan="7" class="no-data">Select Analyze to load data</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Top Errors Tab -->
+    <div id="errors-tab" class="offender-content">
+        <h2>Top Error Types</h2>
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Error Type</th>
+                        <th>Occurrences</th>
+                        <th>Affected Customers</th>
+                        <th>Avg Resolution Time</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="errors-tbody">
+                    <tr><td colspan="7" class="no-data">Select Analyze to load data</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Top Services Tab -->
+    <div id="services-tab" class="offender-content">
+        <h2>Top Services with Issues</h2>
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Service Type</th>
+                        <th>Issue Count</th>
+                        <th>Common Problem</th>
+                        <th>Impact Level</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="services-tbody">
+                    <tr><td colspan="6" class="no-data">Select Analyze to load data</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+.offender-tabs {
+    display: flex;
+    gap: 10px;
+    border-bottom: 2px solid var(--border-primary);
+}
+.tab-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding: 12px 24px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+    border-bottom: 3px solid transparent;
+}
+.tab-btn:hover {
+    color: var(--text-primary);
+}
+.tab-btn.active {
+    color: var(--accent-primary);
+    border-bottom-color: var(--accent-primary);
+}
+.offender-content {
+    display: none;
+    margin-top: 30px;
+}
+.offender-content.active {
+    display: block;
+    animation: fadeIn 0.5s;
+}
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-secondary);
+}
+.data-table th {
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--accent-primary);
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+}
+.data-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-primary);
+    color: var(--text-primary);
+}
+.data-table tbody tr:hover {
+    background: rgba(139, 92, 246, 0.05);
+}
+.trend-up {
+    color: var(--error-color);
+}
+.trend-down {
+    color: var(--success-color);
+}
+.action-btn {
+    background: var(--accent-gradient);
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: transform 0.2s;
+}
+.action-btn:hover {
+    transform: translateY(-2px);
+}
+</style>
+
+<script>
+document.addEventListener('pageLoaded', function(e) {
+    if (e.detail.pageId === 'top-offender') {
+        loadOffenderData();
+    }
+});
+
+function switchOffenderTab(tabName) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.offender-content').forEach(content => content.classList.remove('active'));
+    
+    event.target.classList.add('active');
+    document.getElementById(tabName + '-tab').classList.add('active');
+}
+
+function loadOffenderData() {
+    // Sample data for customers
+    const customersData = [
+        { rank: 1, customerId: '130404843', issueCount: 45, category: 'Interface', lastDate: '2025-01-18', trend: '↑' },
+        { rank: 2, customerId: '130696904', issueCount: 38, category: 'User Education', lastDate: '2025-01-17', trend: '↓' },
+        { rank: 3, customerId: '130382003', issueCount: 32, category: 'Old Order', lastDate: '2025-01-19', trend: '↑' },
+        { rank: 4, customerId: '131147453', issueCount: 28, category: 'Interface', lastDate: '2025-01-16', trend: '=' },
+        { rank: 5, customerId: '131263688', issueCount: 22, category: 'SNP Callback', lastDate: '2025-01-15', trend: '↓' },
+    ];
+
+    const tbody = document.getElementById('customers-tbody');
+    tbody.innerHTML = customersData.map(customer => `
+        <tr>
+            <td><strong>#${customer.rank}</strong></td>
+            <td>${customer.customerId}</td>
+            <td><span class="badge badge-warning">${customer.issueCount}</span></td>
+            <td>${customer.category}</td>
+            <td>${customer.lastDate}</td>
+            <td class="${customer.trend === '↑' ? 'trend-up' : customer.trend === '↓' ? 'trend-down' : ''}" style="font-size: 1.5rem;">${customer.trend}</td>
+            <td>
+                <button class="action-btn" onclick="viewDetails('customer', '${customer.customerId}')">📊 View</button>
+            </td>
+        </tr>
+    `).join('');
+
+    // Sample data for sites
+    const sitesData = [
+        { rank: 1, siteId: 'OSite_642990_1', issueCount: 52, category: 'Interface', lastDate: '2025-01-19', trend: '↑' },
+        { rank: 2, siteId: 'OSite_862845_1', issueCount: 41, category: 'User Education', lastDate: '2025-01-18', trend: '=' },
+        { rank: 3, siteId: 'OSite_698418_1', issueCount: 35, category: 'Old Order', lastDate: '2025-01-17', trend: '↓' },
+    ];
+
+    const sitesTbody = document.getElementById('sites-tbody');
+    sitesTbody.innerHTML = sitesData.map(site => `
+        <tr>
+            <td><strong>#${site.rank}</strong></td>
+            <td>${site.siteId}</td>
+            <td><span class="badge badge-warning">${site.issueCount}</span></td>
+            <td>${site.category}</td>
+            <td>${site.lastDate}</td>
+            <td class="${site.trend === '↑' ? 'trend-up' : site.trend === '↓' ? 'trend-down' : ''}" style="font-size: 1.5rem;">${site.trend}</td>
+            <td>
+                <button class="action-btn" onclick="viewDetails('site', '${site.siteId}')">📊 View</button>
+            </td>
+        </tr>
+    `).join('');
+
+    // Sample data for errors
+    const errorsData = [
+        { rank: 1, errorType: 'SNP Callback Timeout', occurrences: 145, customers: 32, avgTime: '4.2 hrs', status: 'Open' },
+        { rank: 2, errorType: 'CLIPS Fallout', occurrences: 98, customers: 28, avgTime: '6.5 hrs', status: 'In Progress' },
+        { rank: 3, errorType: 'User Task Delay', occurrences: 76, customers: 45, avgTime: '12.3 hrs', status: 'Open' },
+    ];
+
+    const errorsTbody = document.getElementById('errors-tbody');
+    errorsTbody.innerHTML = errorsData.map(error => `
+        <tr>
+            <td><strong>#${error.rank}</strong></td>
+            <td>${error.errorType}</td>
+            <td><span class="badge badge-error">${error.occurrences}</span></td>
+            <td>${error.customers}</td>
+            <td>${error.avgTime}</td>
+            <td><span class="badge">${error.status}</span></td>
+            <td>
+                <button class="action-btn" onclick="viewDetails('error', '${error.errorType}')">📊 View</button>
+            </td>
+        </tr>
+    `).join('');
+
+    // Sample data for services
+    const servicesData = [
+        { rank: 1, serviceType: 'SACM Subscriber', issueCount: 156, problem: 'Interface Timeout', impact: 'High' },
+        { rank: 2, serviceType: 'EVCE Configuration', issueCount: 124, problem: 'User Task Pending', impact: 'Medium' },
+        { rank: 3, serviceType: 'UNI Provisioning', issueCount: 98, problem: 'Resource Unavailable', impact: 'High' },
+    ];
+
+    const servicesTbody = document.getElementById('services-tbody');
+    servicesTbody.innerHTML = servicesData.map(service => `
+        <tr>
+            <td><strong>#${service.rank}</strong></td>
+            <td>${service.serviceType}</td>
+            <td><span class="badge badge-warning">${service.issueCount}</span></td>
+            <td>${service.problem}</td>
+            <td><span class="badge ${service.impact === 'High' ? 'badge-error' : 'badge-warning'}">${service.impact}</span></td>
+            <td>
+                <button class="action-btn" onclick="viewDetails('service', '${service.serviceType}')">📊 View</button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function viewDetails(type, id) {
+    alert(`Viewing detailed analysis for ${type}: ${id}`);
+}
+
+function exportOffenderReport() {
+    alert('Exporting Top Offender Report...');
+}
+</script>
+
+
+

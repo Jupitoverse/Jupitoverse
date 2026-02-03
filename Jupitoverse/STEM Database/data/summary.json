@@ -1,0 +1,39 @@
+{
+  "total_items": 131,
+  "sections": {
+    "organizations": 126,
+    "science_centres": 5,
+    "research_labs": 0,
+    "universities": 0,
+    "funding_schemes": 0,
+    "programs": 0,
+    "policies": 0
+  },
+  "categories": {
+    "Private Sector - CMIE Database & Multinational Companies": 37,
+    "Private Sector - Potential to undertake R&D": 19,
+    "Private Sector - DSIR Registered": 54,
+    "Higher Education Sector": 6,
+    "State Sector - Government Institutions": 2,
+    "Central Sector - Labs & Research Institutions": 8
+  },
+  "states": {
+    "Gujarat": 16,
+    "Telangana": 9,
+    "Maharashtra": 35,
+    "Karnataka": 15,
+    "Tamil Nadu": 11,
+    "Delhi": 5,
+    "Haryana": 10,
+    "Uttar Pradesh": 5,
+    "West Bengal": 4,
+    "Kerala": 4,
+    "Dadra and Nagar Haveli": 1,
+    "Andhra Pradesh": 5,
+    "Madhya Pradesh": 2,
+    "Himachal Pradesh": 2,
+    "Punjab": 1,
+    "Chhattisgarh": 1
+  },
+  "scrape_date": "2025-11-02 20:38:43"
+}

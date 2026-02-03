@@ -1,0 +1,71 @@
+i have to run below query for around 3600  oai.specverid. 
+
+currently i have csv file at Amdocs Server:- "/fs_ogs/operogs/scriptbin/ogs_monitors/Jupitoverse/OSO Activity Data/OSO_activity_data.csv"
+ with Sheet Name: OSO_activity_data having around 3600 row with columns as below:-
+
+spec_ver_id	>>>Input in our Script
+name	
+interface	
+profile	wbs	
+implementation	class	
+Avg Time	>>>>Output of the Query
+Maximun Time	>>> 2 * output of the Query
+Reexecution Allowed	>> By Default Yes
+Billing impacting	>>> By Default Yes
+Discription  >>> By Default: Refer OSO GUI
+
+Here We have to pass spec_ver_id as "oai.spec_ver_id" one by one in below quey and have to store the output in column "Avg Time" and have to keep 2*output in "Maximun Time" column of the csv corresponding to each oai.specverid. 
+
+
+
+us db details- conn = psycopg2.connect(                 
+database="prodossdb",                 
+user='ossdb01uams',                 
+password='Pr0d_ossdb01uams',                 
+host='oso-pstgr-rd.orion.comcast.com',                 
+port='6432'
+)
+
+
+Query:-
+
+WITH latest AS (
+    SELECT
+        oai.actual_start_date,
+        oai.actual_end_date
+    FROM oss_activity_instance AS oai
+    WHERE oai.spec_ver_id = '$From_CSV_file_spec_ver_id'
+      AND oai.state = 'Completed'
+      AND oai.prev_state = 'In Progress'
+      AND oai.part_id IN (1,2,3,4,5)
+    ORDER BY oai.create_date DESC
+    LIMIT 30
+),
+durations AS (
+    SELECT EXTRACT(EPOCH FROM (actual_end_date - actual_start_date)) / 60.0 AS minutes
+    FROM latest
+    WHERE actual_start_date IS NOT NULL
+      AND actual_end_date IS NOT NULL
+      AND actual_end_date > actual_start_date
+),
+bounds AS (
+    SELECT
+        percentile_disc(0.05) WITHIN GROUP (ORDER BY minutes) AS p5,
+        percentile_disc(0.95) WITHIN GROUP (ORDER BY minutes) AS p95
+    FROM durations
+)
+SELECT ROUND(AVG(d.minutes)::numeric, 2) AS avg_minutes
+FROM durations d
+CROSS JOIN bounds b
+WHERE d.minutes BETWEEN b.p5 AND b.p95;
+ 
+Just to keep it test for few rows add below variables so that we can control which rows to execute here-
+
+# Process a subset (1-based, inclusive). Set both to None to process all rows.
+START_ROW = None   # e.g., 1
+END_ROW   = None   # e.g., 500
+
+
+Keep proper logs , and db timeout with max 5 min for single execution of query else it should pass next
+
+

@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Musing - Complete Quantum Computing Course</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a2e;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #764ba2 0%, #667eea 100%);
+        }
+
+        /* Quantum Particle Background Animation */
+        .quantum-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+        }
+
+        .quantum-particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: float 20s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translate(100vw, 100vh); opacity: 0; }
+        }
+
+        /* Glowing Text Effect */
+        .glow-text {
+            text-shadow: 0 0 10px rgba(103, 232, 249, 0.5),
+                         0 0 20px rgba(103, 232, 249, 0.3),
+                         0 0 30px rgba(103, 232, 249, 0.2);
+        }
+
+        /* Quantum Card Hover Effect */
+        .quantum-card {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quantum-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(103, 232, 249, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+        }
+
+        .quantum-card:hover::before {
+            left: 100%;
+        }
+
+        .quantum-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(103, 232, 249, 0.3);
+        }
+
+        /* Code Block Styling */
+        pre {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 20px;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            border-left: 4px solid #667eea;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            color: #9cdcfe;
+        }
+
+        /* Bloch Sphere Canvas */
+        #bloch-sphere {
+            background: radial-gradient(circle, #1a1a2e 0%, #0f0f1e 100%);
+            border-radius: 12px;
+        }
+
+        /* Quiz Styles */
+        .quiz-option {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .quiz-option:hover {
+            background: rgba(103, 232, 249, 0.1);
+            transform: translateX(10px);
+        }
+
+        .quiz-option.correct {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+        }
+
+        .quiz-option.incorrect {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            transition: width 0.5s ease;
+        }
+
+        /* Certificate Styles */
+        #certificate {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Simulation Controls */
+        .sim-control {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .quantum-card {
+                margin: 10px 0;
+            }
+            
+            pre {
+                font-size: 12px;
+                padding: 15px;
+            }
+        }
+
+        /* Loading Animation */
+        .loader {
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-top: 5px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Interactive Simulation Styles */
+        .qubit-visual {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Chapter Navigation */
+        .chapter-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(15, 12, 41, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Achievement Badge */
+        .achievement-badge {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+
+    <!-- Quantum Background -->
+    <div class="quantum-bg" id="quantumBg"></div>
+
+    <!-- Hero Section -->
+    <section id="hero" class="min-h-screen flex items-center justify-center relative overflow-hidden">
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <h1 class="text-6xl md:text-8xl font-black mb-6 glow-text animate-fade-in">
+                Quantum Musing
+            </h1>
+            <p class="text-2xl md:text-4xl mb-4 text-purple-300">
+                Master Quantum Computing from Zero to Hero
+            </p>
+            <p class="text-lg md:text-xl mb-8 text-gray-300 max-w-2xl mx-auto">
+                Founded by <span class="text-cyan-400 font-semibold">Rajan Chopra</span> & <span class="text-cyan-400 font-semibold">Abhishek Agrahari</span>
+                <br>Transforming Quantum Education in India 🇮🇳
+            </p>
+            <div class="flex flex-col md:flex-row gap-4 justify-center items-center mb-8">
+                <button onclick="startCourse()" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-8 py-4 rounded-full font-bold text-xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition">
+                    🚀 Start Learning
+                </button>
+                <button onclick="scrollToSection('course-info')" class="border-2 border-purple-500 hover:bg-purple-500 px-8 py-4 rounded-full font-bold text-xl transition">
+                    📖 Course Info
+                </button>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mt-12">
+                <div class="quantum-card bg-white/10 backdrop-blur p-6 rounded-xl">
+                    <div class="text-4xl mb-2">📚</div>
+                    <div class="text-3xl font-bold">10+</div>
+                    <div class="text-sm text-gray-400">Chapters</div>
+                </div>
+                <div class="quantum-card bg-white/10 backdrop-blur p-6 rounded-xl">
+                    <div class="text-4xl mb-2">🎓</div>
+                    <div class="text-3xl font-bold">50+</div>
+                    <div class="text-sm text-gray-400">Topics</div>
+                </div>
+                <div class="quantum-card bg-white/10 backdrop-blur p-6 rounded-xl">
+                    <div class="text-4xl mb-2">🧪</div>
+                    <div class="text-3xl font-bold">15+</div>
+                    <div class="text-sm text-gray-400">Simulations</div>
+                </div>
+                <div class="quantum-card bg-white/10 backdrop-blur p-6 rounded-xl">
+                    <div class="text-4xl mb-2">🏆</div>
+                    <div class="text-3xl font-bold">100%</div>
+                    <div class="text-sm text-gray-400">Certificate</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Course Info Section -->
+    <section id="course-info" class="py-20 relative">
+        <div class="container mx-auto px-4">
+            <h2 class="text-5xl font-bold text-center mb-12 glow-text">What You'll Learn</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="quantum-card bg-gradient-to-br from-purple-900/50 to-pink-900/50 p-8 rounded-2xl backdrop-blur">
+                    <div class="text-5xl mb-4">🎯</div>
+                    <h3 class="text-2xl font-bold mb-4">Fundamentals</h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li>✓ Quantum Mechanics Basics</li>
+                        <li>✓ Qubits & Superposition</li>
+                        <li>✓ Entanglement & Interference</li>
+                        <li>✓ Mathematical Foundations</li>
+                    </ul>
+                </div>
+                <div class="quantum-card bg-gradient-to-br from-blue-900/50 to-cyan-900/50 p-8 rounded-2xl backdrop-blur">
+                    <div class="text-5xl mb-4">⚙️</div>
+                    <h3 class="text-2xl font-bold mb-4">Quantum Gates</h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li>✓ Single-Qubit Gates</li>
+                        <li>✓ Multi-Qubit Gates</li>
+                        <li>✓ Quantum Circuits</li>
+                        <li>✓ Gate Decomposition</li>
+                    </ul>
+                </div>
+                <div class="quantum-card bg-gradient-to-br from-green-900/50 to-teal-900/50 p-8 rounded-2xl backdrop-blur">
+                    <div class="text-5xl mb-4">🚀</div>
+                    <h3 class="text-2xl font-bold mb-4">Algorithms</h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li>✓ Shor's Algorithm</li>
+                        <li>✓ Grover's Search</li>
+                        <li>✓ Quantum Fourier Transform</li>
+                        <li>✓ VQE & QAOA</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Course Content -->
+    <div id="course-content" class="hidden">
+        <!-- Sidebar Navigation -->
+        <div class="fixed left-0 top-0 h-screen w-80 bg-gray-900 border-r border-gray-800 overflow-y-auto z-50 hidden lg:block" id="sidebar">
+            <div class="p-6">
+                <h3 class="text-2xl font-bold mb-6 text-center glow-text">Course Contents</h3>
+                
+                <!-- Progress Bar in Sidebar -->
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm font-semibold">Progress</span>
+                        <span class="text-sm" id="sidebar-progress-text">0%</span>
+                    </div>
+                    <div class="w-full bg-gray-700 rounded-full h-2">
+                        <div id="sidebar-progress-bar" class="progress-bar bg-gradient-to-r from-purple-600 to-pink-600 h-2 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Expandable Menu -->
+                <div class="space-y-2">
+                    <!-- Introduction -->
+                    <div class="bg-gray-800 rounded-lg overflow-hidden">
+                        <button onclick="toggleSection('intro')" class="w-full text-left px-4 py-3 hover:bg-gray-700 transition flex items-center justify-between">
+                            <span class="font-semibold">📘 Introduction</span>
+                            <svg id="intro-icon" class="w-5 h-5 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                        <div id="intro-content" class="hidden bg-gray-850 px-4 py-2 space-y-1">
+                            <a onclick="showChapter(0)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• What is Quantum Computing?</a>
+                            <a onclick="showChapter(0)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• History & Origins</a>
+                            <a onclick="showChapter(0)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Why Learn QC?</a>
+                        </div>
+                    </div>
+
+                    <!-- Chapter 1: Foundations -->
+                    <div class="bg-gray-800 rounded-lg overflow-hidden">
+                        <button onclick="toggleSection('ch1')" class="w-full text-left px-4 py-3 hover:bg-gray-700 transition flex items-center justify-between">
+                            <span class="font-semibold">1️⃣ Foundations</span>
+                            <svg id="ch1-icon" class="w-5 h-5 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                        <div id="ch1-content" class="hidden bg-gray-850 px-4 py-2 space-y-1">
+                            <a onclick="showChapter(1)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Complex Numbers</a>
+                            <a onclick="showChapter(1)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Linear Algebra</a>
+                            <a onclick="showChapter(1)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Vectors & Matrices</a>
+                            <a onclick="showChapter(1)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Probability Theory</a>
+                            <a onclick="showChapter(1)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Chapter 1 Quiz</a>
+                        </div>
+                    </div>
+
+                    <!-- Chapter 2: Qubits -->
+                    <div class="bg-gray-800 rounded-lg overflow-hidden">
+                        <button onclick="toggleSection('ch2')" class="w-full text-left px-4 py-3 hover:bg-gray-700 transition flex items-center justify-between">
+                            <span class="font-semibold">2️⃣ Qubits</span>
+                            <svg id="ch2-icon" class="w-5 h-5 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                        <div id="ch2-content" class="hidden bg-gray-850 px-4 py-2 space-y-1">
+                            <a onclick="showChapter(2)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• What is a Qubit?</a>
+                            <a onclick="showChapter(2)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Superposition</a>
+                            <a onclick="showChapter(2)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Quantum States</a>
+                            <a onclick="showChapter(2)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Bloch Sphere</a>
+                            <a onclick="showChapter(2)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Entanglement</a>
+                            <a onclick="showChapter(2)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Measurement</a>
+                            <a onclick="showChapter(2)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Chapter 2 Quiz</a>
+                        </div>
+                    </div>
+
+                    <!-- Chapter 3: Quantum Gates -->
+                    <div class="bg-gray-800 rounded-lg overflow-hidden">
+                        <button onclick="toggleSection('ch3')" class="w-full text-left px-4 py-3 hover:bg-gray-700 transition flex items-center justify-between">
+                            <span class="font-semibold">3️⃣ Quantum Gates</span>
+                            <svg id="ch3-icon" class="w-5 h-5 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                        <div id="ch3-content" class="hidden bg-gray-850 px-4 py-2 space-y-1">
+                            <a onclick="showChapter(3)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Introduction to Gates</a>
+                            <a onclick="showChapter(3)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Pauli Gates (X, Y, Z)</a>
+                            <a onclick="showChapter(3)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Hadamard Gate</a>
+                            <a onclick="showChapter(3)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Phase Gates (S, T)</a>
+                            <a onclick="showChapter(3)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• CNOT Gate</a>
+                            <a onclick="showChapter(3)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Multi-Qubit Gates</a>
+                            <a onclick="showChapter(3)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Chapter 3 Quiz</a>
+                        </div>
+                    </div>
+
+                    <!-- Chapter 4: Quantum Circuits -->
+                    <div class="bg-gray-800 rounded-lg overflow-hidden">
+                        <button onclick="toggleSection('ch4')" class="w-full text-left px-4 py-3 hover:bg-gray-700 transition flex items-center justify-between">
+                            <span class="font-semibold">4️⃣ Quantum Circuits</span>
+                            <svg id="ch4-icon" class="w-5 h-5 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                        <div id="ch4-content" class="hidden bg-gray-850 px-4 py-2 space-y-1">
+                            <a onclick="showChapter(4)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Circuit Basics</a>
+                            <a onclick="showChapter(4)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Building Circuits</a>
+                            <a onclick="showChapter(4)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Bell State Circuit</a>
+                            <a onclick="showChapter(4)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• GHZ State</a>
+                            <a onclick="showChapter(4)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Teleportation Circuit</a>
+                            <a onclick="showChapter(4)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Chapter 4 Quiz</a>
+                        </div>
+                    </div>
+
+                    <!-- Chapter 5: Algorithms -->
+                    <div class="bg-gray-800 rounded-lg overflow-hidden">
+                        <button onclick="toggleSection('ch5')" class="w-full text-left px-4 py-3 hover:bg-gray-700 transition flex items-center justify-between">
+                            <span class="font-semibold">5️⃣ Quantum Algorithms</span>
+                            <svg id="ch5-icon" class="w-5 h-5 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                        <div id="ch5-content" class="hidden bg-gray-850 px-4 py-2 space-y-1">
+                            <a onclick="showChapter(5)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Deutsch-Jozsa Algorithm</a>
+                            <a onclick="showChapter(5)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Grover's Search</a>
+                            <a onclick="showChapter(5)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Shor's Factoring</a>
+                            <a onclick="showChapter(5)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• QFT (Quantum Fourier)</a>
+                            <a onclick="showChapter(5)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• VQE & QAOA</a>
+                            <a onclick="showChapter(5)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Chapter 5 Quiz</a>
+                        </div>
+                    </div>
+
+                    <!-- Chapter 6: Programming -->
+                    <div class="bg-gray-800 rounded-lg overflow-hidden">
+                        <button onclick="toggleSection('ch6')" class="w-full text-left px-4 py-3 hover:bg-gray-700 transition flex items-center justify-between">
+                            <span class="font-semibold">6️⃣ Qiskit Programming</span>
+                            <svg id="ch6-icon" class="w-5 h-5 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                        <div id="ch6-content" class="hidden bg-gray-850 px-4 py-2 space-y-1">
+                            <a onclick="showChapter(5)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Setup & Installation</a>
+                            <a onclick="showChapter(5)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Creating Circuits</a>
+                            <a onclick="showChapter(5)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Running Simulations</a>
+                            <a onclick="showChapter(5)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Real Hardware Access</a>
+                            <a onclick="showChapter(5)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Visualization Tools</a>
+                        </div>
+                    </div>
+
+                    <!-- Simulations -->
+                    <div class="bg-gray-800 rounded-lg overflow-hidden">
+                        <button onclick="toggleSection('sim')" class="w-full text-left px-4 py-3 hover:bg-gray-700 transition flex items-center justify-between">
+                            <span class="font-semibold">🧪 Simulations</span>
+                            <svg id="sim-icon" class="w-5 h-5 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                        <div id="sim-content" class="hidden bg-gray-850 px-4 py-2 space-y-1">
+                            <a onclick="showChapter(6)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Bloch Sphere Visualizer</a>
+                            <a onclick="showChapter(6)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Gate Simulator</a>
+                            <a onclick="showChapter(6)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Circuit Builder</a>
+                            <a onclick="showChapter(6)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Grover's Algorithm Demo</a>
+                            <a onclick="showChapter(6)" class="block px-3 py-2 hover:bg-purple-600 rounded cursor-pointer text-sm">• Teleportation Simulator</a>
+                        </div>
+                    </div>
+
+                    <!-- Final Test -->
+                    <div class="bg-gradient-to-r from-orange-600 to-red-600 rounded-lg overflow-hidden">
+                        <button onclick="showChapter(7)" class="w-full text-left px-4 py-3 hover:opacity-90 transition flex items-center justify-between">
+                            <span class="font-semibold">📝 Final Test</span>
+                            <span class="text-xl">→</span>
+                        </button>
+                    </div>
+
+                    <!-- Certificate -->
+                    <div class="bg-gradient-to-r from-yellow-600 to-orange-600 rounded-lg overflow-hidden">
+                        <button onclick="showChapter(8)" class="w-full text-left px-4 py-3 hover:opacity-90 transition flex items-center justify-between">
+                            <span class="font-semibold">🏆 Get Certificate</span>
+                            <span class="text-xl">→</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Toggle -->
+        <button id="mobile-menu-btn" class="lg:hidden fixed top-4 left-4 z-50 bg-purple-600 p-3 rounded-full shadow-lg" onclick="toggleMobileSidebar()">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+            </svg>
+        </button>
+
+        <!-- Main Content Area -->
+        <div class="lg:ml-80 min-h-screen">
+            <!-- Progress Bar -->
+            <div class="chapter-nav py-4 shadow-lg">
+                <div class="container mx-auto px-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm font-semibold">Progress</span>
+                        <span class="text-sm" id="progress-text">0%</span>
+                    </div>
+                    <div class="w-full bg-gray-700 rounded-full h-3">
+                        <div id="progress-bar" class="progress-bar bg-gradient-to-r from-purple-600 to-pink-600 h-3 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chapter Content Container -->
+            <div class="container mx-auto px-4 py-8">
+                <div id="chapter-container" class="quantum-card bg-white/5 backdrop-blur p-8 rounded-2xl">
+                    <!-- Dynamic Content Will Load Here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-gray-800 py-8 mt-20">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-400">© 2024 Quantum Musing | Founded by Rajan Chopra & Abhishek Agrahari</p>
+            <p class="text-sm text-gray-500 mt-2">Transforming Quantum Education in India 🇮🇳</p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize
+        let currentChapter = 0;
+        let completedChapters = new Set();
+        let quizScores = {};
+        let userName = '';
+
+        // Create quantum particles
+        function createQuantumParticles() {
+            const bg = document.getElementById('quantumBg');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'quantum-particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                bg.appendChild(particle);
+            }
+        }
+
+        createQuantumParticles();
+
+        // Start Course
+        function startCourse() {
+            userName = prompt("What's your name?") || "Quantum Explorer";
+            document.getElementById('hero').classList.add('hidden');
+            document.getElementById('course-info').classList.add('hidden');
+            document.getElementById('course-content').classList.remove('hidden');
+            showChapter(0);
+        }
+
+        // Scroll to Section
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Show Chapter
+        function showChapter(chapterNum) {
+            currentChapter = chapterNum;
+            updateProgress();
+            
+            // Update button states
+            document.querySelectorAll('.chapter-btn').forEach((btn, index) => {
+                if (index === chapterNum) {
+                    btn.classList.remove('bg-gray-700');
+                    btn.classList.add('bg-purple-600');
+                } else {
+                    btn.classList.remove('bg-purple-600');
+                    btn.classList.add('bg-gray-700');
+                }
+            });
+
+            const container = document.getElementById('chapter-container');
+            
+            // Chapter content
+            const chapters = [
+                getIntroContent(),
+                getFoundationsContent(),
+                getQubitsContent(),
+                getGatesContent(),
+                getCircuitsContent(),
+                getAlgorithmsContent(),
+                getSimulationsContent(),
+                getTestContent(),
+                getCertificateContent()
+            ];
+
+            container.innerHTML = chapters[chapterNum];
+            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Update Progress
+        function updateProgress() {
+            const progress = (completedChapters.size / 8) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+            document.getElementById('progress-text').innerText = Math.round(progress) + '%';
+            
+            // Update sidebar progress too
+            const sidebarProgressBar = document.getElementById('sidebar-progress-bar');
+            const sidebarProgressText = document.getElementById('sidebar-progress-text');
+            if (sidebarProgressBar) {
+                sidebarProgressBar.style.width = progress + '%';
+            }
+            if (sidebarProgressText) {
+                sidebarProgressText.innerText = Math.round(progress) + '%';
+            }
+        }
+
+        // Toggle Section (Expand/Collapse)
+        function toggleSection(sectionId) {
+            const content = document.getElementById(sectionId + '-content');
+            const icon = document.getElementById(sectionId + '-icon');
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Toggle Mobile Sidebar
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar.classList.contains('hidden')) {
+                sidebar.classList.remove('hidden');
+                sidebar.classList.add('block');
+            } else {
+                sidebar.classList.remove('block');
+                sidebar.classList.add('hidden');
+            }
+        }
+
+        // Mark Chapter Complete
+        function completeChapter(chapterNum) {
+            completedChapters.add(chapterNum);
+            updateProgress();
+            alert('🎉 Chapter completed! Keep going!');
+        }
+
+        // Get Intro Content
+        function getIntroContent() {
+            return `
+                <h1 class="text-5xl font-bold mb-8 glow-text">Introduction to Quantum Computing</h1>
+                
+                <div class="space-y-8">
+                    <div class="quantum-card bg-gradient-to-r from-purple-900/50 to-blue-900/50 p-8 rounded-xl">
+                        <h2 class="text-3xl font-bold mb-4">🌌 What is Quantum Computing?</h2>
+                        <p class="text-lg leading-relaxed mb-4">
+                            Imagine a world where computers don't just process information as 0s and 1s, but can exist in multiple states simultaneously. 
+                            That's the magic of quantum computing! Unlike classical computers that use bits, quantum computers use <strong class="text-cyan-400">qubits</strong> 
+                            that can be in superposition - existing as 0, 1, or both at the same time.
+                        </p>
+                        <div class="grid md:grid-cols-2 gap-4 mt-6">
+                            <div class="bg-white/10 p-6 rounded-lg">
+                                <h3 class="text-xl font-bold mb-3 text-purple-300">Classical Bit</h3>
+                                <div class="flex justify-around items-center py-4">
+                                    <div class="text-center">
+                                        <div class="w-20 h-20 bg-red-500 rounded-full flex items-center justify-center text-2xl font-bold">0</div>
+                                        <p class="mt-2">OFF State</p>
+                                    </div>
+                                    <div class="text-2xl">OR</div>
+                                    <div class="text-center">
+                                        <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center text-2xl font-bold">1</div>
+                                        <p class="mt-2">ON State</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white/10 p-6 rounded-lg">
+                                <h3 class="text-xl font-bold mb-3 text-cyan-300">Quantum Qubit</h3>
+                                <div class="flex justify-center items-center py-4">
+                                    <div class="text-center">
+                                        <div class="w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-xl font-bold animate-pulse">
+                                            0+1
+                                        </div>
+                                        <p class="mt-2">Superposition</p>
+                                        <p class="text-sm text-gray-400">Both at once!</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quantum-card bg-gradient-to-r from-blue-900/50 to-green-900/50 p-8 rounded-xl">
+                        <h2 class="text-3xl font-bold mb-4">📜 Brief History</h2>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="text-4xl mr-4">1981</div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-yellow-300">Richard Feynman's Vision</h3>
+                                    <p>Proposed that quantum systems could be simulated efficiently using quantum computers.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="text-4xl mr-4">1994</div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-yellow-300">Shor's Algorithm</h3>
+                                    <p>Peter Shor discovered a quantum algorithm that could break RSA encryption - a game changer!</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="text-4xl mr-4">2019</div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-yellow-300">Quantum Supremacy</h3>
+                                    <p>Google announced quantum supremacy with their 53-qubit Sycamore processor.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="text-4xl mr-4">2024</div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-yellow-300">India's Quantum Mission</h3>
+                                    <p>India launched the National Quantum Mission with ₹6,000 crore investment! 🇮🇳</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quantum-card bg-gradient-to-r from-pink-900/50 to-purple-900/50 p-8 rounded-xl">
+                        <h2 class="text-3xl font-bold mb-4">🎯 Why Learn Quantum Computing?</h2>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="bg-white/10 p-6 rounded-lg">
+                                <div class="text-4xl mb-3">💊</div>
+                                <h3 class="text-xl font-bold mb-2">Drug Discovery</h3>
+                                <p class="text-sm">Simulate molecular interactions to discover new medicines faster.</p>
+                            </div>
+                            <div class="bg-white/10 p-6 rounded-lg">
+                                <div class="text-4xl mb-3">🔐</div>
+                                <h3 class="text-xl font-bold mb-2">Cryptography</h3>
+                                <p class="text-sm">Create unbreakable quantum encryption & quantum-safe security.</p>
+                            </div>
+                            <div class="bg-white/10 p-6 rounded-lg">
+                                <div class="text-4xl mb-3">🤖</div>
+                                <h3 class="text-xl font-bold mb-2">AI & ML</h3>
+                                <p class="text-sm">Quantum machine learning for faster training and better models.</p>
+                            </div>
+                            <div class="bg-white/10 p-6 rounded-lg">
+                                <div class="text-4xl mb-3">💰</div>
+                                <h3 class="text-xl font-bold mb-2">Finance</h3>
+                                <p class="text-sm">Portfolio optimization and risk analysis at quantum speed.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-green-900/30 border-l-4 border-green-500 p-6 rounded-lg">
+                        <h3 class="text-2xl font-bold mb-3">🎓 What You'll Master in This Course</h3>
+                        <ul class="space-y-2 text-lg">
+                            <li>✅ Quantum Mechanics fundamentals</li>
+                            <li>✅ Qubits, Superposition & Entanglement</li>
+                            <li>✅ Quantum Gates & Circuits</li>
+                            <li>✅ Famous Quantum Algorithms</li>
+                            <li>✅ Hands-on Programming with Qiskit</li>
+                            <li>✅ Real quantum hardware access</li>
+                            <li>✅ Industry applications</li>
+                        </ul>
+                    </div>
+
+                    <div class="text-center mt-8">
+                        <button onclick="completeChapter(0); showChapter(1);" class="bg-gradient-to-r from-green-600 to-blue-600 px-12 py-4 rounded-full font-bold text-xl hover:shadow-2xl transform hover:scale-105 transition">
+                            Start Chapter 1: Foundations →
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Get Foundations Content
+        function getFoundationsContent() {
+            return `
+                <h1 class="text-5xl font-bold mb-8 glow-text">Chapter 1: Mathematical Foundations</h1>
+                
+                <div class="space-y-8">
+                    <div class="quantum-card bg-gradient-to-r from-blue-900/50 to-purple-900/50 p-8 rounded-xl">
+                        <h2 class="text-3xl font-bold mb-4">🔢 Complex Numbers</h2>
+                        <p class="text-lg mb-4">Complex numbers are essential in quantum mechanics. A complex number has the form: <strong class="text-cyan-400">a + bi</strong></p>
+                        <div class="bg-white/10 p-6 rounded-lg mb-4">
+                            <p class="mb-2">Where:</p>
+                            <ul class="list-disc list-inside space-y-2">
+                                <li><strong>a</strong> is the real part</li>
+                                <li><strong>b</strong> is the imaginary part</li>
+                                <li><strong>i</strong> is the imaginary unit where i² = -1</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="bg-black/30 p-6 rounded-lg">
+                                <h3 class="text-xl font-bold mb-3 text-yellow-300">Examples:</h3>
+                                <ul class="space-y-2 font-mono">
+                                    <li>3 + 4i</li>
+                                    <li>-2 + 5i</li>
+                                    <li>7 - 2i</li>
+                                </ul>
+                            </div>
+                            <div class="bg-black/30 p-6 rounded-lg">
+                                <h3 class="text-xl font-bold mb-3 text-green-300">Operations:</h3>
+                                <ul class="space-y-2">
+                                    <li><strong>Addition:</strong> (a+bi) + (c+di) = (a+c) + (b+d)i</li>
+                                    <li><strong>Multiplication:</strong> (a+bi)(c+di) = (ac-bd) + (ad+bc)i</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quantum-card bg-gradient-to-r from-purple-900/50 to-pink-900/50 p-8 rounded-xl">
+                        <h2 class="text-3xl font-bold mb-4">📐 Linear Algebra</h2>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="text-2xl font-bold mb-3 text-cyan-300">Vectors</h3>
+                                <p class="mb-4">In quantum computing, quantum states are represented as vectors:</p>
+                                <pre class="text-sm"><code>|ψ⟩ = [α]
+     [β]
+
+where |α|² + |β|² = 1</code></pre>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold mb-3 text-yellow-300">Matrices</h3>
+                                <p class="mb-4">Quantum gates are represented as matrices:</p>
+                                <pre class="text-sm"><code>H = 1/√2 [1   1]
+         [1  -1]
+
+(Hadamard Gate)</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-900/30 border-l-4 border-blue-500 p-6 rounded-lg">
+                        <h3 class="text-2xl font-bold mb-4">📝 Quick Quiz</h3>
+                        <div id="quiz-ch1" class="space-y-4">
+                            <p class="text-lg font-semibold">What is i² equal to?</p>
+                            <div class="space-y-2">
+                                <div class="quiz-option border-2 border-gray-600 p-4 rounded-lg" onclick="checkAnswer(1, 'A', false)">
+                                    A) 0
+                                </div>
+                                <div class="quiz-option border-2 border-gray-600 p-4 rounded-lg" onclick="checkAnswer(1, 'B', true)">
+                                    B) -1
+                                </div>
+                                <div class="quiz-option border-2 border-gray-600 p-4 rounded-lg" onclick="checkAnswer(1, 'C', false)">
+                                    C) 1
+                                </div>
+                                <div class="quiz-option border-2 border-gray-600 p-4 rounded-lg" onclick="checkAnswer(1, 'D', false)">
+                                    D) i
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-8">
+                        <button onclick="completeChapter(1); showChapter(2);" class="bg-gradient-to-r from-green-600 to-blue-600 px-12 py-4 rounded-full font-bold text-xl hover:shadow-2xl transform hover:scale-105 transition">
+                            Next: Chapter 2 - Qubits →
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Get Qubits Content
+        function getQubitsContent() {
+            return `
+                <h1 class="text-5xl font-bold mb-8 glow-text">Chapter 2: Understanding Qubits</h1>
+                
+                <div class="space-y-8">
+                    <div class="quantum-card bg-gradient-to-r from-cyan-900/50 to-blue-900/50 p-8 rounded-xl">
+                        <h2 class="text-3xl font-bold mb-4">⚛️ What is a Qubit?</h2>
+                        <p class="text-lg mb-6">A qubit (quantum bit) is the fundamental unit of quantum information. Unlike classical bits that are either 0 or 1, qubits can exist in a <strong class="text-cyan-400">superposition</strong> of both states!</p>
+                        
+                        <div class="grid md:grid-cols-2 gap-6 mb-6">
+                            <div class="bg-white/10 p-6 rounded-lg">
+                                <h3 class="text-2xl font-bold mb-4 text-red-400">Classical Bit</h3>
+                                <div class="flex justify-around items-center py-6">
+                                    <div class="text-center">
+                                        <div class="w-24 h-24 bg-red-600 rounded-full flex items-center justify-center text-3xl font-bold shadow-lg">0</div>
+                                        <p class="mt-3 font-semibold">OFF</p>
+                                    </div>
+                                    <div class="text-3xl font-bold">OR</div>
+                                    <div class="text-center">
+                                        <div class="w-24 h-24 bg-green-600 rounded-full flex items-center justify-center text-3xl font-bold shadow-lg">1</div>
+                                        <p class="mt-3 font-semibold">ON</p>
+                                    </div>
+                                </div>
+                                <p class="text-center text-gray-400">Can only be in ONE state at a time</p>
+                            </div>
+                            
+                            <div class="bg-white/10 p-6 rounded-lg">
+                                <h3 class="text-2xl font-bold mb-4 text-purple-400">Quantum Qubit</h3>
+                                <div class="flex justify-center items-center py-6">
+                                    <div class="text-center">
+                                        <div class="qubit-visual">
+                                            |ψ⟩
+                                        </div>
+                                        <p class="mt-3 font-semibold">Superposition</p>
+                                    </div>
+                                </div>
+                                <p class="text-center text-gray-400">Can be 0, 1, or BOTH simultaneously!</p>
+                                <p class="text-center mt-2"><strong>|ψ⟩ = α|0⟩ + β|1⟩</strong></p>
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-r from-purple-900/50 to-blue-900/50 p-6 rounded-lg">
+                            <h3 class="text-2xl font-bold mb-3">Mathematical Representation</h3>
+                            <pre class="text-sm mb-4"><code>|0⟩ = [1]    |1⟩ = [0]    |ψ⟩ = α|0⟩ + β|1⟩ = [α]
+      [0]          [1]                           [β]
+
+where |α|² + |β|² = 1 (normalization condition)</code></pre>
+                            <p class="text-gray-300">The coefficients α and β are complex numbers that determine the probability of measuring 0 or 1.</p>
+                        </div>
+                    </div>
+
+                    <div class="quantum-card bg-gradient-to-r from-pink-900/50 to-purple-900/50 p-8 rounded-xl">
+                        <h2 class="text-3xl font-bold mb-4">🌀 Superposition</h2>
+                        <p class="text-lg mb-4">Superposition is the ability of a quantum system to be in multiple states at once. When we measure a qubit, it "collapses" to either |0⟩ or |1⟩.</p>
+                        
+                        <div class="bg-black/30 p-6 rounded-lg mb-4">
+                            <h3 class="text-xl font-bold mb-3 text-yellow-300">Example: Equal Superposition</h3>
+                            <pre class="text-sm"><code>|ψ⟩ = 1/√2(|0⟩ + |1⟩)
+
+Probability of measuring |0⟩ = |1/√2|² = 1/2 = 50%
+Probability of measuring |1⟩ = |1/√2|² = 1/2 = 50%</code></pre>
+                        </div>
+
+                        <div class="bg-orange-900/30 border-l-4 border-orange-500 p-6 rounded-lg">
+                            <h3 class="text-xl font-bold mb-2">🤔 Thought Experiment: Schrödinger's Cat</h3>
+                            <p class="mb-3">Before observation, the cat is both alive AND dead - a superposition! When you open the box (measurement), the state collapses to one outcome.</p>
+                            <div class="text-6xl text-center py-4">🐱 + 💀 = 📦</div>
+                        </div>
+                    </div>
+
+                    <div class="quantum-card bg-gradient-to-r from-green-900/50 to-teal-900/50 p-8 rounded-xl">
+                        <h2 class="text-3xl font-bold mb-4">🔗 Quantum Entanglement</h2>
+                        <p class="text-lg mb-4">When qubits become entangled, measuring one instantly affects the other, no matter how far apart they are! Einstein called this "spooky action at a distance."</p>
+                        
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="bg-white/10 p-6 rounded-lg">
+                                <h3 class="text-xl font-bold mb-3">Bell State (Entangled)</h3>
+                                <pre class="text-sm"><code>|Φ⁺⟩ = 1/√2(|00⟩ + |11⟩)
+
+If qubit 1 is |0⟩
+→ qubit 2 is also |0⟩
+
+If qubit 1 is |1⟩
+→ qubit 2 is also |1⟩</code></pre>
+                            </div>
+                            <div class="bg-white/10 p-6 rounded-lg">
+                                <h3 class="text-xl font-bold mb-3">Applications</h3>
+                                <ul class="space-y-2">
+                                    <li>✅ Quantum Teleportation</li>
+                                    <li>✅ Quantum Cryptography</li>
+                                    <li>✅ Quantum Computing Power</li>
+                                    <li>✅ Quantum Networks</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-900/30 border-l-4 border-blue-500 p-6 rounded-lg">
+                        <h3 class="text-2xl font-bold mb-4">📝 Quick Quiz</h3>
+                        <div class="space-y-4">
+                            <p class="text-lg font-semibold">What happens when you measure a qubit in superposition?</p>
+                            <div class="space-y-2">
+                                <div class="quiz-option border-2 border-gray-600 p-4 rounded-lg" onclick="checkAnswer(2, 'A', false)">
+                                    A) It stays in superposition
+                                </div>
+                                <div class="quiz-option border-2 border-gray-600 p-4 rounded-lg" onclick="checkAnswer(2, 'B', true)">
+                                    B) It collapses to either |0⟩ or |1⟩
+                                </div>
+                                <div class="quiz-option border-2 border-gray-600 p-4 rounded-lg" onclick="checkAnswer(2, 'C', false)">
+                                    C) It disappears
+                                </div>
+                                <div class="quiz-option border-2 border-gray-600 p-4 rounded-lg" onclick="checkAnswer(2, 'D', false)">
+                                    D) Nothing happens
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-8 space-x-4">
+                        <button onclick="showChapter(1)" class="bg-gray-700 px-8 py-3 rounded-full font-bold hover:bg-gray-600 transition">
+                            ← Previous
+                        </button>
+                        <button onclick="completeChapter(2); showChapter(3);" class="bg-gradient-to-r from-green-600 to-blue-600 px-12 py-4 rounded-full font-bold text-xl hover:shadow-2xl transform hover:scale-105 transition">
+                            Next: Chapter 3 - Quantum Gates →
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Check Answer Function
+        function checkAnswer(chapterNum, answer, isCorrect) {
+            event.target.classList.remove('border-gray-600');
+            if (isCorrect) {
+                event.target.classList.add('correct');
+                alert('✅ Correct! Well done!');
+                if (!quizScores[chapterNum]) {
+                    quizScores[chapterNum] = 100;
+                }
+            } else {
+                event.target.classList.add('incorrect');
+                alert('❌ Not quite! Try again or move forward.');
+            }
+        }
+
+        // Remaining content functions will be added...
+        // For now, adding placeholders
+        function getGatesContent() {
+            return '<h1 class="text-5xl font-bold mb-8">Chapter 3: Quantum Gates</h1><p class="text-lg">Content coming soon...</p><button onclick="showChapter(4)" class="mt-8 bg-gradient-to-r from-green-600 to-blue-600 px-12 py-4 rounded-full font-bold text-xl">Next Chapter →</button>';
+        }
+
+        function getCircuitsContent() {
+            return '<h1 class="text-5xl font-bold mb-8">Chapter 4: Quantum Circuits</h1><p class="text-lg">Content coming soon...</p><button onclick="showChapter(5)" class="mt-8 bg-gradient-to-r from-green-600 to-blue-600 px-12 py-4 rounded-full font-bold text-xl">Next Chapter →</button>';
+        }
+
+        function getAlgorithmsContent() {
+            return '<h1 class="text-5xl font-bold mb-8">Chapter 5: Quantum Algorithms</h1><p class="text-lg">Content coming soon...</p><button onclick="showChapter(6)" class="mt-8 bg-gradient-to-r from-green-600 to-blue-600 px-12 py-4 rounded-full font-bold text-xl">Next: Simulations →</button>';
+        }
+
+        function getSimulationsContent() {
+            return `
+                <h1 class="text-5xl font-bold mb-8 glow-text">Interactive Simulations</h1>
+                <div class="quantum-card bg-gradient-to-r from-purple-900/50 to-pink-900/50 p-8 rounded-xl">
+                    <h2 class="text-3xl font-bold mb-4">🎮 Bloch Sphere Simulator</h2>
+                    <p class="text-lg mb-6">Visualize qubit states on the Bloch Sphere!</p>
+                    <canvas id="bloch-sphere" width="400" height="400" class="mx-auto border-2 border-purple-500 rounded-lg"></canvas>
+                    <div class="mt-6 text-center">
+                        <button onclick="showChapter(7)" class="bg-gradient-to-r from-green-600 to-blue-600 px-12 py-4 rounded-full font-bold text-xl">
+                            Take Final Test →
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getTestContent() {
+            return `
+                <h1 class="text-5xl font-bold mb-8 glow-text">📝 Final Certification Test</h1>
+                <div class="quantum-card bg-gradient-to-r from-blue-900/50 to-purple-900/50 p-8 rounded-xl">
+                    <p class="text-xl mb-6">Answer these questions to earn your certificate!</p>
+                    <div class="space-y-6">
+                        <div class="bg-white/10 p-6 rounded-lg">
+                            <p class="font-bold text-lg mb-4">1. What is the fundamental unit of quantum information?</p>
+                            <div class="space-y-2">
+                                <div class="quiz-option border-2 border-gray-600 p-4 rounded-lg" onclick="selectTestAnswer(1, 'qubit', true)">A) Qubit ✓</div>
+                                <div class="quiz-option border-2 border-gray-600 p-4 rounded-lg" onclick="selectTestAnswer(1, 'bit', false)">B) Bit</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-8">
+                        <button onclick="finishTest()" class="bg-gradient-to-r from-green-600 to-yellow-600 px-12 py-4 rounded-full font-bold text-xl">
+                            Submit & Get Certificate 🏆
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        let testScore = 0;
+        function selectTestAnswer(qNum, answer, isCorrect) {
+            if (isCorrect) {
+                testScore += 20;
+                event.target.classList.add('correct');
+            } else {
+                event.target.classList.add('incorrect');
+            }
+        }
+
+        function finishTest() {
+            if (testScore >= 60) {
+                alert('🎉 Congratulations! You passed with ' + testScore + '% score!');
+                completeChapter(7);
+                showChapter(8);
+            } else {
+                alert('Score: ' + testScore + '%. You need 60% to pass. Try again!');
+                testScore = 0;
+            }
+        }
+
+        function getCertificateContent() {
+            const today = new Date().toLocaleDateString();
+            return `
+                <h1 class="text-5xl font-bold mb-8 glow-text">🏆 Certificate of Completion</h1>
+                <div id="certificate" class="max-w-4xl mx-auto p-12 rounded-2xl text-center">
+                    <h2 class="text-4xl font-bold mb-8">Certificate of Achievement</h2>
+                    <p class="text-2xl mb-6">This certifies that</p>
+                    <h3 class="text-5xl font-black mb-6 text-yellow-300">${userName}</h3>
+                    <p class="text-2xl mb-6">has successfully completed</p>
+                    <h4 class="text-3xl font-bold mb-8">Quantum Computing Masterclass</h4>
+                    <p class="text-xl mb-8">Quantum Musing | ${today}</p>
+                    <div class="flex justify-center gap-8 mb-8">
+                        <div>
+                            <p class="text-sm text-gray-300">Rajan Chopra</p>
+                            <p class="font-bold">Co-Founder</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-300">Abhishek Agrahari</p>
+                            <p class="font-bold">Co-Founder</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-8">
+                    <button onclick="downloadCertificate()" class="bg-gradient-to-r from-yellow-600 to-orange-600 px-12 py-4 rounded-full font-bold text-xl">
+                        📥 Download Certificate (PDF)
+                    </button>
+                </div>
+            `;
+        }
+
+        function downloadCertificate() {
+            alert('Certificate download will start! (PDF generation requires additional setup)');
+        }
+    </script>
+</body>
+</html>
+

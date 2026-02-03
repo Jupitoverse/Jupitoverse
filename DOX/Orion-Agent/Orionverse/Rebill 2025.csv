@@ -1,0 +1,1322 @@
+Bill Run Date,Service Id,Customer Id,Site ID,Own By,RCA Category,RCA  Sub Category,ABP Analysis,OSO Analysis - Rebill,Review Comment,Patch Details - All,Next Action,Lession Learnt,Previous ReviewComments
+1-Sep-25,SACM_151_2238855 UNI_151_2228921 EVCE_151_2233962 EQP_151_2221264,130404843,OSite_642990_1,OSO,Interface,SNP Callback,NB call came on 09-AUG-25 00:00:00 to cease the SACM_151_2238855 subscriber with the date of 04-DEC-24 17:59:59 NB call came on 09-AUG-25 00:00:00 to cease the UNI_151_2228921 subscriber with the date of 04-DEC-24 17:59:59 NB call came on 0 9-AUG-25 00:00:00 to cease the EVCE_151_2233962 subscriber with the date of 04-D EC-24 17:59:59 NB call came on 09-AUG-25 00:00:00 to cease the EQP_151_2221264 s ubscriber with the date of 04-DEC-24 17:59:59,OSO was waiting for the SNP callback on UNI Interface Turn Down.Please check with SNP if they have any tracking or report for such thing.Also open a SR to work on Automation at OSO side to fetch and share this report biweekly in order to avaoid such cases in future.,"[8/25 Abhishek]: Sonalika/Anargha to check with SNP about this callback and open SR to do automation to catch sunch records in advance and send it to Comcast team to handle it in order not to rebill.
+
+[8/25 Abhishek]: Biswajit to open case.
+
+[8/25 Biswajit]: CAS2878184", , , ,
+1-Sep-25,CNCV3977804 SAC3978437 EQP3977806,130696904,OSite_862845_1,OSO,Interface,CLIPS Fallout,NB call came on 01-AUG-25 00:00:00 to activate the CNCV3977804 subscriber with t he date of 16-JAN-25 06:00:00. NB call came on 01-AUG-25 00:00:00 to activate the SAC3978437 subscriber with the date of 16-JAN-25 06:00:00 NB call came on 01-AU G-25 00:00:00 to activate the EQP3977806 subscriber with the date of 16-JAN-25 0 6:00:00,"Interface:- Fallout on ""Create IP Address Range Change"" delayed the NB call here. We couldn'r find SR in our dashboard for date 1st Aug. @Sonalike Team Please help here .And if no SR found We need CLIPS to check for RCA.Error details: An ARM Business error occurred while attempting to proceed service request errorCode : 1 errorMessage : Could not create IP for objectName: 24.153.141.152./30                                   Also Kindly Request user to open SR for fallout sitting for longer time.","[8/25 Abhishek]: Biswajit/Somnath to open ticket and after that, Sonalika/Anargha to reachout to CLIPS team about the RCA and to know about the monitoring such fallouts at their end.
+
+[8/25 Biswajit]: CAS2878423", , , ,
+1-Sep-25,SAC2710411 EVCE3556955 UNI3556957 EQP3556956,130382003,OSite_698418_1,OSO,User Education,User task Delay+ Shared Service PTD Set,NB call came on 14-AUG-25 00:0 0:00 to activate the EVCE3556955 subscriber with the date of 27-MAR-25 10:00:58 NB call came on 14-AUG-25 00:00:00 to activate the UNI3556957 subscriber with th e date of 27-MAR-25 10:00:58 NB call came on 14-AUG-25 00:00:00 to activate the EQP3556956 subscriber with the date of 27-MAR-25 10:00:58,"User Education: Here NB call got delayed due to shared dependency where EDI PTD was for starting week of July + User delayed the manual task ""Remove Core Configurations manually"". Sites Access was shared here for ENS and EDI.",[8/25 Abhishek]: Discussed and Approved for Patch, , , ,
+1-Sep-25,SDW_411_3770828 EQP_411_3768488,131147453,OSite_879162_1,OSO,User Education,User Pending Task,NB call came on 01-AUG-25 00:00:00 to cease the SDW_411_3770828 subscriber with the date of 07-MAY-25 18:59:59 NB call came on 01-AUG-25 00:00:00 to cease the E QP_411_3768488 subscriber with the date of 07-MAY-25 18:59:59,"User Education:user task delay-""Soft disconnect sd WAN Service"" and then 10 days for mandatory Wait Rule of Registered Timed Action",[8/25 Abhishek]: Discussed and Nothing to Patch, , , ,
+15-Aug-25,BVE4485283 EQP4485282,131263688,OSite_969535_1,OSO,Interface,CLIPs Callback,"NB call came on 16-JUL-25 00:00:00 to activate the BVE4485283 subscriber with th e date of 03-JUL-25 09:30:54
+NB call came on 16-JUL-25 00:00:00 to activate the EQP4485282 subscriber with the date of 03-JUL-25 09:30:54",Date is correct here. Please open a new SR as his seems to be defect where Commit CLIPS Inventory with TN Design was stuck even though dependency was released.DOC -2 Date arrived flag updated on 14th and hence on 16th it release.,"8/8 Saurabh - Biswa to open new case for OSO
+8/8 - Biswajit - CAS2832017
+8/12 Prateek: MOved SR for CLIPS team to check RCA with more details
+8/12 Anisha: CLIPs RCA awaited on the ticket",,,,
+15-Aug-25,EVCE2625596 UNI2625597 SAC2625589 EQP2625595,130396457,OSite_690366_1,OSO,Old Order,Billing Sync Point,"UpdateParameter call came on 16-JUL-25 00:00:00 to update parameters of EVCE2625596 subscriber with the date of 29-MAR-23 00:00:00
+UpdateParameter call came on 16-JUL-25 00:00:00 to update parameters of UNI2625597 subscriber with the date of 29-MAR-23 00:00:00
+UpdateParameter call came on 16-JUL-25 00:00:00 to update parameters of SAC2625589 subscriber with the date of 29-MAR-23 00:00:00 Update Parameter call came on 16-JUL-25 00:00:00 to update parameters of EQP2625595 subscr iber with the date of 29-MAR-23 00:00:00","""OSO is sending correct date here i.e. 16th July 2025. ABP Team, please check how this date was picked. Request Date : 16-07-2025 20:43:41 GMT
+{Action=CREATE, Version=3, SubAction=CH, ProductId=IProductAgreementItemInstance_3038116, BillingDate=2025-07-16T20:43:37Z}
+{Action=CREATE, Version=3, SubAction=CH, ProductId=IProductAgreementItemInstance_3038115, BillingDate=2025-07-16T20:43:37Z}""","8/8 Saurabh - Billing team to check how the date came as 2023 because as per OSO corerect date was sent
+
+8/11: There were 2 NB calls on the same day at an interval of 15 mins. First at 16-JUL-25 15:29:57,
+
+8/12: a 2023 EPL order was stuck on sync point that caused the billing to stuck.. old order do not have logs the 2023 date was correct and after that another amend got released for modify that got executed on same day and sent the update NB call for next version
+
+8/12 Anisha: Need to check with SQO, the correct BA here.
+8/12 Saurabh - On 16th July, we see old BA 708749845 was moved to newer BA 708730511 with eff date of 29-Mar-2023. Currently from 7/16/25 , all services and customer are under only 1 single BA 708730511.
+Either we can remove the rebill request or need to move distribution to older BA if that is still required. We need to confirm with SQO what should be the correct BA
+
+8/14 Saurabh - Remove the Rebill entry
+8/14- Patched, removed rebill entry, no financial impact",,,,
+15-Aug-25,EQP4557427,131228696,OSite_973106_1, ,Interface,DCP Fallout,NB call came on 17-JUL-25 00:00:00 to activate the EQP4557427 subscriber with th e date of 10-JUL-25 12:54:35,"User Education: NB call delayed here for around 7 days due to DCP fallout on "" cnam Provisioning in Neustar"" and ""Update DA/Dlin Neustar""",8/8 Saurabh - Discussed,,,,
+15-Aug-25,EQP4584368,131227723,OSite_957203_1, ,User Education,User Pending Task,NB call came on 17-JUL-25 00:00:00 to activate the EQP4584368 subscriber with th e date of 10-JUL-25 16:11:04,"User Education: Here Notify Billing call has been delayed due to User task delay  ""DOI Call Flow Design GT"" ",8/8 Saurabh - Discussed,,,,
+15-Aug-25,BVE4457703 EQP4457704,131189221,OSite_966138_1, ,User Education,User Pending Task,NB call came on 17-JUL-25 00:00:00 to activate the BVE4457703 subscriber with th e date of 30-JUN-25 09:12:30 NB call came on 17-JUL-25 00:00:00 to activate the EQP4457704 subscriber with the date of 30-JUN-25 09:12:30,"User Education: Here Notify Billing call has been delayed due to User task delay  ""DOI Call Flow Design GT"" ",8/8 Saurabh - Discussed,,,,
+15-Aug-25,EQP3987924,130979746,OSite_859822_1, ,Interface,DCP Callback,NB call came on 18-JUL-25 00:00:00 to activate the EQP3987924 subscriber with th e date of 08-JUL-25 13:54:55,"Interface : NB call delayed due to no callbacks from DCP on  ""Update DA/Dlin Neustar"".","8/8 Saurabh -  Did eventually callback came or how the order got fulfilled. Once we have this confirmation, possibly we can mark this as discussed
+8/12: Someone retried the activity manully , related CAS2757366",,,,
+15-Aug-25,EQP_155_2179730,130397515,OSite_635684_1, ,User Education,Re-Establishment,NB call came on 21-JUL-25 00:00:00 to activate the EQP_155_2179730 subscriber wi th the date of 13-JUN-25 00:00:00,"""RCA: Working As Designed/User Education
+
+This is the case of Re-establishment where previous subscriber were getting cease with the date of 13th June an hence Re-establishment flow activation date has been picked the same.
+Here this delay is due to User GT- """"Service Assign CCS"""" in previous disconnect flow which user didn't completed and then placed restore order on 19th July.""",8/8 Saurabh - Discussed,,,,
+15-Aug-25,UNI_455_3294379 EVCE_455_3294521 SACM_455_3295888 EQP_455_3301978,130822353,OSite_801974_1, ,Interface,SNP Fallout,NB call came on 21-JUL-25 00:00:00 to cease the UNI_455_3294379 subscriber with the date of 12-JUN-25 18:59:59 NB call came on 21-JUL-25 00:00:00 to cease the E VCE_455_3294521 subscriber with the date of 12-JUN-25 18:59:59 NB call came on 2 1-JUL-25 00:00:00 to cease the SACM_455_3295888 subscriber with the date of 12-J UN-25 18:59:59 NB call came on 21-JUL-25 00:00:00 to cease the EQP_455_3301978 s ubscriber with the date of 12-JUN-25 18:59:59,SInterface: SNP fallout on Uni Interface turn Down delayed NB Call.Please check with SNP for more details, ,,,,
+15-Aug-25,EQP_115_1813492,130326446,OSite_575417_1, ,User Education,User Input,NB call came on 21-JUL-25 00:00:00 to activate the EQP_115_1813492 subscriber wi th the date of 24-MAY-25 00:00:00,"Here PRI  PTD was set for 18th july and this DOCSIS EQP was dependent on PRI. Need to check more
+
+8/12: PRI NB and PONR was released in may only, but after few minutes when order went to reease the dependency of docsis PONR it got amended via some external amend and order went on hold..then in forward plan activity  create service inventory falout got created in JUNE which got fixed in JULY hence the delay","
+
+8/12: The subscriber is 'RE' subscriber with only SAC and EQP active on this site. Need to check where the other services are , for this site.
+8/12 Saurabh - There is nothing chargeable on this customer as PRI already expired
+select * from bl1_rc_rates a where a.receiver_customer='130326446'
+Dale checked there is PRI provide order signed today 8/12
+
+@sonalika to check with CPM what is going on with this customer as there is no active service but customer is getting latefees due to SAC, EQP being active
+<sonalika> Reached CPM Kevin Elwardt, awaiting response
+
+8/13 Saurabh - Remove the rebill entry.
+
+Biswajit to open new case  for Sonalika's team to follow up with CPM
+8/14 - CAS2845616
+
+8/14- Patched, removed rebill entry, no financial impact",,,,
+15-Aug-25,UNI_455_3294031 EVCE_455_3294531,130822366,OSite_801344_1, , , ,NB call came on 22-JUL-25 00:00:00 to activate the UNI_455_3294031 subscriber wi th the date of 25-APR-25 00:00:00 NB call came on 22-JUL-25 00:00:00 to activate the EVCE_455_3294531 subscriber with the date of 25-APR-25 00:00:00,"""RCA: Working As Designed/User Education
+
+This is the case of Re-establishment where previous subscriber were getting cease with the date of 25th April  and hence Re-establishment flow activation date has been picked the same.
+Here this delay is due to User GT- """"Service Assign CCS"""" in previous disconnect flow which user didn't completed and then placed restore orde.""", ,,,,
+15-Aug-25,BI4533820 BV4533819 INS4533821 SAC4533721,131271750,OSite_975365_1, , , ,NB call came on 22-JUL-25 00:00:00 to activate the BI4533820 subscriber with the date of 09-JUL-25 07:45:49 NB call came on 22-JUL-25 00:00:00 to activate the B V4533819 subscriber with the date of 09-JUL-25 07:45:49 NB call came on 22-JUL-2 5 00:00:00 to activate the INS4533821 subscriber with the date of 09-JUL-25 07:4 5:49 NB call came on 22-JUL-25 00:00:00 to activate the SAC4533721 subscriber wi th the date of 09-JUL-25 07:45:49,User Education: User delayed the GT- Verify Service Available for provide BE, ,,,,
+15-Aug-25,EQP_535_4215980 EQP_535_4229353 SACM_535_4224959 BVE_535_4218920,131221395,OSite_930863_1, , , ,"NB call came on 23-JUL-25 00:00:00 to cease the EQP_535_4215980 subscriber with the date of 23-JUL-25 13:51:53
+NB call came on 23-JUL-25 00:00:00 to cease the EQP_535_4229353 subscriber with the date of 23-MAY-25 18:59:59
+NB call came on 23 -JUL-25 00:00:00 to cease the SACM_535_4224959 subscriber with the date of 23-JU L-25 13:52:02
+ NB call came on 23-JUL-25 00:00:00 to cease the BVE_535_4218920 su bscriber with the date of 23-MAY-25 18:59:59","""BVE_535_4218920 and its Equipment EQP_535_4229353 got delayed from 24th may to 23rd July as order was stuck at """"Hotcut Hard Disconnect Wait"""". Latest PTD was not picked in disconnect order.Please open a new SR for this.This seems to be defect.
+
+EQP_535_4215980 and SACM_535_4224959 : Billing date of DOCSIS and SAC  is correct since it's dependent only on its underlay service (COAX),
+the other service is not related COAX.Reference WAD Defect: 1584004""
+
+8/12: New PTD was not picked because no UD amend was done for rework PTD.. and cease order was stuck because of move order in provide at task ""Start Advanced Voice Product Design with Customer"" from may to july. and docsis and other are depndent on underlay.. so dates are correct ","8/8 Saurabh - Biswa to open new case for OSO and Abhishek A. to check whether this is an existing defect or need to open a new one.
+8/8 - Biswajit - CAS2832054
+8/11: Need to check the latest on the ticket, whether or not it’s a defect",,,,
+15-Aug-25,EQP4391588 SAC4391583 EQP4391589 BVE4391591,131221395,OSite_953339_1, , , ,"NB call came on 23-JUL-25 00:00:00 to activate the EQP4391588 subscriber with the date of 23-JUL-25 13:46:44
+NB call came on 23-JUL-25 00:00:00 to activate the SAC4391583 subscriber with the date of 23-JUL-25 13:46:51
+NB call came on 23-JUL -25 00:00:00 to activate the EQP4391589 subscriber with the date of 23-JUL-25 14 :25:12
+NB call came on 23-JUL-25 00:00:00 to activate the BVE4391591 subscriber with the date of 23-JUL-25 14:25:12",Seems no delay here.We should be good with this record.,"8/8 Saurabh - Billing team to check why this is even a rebill entry as the dates are mentioned as same, even OSO mentioned RCA as no issues/dealys",,,,
+15-Aug-25,EQP2489502,130374639,OSite_618096_1, , , ,NB call came on 24-JUL-25 00:00:00 to cease the EQP2489502 subscriber with the d ate of 28-FEB-25 17:59:59,"""
+RCA; User Education
+This is old order from 2022 where MR task has been delayed for so long. Order reached PONR and MR service got ceased in march.
+Later User delayed another MR task - """"Mark MR Service Disconnected in NMS and CLIPS"""" which delayed the NB call here.""",8/8 Saurabh - Discussed,,,,
+15-Aug-25,EQP3568047 BVE3568048,130958712,OSite_845240_1, , , ,"NB call came on 24-JUL-25 00:00:00 to activate the EQP3568047 subscriber with th e date of 08-NOV-24 12:17:46
+ NB call came on 24-JUL-25 00:00:00 to activate the BVE3568048 subscriber with the date of 08-NOV-24 12:17:46",Here NB call was triggered on time back in Nov 2024 but SQO didn't processed and now SQO don’t have old logs to check further.This was later retried by user and then NB processed with new request.,"8/8 Saurabh - Approved to Patch, limit charges to last 90 days.
+Biswa to open new case as patching is required
+8/8 - Biswajit - CAS2832098",,,,
+15-Aug-25, EVCE3342550 UNI3342548,130291712,OSite_541288_1, , , ,"NB call came on 29-JUL-25 00:00:00 to activate the EVCE3342550 subscriber with the date of 0 4-APR-25 15:10:11
+NB call came on 29-JUL-25 00:00:00 to activate the UNI3342548 subscriber with the date of 04-APR-25 15:10:11","Shared EQP scenario and on EQP user delayed task ""Confirm Technician Switch/CM/NID Pickup (SWAP)"" from February to july 2025","8/12: Need to patch the effective dates to 5/15(90 days). Need a case to track the patch
+CAS2840055 raised.",,,,
+15-Aug-25,EQP4361578 BVE4361579,131237492,OSite_950901_1, ,Interface,DCP Callback,"NB call came on 01-AUG-25 00:00:00 to activate the EQP4361578 subscriber with th e date of 09-JUL-25 08:52:43
+NB call came on 01-AUG-25 00:00:00 to activate the BVE4361579 subscriber with the date of 09-JUL-25 08:52:43","Interface: NB call was delayed due to DCP activity- Update DA/DL in Neustar"" whch was reworked by User on 1st Aug.please note ""SLA Breach"" GT was opened to point out DCP callback delay to user.","8/8 Saurabh - Joe would like to discuss this in more details, who is the user, what does rework mean here , OSO team please provide more details",,,,
+15-Aug-25,EQP4363461,131242545,OSite_954555_1, , , ,NB call came on 04-AUG-25 00:00:00 to activate the EQP4363461 subscriber with th e date of 13-MAY-25 17:27:57,User Education: User delayed the GT- Capture Equipment Details,708896916,,,,
+15-Aug-25,UNI3727443 EVCE3727445,130951227,OSite_840169_1, , , ,NB call came on 05-AUG-25 00:00:00 to activate the UNI3727443 subscriber with th e date of 28-APR-25 14:03:43 NB call came on 05-AUG-25 00:00:00 to activate the EVCE3727445 subscriber with the date of 28-APR-25 14:03:43,"User Delay on task till 5th may + Stuck on Service Completion Sync Point- EPL
+8/12: EPL : Service Sync complettion stuck , other leg was alreqady completed. Need a ticket for deep dive","8/11: Case would be opened to patch the effective date going back 90 days
+8/11 - CAS2836091 raised for patching.
+8/12 Saurabh - Anargha to check why there was user delay. Case is already opened for the same.
+8/13 [Anargha] - Have reached out to the user, awaiting response
+8/13 [Anargha] - The order was stuck and user was not aware
+
+8/13 Saurabh - CAS2836091 completed for patching and RCA is also provided above",,,,
+15-Aug-25, , , , , , ,"8/12 Saurabh - There are total of 7 customers for cycle 115 then we should take care of before 8/15
+BILL_CYCLE COUNT(*)
+101 26
+115 7
+
+8/14 Saurabh - Below customers for 115 will be patched (or no patch needed)
+
+416907   130293796?– No Patch needed , Protected unit price is 34.95 and quantity is 138 ,  hence total price : 4823.10
+608105   130369855?– Patch needed (correct unit price to 29.95 for subscriber 608105/offer instance 19106772)
+874701   130503164?-  Patch needed (correct quantity to 1 and protected price to 29.95 for subscriber 874701/offer instance 25655541)
+905460   130676994?- Patch needed (correct protected price to 0 for subscriber 905460/offer instance 29857683)
+1132926  130825068   - Patch needed (correct protected price to 0 for subscriber 1132926/offer instance 32694555)
+1133249  130825420?- No Patch needed , Protected unit price is 9.95 and quantity is 10 ,  hence total price : 99.50
+1726695  131231471 – No Patch needed, Billing has correct promo price -1755.6 (qty 88*unitprice 19.95)", , ,,,,
+15-Aug-25, , , , , , , , , ,,,,
+15-Aug-25, , , , , , ,8/14 Saurabh -No patching required for Asterisk type as fix is already deployed and no more new imapcts, , ,,,,
+15-Aug-25, , , , , , ,"8/14 Saurabh - Patched
+EVCE should still be charged at $192 (prorated)
+UNI should still be charged at $208 (prorated)
+Both got disconnected on 8/4/25 (Patch details in patch section)", ,708800354,,,,
+15-Aug-25, , , , , , , , , ,,,,
+1-Aug-25,EQP4413751 BVE4413752,131252064,OSite_961670_1, , , ,"NB call came on 02-JUL-25 00:00:00 to activate the EQP4413751 subscriber with the date of 28-MAY-25 12:52:02
+NB call came on 02-JUL-25 00:00:00 to activate the BVE4413752 subscriber with the date of 28-MAY-25 12:52:02","User Education : Here NB call has been delayed due to User task dealy  - ""DOI Call Flow Design GT"" ",Discussed,,,,
+1-Aug-25,UNI_151_2248100 EVCE_151_2238386 SACM_151_2241510 EQP_151_2241588,130407089,OSite_643118_1, , , ,"NB call came on 04-JUL-25 00:00:00 to cease the UNI_151_2248100 subscriber with the date of 24-JUN-25 18:59:59
+NB call came on 04-JUL-25 00:00:00 to cease the EVCE_151_2238386 subscriber with the date of 24-JUN-25 18:59:59",This is working as designed. Here We have 10 days delay which was due to mandatory wait rule of Registered timed Action. got captured in Rebill due to cycle change.,Discussed,,,,
+1-Aug-25,EQP4480718 BVE4480717,131262829,OSite_968993_1, ,Interface,DCP Fallout,"NB call came on 08-JUL-25 00:00:00 to activate the EQP4480718 subscriber with the date of 30-JUN-25 13:22:05
+NB call came on 08-JUL-25 00:00:00 to activate the BVE4480717 subscriber with the date of 30-JUN-25 13:22:05",Interface: DCP Fallout on CNAM Provisioning in Neustar ,Discussed,,,,
+1-Aug-25,BVE4451203 EQP4451201,131257771,OSite_965543_1, , , ,"NB call came on 02-JUL-25 00:00:00 to activate the BVE4451203 subscriber with the date of 24-JUN-25 15:53:22
+NB call came on 02-JUL-25 00:00:00 to activate the EQP4451201 subscriber with the date of 24-JUN-25 15:53:22","User Education/This is working as designed. We had Eight day delay on User GT : ""DOI Call flow Design"" . Got captured in Rebill due to cycle change.",Discussed,,,,
+1-Aug-25,EQP4445486 BVE4445489,131251729,OSite_961335_1, , , ,"NB call came on 07-JUL-25 00:00:00 to activate the EQP4445486 subscriber with the date of 27-JUN-25 12:30:29
+NB call came on 07-JUL-25 00:00:00 to activate the BVE4445489 subscriber with the date of 27-JUN-25 12:30:29","User Education/This is working as designed. We had ten days delay on User GT : ""DOI Call flow Design"" . Got captured in Rebill due to cycle change.",Discussed,,,,
+1-Aug-25,BVE4396910 EQP4396909,131249628,OSite_959886_1, , , ,"NB call came on 03-JUL-25 00:00:00 to activate the BVE4396910 subscriber with the date of 24-JUN-25 08:49:35
+NB call came on 03-JUL-25 00:00:00 to activate the EQP4396909 subscriber with the date of 24-JUN-25 08:49:35","User Education+Interface issue . We had ten days delay on User GT : ""DOI Call flow Design""  and then CLIPS fallout on ""Commit CLIPS Inventory with TNs"" for 2 days. Got captured in Rebill due to cycle change.",Discussed,,,,
+1-Aug-25,BI3664025 SAC3664018,130439488,OSite_858853_1, , , ,"NB call came on 15-JUL-25 00:00:00 to cease the BI3664025 subscriber with the date of 07-JUL-25 18:59:59
+NB call came on 15-JUL-25 00:00:00 to cease the SAC3664018 subscriber with the date of 07-JUL-25 18:59:59","This is working as designed. Here We have 8 days delay which was due to mandatory wait rule of Registered timed Action. got captured in Rebill due to cycle change.Also, Here expected NB delay should be for 10 days but looks like User was not ready to wait and hence release the flag early.",7/28 Saurabh - Discussed,,,,
+1-Aug-25,BVE3168253,130689162,OSite_762057_1, , , ,NB call came on 18-JUL-25 00:00:00 to activate the BVE3168253 subscriber with the date of 17-JUN-25 18:51:20,"Interface: Order was stuck on CLIPS activity "" COMMIT CLIPS in Inventory with TNs"" awaiting CLIPS callback which was later handled under CAS2771115. For more details kindly check with CLIPS team.","[7/24 Abhishek]: Sonalika to check the case which is provided by OSO
+7/28- INC008198997/INC008206472/INC008254206
+
+[7/28 Abhishek]: To open new SR/case by Sumantha
+
+
+07/28 CAS2796921 raised.
+7/29 Deepthi: CLIPS Analysis
+Business VoiceEdge Service (Provide) - 772492 - CLEAN AND DRY LAUNDROMAT - IFrameworkAgreement_761775 - CD Verona - OSite_950127_1 - BVE4313669 - PR
+Commit CLIPS Inventory with TN Design-plan
+It was handled under CAS2720366 with RCA : Defect 2902015
+7/29 Saurabh - Marked as Discussed",,,,
+1-Aug-25,BVE4436865,130943671,OSite_964219_1, ,Interface,DCP Fallout,NB call came on 14-JUL-25 00:00:00 to activate the BVE4436865 subscriber with the date of 24-JUN-25 11:42:35,Interface: here NB call got delayed due to DCP fallout on update DA/DL: CAS2738587,"[7/24 Abhishek]: Sonalika to check the case which is provided by OSO
+7/28- CAS2738587 was identified as a user Error",,,,
+1-Aug-25,EVCE3996602 UNI3996604 EQP3996608 SAC3996580,130948181,OSite_837996_1, , , ,"NB call came on 17-JUL-25 00:00:00 to activate the EVCE3996602 subscriber with the date of 30-MAY-25 09:51:29
+NB call came on 17-JUL-25 00:00:00 to activate the UNI3996604 subscriber with the date of 30-MAY-25 09:51:29
+NB call came on 17-JUL-25 00:00:00 to activate the EQP3996608 subscriber with the date of 30-MAY-25 09:51:29
+NB call came on 17-JUL-25 00:00:00 to activate the SAC3996580 subscriber with the date of 30-MAY-25 09:51:29","User Education: User task Delay on ""Capture Switch CM/NID"" ","7/24 Saurabh - Sonalika/Deepthi to check with user why there was a delay on the task
+7/24 Deepthi: Reached out to user, waiting on their response.
+7/28 Deepthi: CPM doesn't have the task under that Osite, so would not know why there was a delay.
+
+[7/28 Abhishek]: Deepthi is going to reachout to user again.
+
+[7/29 Abhishek]: No updates, deepthi still checking with the user.
+7/29-  Frontline OSO team worked as part of CAS2765599/CAS2767825
+7/29 Saurabh - Discussed",,,,
+1-Aug-25,BVE4396755 EQP4396752,131249206,OSite_959484_1, , , ,"NB call came on 03-JUL-25 00:00:00 to activate the BVE4396755 subscriber with the date of 26-JUN-25 13:33:54
+NB call came on 03-JUL-25 00:00:00 to activate the EQP4396752 subscriber with the date of 26-JUN-25 13:33:54","User Education : Here NB call has been delayed due to User task dealy  - ""DOI Call Flow Design GT"" ",7/24 Saurabh - Discussed,,,,
+1-Aug-25,EQP4532494 BVE4532495,131271630,OSite_975219_1, , , ,"NB call came on 15-JUL-25 00:00:00 to activate the EQP4532494 subscriber with the date of 14-JUL-25 08:36:41
+NB call came on 15-JUL-25 00:00:00 to activate the BVE4532495 subscriber with the date of 14-JUL-25 08:36:41","""This is working as designed.One day delay is acceptable.Captured due to Cycle change.",7/24 Saurabh - Discussed,,,,
+1-Aug-25,BVE4509955 EQP4509956,131267863,OSite_972657_1, ,Interface,DCP Fallout,"NB call came on 16-JUL-25 00:00:00 to activate the BVE4509955 subscriber with the date of 10-JUL-25 16:28:56
+NB call came on 16-JUL-25 00:00:00 to activate the EQP4509956 subscriber with the date of 10-JUL-25 16:28:56",Interface: here NB call got delayed due to DCP fallout on update DA/DL,7/24 Saurabh - Discussed,,,,
+1-Aug-25,EQP4426051 BVE4426052,131254466,OSite_963027_1, , , ,"NB call came on 06-JUL-25 00:00:00 to cease the EQP4426051 subscriber with the date of 26-JUN-25 18:59:59
+NB call came on 06-JUL-25 00:00:00 to cease the BVE4426052 subscriber with the date of 26-JUN-25 18:59:59",This is working as designed. Here We have 10 days delay which was due to mandatory wait rule of Registered timed Action. got captured in Rebill due to cycle change.,7/24 Saurabh - Discussed,,,,
+1-Aug-25,BVE4533238 EQP4533237,131271721,OSite_975235_1, , , ,"NB call came on 15-JUL-25 00:00:00 to activate the BVE4533238 subscriber with the date of 14-JUL-25 10:52:36
+NB call came on 15-JUL-25 00:00:00 to activate the EQP4533237 subscriber with the date of 14-JUL-25 10:52:36","""This is working as designed.One day delay is acceptable.Captured due to Cycle change.",7/24 Saurabh - Discussed,,,,
+1-Aug-25,EQP4445801 BVE4445802,131251441,OSite_961105_1, , , ,"NB call came on 08-JUL-25 00:00:00 to activate the EQP4445801 subscriber with the date of 30-JUN-25 12:43:43
+NB call came on 08-JUL-25 00:00:00 to activate the BVE4445802 subscriber with the date of 30-JUN-25 12:43:43","User Education : Here NB call has been delayed due to User task dealy  - ""DOI Call Flow Design GT"" ",7/24 Saurabh - Discussed,,,,
+1-Aug-25,EQP_411_3815751 EQP_411_3801012 SACM_411_3820306 BVE_411_3783776,131150762,OSite_902325_1, , , ,"NB call came on 03-JUL-25 00:00:00 to cease the EQP_411_3815751 subscriber with the date of 03-JUL-25 11:24:24
+NB call came on 03-JUL-25 00:00:00 to cease the EQP_411_3801012 subscriber with the date of 30-MAY-25 18:59:59
+NB call came on 03-JUL-25 00:00:00 to cease the SACM_411_3820306 subscriber with the date of 03-JUL-25 11:24:28
+NB call came on 03-JUL-25 00:00:00 to cease the BVE_411_3783776 subscriber with the date of 30-MAY-25 18:59:59","EQP_411_3801012,BVE_411_3783776 - Here NB call has been delayed due to Delayed Hotcut Disconnect Wait .On the other gaining site User had placed inflight change and then had aligned PTD as 3rd July. Please confirm cease date with user/TTU. If it varies with the current system date then this can be a defect scenario as we can see some gap here related to billing date alignment post Amend.Please get the update early in order to losse track of this issue. For other two products:-
+Billing date of DOCSIS and SAC  is correct since it's dependent only on its underlay service (COAX), the other service is not related COAX.
+Reference Defect: 1584004","7/24 Saurabh - Sonalika/Deepthi to check with user on 2 services mentioned below if disconnect dates of old site 30-MAY-25 is correct  as the new site services are effective from 7/3
+EQP_411_3801012
+BVE_411_3783776
+7/24 Deepthi: Reached out to user, waiting on their response.
+7/25 Deepthi: The customer havent been in the location at 1244 ALLANSON RD MUNDELEIN, IL 60060 in almost 2 years.
+
+[7/28 Abhishek]: Old Site: 1244 ALLANSON RD_RETRACTABLES,BHS
+New Site:1505 Reidel Road
+
+[7/28 Abhishek]: Dale is going to check with TTU team about the usage
+
+7/28 Saurabh -Approved to Patch from 7/3
+
+[8/1 Abhishek]: Patched, dates are changed from 5/30->7/3",,,,
+1-Aug-25,EQP4321893 SAC4321861 BVE4321895 EQP4321894,131150762,OSite_951014_1, , , ,"NB call came on 03-JUL-25 00:00:00 to activate the EQP4321893 subscriber with the date of 31-MAY-25
+NB call came on 03-JUL-25 00:00:00 to activate the SAC4321861 subscriber with the date of 31-MAY-25
+NB call came on 03-JUL-25 00:00:00 to activate the BVE4321895 subscriber with the date of 31-MAY-25
+NB call came on 03-JUL-25 00:00:00 to activate the EQP4321894 subscriber with the date of 31-MAY-25
+NB call came on 03-JUL-25 00:00:00 to cease below 2 services with backdate date of 5/31
+EQP_411_3801012
+BVE_411_3783776
+Below 2 services were disconnected from same date 7/3/25
+EQP_411_3815751
+SACM_411_3820306",This is the other site of above record OSite_902325_1 and we  can't see any issue/delay here.,7/29 Saurabh - Rejected this entry as its covered under #1818,,,,
+1-Aug-25,BVE4004088,131164215,OSite_908846_1, , , ,NB call came on 09-JUL-25 00:00:00 to activate the BVE4004088 subscriber with the date of 27-JUN-25 14:56:59,"Please get User expectation on active site and add that comment  in new SR and then move to OSO tagging Abhishek Agrahari.  This still needs handling. Lot of manual intervention: Current active product: BVE4004088
+BVE4497912                                                                                                Previous SR:- CAS2743104
+ 
+CAS2742420
+ 
+CAS2729574 ","7/24 Saurabh - Sumantha to open new case of OSO and assign to Abhishek A.
+
+7/24 Sumanta - CAS2790084 opened.
+
+[7/29 Abhishek]: Sonalika to check with user about the products which all products suppose to be active. For now, there are 2 BVE products are active without Equipment.
+7/29- [Anargha] - Below is the update from the user -
+The customer does not need 2 and does not have any equipment. OSite_908846_1 was turned up at 5/24. The sales team redid the order so many times that it broke the process in Orion. it was a move, the old site was disconnectred on 3/14. BVE - BVE4004088, cancelled, BVE - BVE4334171 installed on 5/23.
+
+Saurabh - One BVE to be disconnected, BVE4004088/subscriber no 1786311 and remove rebill entry. There should be only 1 BVE active on customer",,,,
+1-Aug-25,BVE4308609 EQP4308610,131172753,OSite_949373_1, , , ,"NB call came on 03-JUL-25 00:00:00 to activate the BVE4308609 subscriber with the date of 30-JUN-25 12:46:28
+NB call came on 03-JUL-25 00:00:00 to activate the EQP4308610 subscriber with the date of 30-JUN-25 12:46:28","User Education/Working As Designed: Here NB call has been delayed due to User task dealy  - ""DOI Call Flow Design GT"" . Since Delay is minimal and this got captured in rebill due to cycle change we can mark this as Working As Designed.",discussed,,,,
+1-Aug-25,EQP3969059,131176830,OSite_904966_1, , , ,NB call came on 19-JUL-25 00:00:00 to activate the EQP3969059 subscriber with the date of 23-JUN-25 09:20:12,Please check for usage start date with TTU team. Here We had PTD change which has delayed the NB call as flow was waiting DOI date. Once Usage date would be confirmed then we will share the final analysis from OSO side.,"7/24 Saurabh -  Dale to check TTU usage part
+7/29 Saurabh - Dale is checking on TTU usage part if BVE service and EQP should be charged from 23-June-25 or 19-Jul-25
+
+BVE3969060
+EQP3969059
+
+[7/30 Abhishek]: To update the effecitve date to 15th July 2025 for these products (BVE3969060
+EQP3969059)",,,,
+1-Aug-25,EQP4300848 BVE4300838,131234443,OSite_948760_1, , , ,"NB call came on 02-JUL-25 00:00:00 to activate the EQP4300848 subscriber with the date of 30-JUN-25 16:11:03
+NB call came on 02-JUL-25 00:00:00 to activate the BVE4300838 subscriber with the date of 30-JUN-25 16:11:03","User Education/Working As Designed: Here NB call has been delayed due to User task dealy  - ""DOI Call Flow Design GT"" . Since Delay is minimal and this got captured in rebill due to cycle change we can mark this as Working As Designed.",7/24 Saurabh - Discussed,,,,
+1-Aug-25,BVE4313669 EQP4313721,131236030,OSite_950127_1, , , ,"NB call came on 01-JUL-25 00:00:00 to activate the BVE4313669 subscriber with the date of 24-JUN-25 09:55:01
+NB call came on 01-JUL-25 00:00:00 to activate the EQP4313721 subscriber with the date of 24-JUN-25 09:55:01","Interface: Order was delayed due to CLIPS fallout on CLIPS activity "" COMMIT CLIPS in Inventory with TNs"" . For more details kindly check with CLIPS team.","7/24 Saurabh - Sonalika to check with CLIPS
+7/28- INC008198997/INC008206472/INC008254206
+07/28 CAS2796921 raised.
+7/29 Deepthi: CLIPS Analysis
+Business VoiceEdge Service (Provide) - 830679 - JEP Enterprises Group - IFrameworkAgreement_771496 - 137_LEVEL RD__COLLEGEVILLE_PA_19426 - OSite_955198_1 - BVE4414319 - PR
+Business VoiceEdge Service (Provide) - 830679 - JEP Enterprises Group - IFrameworkAgreement_771496 - 137_LEVEL RD__COLLEGEVILLE_PA_19426 - OSite_955198_1 - BVE4414319 - PR
+This was not handle by CLIPS, we dont have error for this activity. Exact RCA cannot be determined for this case as without checking logs we cannot confirm the issue.(Logs not available now as activity was stuck on 20-06-2025 14:10:46 GMT) But it seems it could be probably due to same issue as mentioned above RCA : Defect 2902015.
+7/29 Saurabh - Discussed",,,,
+1-Aug-25,EQP4330175 BVE4330176,131239449,OSite_952372_1, , , ,"NB call came on 15-JUL-25 00:00:00 to activate the EQP4330175 subscriber with the date of 13-JUN-25 07:42:30
+NB call came on 15-JUL-25 00:00:00 to activate the BVE4330176 subscriber with the date of 13-JUN-25 07:42:30","User Education : Here NB call has been delayed due to User task dealy - ""DOI Call Flow Design GT"" ","7/24 Saurabh - Sonalika to check with user why task was delayed for over a month
+7/28[Anargha] - Update from the user -
+Attempted a connect call twice - left messages then sent a no contact email sending them templates and stating if they have any questions to respond to the email.  As of 7/1/25 no response to the email and the task was closed.
+7/28 Saurabh - Discussed",,,,
+1-Aug-25,EQP4341307 BVE4341308,131241088,OSite_953571_1, , Interface,DCP Fallout,"NB call came on 03-JUL-25 00:00:00 to activate the EQP4341307 subscriber with the date of 30-JUN-25 16:14:54
+NB call came on 03-JUL-25 00:00:00 to activate the BVE4341308 subscriber with the date of 30-JUN-25 16:14:54",Interface: here NB call got delayed due to DCP fallout on update DA/DL,7/24 Saurabh - Discussed,,,,
+1-Aug-25,EQP4414318 BVE4414319,131243449,OSite_955198_1, , , ,"NB call came on 11-JUL-25 00:00:00 to activate the EQP4414318 subscriber with the date of 18-JUN-25 09:01:18
+NB call came on 11-JUL-25 00:00:00 to activate the BVE4414319 subscriber with the date of 18-JUN-25 09:01:18","Interface: Order was stuck on CLIPS activity "" COMMIT CLIPS in Inventory with TNs"" awaiting CLIPS callback .No SR in dashboard. For more details kindly check with CLIPS team.","7/24 Saurabh - Sonalika to check with CLIPS
+7/28- INC008198997/INC008206472/INC008254206
+07/28 CAS2796921 raised.
+7/29 Deepthi: CLIPS Analysis
+Business VoiceEdge Service (Provide) - 545261 - HARRIS MEMORIAL CHURCH OF GOD - IFrameworkAgreement_561670 - 4317_LIPPINCOTT BLVD__BURTON_MI_48519 - OSite_762057_1 - BVE3168253 - PR
+Commit CLIPS Inventory with TN Design
+This was not handle by CLIPS, we dont have error for this activity. Exact RCA cannot be determined for this case as without checking logs we cannot confirm the issue.(Logs not available now as activity was stuck on 18-06-2025 13:35:52 GMT) But it seems it could be probably due to same issue as mentioned above RCA : Defect 2902015.
+7/29 Saurabh - Discussed",,,,
+1-Aug-25,EQP4520903,131267631,OSite_972638_1, , , ,NB call came on 17-JUL-25 00:00:00 to activate the EQP4520903 subscriber with the date of 14-JUL-25 13:07:10,"User Education/Working As Designed: Here NB call has been delayed due to User task dealy  - ""DOI Call Flow Design GT"" . Since Delay is minimal and this got captured in rebill due to cycle change we can mark this as Working As Designed.",7/24 Saurabh - Discussed,,,,
+1-Aug-25,EQP4359749,131240520,OSite_953136_1, , , ,NB call came on 17-JUL-25 00:00:00 to activate the EQP4359749 and BVE4359231 subscriber with the date of 01-JUL-25 12:07:10,User Education: User delayed the DOI completed task in BVE EQP flow which delayed the NB call here,"7/24 Saurabh - Sonalika to check with user why task was delayed
+7/28[Anargha] - User missed out the task. Missed it on 7/1 and CPM reach out to him to complete on 7/17
+7/28 Saurabh - Discussed",,,,
+1-Aug-25,NA,NA,NA,NA, ,NA,NA,NA,"[7/29 Abhishek]: Auto pay records ae shared with Dale/Melissa and informt to Joe in the call to provide the approval to patch, so for now we are waiting for approcal from Comcast.
+
+[730 Abhishek]: Abhishek B will share the revised impact.
+
+[7/30 Abhishek]: Revised Impact was shared
+
+[7/31 Abhishek]: Saurabh Patched it after approval from Mellisa ",,,,
+1-Aug-25, , , , , , , , ,[7/29 Abhishek]: This is approved to patch,,,,
+1-Aug-25, , , , , , , , ,"[7/29 Abhishek]: We have sent detailed email about these 2 mismatches with WA details, @Saurabh- please discuss with Joe/dale to approve the patch to correct these mismatches.",,,,
+15-Jul-25,EQP_535_4229400,131221276, , , , ,To be Review with Finance team, , ,,,,
+15-Jul-25,BVE4434005 EQP4434004 ,131255508,OSite_963643_1 , , , ,NOtifyBilling call  came on 18-JUN-25 to activate the subscribers with the date of 13-JUN-25.,"This is working as designed. Five day delay is acceptable. Got captured in Rebill due to cycle change.
+Here We have  delay due to user delaying task - ""DOI Call flow Design"".", ,,,,
+15-Jul-25,EQP_535_4251756 SACM_535_4289177 EQP_535_4293811 ,131226592,OSite_945025_1 , ,Interface,DCP Callback,"NotifyBilling call  came on 20-JUN-25 to cease the EQP_535_4251756 subscriber with the date of 23-APR-25,
+and to cease the SACM_535_4289177, EQP_535_4293811 with the date of 20-JUN-25.
+Its BVE_535_4248863, was already disconnected on 02-MAY-25 with the disconnect date of 23-APR-25.","Here NB call has been delayed due to DCP delayed callback on ""Notify DCP of Start of Voice Service product""
+
+Billing date of DOCSIS and SAC  is correct since it's dependent only on its underlay service (COAX), the other service is not related COAX.Althought  DOCSIS and sac billing date has been impacted here due to that delay but its WAD as per the current design.
+
+We had a similar instance in past too where we had opened the defect and have got PDO input as stated above.
+ 
+Reference Defect: 1584004", ,708888380,,,
+15-Jul-25,BVE4373574 EQP4373573 ,131227723,OSite_957203_1 , , , ,"NOtifyBilling call  came on 18-JUN-25 to activate the subscribers with the date of 12-JUN-25.
+and then another NB  came on 01-JUl-25 to cease the subscribers with the date of 01-JUl-25.","""This is working as designed. Six day delay is acceptable. Got captured in Rebill due to cycle change.
+Here We have  delay due to user delaying task - ""DOI Call flow Design""",7/7 Anisha: Abhishek A. is checking why the services got ceased on 01-JUL-25,708887491,,,
+15-Jul-25,BVE4345172 EQP4345173 ,131226489,OSite_953984_1 , , , ,NOtifyBilling call  came on 18-JUN-25 to activate the subscribers with the date of 12-JUN-25.,"This is working as designed. Four day delay is acceptable. Got captured in Rebill due to cycle change.
+Here We have  delay due to user delaying task - ""DOI Call flow Design""",7/15 Biswajit - Subscriber is activated from June 12 2025.,708899937,,,
+15-Jul-25,EQP3682777 CNCV3682778 SAC3683281 ,130979833,OSite_859696_1 , , , ,"NB call came on 23-JUN-25 00:00:00 to activate the EQP3682777, CNCV and SAC subscriber with th e date of 12-MAR-25 07:00:00 ","Here User completed the task : ""offnet order completion"" on 24th june and have added billing date manually as 12th march 2025 which is its functionality here.
+That's why there is a gap in NB call and billing date.","7/7 Anisha:Joe will take this up internally, why user set the backdate of 12-MAR-25.
+7/9: Abhishek A. to check for the feature supporting this functionality",,,,
+15-Jul-25,BVE4370969 EQP4370970 ,131245758,OSite_956943_1 , , , ,NOtifyBilling call  came on 23-JUN-25 to activate the subscribers with the date of 12-JUN-25.,"User Education: Here NB call has been delayed due to User(Dang Michael) task dealy  - ""DOI Call Flow Design GT"" . ",7/15 Biswajit - Subscriber is activated from June 12 2025.,,,,
+15-Jul-25,EQP4403681 BVE4403683 ,131250508,OSite_960541_1 , , , ,NOtifyBilling call  came on 27-JUN-25 to activate the subscribers with the date of 11-JUN-25.,"User Education: Here NB call has been delayed due to User(Mihes Michael) task dealy  - ""DOI Call Flow Design GT"" . ",7/15 Sumanta - Subscriber is activated from June 11 2025.,,,,
+15-Jul-25,CNCV4118975 SAC4118967 EQP4118974 ,130369459,OSite_920238_1 , , , ,NOtifyBilling call  came on 03-JUl-25 to activate the subscribers with the date of 03-APR-25.,"Here User completed the task : ""offnet order completion"" on 3rd july 2025  and have added billing date manually as 3rd April 2025 which is its functionality here.
+That's why there is a gap in NB call and billing date.", ,,,,
+15-Jul-25,SAC3613986 EQP3613987 ,130540647,OSite_762659_1 , , , ,"NotifyBilling call  came on 03-JUL-25 to activate the SAC3613986 subscriber with the date of 24-JAN-25.
+NotifyBilling call  came on 03-JUL-25 to activate the EQP3613987 with the date of 07-JAN-25.
+
+Associated UNI and EVC were created on 24-JAN-25 itself. Need to verify date of EQP as it is different from the date of service and need to justify the reason for delay.",This seems corrupted order with previous manual handling and lots of SR on it. Also We had a cancelled EDI on this site. Here We can conclude that EQP date is incorrect. So Please consider the EDI billing date only for EDI and EQP. And kindly raise a new SR to do further analysis for delay reason and date mismatch.,"7/7 Anisha:Joe will take this up internally, why user set the backdate of 12-MAR-25.
+7/9: Abhishek A. to check for the feature supporting this functionality
+7/9 - CAS2743055 generated for RCA and Tracking.",,,,
+15-Jul-25,BVE4436518 EQP4436517 ,131246937,OSite_957677_1 , , , ,NOtifyBilling call  came on 03-JUl-25 to activate the subscribers with the date of 13-JUN-25.,"User Education: Here NB call has been delayed due to User(Gathers Chasify) task dealy  - ""DOI Call Flow Design GT"" . ", ,708899937,,,
+15-Jul-25,BVE4008599 EQP4008600 ,130485534,OSite_693055_1 , , , ,NOtifyBilling call  came on 23-JUN-25 to activate the subscribers with the date of 13-JUN-25.,"User Education: Here NB call has been delayed due to User(Shaw melody) task dealy  - ""DOI Call Flow Design GT"" . ", ,,,,
+15-Jul-25, , , , , , ,7/10: Need to prepare the patch, , ,,,,
+15-Jul-25,UNI_415_1606942 EVCE_415_1607320 SACM_415_1608328 EQP_415_1608172,130284556,OSite_529619_1, , , ,NB call came on 07-JUL-25 00:00:00 to activate the  subscribers with the date of 18-APR-25 00:00:00 ,"This is the case of re-estbalishment. Initially User placed Cease order on 19th march which was getting ceased with the date of 18th April but later user placed a Restore on 11th June which created new subscriber with the previous cease date as we are expecting no service down on the site. This is working as designed from OSO side. For any clarification, Please check with user.","7/7 Anisha:Joe will take this up internally, why user set the backdate of 12-MAR-25.",,,,
+1-Jul-25, ,130406128, , , , ,"NB call came on 02-JUN-25 00:00:00 to cease the SACM_151_2223314 subscriber with the date of 23-MAY-25 18:59:59
+
+NB call came on 02-JUN-25 00:00:00 to cease the UNI_151_2229728 subscriber with the date of 23-MAY-25 18:59:59
+
+NB call came on 02-JUN-25 00:00:00 to cease the EVCE_151_2227842 subscriber with the date of 23-MAY-25 18:59:59
+
+NB call came on 02-JUN-25 00:00:00 to cease the EQP_151_2239334 subscriber with the date of 23-MAY-25 18:59:59",Working As Designed: 10 Days mandatory wait Rule : Captured due to cycle change,"[6/23 Abhishek]: Discussed
+
+[6/23 Abhishek]: To provide the impact..",,,,
+1-Jul-25, ,130520407, , , , ,"NB call came on 10-JUN-25 00:00:00 to activate the EQP4340096 subscriber with the date of 30-MAY-25 09:45:47
+
+NB call came on 10-JUN-25 00:00:00 to activate the BVE4340097 subscriber with the date of 30-MAY-25 09:45:47","User Education: Here NB call has been delayed due to User(Szulewski Joshua) task dealy  - ""DOI Call Flow Design GT"" . ","[6/23 Abhishek]: Discussed
+
+[6/23 Abhishek]: To provide the impact..
+6/24 Saurabh - Marked as Discussed, still financial impact needs to be updated",,,,
+1-Jul-25, ,130939897, , ,Interface,DCP Fallout,"NB call came on 03-JUN-25 00:00:00 to activate the BVE4363434 subscriber with the date of 30-MAY-25 10:39:46
+
+NB call came on 03-JUN-25 00:00:00 to activate the EQP4363433 subscriber with the date of 30-MAY-25 10:39:46","Interface: NB call has been delayed due to DCP fallout on ""Update DA/DL in Neustar"". Also its a three day delay. For more info, Please check with DCP.","[6/23 Abhishek]: Sonalika/Team to check about the delay from DCP side
+6/23 Saurabh - Discussed",,,,
+1-Jul-25, ,130990007, , , , ,"NB call came on 06-JUN-25 00:00:00 to activate the EQP3737094 subscriber with the date of 23-MAY-25 15:07:13
+
+NB call came on 06-JUN-25 00:00:00 to activate the BVE3737095 subscriber with the date of 23-MAY-25 15:07:13","User Education: Here NB call has been delayed due to User(Fye Jason) task dealy  - ""DOI Call Flow Design GT"" . ","[6/23 Abhishek]: Discussed
+
+[6/23 Abhishek]: To provide the impact..",708870144,,,
+1-Jul-25, ,131147211, , , , ,"NB call came on 05-JUN-25 00:00:00 to activate the EVCE4014635 subscriber with the date of 03-APR-25 09:20:40
+
+NB call came on 05-JUN-25 00:00:00 to activate the UNI4014633 subscriber with the date of 03-APR-25 09:20:40
+
+NB call came on 05-JUN-25 00:00:00 to activate the SAC4014626 subscriber with the date of 03-APR-25 09:20:40
+
+NB call came on 05-JUN-25 00:00:00 to activate the EQP4014634 subscriber with the date of 03-APR-25 09:20:40","User Education: user-Borges Alanna  delayed the task ""Schedule Core Resource For BGP""","[6/23 Abhishek]: Deepthi to check with user about the delay of the task
+[6/23 Deepthi]: User says the task was completed on the date the customer requested.
+6/23 Saurabh - Discussed",708841482,,,
+1-Jul-25, ,131161798, , ,Interface,DCP Fallout,"NB call came on 03-JUN-25 00:00:00 to activate the EQP4386884 subscriber with the date of 30-MAY-25 13:12:28
+
+NB call came on 03-JUN-25 00:00:00 to activate the BVE4386885 subscriber with the date of 30-MAY-25 13:12:28","Interface: NB call has been delayed due to DCP fallout on ""Update DA/DL in Neustar"". It was  completed by user - Deshazer William. For more info, Please check with DCP.","[6/23 Abhishek]: Sonalika/Team to check about the delay from DCP side
+6/23 Saurabh - As per sonalika there was some issue between DCP and Neustar, marking this as Discussed",708857030,,,
+1-Jul-25, ,131167379, , ,Interface,DCP Callback,"NB call came on 03-JUN-25 00:00:00 to activate the BVE4414775 subscriber with the date of 21-MAY-25 06:22:05
+
+NB call came on 03-JUN-25 00:00:00 to activate the EQP4414774 subscriber with the date of 21-MAY-25 06:22:05","Interface: NB call has been delayed due to DCP callback on ""Update DA/DL in Neustar"". It got completed on third request.For more info, Please check with DCP.","[6/23 Abhishek]: Sonalika/Team to check about the delay from DCP side
+6/23 Saurabh - As per sonalika there was some issue between DCP and Neustar, marking this as Discussed
+[07/01 Biswajit] : Backbilled from the Date May 21.",,,,
+1-Jul-25, ,131191160, , , Interface,DCP Callback,"NB call came on 03-JUN-25 00:00:00 to activate the BVE4057960 subscriber with the date of 28-MAY-25 15:10:45
+
+NB call came on 03-JUN-25 00:00:00 to activate the EQP4057961 subscriber with the date of 28-MAY-25 15:10:45","Interface: NB call has been delayed for 4 days due to DCP callback on ""CNAM Provisioning in Neustar"". It got completed on second request.For more info, Please check with DCP.","[6/23 Abhishek]: Discussed
+
+[6/23 Abhishek]: To provide the impact.
+[07/01 Biswajit] - Backbilled from the Date May 28.",,,,
+1-Jul-25, ,131201064, , , , ,"NB call came on 16-JUN-25 00:00:00 to activate the EQP4126876 subscriber with the date of 28-MAY-25 10:56:08
+
+NB call came on 16-JUN-25 00:00:00 to activate the BVE4126877 subscriber with the date of 28-MAY-25 10:56:08","User Education: Here NB call has been delayed due to User(Rueckheim Donald) task dealy  - ""DOI Call Flow Design GT"" . ","[6/23 Abhishek]: Discussed
+
+[6/23 Abhishek]: To provide the impact..
+
+[07/01 Biswajit] - Backbilled from the Date May 28.",,,,
+1-Jul-25, ,131236506, , , , ,"NB call came on 05-JUN-25 00:00:00 to activate the BVE4314342 subscriber with the date of 30-MAY-25 14:07:42
+
+NB call came on 05-JUN-25 00:00:00 to activate the EQP4314341 subscriber with the date of 30-MAY-25 14:07:42","Here NB call got delayed for 5 days  due to fallout on ""Commit CLIPS Inventory with TN Design"".
+Got captured due to cycle change .
+Handled under SR:CAS2654763
+RCA:Interfcae: This seems CLIPS connectivity issue : Worked on Retry
+Please check with clips if more info needed here
+Issue : Commit CLIPS Inventory with TN Design is stuck
+Theme :Commit CLIPS Inventory with TN Design
+WA Details: Commit CLIPS Inventory with TN Design is completed after retry","[6/23 Abhishek]: Sonalika/Team to check with CLIPS about the issue
+6/23 Saurabh : Discussed",,,,
+1-Jul-25, ,131239600, , , , ,"NB call came on 02-JUN-25 00:00:00 to activate the BVE4331204 subscriber with the date of 28-MAY-25 11:28:59
+
+NB call came on 02-JUN-25 00:00:00 to activate the EQP4331203 subscriber with the date of 28-MAY-25 11:28:59","User Education/Working As Designed: Here NB call has been delayed due to User task dealy  - ""DOI Call Flow Design GT"" . Since Delay is minimal and this got captured in rebill due to cycle change we can mark this as Working As Designed.",6/23 Saurabh -Discussed,,,,
+1-Jul-25,UNI_111_1892107 EVCE_111_1892649 SACM_111_1894192 EQP_111_1892650,130340973, , , , ,"NB call came on 04-JUN-25 00:00:00 to cease the UNI_111_1892107 subscriber with the date of 28-JUL-23 18:59:59
+
+NB call came on 04-JUN-25 00:00:00 to cease the EVCE_111_1892649 subscriber with the date of 28-JUL-23 18:59:59
+
+NB call came on 04-JUN-25 00:00:00 to cease the SACM_111_1894192 subscriber with the date of 28-JUL-23 18:59:59
+
+NB call came on 04-JUN-25 00:00:00 to cease the EQP_111_1892650 subscriber with the date of 28-JUL-23 18:59:59","Its a 2022 Order, User placed a Move, cease PTD crossed in 2023 that date is corect but it was waiting for hotcut provide order to reach installation. but user kept the provide order pending from 2022 and later in 2025 recently user cancelled the Gaining site i.e. Provide order after that cease order progressed after cancellation ","[6/25 Abhishek]: Abhishek B to provide revenue impact
+
+[6/25 Abhishek]: Sonalika/Team to check with CPM about this particular order
+
+[6/25 Abhishek]: Impacts are updated
+
+[6/26 Abhishek]: Sonalika/team still cheking with CPM about to confirm the disconnect/cease date
+
+[6/30 Abhishek]: Patch is approved to change the cease date from July 2023-> 6/30/2025 and Somnath/team will open the case/SR. Dale need to get the usage details from TTU and put the comment in the case, afterwards we will provide the credit amount for which Billing backoffice team can open the credit case and track it from CRM GUI.
+[06/30 Somnath]: Created CAS2718432",,,,
+1-Jul-25,SAC2677929 EQP2678027 UNI2677985 EVCE2677983,130313341, , , , ,"NB call came on 13-JUN-25 00:00:00 to activate the SAC2677929 subscriber with the date of 16-OCT-24 14:31:26
+
+NB call came on 13-JUN-25 00:00:00 to activate the EQP2678027 subscriber with the date of 16-OCT-24 14:32:04
+
+NB call came on 13-JUN-25 00:00:00 to activate the UNI2677985 subscriber with the date of 16-OCT-24 14:31:00
+
+NB call came on 13-JUN-25 00:00:00 to activate the EVCE2677983 subscriber with the date of 16-OCT-24 14:31:00","billing sync point was stuck , Its due to User education, Purpose of SBI Sync Point is to ensure all sites will flow together and billing will be completed. on its corresponding site SYNC point was hanlded manually  on previous defect check 2280642 for more details, other corresponding site was hanlded manually due to some confusion that caused current site stuck","[6/25 Abhishek]: Abhishe B to provide the impact
+
+[6/25 Abhishek]: Patch will be required based on 90 Days Revenue policy
+
+[6/25 Abhishek]: Impacts are provided based on 90 days policy
+
+6/26 Saurabh - Approved to Patch, please patch rebill dates to charge customer for last 90 days as per the financial impacts",,,,
+1-Jul-25,EQP2687545 SAC2687455 EVCE2873701 UNI2873699,130339589, , , , ,"NB call came on 02-JUN-25 00:00:00 to cease the EQP2687545 subscriber with the date of 01-NOV-24 18:59:59
+
+NB call came on 02-JUN-25 00:00:00 to cease the SAC2687455 subscriber with the date of 01-NOV-24 18:59:59
+
+NB call came on 02-JUN-25 00:00:00 to cease the EVCE2873701 subscriber with the date of 23-MAY-25 18:59:59
+
+NB call came on 02-JUN-25 00:00:00 to cease the UNI2873699 subscriber with the date of 23-MAY-25 18:59:59","Working as designed for UNI and EVCE, activity was waiting for mandatory 10 days wait rule, and within 10 days billing cycle got changed. and  for SAC and EQP the date should match with current UNI its a shared service scenario somehow old EPL cease date is getting picked. it should have been with EDI, need SR here for RCA","[6/25 Abhishek]: Abhishek B to provide the patch details and impact as well
+
+[6/25 Abhishek]: Somnath/team to open the case/SR for OSO
+
+[6/25 Biswajit] : CAS2707406 raised for RCA
+6/26 Saurabh - Discussed, RCA case opened 
+6/30 Saurabh - EQP date was patched to be in sync with EVCE i.e 23-May-25
+update bl1_rc_rates set expiration_date='23-MAY-2025', last_cyc_expr_date='31-MAY-2025',application_id='BR17',dl_Service_code='72' where rc_rate_seq_no=1553536;--earlier RMMEQPFEE dates 01-NOV-24 and 30-NOV-24",,,,
+1-Jul-25,SACM_451_3425536 EQP_451_3440542,130946790, , , , ,"UpdateParameter call came on 17-JUN-25 00:00:00 to update parameters of SACM_451_3425536 subscriber with the date of 13-JAN-25 00:00:00
+
+UpdateParameter call came on 17-JUN-25 00:00:00 to update parameters of EQP_451_3440542 subscriber with the date of 13-JAN-25 00:00:00","EDI + PRI with UNDERLAY scenario
+PRI getting ceased and EDI remains as it is
+here NB call issue is for SAC and EQP
+
+functionality is either EDI or underlay which ever complte first it will release Billing call for EQP and SAC
+for EDI task ---> Verify Service Active for Modify is pending from user from 4th JAN to till now..
+so now undrelay cease got complete and released the billing activity.. in june
+
+Seems working as designed and some user error as well ","[6/25 Abhishek]: Abhishek B to check if there is any billing impact
+6/26 Saurabh - No financial impact. SAC has no RC, EQP RC remains same. Marking as Discussed",,,,
+1-Jul-25,EQP2866604 SAC2860357,130529816, , , , ,"NB call came on 14-JUN-25 00:00:00 to cease the EQP2866604 subscriber with the date of 07-FEB-25 17:59:59
+
+NB call came on 14-JUN-25 00:00:00 to cease the SAC2860357 subscriber with the date of 07-FEB-25 17:59:59",Issue is on 10th feb we have a outage INC007520000 that cause PONR not released for EQP and SAC but got released for EDI.. date is correct RCA is environment issue,[6/25 Abhishek]: Discussed,,,,
+1-Jul-25,BV3966293,130977287, , , , ,NB call came on 12-JUN-25 00:00:00 to cease the BV3966293 subscriber with the date of 25-APR-25 18:59:59,"activity Query TN Port Details-plan in error from April to june because of OMW error we do not get any TN in response from OMW later this activity got force completed , RCA is interface","6/25 Saurabh - Financial impact updated, marked as Discussed, no patching needed",,,,
+1-Jul-25,SACM_401_1594621 UNI_401_1595393 UNI_401_1594510 EVCE_401_1595097 EVCE_401_1594166 EQP_401_1596058 EQP_401_1593090,130273235, , , , ,"NB call came on 13-JUN-25 00:00:00 to cease the SACM_401_1594621 subscriber with the date of 18-APR-25 18:59:59
+
+NB call came on 13-JUN-25 00:00:00 to cease the UNI_401_1595393 subscriber with the date of 18-APR-25 18:59:59
+
+NB call came on 13-JUN-25 00:00:00 to cease the UNI_401_1594510 subscriber with the date of 18-APR-25 18:59:59
+
+NB call came on 13-JUN-25 00:00:00 to cease the EVCE_401_1595097 subscriber with the date of 18-APR-25 18:59:59
+
+NB call came on 13-JUN-25 00:00:00 to cease the EVCE_401_1594166 subscriber with the date of 18-APR-25 18:59:59
+
+NB call came on 13-JUN-25 00:00:00 to cease the EQP_401_1596058 subscriber with the date of 18-APR-25 18:59:59
+
+NB call came on 13-JUN-25 00:00:00 to cease the EQP_401_1593090 subscriber with the date of 18-APR-25 18:59:59",Activity retrieve port status from inventory was in error from april to 3rd june then 10 day mandatory wait rule.. this is CLIPS activity they should provide the reason for this.. RCA interface CLIPS,"6/25 Saurabh - Marked as Discussed, no patching needed
+Biswajit to open new case for RCA on CLIPS
+CAS2707146 Opened for RCA",708589323,,,
+1-Jul-25,UNI_401_1595390 UNI_401_1595787 EVCE_401_1593455 EVCE_401_1593456 SACM_401_1593089 EQP_401_1594708 EQP_401_1596140,130273235, , , , ,"NB call came on 13-JUN-25 00:00:00 to cease the UNI_401_1595390 subscriber with the date of 18-APR-25 18:59:59
+
+NB call came on 13-JUN-25 00:00:00 to cease the UNI_401_1595787 subscriber with the date of 18-APR-25 18:59:59
+
+NB call came on 13-JUN-25 00:00:00 to cease the EVCE_401_1593455 subscriber with the date of 18-APR-25 18:59:59
+
+NB call came on 13-JUN-25 00:00:00 to cease the EVCE_401_1593456 subscriber with the date of 18-APR-25 18:59:59
+
+NB call came on 13-JUN-25 00:00:00 to cease the SACM_401_1593089 subscriber with the date of 18-APR-25 18:59:59
+
+NB call came on 13-JUN-25 00:00:00 to cease the EQP_401_1594708 subscriber with the date of 18-APR-25 18:59:59
+
+NB call came on 13-JUN-25 00:00:00 to cease the EQP_401_1596140 subscriber with the date of 18-APR-25 18:59:59",Activity retrieve port status from inventory was in error from april to 3rd june then 10 day mandatory wait rule.. this is CLIPS activity they should provide the reason for this.. RCA interface CLIPS,"6/25 Saurabh - Marked as Discussed, no patching needed
+Biswajit to open new case for RCA on CLIPS
+CAS2707146 Opened for RCA",708589323,,,
+1-Jul-25,UNI_401_1595391 UNI_401_1595906 EVCE_401_1595601 EVCE_401_1594165 EQP_401_1595341,130273235, , , , ,"NB call came on 13-JUN-25 00:00:00 to cease the UNI_401_1595391 subscriber with the date of 18-APR-25 18:59:59
+
+NB call came on 13-JUN-25 00:00:00 to cease the UNI_401_1595906 subscriber with the date of 18-APR-25 18:59:59
+
+NB call came on 13-JUN-25 00:00:00 to cease the EVCE_401_1595601 subscriber with the date of 18-APR-25 18:59:59
+
+NB call came on 13-JUN-25 00:00:00 to cease the EVCE_401_1594165 subscriber with the date of 18-APR-25 18:59:59
+
+NB call came on 13-JUN-25 00:00:00 to cease the EQP_401_1595341 subscriber with the date of 18-APR-25 18:59:59",Activity retrieve port status from inventory was in error from april to 3rd june then 10 day mandatory wait rule.. this is CLIPS activity they should provide the reason for this.. RCA interface CLIPS,"6/25 Saurabh - Marked as Discussed, no patching needed
+Biswajit to open new case for RCA on CLIPS
+CAS2707146 Opened for RCA
+
+[07/01 Biswajit] - Backbilled from the Date Apr 19",,,,
+1-Jul-25,UNI_451_3409773 EVCE_451_3401314,130941859, , , , ,"NB call came on 05-JUN-25 00:00:00 to cease the UNI_451_3409773 subscriber with the date of 18-APR-25 18:59:59
+
+NB call came on 05-JUN-25 00:00:00 to cease the EVCE_451_3401314 subscriber with the date of 18-APR-25 18:59:59",we have CLIPS DB ISSUE  on 17th & 18th  APril  so that leads to OSO env unstabality and bounce and because of that environemnt might be unstable for some time that caused activity not released on 18th April.. later someone manually released billing cease on june,"6/25 Saurabh - Marked as Discussed, no patching needed
+
+[07/01 Biswajit] - Backbilled from the Date Apr 19",,,,
+1-Jul-25,EQP_411_3812133 SACM_411_3791733 BVE_411_3780688 EQP_411_3800257,131153018, , , , ,"NB call came on 04-JUN-25 00:00:00 to cease the EQP_411_3812133 subscriber with the date of 30-APR-25 18:59:59
+
+UpdateParameter call came on 04-JUN-25 00:00:00 to update parameters of SACM_411_3791733 subscriber with the date of
+
+NB call came on 18-JUN-25 00:00:00 to cease the BVE_411_3780688 subscriber with the date of 30-APR-25 18:59:59
+
+UpdateParameter call came on 04-JUN-25 00:00:00 to update parameters of EQP_411_3800257 subscriber with the date of ",Its is a HOTCUT move order and our cease order is waiting for provide order to complete. the major delay observed from may to June 4 is on DOC GO/NOGO task delayed by user. working as design cease order will not progress until provide reach to a certain point,"6/25 Saurabh - Dale to check with CPM why old EQP , BVE disconnected from 4/30 but new one activated from 6/4/25 , hotcut move should have no gaps in service dates
+
+6/25- Dale- CPM confirmed disconnect date should be 6/4 not 4/30. Patch needed
+
+6/26 Saurabh - Approved to Patch",,,,
+1-Jul-25,"BVE4313110 EQP4313136
+sub no 1775873 1775853",131158298, , , , ,"NB call came on 04-JUN-25 00:00:00 to activate the BVE4313110 subscriber with the date of 30-MAY-25 14:38:28
+
+NB call came on 04-JUN-25 00:00:00 to activate the EQP4313136 subscriber with the date of 30-MAY-25 14:38:28","Approintment date for tech install was of 31st may, and that day user also completed the verification task at OSO like go / no -go but the work order for installation was closed on 4th June that caused the delay.. need to check wih user and WFX for WOid->10019457238220970001 where it was pending.. RCA seems to be interface for now",6/25 Saurabh - Discussed,,,,
+1-Jul-25,UNI_411_3843073 EVCE_411_3890736 SACM_411_3926517 EQP_411_3853137,131159698, , , , ,"NB call came on 09-JUN-25 00:00:00 to cease the UNI_411_3843073 subscriber with the date of 25-APR-25 18:59:59
+
+NB call came on 09-JUN-25 00:00:00 to cease the EVCE_411_3890736 subscriber with the date of 25-APR-25 18:59:59
+
+NB call came on 09-JUN-25 00:00:00 to cease the SACM_411_3926517 subscriber with the date of 25-APR-25 18:59:59
+
+NB call came on 09-JUN-25 00:00:00 to cease the EQP_411_3853137 subscriber with the date of 25-APR-25 18:59:59",on 24th April activity hotcut hard disconnect was supposed to released being an HOTCUT order but on 24th   There were couple of long running sessions at clips DB and also backlog was there in JMs queue due to which . slowness was there. so again OSO performace is one way or another dependent on CLIPS thay may have caused the issue. later this activity worked on re-execute seems like intermitent env isue because of CLIPS HOgging threads,"6/25 Saurabh - Marked as Discussed, no patching needed
+Biswajit to open new case for RCA on CLIPS
+CAS2707275 opened foe RCA",,,,
+1-Jul-25, , , , , , , , , ,,,,
+1-Jul-25, , , , , , , , , ,,,,
+1-Jul-25, ,131158035, , , , , , ,"Subscriber 1453642 has promotion with offer instance 37207029 . Promotion ended on Jun-3-2025 but it is still effective in bl1_rc_rates.
+Please run following update statement in DB -> update bl1_rc_rates set amount = 0 where service_receiver_id = 1453642 and offer_instance = 37207029 and rc_rate_seq_no = 2455090
+
+[6/30 Abhishek]: Approved ",,,,
+1-Jul-25, ,131166316, , , , , , ,"Subscriber 1450657 has promotion with offer instance 37293758 . Promotion ended on May-18-2025 but it is still effective in bl1_rc_rates.
+Please run following update statement in DB -> update bl1_rc_rates set amount = 0 where service_receiver_id = 1450657 and offer_instance = 37293758 and rc_rate_seq_no = 2427134 -> Mark For Rebill
+
+[6/30 Abhishek]: Approved by Dale to patch",708862819,,,
+15-Jun-25,MR2318155 EQP2318154 ,130416033,OSite_651428_1 , , , ,"MR ceased with the date of 29-MAR-23, whereas EQP ceased with the date of 19-MAR-25","Cease order was places in Dec 2022 and DMD data is corrupted here.Order is delayed due to some unknow reason which is non-conclusive being corrupted data. Please check with TTU team/User for correct Cease date/usage of MR service.More than 25+ SR's on this customer. Handled under SR019568041.
+next Step: Verify the date and patch it accordingly post approval. ","4/7: To see if we have more instances where EQP and service dates are out of sync.
+To see if there was any issue in the earlier phases of the 25 SRs that we had for this customer. Need to share the list of 25+ SRs.
+04/09: Prateek 2022 order do not have enough logs to conclude why PTD was not released at that time as of now cease date from system is 5th March 2025 if any ither date is required user should confirm
+
+04/09: Joe to check with TTU when the usage went down
+4/11 Saurabh - Its still Billing as per user (Dale confirmed). As of right now not taking applying any WA in Billing (MR ceased from 2023 and EQP from 2025). Credits will be given for MR as per impacts mentioned
+
+4/14: Dale would check with MR team. Somnath to raise SR, we will track this cusotmer in the next month through the SR. For now, we will remove this cusotmer from rebill.
+
+[5/27 Abhishek]: Dale is still checking with MR team about the MR disconnect dates
+
+**5/28 Saurabh - Duplicate of old BR item #1688
+5/28 Dale: Spoke to MR team and CPM. Back date to Dec 2022 is correct. Customer was supposed to drop off equipment but hasnt yet. Euipment still active because CLIPS task to deactivate the device was skipped in WA. Need to add to back to rebill and let backdate process
+
+5/28 Saurabh - Need to reactivate rebill request but with Dec'22 . Currently services are ceased with March 2023 date (need to backdate to Dec'22)
+select * from bl1_technical_mark where entity_id=130416033;
+
+6/3: Dale/Zach would check with CPM for the exact disconnect date.
+
+6/4: CAS2620880- Disconnection date 12/13/2022
+6/6 Saurabh - Billing patch applied to disconnect MR and EQP from 12/13/2022 , sending SR back for closure.  Patch details and backup table updated in patch_details column.",708743532,,,
+15-Jun-25,EVCE_135_2027057,130369402,OSite_614799_1,NA, , ,"UpdateParameter call came on 29-MAY-25 00:00:00 to update parameters of EVCE_135_2027057 subscriber with the date of 11-JAN-24 00:00:00
+
+Parameter name Protected NRC price updated. Old value: {-1}. New value: {0.0}.
+Parameter name Custom terms updated. Old value: {0}. New value: {NA}.","here NB call delayed due to Billing Sync Point which was impact of amdocs Release day on 11th Jan. RCA:- Environment issue
+
+6/13: Internal mail initiated with Amdocs Design Team. Will update as per their input. Billing Date is correct .","6/12: Abhishek A. to check this further
+6/13: Sumanta to create a case. Need to have this added in tracker for Open items for RCA of delay.
+CAS2677132 raised","708723671 - This needs discussion as 11th Jan is not showing on Bill. As discussed, it's not showing as  - Removed from rebill.",,,
+15-Jun-25,EVCE3117075 UNI3117077 SAC3116742 EQP3117074,130537266,OSite_745808_1,NA, , ,NB call came on 20-MAY-25 00:00:00 to activate the  subscribers with the date of 18-SEP-24 10:33:15,Here Notification Group was not decomposed back in April 2024.this was handled under the SR: CAS2611530 with the RCA : Not Reproducible due to absence of logs,"6/9: Need to patch it for 90 days, but will be approved once we have the impacts
+6/11 Saurabh -Approved to Patch for last 90 days billing
+6/12: sumanta to raise a ticket for tracking the patch
+CAS2673994 raised",708758600,,,
+15-Jun-25,INS3694305 BI3694167 SAC3694037 EQP3694177,130980457,OSite_862141_1,NA, , ,"NB call came on 29-MAY-25 00:00:00 to activate the INS3694305 subscriber with the date of 04-DEC-24 13:20:51
+
+NB call came on 29-MAY-25 00:00:00 to activate the BI3694167 subscriber with the date of 04-DEC-24 13:20:51
+
+NB call came on 29-MAY-25 00:00:00 to activate the SAC3694037 subscriber with the date of 04-DEC-24 13:20:51
+
+NB call came on 29-MAY-25 00:00:00 to activate the EQP3694177 subscriber with the date of 04-DEC-24 13:20:51",Here We can see user has changed the PTD for 2040 without any UD Amend and hence kept the flow to complete. later on 29th may he changed the PTD 30th May. Please confirm usage with TTU.,"6/12: Sonalika to check with TTU as to when the user started using the services
+6/12- Checked with CPM Paula Thornhill, this site got activated on 4th Dec 2024.
+Per her they were cancelling some other sites for this customer and ptd for this site probably got changed accidently.
+6/12 Saurabh - Approved to Patch for last 90 days. Correct offer effective date and rebill request to charge only for last 90 days
+
+6/15: Sumanta to create a ticket for tracking the patch.",708836798,,,
+15-Jun-25,EQP_455_3314267 EQP_455_3313509 PRI_455_3313229 SACM_455_3306349,130824527,OSite_804917_1,NA, , ,"NB call came on 15-MAY-25 00:00:00 to cease the EQP_455_3314267 subscriber with the date of 24-DEC-24 17:59:59
+
+NB call came on 15-MAY-25 00:00:00 to cease the EQP_455_3313509 subscriber with the date of 15-MAY-25 08:32:36
+
+NB call came on 15-MAY-25 00:00:00 to cease the PRI_455_3313229 subscriber with the date of 24-DEC-24 17:59:59
+
+NB call came on 15-MAY-25 00:00:00 to cease the SACM_455_3306349 subscriber with the date of 15-MAY-25 08:32:37","initially this was PRI to BV transistion and hence PRI Cease flow was  stuck at ""Hot Disconnect Wait""  awaiting for the BV flow which was manually cancelled .Please check with User on BV order and validate the current order. Also Note We can see multiple TOS SR on this customer .Date is correct here.
+
+6/13: We had already checked the Provided SR CAS2607581(INC000009567636) and this was not helpful in concluding our RCA. Please check with user only for the BV Service as discussed in previous Rebill call.","6/12: Abhsihek A. to check the ticket CAS2607581. INC000009567636.
+6/13: Patrick Ochabillo: sonalika to check with the user what is the expectation here?. BV was manually cancelled and PRI is also ceased now.",,,,
+15-Jun-25,CNCV3709932 SAC3709889 EQP3709918,130965744,OSite_849918_1,NA, , ,"NB call came on 26-MAY-25 00:00:00 to activate the CNCV3709932 subscriber with the date of 11-FEB-25 06:00:00
+
+NB call came on 26-MAY-25 00:00:00 to activate the SAC3709889 subscriber with the date of 11-FEB-25 06:00:00
+
+NB call came on 26-MAY-25 00:00:00 to activate the EQP3709918 subscriber with the date of 11-FEB-25 06:00:00",User Task Delay- Offnet order Complete by Ellis martina ,"6/12 : Anisha to update the impacts. Sumanta to raise a ticket for the patch
+CAS2674028 raised",,,,
+15-Jun-25,EVCE2560253 UNI2560251 EQP2560252 SAC2560160,130470342,OSite_683899_1,NA, , ,"NB call came on 26-MAY-25 00:00:00 to cease the EVCE2560253 subscriber with the date of 01-APR-25 18:59:59
+
+NB call came on 26-MAY-25 00:00:00 to cease the UNI2560251 subscriber with the date of 01-APR-25 18:59:59
+
+NB call came on 26-MAY-25 00:00:00 to cease the EQP2560252 subscriber with the date of 01-APR-25 18:59:59
+
+NB call came on 26-MAY-25 00:00:00 to cease the SAC2560160 subscriber with the date of 01-APR-25 18:59:59","Interface: SNP: NB Call delayed due to SNP fallout on UNI Interface Fiber underlay Turndown.No related SR found in our record. For any further clarification, please check with SNP team.","6/9: Sonalika/Anargha to check with SNP team regarding the fallout.
+Anargha: Have created JIRA ticket with SNP team to check regarding the Fallout
+
+6/12: Update from SNP - According to the logs, no errors were detected. The involved device seems reachable, but we couldn’t establish an SSH connection to it using our service accounts. It also appears that a message was received from CMPS. From the SNP/NOMAD side, we can retry the task if necessary ",,,,
+15-Jun-25,EQP3688216 BVE3688219,130533395,OSite_722271_1,NA, , ,"NB call came on 15-MAY-25 00:00:00 to activate the EQP3688216 subscriber with the date of 13-MAY-25 17:21:07
+
+NB call came on 15-MAY-25 00:00:00 to activate the BVE3688219 subscriber with the date of 13-MAY-25 17:21:07",This is working as designed. Two day delay is acceptable. Got captured in Rebill due to cycle change,6/9: Discussed,,,,
+15-Jun-25,EVCE3460408,130710119,OSite_838120_1,NA, , ,"UpdateParameter call came on 19-MAY-25 00:00:00 to update parameters of EVCE3460408 subscriber with the date of 07-APR-25 00:00:00.
+
+(Static IP added with the date of 4/7)","This needs discussion among SQO/ABP/OSO.
+Request for an SR for RCA","6/11: Sumanta to raise ticket for this case
+CAS2671119 raised
+6/11 Saurabh - CAS2671119 moved to SQO to understand why STATIC IP was added with a backdated date
+SQO/OSO team - Please check , why was STATIC IP added with backdated date.
+
+customer id 130710119
+subscriber no 1761150/EVCE3460408 billing id 43394115 , offer Static IP (MRC) was added on this subscriber on 5/19/25 with backdate eff date of 4/7/25",,,,
+15-Jun-25,EQP_455_3310025 EQP_455_3309239 PRI_455_3306017 SACM_455_3313370,130824524,OSite_804677_1,NA, , ,"NB call came on 18-MAY-25 00:00:00 to cease the EQP_455_3310025 subscriber with the date of 09-MAY-25 18:59:59
+
+NB call came on 18-MAY-25 00:00:00 to cease the EQP_455_3309239 subscriber with the date of 18-MAY-25 20:06:56
+
+NB call came on 18-MAY-25 00:00:00 to cease the PRI_455_3306017 subscriber with the date of 09-MAY-25 18:59:59
+
+NB call came on 18-MAY-25 00:00:00 to cease the SACM_455_3313370 subscriber with the date of 18-MAY-25 20:06:54",This is working as designed. Here We have 10 days delay which was due to mandatory wait rule of Registered timed Action. got captured in Rebill due to cycle change.,"6/9 : discussed
+
+06/16 - [Biswajit]  - Offers are ceased on May 09th and May 14th in the latest Bill.",,,,
+15-Jun-25,EQP3584917 BVE3584919,130967827,OSite_851603_1,NA, Interface,DCP Fallout,"NB call came on 21-MAY-25 00:00:00 to activate the EQP3584917 subscriber with the date of 29-APR-25 16:31:02
+
+NB call came on 21-MAY-25 00:00:00 to activate the BVE3584919 subscriber with the date of 29-APR-25 16:31:02","Interface: here NB got delayed due to DCP fallout on ""CNAM provisioning in Neustar""","6/11: Sumanta to raise a ticket for #1749 and #1753
+CAS2671158 raised
+
+06/16 - [Biswajit] - Services started on Apr 29 as per the latest bill.",,,,
+15-Jun-25,BVE4021590 EQP4021592,131185221,OSite_910538_1,NA, , ,"NB call came on 19-MAY-25 00:00:00 to activate the BVE4021590 subscriber with the date of 09-MAY-25 10:51:22
+
+NB call came on 19-MAY-25 00:00:00 to activate the EQP4021592 subscriber with the date of 09-MAY-25 10:51:22",This is working as designed. Here We have 10 days delay which was due to mandatory wait rule of Registered timed Action. got captured in Rebill due to cycle change.,"6/9 : discussed
+
+06/16 - [Biswajit] - Services started on May 08 as per the latest bill",,,,
+15-Jun-25,BVE4054866,131190817,OSite_913908_1,NA, , ,NB call came on 15-MAY-25 00:00:00 to activate the BVE4054866 subscriber with the date of 13-MAY-25 18:11:39. All other subscriber also active from 13-MAY-25,This is working as designed. Two day delay is acceptable. Got captured in Rebill due to cycle change,"6/9 : discussed
+
+06/16 - [Biswajit] - BVE Services started on May 13 as per the latest bill",,,,
+15-Jun-25,BVE4313902 EQP4313903,131205836,OSite_923976_1,NA, , ,"NB call came on 15-MAY-25 00:00:00 to activate the BVE4313902 subscriber with the date of 13-MAY-25 15:12:12
+
+NB call came on 15-MAY-25 00:00:00 to activate the EQP4313903 subscriber with the date of 13-MAY-25 15:12:12",This is working as designed. Two day delay is acceptable. Got captured in Rebill due to cycle change,6/9 : discussed,,,,
+15-Jun-25,BVE4156929 EQP4156992,131206154,OSite_924414_1,NA,Interface,DCP Fallout,"NB call came on 16-MAY-25 00:00:00 to activate the BVE4156929 subscriber with the date of 02-MAY-25 10:22:05
+
+NB call came on 16-MAY-25 00:00:00 to activate the EQP4156992 subscriber with the date of 02-MAY-25 10:22:05","Interface: here NB got delayed due to DCP fallout on ""CNAM provisioning in Neustar"".",CAS2671158 raised,,,,
+15-Jun-25,BVE4351348 EQP4351347,131242821,OSite_954776_1,NA, , ,"NB call came on 16-MAY-25 00:00:00 to activate the BVE4351348 subscriber with the date of 14-MAY-25 11:50:52
+
+NB call came on 16-MAY-25 00:00:00 to activate the EQP4351347 subscriber with the date of 14-MAY-25 11:50:52","Here We have 2 days delay due to user delaying task - ""DOI Call flow Design"". This is not a huge delay captured due to cycle change. WAD/User Education",6/9 : discussed,,,,
+15-Jun-25,BVE_535_4277593,131224209, , , , ,"An updateSubscriber call came for subscriber 1722501 on 10-JUN-25, but its call to Invoicing failed. Defect ", ,"6/11: Sumanta to raise a ticket
+CAS2671024 raised","as per WA effective date of RC to 15-APR-25 however, it's not found in Bill. as discussed it's not shoiwng as no impact.",,,
+15-Jun-25,BVE_535_4277593,131223863, , , , ,"An updateSubscriber call came for subscriber 1722501 on 10-JUN-25, but its call to Invoicing failed. Defect ", ,"6/11: Sumanta to raise a ticket
+CAS2674061 raised",,,,
+15-Jun-25, , , , , , , , , ,,,,
+15-Jun-25, , , , , , , , , ,,,,
+1-Jun-25,EQP3122947,130617081,NA,NA, , ,Update subscriber call received on 15th May to change the quantity of offer--Device and Accessories - Equipment Fee (MRC) with the backdate of 8th April 2024.,User education: User - Bumatay Marithel delayed the manual GT- Capture ESG Installation from 25th June 2024 to 15th may 2025,"[5/27 Abhishek]: Sonalika/team to check with user about the dealy of the task.
+
+5/27 Angelo: No update from user
+
+[5/28 Abhishek]: No update from User, Sonalika/team is still checking.
+
+5/28 Angelo: User advised this order was actually from Leanna Cavazos, she moved to a new role now. User closed her task because they received an email regarding their teams' tasks that were not closed.  And she said she dont know the reason why it was left, it could have been a missed opportunity or simply a stuck task.
+(Swap device on x2945 to a new CCX 500)
+
+5/28 Saurabh - Marking as Discussed",,,,
+1-Jun-25,EQP_451_3423701,130944291,NA,NA,Interface,DCP Fallout,Update subscriber call received on 15th May to change the quantity of offer--Device and Accessories - Equipment Fee (MRC) with the backdate of 14th June 2024.,"Interface: DCP Fallout: Here NB call got delayed due to DCP fallout on ""Notify DCP Equipment Completed"" since June 2024.No SR found in our dashboard and fallout was completed by  User itself only.","[5/27 Abhishek]: Abhishek B to update the impact
+
+[5/27 Abhishek]: Abhishek A (OSO) to send an email to Joe/team about the additional impacts.
+
+[5/28 Abhishek]: Impacts is updated.",,,,
+1-Jun-25,EQP_451_3401972,130942360,NA,NA,Interface,DCP Fallout,Update subscriber call received on 15th May to change the quantity of offer--Device and Accessories - Equipment Fee (MRC) with the backdate of 14th June 2024.,"Interface: DCP Fallout: Here NB call got delayed due to DCP fallout on ""Notify DCP Equipment Completed"" since June 2024.Retried undfer Non-Dox SR: CAS258961","[5/27 Abhishek]: Abhishek B to update the impact
+
+[5/27 Abhishek]: Abhishek A (OSO) to send an email to Joe/team about the additional impacts.
+
+[5/28 Abhishek]: Impacts is updated.",,,,
+1-Jun-25,EQP3176107 BVE3176108,100145508,NA,NA,Interface,DCP Callback,NB call received on 8th May 25 to activate the BVE services with the backdate of 30th October 2024,"Interface/User: Here NB call delay as flow was stuck for DCp callback on ""Update DA/DL"" and we had SLA Breach GT opened for this delay too which user - Waalsh Maura"" assigned toi himself back in 31 Oct 2024 .This got complted now on rework from UI.Ideally SLA breach task assignee should take action in such case.Please refer below SR for more details. not in Amdocs Queue and hence comment not visible to us.
+SR019554462
+SR019577851","[5/21 Abhishek]: Venkat is going to check with user about the task which was delayed for alomost 6 months.
+
+[5/21 Abhishek]: To backdate the customer till 90days back only based on the reveunce policy that we will do after user inputs
+
+5/22- Kalyan- No update from the user.
+
+[5/27 Abhishek]: Venkat still cheking with user, no inputs from them.
+5/27-Kalyan: User Wlash said system delayed task & doesn't have an exact reason. He worked when there was a Rover ticket on it,
+
+
+5/28 Saurabh - Approved to Patch, backdate the activation to 90 days
+
+[5/29 Abhishek]: This is patched",708776134,,,
+1-Jun-25,SAC2560506 BV2560517 BVE4014670 EQP4014669 EQP4014671,130470419,NA,NA, , ,NB call received on 6th May 2025 to activate the services with the backdate of 9th April 2025,"8/25 Saurabh
+Here We have multiple LOB- BVE & BI with shared Site Access and BI was stuck due to data issue and previous handling at decomp activity as mentioned in CAS2577623. Please note this is working fine for other active instances. And this is single occurance till now in Rebill.","8/25 Saurabh- Discussed, this seems to be some old manual WA at OSO due to which BVE activation got delayed.
+
+Comments from CAS2577623
+Issue:  Sal Y Limon Restaurant - Wait for Decompose
+Resolution: Marking this as data issue due to previous WA's.
+Defect will be opened if similar instance found.
+
+Thanks.",708748009,,,
+1-Jun-25,EVCE2916873 UNI2916875 EQP2916874 SAC2916860,130299060,NA,NA, , ,NB call received on 3rd May 2025 to disconnect the services with the backdate of 31st Jan 2025,"User Education: User ""Gambell Michel"" delayed the NB user task - Suspend Ethernet Service","[5/27 Abhishek]: Sonalika/team to check with user about the dealy of the task.
+
+[5/27 Abhishek]: Abhishek B to update the impact
+
+5/28 Saurabh - Sonalika to check with user and update
+5/28- CMP KIM Forte response:  I don't know what the exact issue was but, I know the Rover Offnet team and Rover team got involved and took care of some back office issues. I wasn't involved in the specifics of the issue.
+Sales ordered Type II circuit twice incorrectly, and sales support attempted to cancel them and resubmit correctly. It should have been oDIA which finally went in correctly 1/28/25
+
+5/28 - Discussed",708674896,,,
+1-Jun-25,UNI3534727 EVCE3534728 EQP3534619 SAC3534435,130960597,NA,NA, , ,NB call received on 1st May 2025 to activate the services with the backdate of 18th Feb 2025,"Billing Cease call has been triggered from OSO side and also reached to SQO but as ABP confirmed this has not been ceased. Please open a SR. This need manual handling from OSO, SQO and ABP team. We will share the RCA with the SR. Mostly RCA would be own by SQO team.","5/27: raised CAS2631277
+
+[5/27 Abhishek]: Sumantha to open SR for WA and RCA. Please assigned to Abhishek A (OSO)
+
+[5/27 Abhishek]: Abhishek B to share the impact
+5/28 Saurabh - Share the impact, RCA CAS2631277 is already sent back with reason WAD/User education
+Angelo/Sonalika to check with user :
+OSO-User education: User - Coehle Frankie sdelayed the manual GT- Capture Switch CM/NID3.0  from 18th Feb to 1st may 2025
+
+RCA: User task delay : WAD
+
+5/28 Angelo: Coehle Frankie advised it didn’t get completed thru automation for some reason
+
+5/28 Saurabh - Approved to Patch, impact analysis is updated . We need to backdate to 90 days backdate date i.e 3/1/25
+
+[5/29 Abhishek]: This is patched",,,,
+1-Jun-25,EQP_411_3822606 SACM_411_3825025 BVE_411_3811479,131151631,NA,NA, , ,NB call received on 13th may to disconnect the BVE and EQP with the bakdate of 24th April 2025 and post that user used DTL feature to backdate the disconnect date from 24th April -> 7th March 25,This is due to waiting period of Regiesterd Timed Action.Working As Designed., ,,,,
+1-Jun-25,EQP_411_3824940 EQP_411_3814295 SACM_411_3780215 BVE_411_3809578,131151869,NA,NA, , ,NB call received on 9th May 25 to disocnnect the BVE and EQP with the backdate of 28th Feb 25,User to confirm how he changed the PTD for disconnect order as we can see it has been set Hotcut but with different date. Please check for usage with TTU as PTD was changed multiple times even crossing the previous PTD. NB Delayed due to Hot cut Hard Disconnect Wait which was waiting for Provide flow. Better to track this issue with new SR as based on user/TTU input...we will check this further.This may be a defect.,"[5/21 Abhishek]: Dale is going to check with TTU team about the usage on this site
+Sonalika/team to check with User why and How user has changed the PTD date multiple times.
+Somnath/team will open SR once we will have inputs for above.
+
+[5/21 Abhishek]: OSO to check with PDO after uses inputs and open defect.
+
+[5/21 Deepthi]:
+CPM comments: The order was completed back on 5/7. I am not able to see that information from the PMD i can possibly try to change the date on my end not sure it will work since i think its in PoNR
+
+[5/27 Abhishek]: Dale will check with TTU team about the usage part.
+
+Abhishek A to check in OSO for user name who changed PTD date multiple times
+
+Somnath/team will open SR and tag to sonalika in chat
+[5/27 Dale]: Old site should use disonnection date of 5/07/25. Call logs show conituous usage since its BVE service and numbers moved to the new location. Confimred with CPM on disconnection date.
+
+5/27 Saurabh - No backdate needed, update the disco dates to 5/7 (instead of currently 2/28) and remove rebill entry for both below subscribers
+1458831/EQP_411_3814295
+1534539/BVE_411_3809578
+
+[5/28 Abhishek]: Patched and removed from rebill.
+ CAS2649204 Created.",,,,
+1-Jun-25,UNI_451_3374464 EVCE_451_3381749 SACM_451_3379094 EQP_451_3375754,130938338,NA,NA, , ,NB call received on 15th May 25 to disocnnect the services with the backdate of 3rd Feb 25,"Here Flow was waiting on ""Hotcut Hard Disconnect Wait"" for Provide order which delayed the NB call.
+(partail analysis and Abhishek A to provide the complete analysis tomorrow)
+
+5/28 Saurabh (From OSO)
+Here Flow was waiting on ""Hotcut Hard Disconnect Wait"" for Provide order which delayed the NB call. Also PTD was chenged multiple times by the user after reaching this activity. TTU to confirm usage stop date and if Usage stop date is not Feb then We may need to check with PDO as We suspect UD amend should have been triggered post PTD change. So on that basis we will conclude if its user eduactaion or any potential gap.","5/27 Saurabh - Pending due to partial analysis from OSO
+5/28 Saurabh - Sonalika/Team to reach out to user to check on TTU usage. Complete OSO analysis is updated, depending on TTU usage date, if its not Feb'2025, OSO might need to check further with PDO's
+5/28 Saurabh - Sonalika shared SR019549086 where PTD was changed to 2/3/25
+
+[5/29 Abhishek]: Dale is checking with CPM about the PTD date for old sites.
+
+[5/30 Abhishek]: Dale confirmed in offshore chat to change the expiration date from 3rd Feb-> 20th May and remove from rebill.
+
+[5/30 Abhishek]: This is patched and removed from rebill",,,,
+1-Jun-25,EQP_411_3953689 SACM_411_3894489 EQP_411_3925872 BVE_411_3890002,131159757,NA,NA, , ,NB call received on 15th May 25 to disocnnect the BVE and EQP with the backdate of 14th Feb 25,"Here NB Call got delayed as ""RELEASE_PONR"" flag was not released as expected by the system post UD Amend by User. Billing date is corrct. Internal mail initiated with Amdocs PDO for the RCA and its working. Will update on this as per the PDO's input.","5/27: raised CAS2631375
+
+[5/27 Abhishek]: Abhishek A to open defect as PDO confirmed that this is defect.
+
+[5/27 Abhishek]: Sumantha to open SR and assign to OSO (Abhishek A)
+5/28 Saurabh - Defect 2882261 raised for CAS2631375",,,,
+1-Jun-25, , , , , , , , ,"[5/27 Abhishek]: Dale will check the report and will provide the approval to patch such population
+
+[5/28 Abhishek]: This is approved and to be patch.
+
+[5/29 Abhishek]: Current impacted records are patched and we will also monitor new impact that will patch before to start EOC",,,,
+1-Jun-25, , , , , , ,"[5/30 Abhishek]: There are 2 story point efforts provided for it and this will go as part of the feature.
+WA script is under development phase.", ,"[6/2 - Biswajit] - Melissa Validated this as ""All Set"".",,,,
+15-May-25,SACM_455_3293267 UNI_455_3294399 EVCE_455_3300819 EQP_455_3297040 EQP_455_3299921,130822047,OSite_801738_1, , , ,"NB came on 17-APR-25 to cease the services with the backate of 4th Dec, 2024","Interface  Issue: SNP team: NB Call got delayed due to SNP fallout on Core port turn Down which was completed by user- ""Kanchan Pragati"" on 16th april 2025
+
+SR019575650
+SNP Input:-
+the router is misconfigured, there is no interface TenGigE 0/0/0/11.3926. Not an issue on SNP side.
+Probably the interface was decommissioned manually prior to submitting Orion request in question.This is non dox issue.please check with SNP if more clarification needed", ,,,,
+15-May-25,UNI_155_2169851 EVCE_155_2181195 SACM_155_2178467 EQP_155_2170397,130397997,OSite_636204_1, , , ,"NB came on 21-APR-25 to cease the services with the backate of 14th Jan, 2025","This is Cease order with Coupled Hotcut having PTD 14th Jan 2025. Here provide Flow was stuck till 21st march on ""Disconnect Network wait"" . Need to check further on multiple Amend on provide flow with PDO. Please raise a new SR.","5/12: Somnath/Sumanta to raise an SR for RCA.
+5/12: User confirmation needed on PTD of cease of losing site and provide order for the gaining site (Customer 130397997) both since this is a move order. Anargha to check that
+05/13: CAS2596327 created by Somnath.
+5/13: Anargha is waiting for user's response
+5/13 Anargha: Checked and confirmed with the user (Holder-Sweet, Ashley)
+PTD of cease of losing and gaining site - 1/13",,,,
+15-May-25,BVE3604779 EQP3604778,130824657,OSite_853588_1, , , ,NB came on 17-APR-25 to activate services with the date of 29-JAN-25,Please raise a SR . Here Final PTD set by the user was 16th April 2025 but DOC date is being picked for early date which needs to be checked with OSO PDO.Please confirm with User/TTU team for the Activation date parallely.,"5/7: Somnath to raise CA for Abhishek A. to check this further with PDOs
+Sonalika/team would check with user/TTU , as to when they activated services
+05/08: Raised CAS2586042
+05/09-User confirmed the 4/16/25 is the correct date",708803651,,,
+15-May-25,BI_915_1640159 EQP_915_1638851 SACM_915_1638738,130291830,OSite_539177_1, , , ,NB came on 23-APR-25 to cease the services with the backdate of 17-JAN-25,Interface  Issue: OMW: here Activate provisioning gateway was stuck awaiting callback from OMW which delayed the NB call. We can see it was retried and then response received for new request as on 24th april.Can't see any SR in our dashboard.Please check with OMW only for Jan request if neeeded., ,708660036,,,
+15-May-25,UNI1945912 EVCE1945913,130352578,OSite_600982_1, , , ,"NB cae on 28th April, to cease the services with the backdate of 22-JAN-25","NB delayed due to failure on Send to Billing.
+Handled under SR019577324. .This was WAD from OSO side. Here NB call failed for the very first time due to impact of manual handling on previous version under SR019548847 by SQO team.
+
+Details of SR019548847 :
+WA - Fallout team applied known WA to handle the Set Product Status fallout.
+RCA - Impact of SQO defect 2627930 which is pending feature creation.", ,708718378,,,
+15-May-25,EQP2653969 UNI2653966 EVCE2653967 SAC2653965,130459122,OSite_677533_1, , , ,NB came on 19-APR-25 to cease the services with the backdate of 17-JAN-25,"RCA: Amdocs Outage
+Here NB call delayed as order was stucked on UNI Interface Turn Down which was handled under:SR019574803 with RCA: Amdocs outage on 17th Jan 2025",[5/15 : Biswajit ] - Services were ceased with back date 17 jan and the charges post 17th Jan has been creadited back.,,,,
+15-May-25,BI3241954 SAC3241952 EQP3241953,130703384,OSite_771321_1, , , ,NB came on 17-APR-25 to cease the services with the backdate of 25-FEB-25,"
+Flag for Release PONR was not released on 7th march due to OSO Outage which delayed the NB call here.",[5/15 : Biswajit ] - In the Bill 05/15/25 Services are backdated from Feb 26,,,,
+15-May-25,SAC3710764 UNI3710767 EVCE3710768 EQP3710766,130824384,OSite_863793_1, , , ,NB on 15-APR-25 to activate the services with the date of 12-MAR-25,"User Eductaion: User (Mclain Jason) delayed the task - ""Capture Switch/CM/NID3.0 details"" which delayed the NB call here","5/12: Dale to check when the usage started on this site
+
+[5/15 : Biswajit ] - For Site Duke St Lancaster Services are backdated from Mar 12",,,,
+15-May-25, , , , , , , ,All 773 records where patch done at SQO/OMS is presented. Approved to patch the 4 occurrences where prices reverted at ABP. We have setup moinitoring to see if there are any new occurrences,Check with Abhishek Bajpai.No impact on Bill,,,,
+15-May-25, ,130323846, , , , , , , ,,,,
+15-May-25, ,130824935, , , , ,Customer 130824935 has two BA's : 708804478 migrated on 15-MAY-24 and the other BA 708880599 migrated on 15-MAR-25. Customer 130824935 has Rebill request for March 15th and Apr 15th cycles . but he has one BA (708880599) with first Orion bill date of Apr-15., , ,,,,
+15-May-25, ,130677050, , , , , , , ,,,,
+15-May-25, , , , , , ,"From Billing side, prices are patched and moved to SQO to patch from their side.", , ,,,,
+1-May-25,EQP2084535,130379199,OSite_621065_1, , , ,NB call received on 2nd April 2025 to change the Service type from EDI~~Fiber_Underlay-> EDI with the date of 1st October 2024,"Shared Scenario with EDI + BVE , Customer is holding BVE from 2022. Now underlay was blocking EDI Amend and hence it was manually released to release the cache order and hence billing for shared EQP was manually progressed.
+Old Order  with lots of manual handling - March 2022 Order","4/24 Saurabh - Discussed, Approved to patch to take this customer out of rebill
+
+[4/30 Abhishek]: Patched",,,,
+1-May-25,BVE2510132 EQP2510133,130439428,OSite_677360_1, , , ,NB call received on 10th April 25 to activate the BVE and EQP witht the effective date of 21st December 2023,"Please check with User. As per the PTD history change without UD Amend, We are not clear with User expectation here as User was changing PTD multiple times without performing UD Amend.Also,get the billing date from the User/TTU team only.","[4/21 Abhishek]: Sonalika/team to check with CPM about the PTD date as user has changed PTD multiple time.
+
+[4/ 21 Abhishek]: Zac will check with TTU team about usage
+(4/22 Sonalika)-Awaiting CPM response
+4/23 Saurabh - As per CPM, OTT is not supposed to be active. Dale confirmed to NOT bill this BVE and EQP. As a WA Billng will stop charging this BVE and EQP (subscriber numbers : 1760485,1760484)
+Cease the OTT service
+
+[4/30 Abhishek]: Patched",708746446,,,
+1-May-25,WB3502690,130130933,OSite_264340_1, , , ,NB call received on 2nd April to activate WB product with date of 25th October 2024,"This was already discussed in previous Rebill Cycle and defect was opened :- 2829747 which has been already discussed in Finance defect call too.
+Here due to Amdocs data issue(as per defect analysis), Notification group was not created for Wireless backup (WB3502692 , WB3502690 ) and hence manual WA was applied from OSO and hence NB call got triggered on 2nd April as a part of handling only. This was for same customer and two sites:- OSite_264340_1 ,OSite_264341_1 . No Other instance in production.","[4/21 Abhishek]:Abhishek B to provide the Patch and impacts based on the 90days back revenue policy.
+4/23 Saurabh - Approved to Patch to backdate to last 90 days
+[4/30 Abhishek]: Patched",,,,
+1-May-25,WB3502692,130130933,OSite_264341_1, , , ,NB call received on 2nd April to activate WB product with date of 25th October 2024,"This was already discussed in previous Rebill Cycle and defect was opened :- 2829747 which has been already discussed in Finance defect call too.
+Here due to Amdocs data issue(as per defect analysis), Notification group was not created for Wireless backup (WB3502692 , WB3502690 ) and hence manual WA was applied from OSO and hence NB call got triggered on 2nd April as a part of handling only. This was for same customer and two sites:- OSite_264340_1 ,OSite_264341_1 . No Other instance in production.","[4/21 Abhishek]:Abhishek B to provide the Patch and impacts based on the 90days back revenue policy.
+4/23 Saurabh - Approved to Patch to backdate to last 90 days",,,,
+1-May-25,EQP1723616 UNI1723619 EVCE1723617 SAC1723615,130307138,OSite_558048_1, , , ,NB call received on 6th April 2025 to disconnect the services from 8th Jan 2025,"This is Move order where User had changed the PTD for Disconnect order but no UD Amend which had blocked the Cease order also awaiting new PTD.
+As per OSO, Billing date is 8th Jan but considering Coupled Hotcut, Please check with TTU for usage end date on this site and accordingly patch the date if required.
+
+Time Stamp              Old Date                 New Date
+2025-04-07 19:23:57.430 2025-05-22 12:00:00.000 2025-04-10 12:00:00.000
+2025-04-07 14:00:30.746 2025-04-07 12:00:00.000 2025-05-22 12:00:00.000
+2025-04-02 17:20:04.966 2025-05-22 12:00:00.000 2025-04-07 12:00:00.000
+2025-03-12 18:02:15.186 2025-04-01 12:00:00.000 2025-05-22 12:00:00.000
+2025-02-13 18:18:09.120 2025-03-03 12:00:00.000 2025-04-01 12:00:00.000
+2025-01-24 19:16:11.250 2025-02-28 12:00:00.000 2025-03-03 12:00:00.000
+2025-01-08 13:25:43.783 2025-01-08 12:00:00.000 2025-02-28 12:00:00.000
+2024-10-21 15:43:31.034 2025-01-08 12:00:00.000","4/24 Saurabh - Dale checking TTU usage to see if disco date of 1/8/25 needs to be changed
+4/25 Saurabh - Dale checked TTU usage and customer was using services until Apr-2025 when they were shut down (on 4/6/25)
+4/25 Dale- Need to discuss on Offshore call. Services were used until disconect date.
+4/25 Saurabh - No backdate disco is needed, Dale confirmed Move date was 4/10/25. Change 1/8/25 to 4/10/25
+
+[4/30 Abhishek]: Patched
+
+5/1 Biswajit - As move date is 4/10, the billed amount was credited for the next periods.",,,,
+1-May-25,EVCE2004258 UNI2004260 EQP2004257 SAC2004256,130345960,OSite_603087_1, , , ,NB call received on 10th April 2025 to disconnect the services from 17th Jan 2025,"Interface: SNP fallout on ""Core port turn Down"" which was completed by user-Dada Abeolu on 10th April 2025
+Seems like Handled under SR019574798. Not visible to us as never came to Amdocs Queue.","4/24 Saurabh - Sonalika to check with SNP team on why there was a delay.
+4/25 Saurabh - Anaragha/Sonalika to follow up with SNP team on the RCA and open a new SR. Also Dale to check if customer was using EDI.
+4/25 Saurabh - Confirmed with Dale nothing needs to be done.. Marking as Discussed
+
+4/28 Anargha - Update from SNP team regarding the RCA -
+The device was decommissioned and is inaccessible in the network.
+RCA: The RCA is an intermittent connectivity issue",,,,
+1-May-25,EQP2592942 SAC2592941,130466620,OSite_688005_1, , , ,NB call received on 11th April to disconnect these 2 products with the backdate of 31st Jan 25 however UNI2592947 and EVCE2592946 disconnected on 2nd feb with the same disconnect date . Please check why EQP and SAC were not disconnected in the month of FEB,"Amdocs Env Issue on 3rd Feb:Handled Under SR019574822
+
+on 3rd feb when the Billing flag should be released we have a OSO downtime/outage because of incident - > INC007489104 and it prevented billing flag release for EQP and SAC. ","4/24 Saurabh - Discussed, no patch needed",,,,
+1-May-25,EQP_451_3421652 EQP_451_3427482 SACM_451_3448951,130940167,OSite_825922_1, ,Interface,DCP Fallout,NB call received on 3rd April to disconnect these products with the date 25th Jan 25 however BVE was disconnected on 3rd Feb with the backdate of 25th Jan 25,"Here NB call was prevented for SAC and EQP due to DCP fallout on ""Notify DCP of Start of Voice Service Product Disconnection"" which seems to be handled by DCP/User in April. No SR found in Amdocs record.
+RCA: Interface: DCP Fallout(Rare Occcurance): For more details on RCA Please check with DCP team.Details provided below for fallout request to DCP:-
+Tracking Id: 15113987
+https://api.orion.comcast.com/onp/v1/sendNotification
+TimeStamp:2025-02-11 14:34:34.307",4/30: Sonalika to reach out to DCP to check,,,,
+15-Apr-25,EVCE_135_2035376 EQP_135_2039611 UNI3518397 EVCE3518396 ,130369690,OSite_612994_1 , , , ,"Subscriber's services have changed: added services:  Equipment Cost (NRC), Equipment Fee (MRC). removed services:  Equipment Cost (NRC), Equipment Fee (MRC).
+
+these came with backdate of 24-OCT-24","task delayed by user at equipment flow from 2024 to march 2025 -> """"MVT Refresh""", ,,,,
+15-Apr-25,UNI_415_1609194 EVCE_415_1607248 SACM_415_1607249 EQP_415_1607669 ,130284632,OSite_529819_1 , , , ,Subscribers ceased on 15-MAR-25 with the backdate of 04-DEC-24,"Interface:SNP team: NB delayed due to SNP fallout on Core Port Turn Down.
+SNP team moved SR for retry only. SR019561258
+Please check with SNP if more details needed on RCA part.","4/7 Anisha: Abhishek A. to double chekc the ticket mentioned, whether it was SNP issue or something at OSO.
+ 4/9 Prateek: SNP issue only not an OSO issue
+4/10: Biswajit to raise an SR for SNP for RCA purpose. It will be added in tracker for Open items",,,,
+15-Apr-25,EVCE2532905 UNI2532901 SAC2532849 EQP2532925 ,130346289,OSite_680418_1 , , , ,"EVCE and UNI activated on 21-MAR-25 wiht the backdate of 12-FEB-25. However,  EQP activated with the date of 21-MAR-25 and SAC with date of 04-JAN-25",in 2022 order site level there was some issue that was manually handled because all order was caneclled at OSO then manuaally decomposed again.. this is re-establish flow so ideal behaiour is the cease date should match with new activation date. UNI EVCE 12 feb date is correct SAC and EQP should again activated with the same date they got ceased  earlier, ,,,,
+15-Apr-25,UNI3245350 EVCE3245348 EQP3245349 SAC3245345 ,130703965,OSite_771778_1 , , , ,NB on 25-MAR-25 to create the subscribers wiht the date of 14-FEB-25,"User Education: User(Dipaliya mathew) delayed the manual task ""Capture Switch/CM/NID3.0 Details"" from 14th Feb  to 25th March. ", ,,,,
+15-Apr-25,EVCE4000725 UNI4000726 EQP4000727 EQP4000728 ,130706908,OSite_773655_1 , , , ,NB on 27-MAR-25 to create the subscribers with the backdate of 06-FEB-25,"shared SAC between EDI and BI and BI was marked as failed install and never reinstalled again, later user Garcia+Tina released the BI flow manually not sure why it should have been opened up after scheduling.. so EDI got delayed becaused of BI and why BI was stalled for scheduling and what is expcetd with BI this needs to be checked with user only.. comcast user should not do WA on their onw they must raise SR only",[15-Apr-25]- Biswajit - Billing backdated to 06th Feb with the adjusted rate.,,,,
+15-Apr-25,UNI_455_3300331 EVCE_455_3300448 SACM_455_3290770 EQP_455_3291828 ,130823419,OSite_804378_1 , , , ,NB on 16-MAR-25 to cease the subscribers with the backdate of 17-JAN-25,"
+NB Call got delayed due to the reason - success callback from SNP team was not updated at OSO end due to OSO outage.
+Handled under SR019563765- outage on January 16th-17th, INC007407288
+From last month We are already monitoring these fallouts and sending mail proactively in order to avoid such delay.","4/7: Need to check how fallouts are handled
+
+[15-Apr-25]- Biswajit - Billing backdated to Jan 18th with the adjusted rate and Net Impact is matching in the bill.",,,,
+15-Apr-25,EQP_455_3329004 SACM_455_3321714 EQP_455_3324771 ,130825630,OSite_800892_1 , ,Interface,DCP Fallout, EQP_455_3329004 SACM_455_3321714  ceased with the date of 21-MAR-25 whereas EQP_455_3324771 ceased with the date of 15-FEB-25. Associated BVE_455_3328216 was ceased back on 17-FEB-25 with the backdate of 15-FEB-25," EQP_455_3324771   - failure at DCP task in service flow stalled the EQP cease flow which got fixed on 22 March 2025 Interface issue
+ EQP_455_3329004, SACM_455_3321714 : Billing date of DOCSIS is correct since it's dependent only on its underlay service (COAX), and underlay  also got delayed because of DCP task fallout so dates are correct", ,,,,
+15-Apr-25,BVE4082611 EQP4082610 ,131194228,OSite_916478_1 , , , ,NB came on 02-APR-25 to create the subscribers with the backdate of 11-MAR-25,"User Education: user(Ruffin Shikaila) delayed the manual task ""DOI Completed"" from 11th march to 1st April.very Rare Scenario for this GT in our Rebill.", ,,,,
+15-Apr-25,BVE4011291 EQP4011289,131183671,OSite_909504_1, , , ,NB came on 04-APR-25 to activate BVE and EQP with backdate of 07-MAR-25.,"User Education: user(Archuleta M) delayed the manual task ""DOI Callflow Design GT"".", ,,,,
+15-Apr-25,PRI_715_1620440,130286684,OSite_532108_1, , , ,"On 17-MAR-25 there was an Update Parameter call on Subscriber 464533  , resulting with transforming stepped promotion into flat", , ,"708,740,118,708,739,000",,,
+15-Apr-25,PRI_155_2183936,130398773,22819 E APPLEWAY AVE-ALTEK MANUFACTURING(OSite_633302_1) , , , ,"It is a stepped promo where price decreased from 1-50 to -100 on 09-JAN-25. Its UPSQO transaction was triggered on 09-JAN-25. Price not updated at SQO.
+SQO defect for the issue: Defect 2832415. Price needs to be updated at SQO.", , ,708732368,,,
+"April 1, 2025",EQP2138519,130386010,OSite_625448_1,OSO,Old Order,2022 Order: Billing Sync point,NB call came on 9th March to update some parameter with the backdate of  1st October 2024,"RCA:Old Order from 2022
+Handled under SR019563997 and RCA was not conclusive due to absence of logs.",,,,,
+"April 1, 2025",EVCE2440521 UNI2440522 EQP2440520 SAC2433558,130412777,OSite_668510_1,OSO,User Education,Manual task Delay,NB call came on 16th March 25 to disconnect products with the backdate of 23rd Feb 2024,"User Education: user (Kebede Sehin) delayed the manual GT: ""Suspend Ethernet Service"" from 23rd Feb to 13th March and then 3 days of mandatory wait rule on Registered Timed Action",,,,,
+"April 1, 2025",UNI2838876 EVCE2838877 EQP2838875 SAC2782698,130515114,OSite_710560_1,OSO,User Education,WAD: Re-Establishment,NB call came on 5th March 25 to activate the services with the backdate of 23rd December 2024,Working As Designed: This is the case of Re-establishment. There was on-going Disconnect order which crossed PONR on 3rd Jan with billing date of 23rd Dec (WAD- 10 Days for Mandatory Wait Rule) and then User restored the order on 5th march which was still before PONRE and hence order got restored as expected.Billing Dates are correct here considering no service turn down at the site.,,,,,
+"April 1, 2025",EQP3502691,130130933,OSite_264340_1,OSO,Not Reproducible,New Defect Opened for billing flag not reeleased for Connection Device: DE 2829747,NB call came on 13rd March to activate it with the backdate of 25th October 2024,Here Billing Flag was not released for the mentioned EQP flow by the system on 25th Oct 2024. We have opened new defect for the RCA: Defect- 2829747. Please open a common SR for this and below record which belongs to same cutomer but different site id. SR would be helpful for tracking purpose. Billing Date is correct for both the record.,,,,,
+"April 1, 2025",EQP3502689,130130933,OSite_264341_1,OSO,Not Reproducible,New Defect Opened for billing flag not reeleased for Connection Device: DE 2829747,NB call came on 13rd March to activate it with the backdate of 25th October 2024,Here Billing Flag was not released for the mentioned EQP flow by the system on 25th Oct 2024. We have opened new defect for the RCA: Defect- 2829747.This is another site of above record.Billing Date is correct.,,,,,
+1-Apr-25,EQP2138519,130386010,OSite_625448_1, , , ,NB call came on 9th March to update some parameter with the backdate of  1st October 2024,"RCA:Old Order from 2022
+Handled under SR019563997 and RCA was not conclusive due to absence of logs.","[3/19 Abhishek]: Abhishek A will do more analysis on this order, what exactly happened with this order",,,,
+1-Apr-25,EVCE2440521 UNI2440522 EQP2440520 SAC2433558,130412777,OSite_668510_1, , , ,NB call came on 16th March 25 to disconnect products with the backdate of 23rd Feb 2024,"User Education: user (Kebede Sehin) delayed the manual GT: ""Suspend Ethernet Service"" from 23rd Feb to 13th March and then 3 days of mandatory wait rule on Registered Timed Action","[3/19 Abhishek]: Venkata will reachout to CPM user to check why this was pending so long and also check about usage with TTU team.
+3/20 Kalyan-  sales and CMP were waiting for customer response to go on suspension that is why it
+took long time to complete the tasks
+3/20 Saurabh - As discussed during onshore call, this delay happened due to customer’s site got flooded and there was no response (as per CPM).
+Due to this customer is claiming services were not used and should have been disconnected.
+@Sapra, Sonalika (Contractor) to check and confirm with TTU team if customer was using services from 2/24 (OSite_668510_1 - 300 Brickstone Sq  #4) , if no usage then we will let rebill process and credits of ~14k to be applied to the account 708745060
+3/28 Saurabh - Removed Rebill entry (no credit will be given) as per requested by Dale/Sonalika",,,,
+1-Apr-25,UNI2838876 EVCE2838877 EQP2838875 SAC2782698,130515114,OSite_710560_1, , , ,NB call came on 5th March 25 to activate the services with the backdate of 23rd December 2024,Working As Designed: This is the case of Re-establishment. There was on-going Disconnect order which crossed PONR on 3rd Jan with billing date of 23rd Dec (WAD- 10 Days for Mandatory Wait Rule) and then User restored the order on 5th march which was still before PONRE and hence order got restored as expected.Billing Dates are correct here considering no service turn down at the site.,"[3/19 Abhishek]: To update the impact
+
+3/26: Somnath to raise SR to track the patch
+03/26: Somnath raised SR019569958",,,,
+1-Apr-25,EQP3502691,130130933,OSite_264340_1, , , ,NB call came on 13rd March to activate it with the backdate of 25th October 2024,Here Billing Flag was not released for the mentioned EQP flow by the system on 25th Oct 2024. We have opened new defect for the RCA: Defect- 2829747. Please open a common SR for this and below record which belongs to same cutomer but different site id. SR would be helpful for tracking purpose. Billing Date is correct for both the record.,03/19 Sumanta - SR019568026 raised,,,,
+1-Apr-25,EQP3502689,130130933,OSite_264341_1, , , ,NB call came on 13rd March to activate it with the backdate of 25th October 2024,Here Billing Flag was not released for the mentioned EQP flow by the system on 25th Oct 2024. We have opened new defect for the RCA: Defect- 2829747.This is another site of above record.Billing Date is correct.,03/19 Sumanta - SR019568026 raised,,,,
+1-Apr-25,UNI_451_3379874 EVCE_451_3384052 SACM_451_3374534 EQP_451_3379223,130938599,OSite_827565_1, , , ,NB call came on 17th March 25 to change the bandwidth from 100-> 50 mbps with the backdate of 9th Jan 2025 hence prices are also changed from $450.35-> $318.6,"RCA: Code: Amdocs defect: 2833461 Fixed , EST Deploy date 03/28/2025 02:12:47.
+
+Here NB Call delayed due to impact of this defect where RELEASE_PONR flag was not released for EDI Modify flow
+
+Handled under SR: SR019565975 and we have another instance in this rebill for same customer but different Site.
+Defect Issue:
+EDI no change and EDI modify both are In delivery, that's not correct.
+EDI no change should be amended in DB and should not show up in PMD UI as it is the older version.
+Due to this EDI modify was waiting at Set product PONR which should have been released.
+Resolution: WA: Task was completed from OSO end
+RCA: 2833461 defect is in fixed phase so marking ticket as change implementation.",03/19 Sumanta - SR019568026 raised,,,,
+1-Apr-25,SACM_451_3387211 UNI_451_3380024 EVCE_451_3377015 EQP_451_3371838,130938663,OSite_828271_1, , , ,NB call came on 4th March to disconnected the services with the backdate of 24th Jan 2025,RELEASE_PONR Flag was not released on 3rd Feb 2025 by the system which was later released manually causing NB delay. Date is correct here. No other instance found yet and no error log.Please raise SR for tracking purpose only to work on query/script in order to deal with such issues.,"3/27: somnath to raise Srfor the script which Abhishek A. will work on and add it in tracker for open items.
+03/27: Somnath: SR019570603 raised",,,,
+1-Apr-25,EQP_291_3014494 PRI_291_3018202 SACM_291_3017409 EQP_291_3014520,130609585,OSite_741891_1, , , ,"NB came on 08-MAR-25 to cease PRI_291_3018202 and EQP_291_3014494 with thebackdate of 26-FEB-25.
+EQP_291_3014520 and SACM_291_3017409 ceased with 08-MAR-25 date",Delay is due to Mandatory Wait Rule and got captured due to cycle change . And Mentioned sac and EQP's MRC was  were already stopped on 25th Jan 2025. This is same as another rebill record in previous rebill cycle with defect: 2816776, ,,,,
+1-Apr-25,UNI_291_3023410 EVCE_291_3021586,130611268,OSite_741316_1, , , ,UNI and EVCE subscribers ceased with backdate of 17-JAN-25,"RCA: Amdocs Known Outega on 16th jan 2025: Handled under SR019560997 which later progressed the NB call here.
+NB Call Delayed as success callback from SNP team was not updated at OSO side.
+Environment issue due to Multi Site Order which caused outage on 16th jan 2025.
+Core issue addressed under Defect: 2802459
+
+Also Here SAC and eqp is shared with PRI and still active, hence Cease call was only for UNI and EVCE.", ,708767170,,,
+1-Apr-25,UNI_451_3379874 EVCE_451_3384052 SACM_451_3374534 EQP_451_3379223,130938599,OSite_827565_1, , , ,"Update parameter call came on 17-MAR-25 to make following changes with backdate of 09-JAN-25.
+1. Update bandwidth from 100 to 50. Price of BASICEVC offer getting updated from 450.35 to 318.6","RCA: Code: Amdocs defect: 2833461 Fixed , EST Deploy date 03/28/2025 02:12:47.
+
+Here NB Call delayed due to impact of this defect where RELEASE_PONR flag was not released for EDI Modify flow
+
+Handled under SR: SR019565975 and we have another instance in this rebill for same customer but different Site.
+Defect Issue:
+EDI no change and EDI modify both are In delivery, that's not correct.
+EDI no change should be amended in DB and should not show up in PMD UI as it is the older version.
+Due to this EDI modify was waiting at Set product PONR which should have been released.
+Resolution: WA: Task was completed from OSO end
+RCA: 2833461 defect is in fixed phase so marking ticket as change implementation.", ,708821076,,,
+1-Apr-25,EQP2194593 EQP2439766 EVCE2194594 UNI2194595 SAC2194050 MR2439765,130399132,OSite_636704_1, , , ,NB came on 20-MAR-25 for bandiwdth upgrade from 1000 to 2000 with backdate of 31-OCT-24.,"User Education: User (Marcin Kostecki) delayed the task ""Confirm technician Switch CM/NID pickup"" from Nov 2024 to march 2025 which has delayed the NB call here.",3/27: Need SR to track patch,708741315,,,
+1-Apr-25, ,130407707,OSite_641952_1, , , ,"Subscriber 464533 suspended on Feb-20 , resulting with transforming stepped promotion into flat", , ,"708,740,118,708,739,000",,,
+1-Apr-25, ,130349413,OSite_599080_1, , , , , ,3/26: Somnath to raise SR ,,,,
+1-Apr-25, ,131147916,OSite_880420_1, , , , , ,3/26: Somnath to raise SR ,,,,
+1-Apr-25, ,130406666,OSite_925112_1, , , , , ,3/26: Somnath to raise SR ,,,,
+1-Apr-25, ,131194398,OSite_918746_1, , , , , ,3/26: Somnath to raise SR ,,,,
+1-Apr-25, ,130977106,OSite_857981_1, , , , , ,3/26: Somnath to raise SR ,,,,
+1-Apr-25, ,130300411,"OSite_552877_1
+OSite_667868_1", , , ,"
+EQP rate change happened on 01-OCT-24, and DL/VNI fees on 01-JAN-25.NB came on  20-MAR-25 that reverted the prices back to old rates
+Rate after rate change:39.95
+8
+8
+
+Old rates: 34.95
+5
+5", , ,,,,
+1-Apr-25, ,130532124,OSite_721368_1, , , ,"
+EQP rate change happened on 01-OCT-24, and DL/VNI fees on 01-JAN-25.NB came on  19-MAR-25 that reverted the prices back to old rates
+Rate after rate change:39.95
+Old rates: 34.95", , ,,,,
+1-Apr-25, ,130939605,OSite_825871_1, , , ,"
+EQP rate change happened on 01-OCT-24, and DL/VNI fees on 01-JAN-25.NB came on  24-MAR-25 that reverted the prices back to old rates
+Rate after rate change:
+8
+
+Old rates:
+5", , ,,,,
+1-Apr-25, ,130940817,OSite_824963_1, , , ,"
+EQP rate change happened on 01-OCT-24, and DL/VNI fees on 01-JAN-25.NB came on  21-MAR-25 that reverted the prices back to old rates
+Rate after rate change:
+8
+
+Old rates:
+5", ,[01-Apr-25]- Biswajit - Billing backdated to 21st March with the new rate of $8.00,,,,
+1-Apr-25, ,130943634,OSite_833598_1, , , ,"
+EQP rate change happened on 01-OCT-24, and DL/VNI fees on 01-JAN-25.NB came on  05-MAR-25 that reverted the prices back to old rates
+Rate after rate change:
+8
+
+Old rates:
+5", ,[01-Apr-25]- Biswajit - Billing backdated to 05th March with the new rate of $8.00,,,,
+1-Apr-25, ,130945490,OSite_826150_1, , , ,"
+EQP rate change happened on 01-OCT-24, and DL/VNI fees on 01-JAN-25.NB came on  10-MAR-25 that reverted the prices back to old rates
+Rate after rate change:
+8
+
+Old rates:
+5", ,[01-Apr-25]- Biswajit - Billing backdated to 10th March with the new rate of $8.00,,,,
+1-Apr-25, ,131151529,OSite_898540_1, , , ,"
+EQP rate change happened on 01-OCT-24, and DL/VNI fees on 01-JAN-25.NB came on  14-MAR-25 that reverted the prices back to old rates
+Rate after rate change:
+8
+8
+
+Old rates:
+5
+5", ,[01-Apr-25]- Biswajit - Billing backdated to 14th March with new rate of $8.00,,,,
+"April 1, 2025",EVCE2440521 UNI2440522 EQP2440520 SAC2433558,130412777,OSite_668510_1,OSO,User Education,User pending task: already Informed multiple times via Report,NB call came on 16th March 25 to disconnect such products with the backdate of 23rd Feb 2024,"User Education: user (Kebede Sehin) delayed the manual GT: ""Suspend Ethernet Service"" from 23rd Feb 2024 to 13th March 2025 and then 3 days of mandatory wait rule on Registered Timed Action. This was already highlighted multiple times in Dec via mail and it appears the issue was not addressed, and the user completed the task this month. To prevent similar occurrences in the future, it is crucial to thoroughly review the provided sheet of pending user tasks esp for this task.",,,,,
+"April 1, 2025",UNI_451_3379874 EVCE_451_3384052 SACM_451_3374534 EQP_451_3379223,130938599,OSite_827565_1,OSO,Code,defect: 2833461,NB call came on 17th March 25 to change the bandwidth from 100-> 50 mbps with the backdate of 9th Jan 2025 hence prices are also changed from $450.35-> $318.6,"RCA: Code: Amdocs defect: 2833461 Fixed , EST Deploy date 03/28/2025 02:12:47.
+
+Here NB Call delayed due to impact of this defect where RELEASE_PONR flag was not released for EDI Modify flow
+
+Handled under SR: SR019565975 and we have another instance in this rebill for same customer but different Site.
+Defect Issue: 
+EDI no change and EDI modify both are In delivery, that's not correct. 
+EDI no change should be amended in DB and should not show up in PMD UI as it is the older version. 
+Due to this EDI modify was waiting at Set product PONR which should have been released.
+Resolution: WA: Task was completed from OSO end
+RCA: 2833461 defect is in fixed phase so marking ticket as change implementation.",,,,,
+"April 1, 2025",SACM_451_3387211 UNI_451_3380024 EVCE_451_3377015 EQP_451_3371838,130938663,OSite_828271_1,OSO,Data,Analysed under 2833461: Wireless Backup: NG Group Not Created ,NB call came on 4th March to disconnected the services with the backdate of 24th Jan 2025,RELEASE_PONR Flag was not released on 3rd Feb 2025 by the system which was later released manually causing NB delay. Date is correct here. No other instance found yet and no error log.Please raise SR for tracking purpose only to work on query/script in order to deal with such issues.,,,,,
+"April 1, 2025",EQP_291_3014494 PRI_291_3018202 SACM_291_3017409 EQP_291_3014520,130609585,OSite_741891_1,OSO,User Education,WAD : Captured due to Cycle Change + 2816776: MRC Stopped but Cease date is different,"NB came on 08-MAR-25 to cease PRI_291_3018202 and EQP_291_3014494 with thebackdate of 26-FEB-25. 
+EQP_291_3014520 and SACM_291_3017409 ceased with 08-MAR-25 date",Delay is due to Mandatory Wait Rule and got captured due to cycle change . And Mentioned sac and EQP's MRC was  were already stopped on 25th Jan 2025. This is same as another rebill record in previous rebill cycle with defect: 2816776,,,,,
+"April 1, 2025",UNI_291_3023410 EVCE_291_3021586,130611268,OSite_741316_1,OSO,Environment,Amdocs known outage on 16th jan,UNI and EVCE subscribers ceased with backdate of 17-JAN-25,"RCA: Amdocs Known Outega on 16th jan 2025: Handled under SR019560997 which later progressed the NB call here.
+NB Call Delayed as success callback from SNP team was not updated at OSO side.
+Environment issue due to Multi Site Order which caused outage on 16th jan 2025.
+Core issue addressed under Defect: 2802459
+
+Also Here SAC and eqp is shared with PRI and still active, hence Cease call was only for UNI and EVCE.",,,,,
+"April 1, 2025",UNI_451_3379874 EVCE_451_3384052 SACM_451_3374534 EQP_451_3379223,130938599,OSite_827565_1,OSO,Data,Analysed under 2833461: Wireless Backup: NG Group Not Created ,"Update parameter call came on 17-MAR-25 to make following changes with backdate of 09-JAN-25.
+1. Update bandwidth from 100 to 50. Price of BASICEVC offer getting updated from 450.35 to 318.6
+","RCA: Code: Amdocs defect: 2833461 Fixed , EST Deploy date 03/28/2025 02:12:47.
+
+Here NB Call delayed due to impact of this defect where RELEASE_PONR flag was not released for EDI Modify flow
+
+Handled under SR: SR019565975 and we have another instance in this rebill for same customer but different Site.
+Defect Issue: 
+EDI no change and EDI modify both are In delivery, that's not correct. 
+EDI no change should be amended in DB and should not show up in PMD UI as it is the older version. 
+Due to this EDI modify was waiting at Set product PONR which should have been released.
+Resolution: WA: Task was completed from OSO end
+RCA: 2833461 defect is in fixed phase so marking ticket as change implementation.",,,,,
+"April 1, 2025",EQP2194593 EQP2439766 EVCE2194594 UNI2194595 SAC2194050 MR2439765,130399132,OSite_636704_1,OSO,User Education,User task Delay,NB came on 20-MAR-25 for bandiwdth upgrade from 1000 to 2000 with backdate of 31-OCT-24.,"User Education: User (Marcin Kostecki) delayed the task ""Confirm technician Switch CM/NID pickup"" from Nov 2024 to march 2025 which has delayed the NB call here.",,,,,
+"March 15, 2025",UNI_915_1650580 EQP_915_1647315 ,130294016,OSite_541504_1 ,ABP,,,Barbara Gillespie used DTL to update disconnect date from 18-MAY-24 to 01-APR-24. Feture not used for EVC subscriber.,Not Required,,,,,
+"March 15, 2025",UNI_915_1647724 EVCE_915_1650502 EQP_915_1640728 ,130293841,OSite_541308_1 ,OSO,User Education,EPL Single Leg order,"Update parameter call came on 18-FEB-25 for below changes with the backdate of 18-JAN-24
+1. Subscriber's services have changed: added services:  Equipment Cost (NRC), Equipment Fee (MRC).
+removed services:  Equipment Cost (NRC), Equipment Fee (MRC).",User Education: user submitteed EPL Modify for single leg  in Nov 2023 and there was price impacting parameter. And hence billing Sync point was stuck which was released on 18th Feb.And Hence NB Call got delayed.please check with user for more details.,Could be enhancement at SQO/Sales level to avoid such cases,,,,
+"March 15, 2025",UNI_115_1799953 EVCE_115_1797004 SACM_115_1811520 EQP_115_1798203 ,130323778,OSite_572101_1 ,OSO,User Education,User skipped scheduling and manual WA as per user request,"Update Parameter call came on 21-FEB-25 with below changes with backdate of 09-SEP-24:
+1. Subscriber's services have changed: added services:  Network Allocation Cost (NRC). removed services:  Network Allocation Cost (NRC) (Vintage).
+2. Parameter name Bandwidth updated. Old value: {30}. New value: {100}.
+3. Parameter name Port ID updated. Old value: {38.KEGS.000037..CBCL..}. New value: {38.KRGS.074714..CBCL..}.","in 2024 September scheduling was cancelled by user and it seems like flow got progressed manually and scheduling was never done so EQP capture flags were not released 
+now in feb 2025 later EQP capture flags were released manually seems like user request only 
+questions for user..
+1- scheduling status i.e. what was the expectetation with this site modification..
+2- date seems correct as of now can as per OSO.. need user to confirm the same",,update bl1_technical_mark set status='CO' where entity_id=130323778;,,,
+"March 15, 2025",EQP_215_3100414 PRI_215_3101001 UNI_215_3100416 UNI_215_3103934 UNI_215_3099976 UNI_215_3103705 EVCE_215_3102563 EVCE_215_3102368 EVCE_215_3104147 EVCE_215_3098 660 SACM_215_3102656 EQP_215_3102138 EQP_215_3102932 ,130677051,OSite_751677_1 ,OSO,User Education,WAD: Multiple LOBs Shared Scenario,"Update parameter call came on 03-MAR-25 making changes with the backdate of 14-OCT-24. Changes:
+1. Bandwidth updated from 500 to 1000
+2. Subscriber's services have changed: added services:  Network Allocation Cost (NRC).
+3. Parameter name Service Type updated. Old value: {EDI~~EPL~~Fiber_Underlay}. New value: {EDI~~EPL}.","
+SHared EQP and SAC between 3 EPL , 1 EDI and PRI underlay
+user submitted order for PRI to BVE migrate in 2024 September..
+them submitted an AMEND to cancel this migration but AMEND got cached because shared ethernet-EQP crossed PONR.. and waiting for cease PTD to arrive which user deneied to update to early date ..
+so manual WA applied recently to release the cache and now all the shared products billing released with backdate..
+date is correct ",,,,,
+"March 15, 2025",EQP_115_1804040 ,130324466,OSite_573639_1 ,OSO,User Education,Manual task Delay,NB came on 25-FEB-25 to activate the EQP subscribers with the backdate of 03-DEC-24. ,"User Education:user(francoeur Shawn) delayed the manual task ""Add Servcice to monitoring and Core"" in the Re-establishment provisioning flow which delayed the NB call
+",,,,,
+"March 15, 2025",EQP_115_1816894 PRI_115_1811998 ,130325704,OSite_572018_1 ,OSO,User Education,New Defect opened post disussion with PDOs. And It was found to be User Education where User-jams Cann had set the Non_price_impacting_parameter= True which caused the issue here.,"Update parameter call came on 25-FEB-25 with changes effective from 11-DEC-24. Changes:
+1. Renewal of contract
+2. Promotion of -200 added for the customer.
+3. Subscriber's services have changed: added services:  Advanced Voice PRI Gateway - Equipment Cost (NRC), Advanced Voice PRI Gateway - Equipment Fee (MRC).
+removed services:  Advanced Voice PRI Gateway - Equipment Cost (NRC), Advanced Voice PRI Gateway - Equipment Fee (MRC). ",New Defect opened post mail disussion with PDO. And It was found to be User Education where User had set the Non_price_impacting_parameter= True  User- jams Cann,,"3/14 Saurabh - Removed from Rebill
+update bl1_technical_mark set status='CO' where entity_id=130325704;",,,
+"March 15, 2025",BVE3630569 EQP3630573 ,130973520,OSite_855701_1 ,OSO,User Education,"WAD:Task Delayed for acceptable period of time , This got captured in Rebill due to Cycle Change",NB came on 19-FEB-25 where to activate subscriber with the date of 12-FEB-25 ,"User Education/WAD: user(Veal Colton) delayed the manual task ""DOI Callflow Design GT"" . Also this is just 7 day delay which is acceptable, it got captured in rebill due to cycle change.",,,,,
+"March 15, 2025",EQP3695317 BVE3695315 ,130980096,OSite_859846_1 ,OSO,User Education,"WAD:Task Delayed for acceptable period of time , This got captured in Rebill due to Cycle Change",NB came on 20-FEB-25 where to activate subscriber with the date of 07-FEB-25 ,"User Education/WAD: user(Roman Geotgie) delayed the manual task ""DOI Callflow Design GT"" . Also this is 13 day delay which is acceptable, it got captured in rebill due to cycle change.",,,,,
+"March 15, 2025",BVE3719510 EQP3719509 ,130987092,OSite_864584_1 ,OSO,User Education,"WAD:Task Delayed for acceptable period of time , This got captured in Rebill due to Cycle Change",NB came on 18-FEB-25 where to activate subscriber with the date of 04-FEB-25 ,"User Education/WAD: user delayed the manual task ""DOI Callflow Design GT"" . Also this is 13 day delay which is acceptable, it got captured in rebill due to cycle change.",,,,,
+"March 15, 2025",BVE3986699 EQP3986698 ,131179315,OSite_906550_1 ,OSO,User Education,"WAD:Task Delayed for acceptable period of time , This got captured in Rebill due to Cycle Change",NB came on 20-FEB-25 where to activate subscriber with the date of 07-FEB-25 ,"User Education/WAD: userdelayed the manual task ""DOI Callflow Design GT"" . Also this is 13 day delay which is acceptable, it got captured in rebill due to cycle change.",,,,,
+"March 15, 2025",EVCE3699928 UNI3699931 ,130304251,OSite_862737_1 ,SQO,Code,Defect: 1014182,NB came on 19-FEB-25 to activate the subscribers with the date of 28-JAN-25. EQP created on 27-FEB-25 with the same activation date,"RCA: SQO Defect: 1014182 NB Failure>Create BXTFA-36420 to address
+NB call delayed for EQP due to failure on ""Send to Billing"" because of this defect. To know more about this defect, Please involve SQO Focal.",,,,,
+"March 15, 2025",EVCE3657838 UNI3657839 SAC3657814 EQP3657836 ,130977394,OSite_858232_1 ,OSO,Non Dox,SNP Issue,NB came on 20-FEB-25 to activate the subscribers with the date of 16-JAN-25,"Interface:SNP team need to share the RCA here.
+NB Call delayed as no callback was sent by SNP team at  ""SNP Port Turn Up"" from 17th Jan to 20th Feb .
+This was reworked by Frontline team under SR:SR019559283 and then this progressed on callback on 20th Feb.",,,,,
+"March 15, 2025",EQP4014759 BVE4014760 ,131184107,OSite_909844_1 ,OSO,User Education,"WAD:Task Delayed for acceptable period of time , This got captured in Rebill due to Cycle Change","NB came on 17-FEB-25 where to activate subscriber with the date of 14-FEB-25 
+
+","User Education/WAD: user(Rueckheim Donald) delayed the manual task ""DOI Callflow Design GT"" . Also this is just 3 day delay which is acceptable, it got captured in rebill due to cycle change.",,,,,
+"March 15, 2025",BVE4027678 EQP4027677 ,131186351,OSite_911178_1 ,OSO,User Education,"WAD:Task Delayed for acceptable period of time , This got captured in Rebill due to Cycle Change",NB came on 20-FEB-25 where to activate subscriber with the date of 12-FEB-25 ,"User Education/WAD: user delayed the manual task ""DOI Callflow Design GT"" . Also this is 8 day delay which is acceptable, it got captured in rebill due to cycle change.",,,,,
+"March 15, 2025",EQP4034464 BVE4034465 ,131187537,OSite_911882_1 ,OSO,User Education,"WAD:Task Delayed for acceptable period of time , This got captured in Rebill due to Cycle Change",NB came on 18-FEB-25 where to activate subscriber with the date of 13-FEB-25 ,"User Education/WAD: userdelayed the manual task ""DOI Callflow Design GT"" . Also this is 5 day delay which is acceptable, it got captured in rebill due to cycle change.",,,,,
+"March 15, 2025",SACM_155_2182658 UNI_155_2190390 EVCE_155_2189571 EQP_155_2188894,130398095,OSite_633050_1,OSO,Non Dox,SNP Issue,NB came on 06-MAR-25 to cease the services with the backdate of 04-DEC-24,"RCA: interface: SNP team
+Her NB got delayed due to fallout on ""UNI Interface Turn Down"" from SNP team which was later forced completed by the user(Martinez Laura).
+
+SR -SR019559136 was also opened and it was sent to SNP team but seems POC closed without adding RCA from the jira.
+SNP ticket Details:- https://ccp.sys.comcast.net/projects/SUP/issues/SUP-25328?filter=allopenissues
+Tracking ID :- 15287676
+API :-https://sat-prod.codebig2.net/v2/ws/token.oauth2?client_id=doxorion&amp;amp;client_secret=cc3caf4563d3d0f36460e755c6725f45&amp;amp;grant_type=client_credentials&amp;amp;scope=orion:provisioning.
+
+Please get more details from JIRA or check with SNP team, as per the Joe's suggestion",,,,,
+"March 15, 2025",UNI_135_2028164 EVCE_135_2036383,130369415,1,OSO,Data,Billing Sync Point was reworked which caused the issue,"NB came on 04-MAR-25 with following changes with backdate of 30-JAN-24:
+1. Parameter name Contract Terms updated. Old value: {60}. New value: {24}.
+2. Subscriber's services have changed: added services:  Network Allocation Cost (NRC). removed services:  Network Allocation Cost (NRC) (Vintage).
+3. Parameter name Override RC Amount updated. Old value: {94.98}. New value: {200.0}.
+4. Parameter name Override RC Amount updated. Old value: {42.53}. New value: {95.0}.","Nb got delayed as flow was stuck at ""Billing Sync point"" . Here This is a data issue , no logs available for May 2024 to confirm the detailed RCA.
+SR019469899
+EPL Site(OSite_614425_1) ""billing sync point"" was waiting for other end (OSite_614424_1). Which is still waiting for fulfillment completion (solution ID : 1169579275 ).
+But this was reworked which corrupted the Sync Point. Now when other leg got completed then also it was not released by the system. And We dont have logs for the may 2024.
+",,"3/12 Saurabh :
+Please note : Removed rebill entry to avoid charging the customer from more than a year
+update  bl1_technical_mark set status='CO' where entity_id=130369415;
+
+3/14 Saurabh - Rebill entry updated to rebill only for last 90 days
+update bl1_technical_mark set start_date='14-JAN-24',status='PN' where entity_id=130369415;-",,,
+"March 15, 2025",EQP_115_1798530,130324038,OSite_572652_1,OSO,Data,No Logs Available: Multiple LOBS with shared EQP: Single Instance,"NB came on 06-MAR-25 with changes from 08-AUG-24:Subscriber's services have changed: added services:  Equipment Cost (NRC), Equipment Fee (MRC). removed services:  Equipment Cost (NRC), Equipment Fee (MRC). ",EQP should match the date with its corrosponding EPL i.e. 6 march 2025..RCA seems complex 2 EQP liked across 4 Lobs and only 1 site access was there need SR for analysis for this extreme compled shared SAC scenario,,To change the effective date from 08-AUG-24 to 06-MAR-25 and remove from rebill,,,
+"March 15, 2025",DDoS2574007,130373175,OSite_624329_1,OSO,Old Order,Decomp Issue: 2021 Order,NB came on 11-MAR-25 to activate DDOS with effective date of 10-FEB-23.,"RCA : Old Order :Sept 2021
+
+Here user has placed Inflight Cancel on DDOS which never decomposed at Solution Delievry Group.
+
+Provide PTD was set for 2040 and hence flow was stuck at ""Wait Until PTD"" as expected. But this was released under ""SR019562272"" and hence subscriber got created at ABP end.
+
+@Billing team, Please cease this subscriber with the created date only post joe approval as user should not be charger here even a single penny.
+
+
+@Please open a new SR to handle the decompose issue as latest two agreement was not decomposed for the customer:- 130373175 where Cease order was placed for site: OSite_616975_1.Please assign this SR to oso Decomp expert in order to handle the decomposition issue.
+
+",,"
+Please note : Rebill entry stopped for the time being
+
+update  bl1_technical_mark set sys_update_date=sysdate,status='CO' where entity_id=130373175
+
+Need to cancel the DDOS subscriber",,,
+"March 15, 2025",EQP2066531 UNI2066529 EVCE2066532 SAC2066270,130292118,OSite_543030_1,OSO,User Education,Manual task Delay,"NB came on 11-MAR-25 to update parameters with the backdate of 16-DEC-24.
+1. Parameter name Contract Terms updated. Old value: {24}. New value: {Custom_Terms}. {29)
+2. Parameter name Bandwidth updated. Old value: {500}. New value: {2000}.
+3. Parameter name Port Speed updated. Old value: {1000}. New value: {10000}.","User Education: User(Vilegas Lisa) delayed the manual task ""Confirm Technician Switch/CM/NID Pickup"" from 16th Dec to 11th March. Very Rare occurance of this GT in delay.",,,,,
+"March 15, 2025",EVCE_115_1797004,130323778,OSite_572101_1,SQO,,,Price of this Static IP offer is 0 in Billing since the time customer was migrated in April -2021. There is no update in protected price received by Billing since then.,"SQO: Prices were 205$ at the time of Migration and then user created the Amend on Jan 8, 2024 and added the EDI service. So the prices in version 1 and 0 were having the same prices  so thats why protected price did not come in NB . It is an Migration Data Issue.",,To update price of $205 for Static IP going back to 90 days,,,
+"March 15, 2025",,130325833,,ABP,,,"Subscriber 464533 suspended on Feb-20 , resulting with transforming stepped promotion into flat",invalidating rc rates seq no 2113729 and revalidate rc rates seq no 1255023 by setting expiration date and last cyc expr date with NULL.,,,,,
+"March 15, 2025",PRI_155_2183936 ,130398773,22819 E APPLEWAY AVE-ALTEK MANUFACTURING(OSite_633302_1) ,ABP,,,This is stepped promo where price reduced from -150 to -100 on 08-JAN-25. Its TRB to SQO was published on 08-JAN-. Price still showing -200 in OMS. ," 
+TRB is completed but Prices of stepped promo is not updated in SQO and OMS. SQO still having the price -200
+
+Defect :-2832415",,,,,
+"March 15, 2025",PRI_155_2185185,130398257,OSite_632838_1,SQO,,,,SQO Analysis is yet to be done: Please create a new SR to track this issue and send this to Billing queue,,Need to expire the old promotion of -200 with the date when new promo of $489 is getting effective,,,
+"March 1, 2025","INS3136897
+EQP3136890
+SAC3136889
+BI3136891",130407385,OSite_641235_1,,,,"
+NB call received on 3rd Jan 2025 to activate theBI services from 30th August 2024.",Correct date is 3rd jan.  Here NB call got delayed because PONR flag was not released by the system back in August 2024. Please go with the date which was already picked by the system and get SR open for RCA. we will try to share RCA asap.,,,,,"[3/19 Abhishek]: Abhishek A will do more analysis on this order, what exactly happened with this order"
+"March 1, 2025",SACM_451_3387289 UNI_451_3375321 EVCE_451_3390703 EQP_451_3373139,130936670,OSite_827594_1,,,,NB call received on 17th Feb to disconnect the services from 24th October 2025,"Interface:SNP team
+NB Call delayed due to fallout on ""Uni Interface Turn Down"" from 24th Oct to 7th Feb and then 10 days for mandatory Wait Rule on Registered timed Action.
+Fallout was completed by ""Martinez Laura"". No SR found in our record. Please check with SNP team for more details.",,2/27 Saurabh - No patch required,,,
+"March 1, 2025",UNI3113250 EVCE3113259 EQP3113264 SAC3113271,130340478,OSite_755718_1,,,,NB call received on 5th Feb to activate the services with the backdate of 3rd December 2024,User Education: User(Vaughan Ronnie) (EAC team) delayed the Capture Switch Equipment task from 8th Nov to 5th Feb 2025.Also this was part of 10th jan User Pending task list.,,,,,
+"March 1, 2025",BVE3649284 EQP3649283,130360281,OSite_691227_1,,,,NB call received on 3rd Feb to activate the services with the backdate of 29th January 25,"User Education/WAD: user(Simone Jillian) delayed the manual task ""DOI Callflow Design GT"" from 29th jan  to 3rd Feb 2025. Also this is just 4 day delay which is acceptable, it got captured in rebill due to cycle change.",,,,,
+"March 1, 2025",UNI3528615 EVCE3528618 SAC3528537 EQP3528617,130430030,OSite_843205_1,,,,NB call received on 5th Feb to activate the services with the backdate of 3rd December 2024,User Education: User(Vaughan Ronnie)(EAC team) delayed the Capture Switch Equipment task from 3rd Dec to 5th Feb 2025.,,,,,
+"March 1, 2025",EVCE2750108 SAC2750095 SAC2750095 EVCE2750108 UNI2750111 EQP2750109,130508923,OSite_706889_1,,,,NB call received on 18th Feb to activate the services with the backdate of 27th December 2024,WAD: This is a case of Re-establishment where Disconnefct Order(task- Remove Core Configurations) was not completed by User may be keeping the re-establishment in mind.Then User placed Re-eastblishment on 18th and old order was disconnecting with the date of 27th Dec and hence We are seeing this delay.,,,,,
+"March 1, 2025",UNI3243390 EVCE3243392 SAC3243388 EQP3243391,130614235,OSite_771063_1,,,,NB call received on 4th Feb to activate the services with the backdate of 13th December 2024,User Education: User(Kostecki Marcin) delayed the Capture Switch Equipment task from 13th Dec to 4th Feb 2025. ,,,,,
+"March 1, 2025",SAC3652112 EVCE3652115 UNI3652118 EQP3652117,130936382,OSite_857704_1,,,,NB call received on 4th Feb to activate the services with the backdate of 2nd December 2024,User Education: User(Scheffer Andrea) delayed the Capture Switch Equipment task from 2nd Dec to 4th Feb 2025.,,,,,
+"March 1, 2025","EVCE3560734 UNI3560733 SAC3560727 EQP3560732
+
+EVCE3507177, UNI3507178, EQP3507176, SAC3507169",130954945,"OSite_847799_1
+
+OSite_843359_1",,,,"NB call received on 4th Feb to activate the services with the backdate of 11th December 2024 (OSite_847799_1)
+
+NB call received on 5th Feb to activate the services with the backdate of 6th December 2024 (OSite_843359_1)","User Education: User delayed the ""Capture Switch Equipment task "" for both the site and hence NB call ghot delayed",,,,,
+"March 1, 2025",EVCE3623992 UNI3623994 EQP3623993 SAC3623922,130972264,OSite_854694_1,,,,NB call received on 10th Feb to activate the services with the backdate of 12th December 2024,User Education: User(Kanchan Pragati) delayed the Capture Switch Equipment task from 12th Dec to 10th Feb 2025.,,,,,
+"March 1, 2025",BVE3996359 EQP3996358,131162412,OSite_905291_1,,,,NB call received on 5th Feb to activate the services with the backdate of 31st January 2025,"Working As Designed: user delayed the manual task ""DOI Callflow Design GT"". This is just 5 day delay which is acceptable, it got captured in rebill due to cycle change.",,,,,
+"March 1, 2025",BVE4037222 EQP4037221,131164809,OSite_912152_1,,,,NB call received on 7th Feb to activate the services with the backdate of 30th January 2025,"Working As Designed: user delayed the manual task ""DOI Callflow Design GT"". This is just 7 day delay which is acceptable, it got captured in rebill due to cycle change.",,,,,
+"March 1, 2025",NA,708767727,,,,,"On Oct-19-2023 BA 708767727 got immediate invoice of $455.38.
+On Apr-10-2024 2 payments of $455.38 &$ 418.74 posted to the account
+
+Current account balance is -$418.74.
+
+Immediate invoice date (Oct-10-2023) is more than 12 months ago , but payment posting date (Apr-10-2024) is less than 12 months ago.
+",Not Required,,"Step1: After BLPREP EOC complete, this customer will get reject due to the reconciliation error.
+
+Step2: QA reports will not run. will ask from SM to hold it. (Plan is to send this rejected customer also in the first extract run if there is no other issues)
+
+Step3: Application team will run below update to change the SPAN for AR1_BILINTER process.
+
+Update AR period to extend the timeframe to look back payment activities from 12 months to 24months (account id 708748091, immediate invoice date of 15-JUL-2022). Do this via REF account (user REFWORK/Owner)
+
+update AR1_PERIOD_CONFIG
+set PERIOD_SPAN = 24
+where FLOW_NAME = 'AR1BILINTER'
+and PERIOD_SPAN = 12 ; 
+
+Step4: SM will perform Fast R&D on AR1_PERIOD_CONFIG table only
+
+Step5: SM will Bounce AR1BILINTR process either from AMC or EOD map.
+
+Step6: SM will mark customer for Undo and application team will validate that it is marked for undo
+
+Step7: SM will start UNDO + RERUN for rejected customer
+
+Step8: After UNDO + RERUN complete, reject will clear and SM will send all the QA reports
+
+Step9: Extract will run and files will deliver to BB (Extract will run on weekday which is 3rd March
+",,,
+"March 1, 2025","EQP_411_3933104
+EQP_411_3786992
+EQP_411_3949003
+EQP_411_3873033
+EQP_411_3888419
+EQP_411_3917626
+EQP_411_3952264
+EQP_411_3842747
+EQP3542071","131159672
+131170705
+130960976
+131172005
+131162224
+131158817
+131155407
+131158949",,,,,,,,To update the Full discount Ind=Y in dynamic attibutes column in BL1_RC_RATES table,,,
+"March 1, 2025",PRI_291_3024958,130610757,,,,,,,,"To Update the Expiration Date-> 14-JUN-2024 AND Last Cycle Expiration Date-> 30-Jun-2024 in BL1_RC_RATES table. Mark customer for rebill: (start date = May-31-2024 , end date = Dec-31-2024)",,,
+"March 1, 2025",,"130937902
+130937902
+130937902
+130937902",,,,,,,,To Update service type to 'EPL' in CM1_AGREEMENT_PARAM table and in dynamic attributes in BL1_RC_RATES table.,,,
+"February 15, 2025","SACM_901_1677430, EQP_901_1668796, EVCE_901_1675298, UNI_901_1671631",130297909,,,,,"Site OSite_549362_1 resumed on 14-JAN-25 12:37:03.Below subscriber NOT resumed  SACM_901_1677430, EQP_901_1668796, EVCE_901_1675298, UNI_901_1671631","OSite_549362_1 : fallout at Port up/down activity 
+SNP team need to check NON DOX issue 
+“Error details: ""NotificationResponse"":[{""status"":""Failure"",""jobId"":""14547924_1"",""payload"":""{\""jobId\"":\""14547924_1\"",\""status\"":\""ERROR\"",\""appSource\"":\""ORION\"",\""results\"":[{\""code\"":\""SNP-299997\"",\""message\"":\""REVERT_IGNORED - Due to an error, the system decided to revert. The few or all devices might be configured. But as per request, orchestration has to ignore revert.\""}]}""}]}
+",,,,,
+"February 15, 2025",UNI_135_2031906 EVCE_135_2036620 ,130369604,OSite_614496_1 ,,,,Shay Alexander used DTL to backdate disconnect date form 30-JUL-24 to 04-APR-24. Feature not used for EQP,Not Required,,,,,
+"February 15, 2025",EQP3114402 EVCE3114405 ,130678699,OSite_755861_1 ,,,,"Started Billing too Early was used by Briana Eidson-Clark to advance the start date from 31-OCT-24 to 18-DEC-24. There are 2 issues:
+1. User did not use the feature for UNI. It does not have charges, but still user should use it to keep the dates aligned.
+2. User did not update commitment start dates because of which the cusotmer will lose out on one-month's promo of $450.",Not Required,,,,,
+"February 15, 2025",EVCE3342037 SAC3342011 UNI3342039 EQP3342036 ,130293793,OSite_677401_1 ,,,,NB came on 23-JAN-25 to start the services with the backdate of 18-SEP-24,"User Education: user(Tarlton Christopher)  delayed the manual GT ""BGP Turn Up"" from 20th Sept to 23rd jan 2025",,,,,
+"February 15, 2025",EVCE3206895 UNI3206893 EQP3206892 SAC3206891 ,130697069,OSite_767123_1 ,,,,NB came on 04-FEB-25 to activate the services from 12-NOV-24,"Environment: Flag for ""Capture Switch task"" was not released due to outage on 11 Nov due to KAFKA LAg issue from ARM side.",,,,,
+"February 15, 2025",WB3466064 EQP3466065 ,130292607,OSite_808099_1 ,,,,NB call came on 31-JAN-25 to cease WB and EQP with backdate of 04-DEC-24,"NB got delayed due to fallout on ""Suspend OTT Service Account with Provider"". But RCA was not given under that SR.Please check this with CSP team for the RCA part as error suggested that fallout reason was pre-suspension of service.We can also track this via new SR and let us know if any further details needed from OSO.
+This was handled under SR019552112
+
+Request Date : 28-01-2025 19:56:46 GMT
+REQUEST
+<?xml version=""1.0"" encoding=""UTF-8"" standalone=""yes""?>
+<local xmlns=""uri"">https://bsd-cspgw.ccsp.comcast.com/CommercialNumerexService/21.02/service/suspendAccount?accountNumber=WB3466064
+TrackingID : ODO_12053FA7D27045F5924E662E849D2432
+Request - </local>
+ ",,,,,
+"February 15, 2025",EVCE2461677 UNI2461678 SAC2461658 EQP2461676 ,130449834,OSite_671938_1 ,,,,NB call came on 17-JAN-25 to cease the services with the date of 04-DEC-24,"Environment: Fallout at Core Port Turn Down delayed the nb cALL. PLEASE CHECK WITH snp TEAM FOR MORE DETAILS.
+Handled under SE: SR019545986
+RCA Provided: This is Environment: System and Server Issues as Port is Already Down SNP Confirmed as Well CPE Not Reachable.",,,,,
+"February 15, 2025",SAC2577762 EVCE2577769 UNI2577770 EQP2577768 ,130474148,OSite_686090_1 ,,Interface,SNP Fallout,NB call came on 01-FEB-25 to cease the services with the date of 04-DEC-24,"Interface: NB delayed as order was stuck at ""UNI Port Turn Down"" awaiting callback from SNP. 
+NO RCA was concluded from OMW/SNP as ffor the tracking ID 13958390, OMW was not able to see any logs
+Handled under SR:SR019550092",,,,,
+"February 15, 2025",EQP_215_3098643 PRI_215_3104603 SACM_215_3100532 EQP_215_3104243 ,130676916,OSite_753632_1 ,,,,"NB came on 18-JAN-25 to cease EQP_215_3098643, PRI_215_3104603 with date of 08-JAN-25 . Other 2 subscribers , SACM_215_3100532 and EQP_215_3104243 , are getitng disconnected with the date of 18-JAN-25",Correct date is 8th Jan for all subscriber i.e. same as PRI service date .This is a PRI Overlay + Underlay Order where we are seeing Underlay and linked EQP is picking wrong date.Please raise a new SR for RCA as it seems to be OSO defect. ,,"Patch disconnect dates from 1/18/2025 to 1/8/2025 in CM and Invoicing
+908396	C	EQP_215_3104243 (current exp date is 1/18/2025)
+887908	C	SACM_215_3100532 (current exp date is 1/18/2025)",,,
+"February 15, 2025",SAC3496395 EVCE3498572 UNI3498573 EQP3498571 ,130954035,OSite_842044_1 ,,User Education,User Task Delay,NB came on 03-FEB-25 to start the services from 10-DEC-24,User Education: user delayed the Capture Switch Equipment task,,,,,
+"February 15, 2025",EVCE3577628 UNI3577625 EQP3577605 SAC3574797 ,130961571,OSite_850664_1 ,,User Education,User Task Delay,NB came on 15-JAN-25 to start the services with the date of 04-DEC-24,User Education: user delayed the Capture Switch Equipment task,,,,,
+"February 15, 2025",EVCE3648137 UNI3648136 EQP3648119 SAC3647815 ,130976040,OSite_857251_1 ,,User Education,User Task Delay,NB came on 03-FEB-25 to start the services from 05-DEC-24,User Education: user delayed the Capture Switch Equipment task,,,,,
+"February 15, 2025",UNI3626576 EVCE3626577 SAC3626569 EQP3626578 ,130973483,OSite_855550_1 ,,User Education,User Task Delay,NB came on 10-FEB-25 to start the services with the backdate of 04-DEC-24,"User Education: user (Holland jesse) delayed the manual GT ""Capture Switch CM/NID"" from 4th Dec to 10th Feb",,,,,
+"February 15, 2025",EVCE3549671 UNI3549668 SAC3348727 EQP3348735 ,130829163,OSite_807580_1 ,,User Education,User Task Delay,NB came on 05-FEB-25 to start the services with the backdate of 18-DEC-24,"User Education: user (Vaughan Ronnie) delayed the manual GT ""Capture Switch CM/NID"" from 18th Dec to 5th Feb",,,,,
+"February 15, 2025",EQP3468000 UNI3468002 EVCE3468001 SAC3467909 ,130949660,OSite_838888_1 ,,User Education,User Task Delay,NB came on 06-FEB-25 to start the services with the backdate of 12-DEC-24,"User Education: user (Vaughan Ronnie) delayed the manual GT ""Capture Switch CM/NID"" from 12th Dec to 5th Feb",,,,,
+"February 15, 2025",EQP3507874 UNI3507873 EVCE3507872 SAC3507866 ,130954171,OSite_842180_1 ,,Interface,SNP Callback,NB came on 07-FEB-25 to start the services with the backdate of 05-DEC-24,"Interface: NB Call got delayed as order was stuck at SNP port awaiting callback from SNP team.
+No SR was found in our record and we can see SNP sent the callback on manual rework on 5th Dec. Please check for any pre-existing SR. And for RCA Please reqach out to SNP team with required details why they didn't sent the callback for the very first request triggered on 5th Dec.
+
+PortTurnUpDown_EVCE3507872
+ ",,,,,
+"February 15, 2025",BVE3558181 EQP3558182 ,130681956,OSite_848850_1 ,,User Education,User Task Delay,NB came on 05-FEB-25 to start the services with the date of 03-DEC-24,"User Education: user (Esancy Lindsay) delayed the manual GT ""BVE Self-Install and/or cancel 48 hour wait"" from 3rd Dec to 5th Feb",,,,,
+"February 15, 2025",EVCE3345072 SAC3345058 UNI3345071 EQP3345075 ,130340292,OSite_807184_1 ,,User Education,User Task Delay,NB came on 04-FEB-25 to start the services with the date of 05-DEC-24,"User Education: user (Klemarczyk Eric) delayed the manual GT ""Capture Switch CM/NID"" from 4th Dec to 5th Feb",,,,,
+"February 15, 2025",SAC3561903 EVCE3563492 UNI3563491 EQP3563510 ,130964603,OSite_849213_1 ,,User Education,User Task Delay,NB came on 04-FEB-25 to start the services with the date of 19-DEC-24,"User Education: user (Vaughan Ronnie) delayed the manual GT ""Capture Switch CM/NID"" from 19th Dec to 5th Feb",,NA,,,
+"February 15, 2025",EVCE3335880 UNI3335879 SAC3335710 EQP3335877 ,130827366,OSite_806240_1 ,,User Education,User Task Delay,NB came on 05-FEB-25 to start the services with the date of 24-OCT-24,"User Education: user (Vaughan Ronnie) delayed the manual GT ""Capture Switch CM/NID"" from 24th Oct to 5th Feb",,To update the effective date to 15-NOV-24 in CM and INV,,,
+"February 1, 2025",EVCE2842872 UNI2842869,130526610,OSite_717475_1,,,,NB call received on 2nd Jan 25 to activate the EVCE and UNI with the backdate of 21st Nov 2023. However EQP and SAC subscribers are still not created ,"Please open a new SR .This need handling from OSO and ABP end to handle all other subscriber. Also tag the SR on my name:-Abhishek Agrahari
+
+1/23: This is a chronic order.On a high level, Billing flow not deccomposed as expected. Subsciber should not have created here. Please take joe approval and cancel the subscriber so that we  customer would not be charge. SR019550186  : SR still in our queue for further RCA investigation. Please proceed with WA for now. Previous SR on this order : SR019545625",,To run ceaseSubscriber API to cancel these subscirbers from date of 21st Nov 2023,,,"[3/19 Abhishek]: Venkata will reachout to CPM user to check why this was pending so long and also check about usage with TTU team.
+3/20 Kalyan-  sales and CMP were waiting for customer response to go on suspension that is why it
+took long time to complete the tasks
+3/20 Saurabh - As discussed during onshore call, this delay happened due to customer’s site got flooded and there was no response (as per CPM).
+Due to this customer is claiming services were not used and should have been disconnected.
+@Sapra, Sonalika (Contractor) to check and confirm with TTU team if customer was using services from 2/24 (OSite_668510_1 - 300 Brickstone Sq  #4) , if no usage then we will let rebill process and credits of ~14k to be applied to the account 708745060
+3/28 Saurabh - Removed Rebill entry (no credit will be given) as per requested by Dale/Sonalika"
+"February 1, 2025",INS3465508 EQP3465498 SAC3465178 BI3465499,130949054,OSite_838600_1,,,,NB call received on 17th Jan 2025 to activate the BI services with the date of 17th Jan 2025 however EQP is effectiev from 16th Jan 2025 and INS subscirber is effective from 19th July 2024,Here Billing date of INS should be aligned with BI . Please open a new SR to check it further as of now we don't have logs for July 2024 . We need more investigation on this.,,"To change the effective date of EQP and INS subscirber to 17th Jan 2025 in CM tables (SUBSCRIBER, SERVICE_AGREEMENT_PARAM,CM1_AGREEMENT_PARAM) and Invoicing table (BL1_RC_RATES). After patch, this record will be removed from rebill",,,"[3/19 Abhishek]: To update the impact
+
+3/26: Somnath to raise SR to track the patch
+03/26: Somnath raised SR019569958"
+"February 1, 2025",BI3695577 INS3695578 SAC3675207 EQP3695582,130297967,OSite_860008_1,,,,NB call received on 3rd Jan 25 to activate the BI services with the backdate of 22nd November 24,Here We can see PTD was set for 5th Feb 2025(Still future date) and PONR flag was released on 3rd Jan while last activity completed in nov 2024.No SR found .Please check for user expecation here :- if he wanted the same date and if so why PTD was not changed instead flag was released manually . ,,,,,03/19 Sumanta - SR019568026 raised
+"February 1, 2025",BVE3609861 EQP3609860,130378744,OSite_620661_1,,,,NB call received on 7th Jan 25 to activate the BVE services with backdate of 31st December 2024,"User Education/WAD: user(McMicheal Jen) delayed the manual task ""DOI Callflow Design GT"" from 31st Dec to 7th jan 2025. Also this is just 7 day delay which is acceptable, it got captured in rebill due to cycle change.",,,,,03/19 Sumanta - SR019568026 raised
+"February 1, 2025",BVE3184227 EQP3184226,130692240,OSite_764429_1,,,,NB call received on 7th Jan 25 to activate the BVE services with backdate of 30th December 2024,"This issue is due to side effect of defect:1550014 where BVE service PONR was not in sync with BVE EQP and hence missing dependecy. Activity which picks the billing date crosssed on 20th Dec and User changed the PTD of 6th Jan on 27th Dec 2024 where as previous PTD was 20th Dec 2024. And Order crossed PONR on 30th Dec .This is very rare edge case scenario and came due to possible combination of all three factor:- defect, User PTD date change, PTD was changed post execution of activity which picks the date. As per OSO , date should be same i.e. 30th Dec.",,,,,03/19 Sumanta - SR019568026 raised
+"February 1, 2025",EQP_291_3022692,130610914,"309 MAIN ST REAR_EXPRESS,MOON STAR(OSite_740824_1)",,,,NB call received on 10th Jan to change the quantity from 2->1 and unit price is $3.95 but protected price was not sent therefore price is not updated at billing end.,"This is a migrated customer which was initially migrated with 2 Quantity of Device and accessories...
+On 10st OCT 2024,for the 1st version rate change performed  in that unit price got changed from 7.9 to 3.95 and quantity updated from 2-->1 and same updated in SQO,but when we check in OMS for the 1st version of this product we can see that  both unit price and protected price are not updated correctly at the time of rate change but quantity was not updaated  which can be because of align price API issues.
+after that user create amend on 11 JAN 25 in that user reduce quantity from 2 to 1 so correct price is $3.95 .
+Now since Protected price was same for both the versions that's why it was not sent to billing for the first version.
+please patch it at billing side. ",,"
+Update ""Protected price"" parameter to match the SQO price.Insert in cm9_driver_upd_param and run Job to syc prices",,,
+"February 1, 2025",EQP_411_3844561,131163312,"1300 SE STARK ST STE 203_REVOLUTION HALL,CO(OSite_871226_1)",,,,NB call received on 13th Jan to change the quantity from 2->1 and unit price is $3.95 but protected price was not sent therefore price is not updated at billing end.,"This is a migrated customer which was initially migrated with 2 Quantity of Device and accessories...
+On 1st JAN 2025,for the 1st version rate change performed  in that unit price got changed from 9.9 to 4.95 and same updated in SQO,but when we check in OMS for the 0th version of this product we can see that only both unit price and protected price are not updated correctly at the time of rate change which can be because of align price API issues.
+after that user create amend on 13 JAN 25 in that user reduce quantity from 2 to 1 so correct price is $4.95 .
+Now since Protected price was same for both the versions that's why it was not sent to billing for the second version.
+please patch it at billing side ",,"
+Update ""Protected price"" parameter to match the SQO price.Insert in cm9_driver_upd_param and run Job to syc prices",,,
+"February 1, 2025",EQP_411_3839803,131164356,"7311 NE 43RD AVE_CONSTRUCTION,H(OSite_890579_1)",,,,NB call received on 16th Jan to change the quantity from 9->1 and unit price is $6.95 but protected price was not sent therefore price is not updated at billing end.,"This is a migrated customer which was initially migrated with 9 Quantity of Device and accessories...
+On 1st JAN 2025,for the 1st version rate change performed  in that unit price got changed from 62.55 to 6.95 and same updated in SQO,but when we check in OMS for the 0th version of this product we can see that only both unit price and protected price are not updated correctly at the time of rate change which can be because of align price API issues.
+after that user create amend on 16 JAN 25 in that user reduce quantity from 9 to 1 so correct price is $6.95 .
+Now since Protected price was same for both the versions that's why it was not sent to billing for the first version.
+please patch it at billing side mapped it to Defect-2800066",,"
+Update ""Protected price"" parameter to match the SQO price.Insert in cm9_driver_upd_param and run Job to syc prices",,,
+"February 1, 2025",PRI_151_2243542,130406833,1301 MORAN RD_KALOTHIA(OSite_643009_1),,,,NB call received on 11th december 24 to change the unti price->439.00 and quantity->1,"This is a migrated customer which was initially migrated with 1 PRI quantity
+user create amend on Dec 12, 2024 and Protected unit price was 439.00
+please patch it at billing side. ",,"
+Update ""Protected price"" parameter to match the SQO price.Insert in cm9_driver_upd_param and run Job to syc prices",,,
+"January 15, 2025",BVE2483832 EQP2483831 ,130453952,OSite_674525_1 ,,,,NB call on 3rd Jan to create the BVe and EQP subscriber with the date of 01-JUL-24,"""Broadsoft Equipment Update for Move"" was stuck from July 2024 till 3rd Dec. And this was handled by the Incubation team under SR019545475.
+RCA Provided: Old order delayed by More than 2 years. order start date: Sept 2022 :Looks Impact of Some ENV issue.Worked on retry , no other instance found",,"To update the effective date from 7/1/24-> 10/15/24 in CM (CM1_AGREEMENT_PARAM,CHARGE_DISTRIBUTE, SUBSCRIBER) and INV tables (BL1_RC_RATES, BL1_CHARGE_REQUEST).",,,"3/27: somnath to raise Srfor the script which Abhishek A. will work on and add it in tracker for open items.
+03/27: Somnath: SR019570603 raised"
+"January 15, 2025",SAC3461168 EVCE3461183 UNI3461182 EQP3461226 ,130420126,OSite_653751_1 ,,User Education,User Task Delay,NB on 6th Jan t create the subscribers with the effective date of 23-OCT-24,"User Education: USer (Holland jesse) delayed the task ""Capture  Switch /CM/NID"" from 23rd oct to 7th Jan",,,,, 
+"January 15, 2025",UNI1615897 EVCE1615896 EQP1615895 SAC1615893 UNI3581963 EVCE3581964 ,130261348,OSite_531512_1 ,,Interface,CLIPS Fallout,"NB came on 18-DEC-24 to create UNI3581963, EVCE3581964 with the date of 15-NOV-24",Interface: CLIPS issue: SR019542945 :NB delayed due to fallout on Decommisioned Swapped CPE which was handled by CLIPS (Dishant Mehta) team.,,,,, 
+"January 15, 2025",UNI3504513 EVCE3504512 SAC3504509 EQP3504511 ,130955665,OSite_842971_1 ,,User Education,User Task Delay,Nb on 2nd Jan to create the subscriber with the backdate of 16-Oct-24,"User Education: USer (Dipallina Mathew) delayed the task ""Capture  Switch /CM/NID"" from oct to 2nd Jan",,,,, 
+"January 15, 2025",EQP2345401 ,130324153,OSite_629505_1 ,,,,"Brett Bogert used DTL to backdate disconnect date from 02-AUG-24 to 10-JUL-24, However feature not used for BVE subscriber ",Not Required,,,,,3/27: Need SR to track patch
+"January 15, 2025",PRI_155_2185185,130398257,OSite_632838_1,,,,"Due to defect 2709210, stepped promo which should have expired on 22nd MArch , 2028 got expired early on 26th December, when an NB came on this subscriber",Not Required,,"Revalidate RC in bl1_rc_rates , Update expiration date to null in service_agreement, cm1_agreement_param, charge_distribute. Set promotion expiration date in cm9_driver_upd_apram_tn and cm1_agreement_param ",,, 
+"January 1, 2025",UNI2916546 EVCE2916545 ,130344031,OSite_723522_1 ,,,,NB call came on 06-Dec-24 to create UNI and EVC  subscribers with the backdate of 24-JUL-24,July 2023 order. sync point was not executed properly at that time that caused order to stuck at Billing sync activity. dont have logs to check the reason,,Need to patch for 90 days. Change effective date to 1st October,,,3/26: Somnath to raise SR 
+"January 1, 2025",UNI_291_3000381 EVCE_291_3003611 SACM_291_3002991 EQP_291_3001313 ,130607405,OSite_739521_1 ,,Environment,RELEASE PONR,NB came on 09-DEC-24 to cease the services with the backdate of 03-JUL-24.,Billing cease shopuld have been done on July 13 2024 and that time we had Production upgrade so sytem was down.. so flag not got released,,,,,3/26: Somnath to raise SR 
+"January 1, 2025",UNI_901_1683168 EVCE_901_1671062 SACM_901_1668821 ,130297939,OSite_549120_1 ,,,,Update parameter call came on 10-DEC-24 to update bandwidth from 500 to 1000 with the backdate of 11-SEP-24,"shared Site acess scenario,Delayed caused by another EDI's EQP where user delayed  task 'Capture Switch/CM/NID Details (SWAP)' from oct to december and for sept to OCT scheduling was delayed seems like some Work order issue multiple work orders where cancelled.. so majority user education scenario",,,,,3/26: Somnath to raise SR 
+"January 1, 2025",EQP3238578 MR3238577 BVE3238589 EQP3238588 ,130702889,OSite_770898_1 ,,User Education,User Task Delay,NB came on 10-DEC-24 to activate BVE and EQP with the backdate of 29-OCT-24,task 'DOI Call Flow Design GT' delayed by user (Shaw melody) from oct to december,,,,,3/26: Somnath to raise SR 
+"January 1, 2025",BVE3574569 EQP3574570 ,130966399,OSite_850645_1 ,,User Education,User Task Delay,NB came on 11-DEC-24 to start the services with the date of 28-OCT-24,task 'DOI Call Flow Design GT' delayed by user (Haywood Candace) from oct to december,,,,,3/26: Somnath to raise SR 
+"January 1, 2025",BVE3189092 EQP3189085 ,130483628,OSite_691861_1 ,,User Education,User Task Delay,NB came on 12-DEC-24 to start the services with the date if 18-NOV-24,"Activity ''Update DA/DL in Neustar"" was stuck at OSO, interface issue OMW",,,,, 
+"January 1, 2025",BVE3196519 EQP3196520 ,130610765,OSite_765967_1 ,,User Education,User Task Delay,NB came on 10-DEC-24 to start the services with the date if 13-NOV-24,task 'DOI Call Flow Design GT' delayed by user (Rueckheim Donald) from oct to december,,,,, 
+"January 1, 2025",EQP_451_3434892 ,130939807,"1106 N BAY AVE_PASTA,PANZONES PIZZA AND(OSite_824855_1) ",,,,"Quantity updated from 6 to 1 for Billing ID: 33414622 on 15-OCT-24, however, updated protected price was not sent to billing.So ideally CPQ amount should be correct. ","This is a migrated customer which was initially migrated with 6 Quantity of Device and accessories...
+on 01-OCT-24 for the 1st version rate change performed  in that unit price got changed from 0 to 3.95 and same updated in SQO,but when we check in OMS for the 0th version of this product we can see that only both unit price and protected price are not updated correctly at the time of rate change which can be because of align price API issues.
+after that user create amend on 15 OCT 24 in that user reduce quantity from 6 to 1 so correct price is $3.95 .
+Now since Protected price was same for both the versions that's why it was not sent to billing for the second version.
+please patch it at billing side mapped it to Defect-2719023",,Update protected price to match the SQO price.Insert in cm9_driver_upd_param and run Job to syc prices,,, 
+"January 1, 2025",EQP_451_3405038 ,130941115,"46 S MAIN ST STE 1_RISK MGT,CONTRACTORS(OSite_836419_1) ",,,,"Quantity updated from 2 to 1 for Billing ID: 33567218 on 04-SEP-24, however, updated protected price was not sent to billing.So ideally CPQ amount should be correct. (4.95*1=4.95)","This is a migrated customer which was initially migrated with 6 Quantity of Device and accessories...
+on 01-OCT-24 for the 1st version rate change performed  in that unit price got changed from 0 to 3.95 and same updated in SQO,but when we check in OMS for the 0th version of this product we can see that only both unit price and protected price are not updated correctly at the time of rate change which can be because of align price API issues.
+after that user create amend on 15 OCT 24 in that user reduce quantity from 6 to 1 so correct price is $3.95 .
+Now since Protected price was same for both the versions that's why it was not sent to billing for the second version.
+please patch it at billing side mapped it to Defect-2719023",,Update protected price to match the SQO price.Insert in cm9_driver_upd_param and run Job to syc prices,,,[01-Apr-25]- Biswajit - Billing backdated to 21st March with the new rate of $8.00
+"January 1, 2025",EQP_291_3025277 ,130610553,"10140 PISCATAWAY RD_FARMS,MILLERS(OSite_739160_1) ",,,,"Quantity updated from 3 to 1 for Billing ID: 28770011 on 24-OCT-24, however, updated protected price was not sent to billing.So ideally CPQ amount should be correct. (4.95*1=4.95)","This is a migrated customer which was initially migrated with 3 Quantity of Device and accessories...
+on 01-OCT-24 for the 1st version rate change performed  in that unit price got changed from 0 to 4.95 and same updated in SQO,but when we check in OMS for the 0th version of this product we can see that only both unit price and protected price are not updated correctly at the time of rate change which can be because of align price API issues.
+after that user create amend on 15-OCT-24 in that user reduce quantity from 3 to 1 so correct price is $4.95 .
+Now since Protected price was same for both the versions that's why it was not sent to billing for the second version.
+please patch it at billing side mapped it to Defect-2719023",,Update protected price to match the SQO price.Insert in cm9_driver_upd_param and run Job to syc prices,,,[01-Apr-25]- Biswajit - Billing backdated to 05th March with the new rate of $8.00
+"January 1, 2025",EQP_451_3435148 ,130943291,"133 PLUM ST UNIT HMOFC_INC,GEDAE(OSite_833449_1) ",,,,"Quantity updated from 4 to 1 for Billing ID: 33522054 on 23-AUG-24, however, updated protected price was not sent to billing.So ideally CPQ amount should be correct. (4.95*1=4.95)","This is a migrated customer which was initially migrated with 4 Quantity of Device and accessories...
+on 01-AUG-24 for the 1st version rate change performed  in that unit price got changed from 0 to 4.95 and same updated in SQO,but when we check in OMS for the 0th version of this product we can see that only both unit price and protected price are not updated correctly at the time of rate change which can be because of align price API issues.
+after that user create amend on 23-AUG-24 in that user reduce quantity from 4 to 1 so correct price is $4.95 .
+Now since Protected price was same for both the versions that's why it was not sent to billing for the second version.
+please patch it at billing side mapped it to Defect-2719023",,Update protected price to match the SQO price.Insert in cm9_driver_upd_param and run Job to syc prices,,,[01-Apr-25]- Biswajit - Billing backdated to 10th March with the new rate of $8.00
+"January 1, 2025",EQP_291_3019898 ,130610206,"10810 DARNESTOWN RD_TULI MD PC,RAMAN(OSite_738651_1) ",,,,"Quantity updated from 8 to 1 for Billing ID: 28762457 on 13-NOV-24, however, updated protected price was not sent to billing.So ideally CPQ amount should be correct. (4.95*1=4.95)","This is a migrated customer which was initially migrated with 8 Quantity of Device and accessories...
+on 01-OCT-24 for the 1st version rate change performed  in that unit price got changed from 0 to 4.95 and same updated in SQO,but when we check in OMS for the 0th version of this product we can see that only both unit price and protected price are not updated correctly at the time of rate change which can be because of align price API issues.
+after that user create amend on 11-NOV-24 in that user reduce quantity from 8 to 1 so correct price is $4.95 .
+Now since Protected price was same for both the versions that's why it was not sent to billing for the second version.
+please patch it at billing side mapped it to Defect-2719023",,Update protected price to match the SQO price.Insert in cm9_driver_upd_param and run Job to syc prices,,,[01-Apr-25]- Biswajit - Billing backdated to 14th March with new rate of $8.00
+"January 1, 2025",EQP_151_2248972 ,130407355,1340 W SMITH ST-Calvary Chapel South(OSite_645310_1) ,,,,"Quantity updated from 10 to 1 for Billing ID: 20821254 on 16-DEC-24, however, updated protected price was not sent to billing.So ideally CPQ amount should be correct. (4.95*1=4.95)","This is a migrated customer which was initially migrated with 10 Quantity of Device and accessories...
+on 01-OCT-24 for the 1st version rate change performed  in that unit price got changed from 0 to 4.95 and same updated in SQO,but when we check in OMS for the 0th version of this product we can see that only both unit price and protected price are not updated correctly at the time of rate change which can be because of align price API issues.
+after that user create amend on 16-DEC-24 in that user reduce quantity from 10 to 1 so correct price is $4.95 .
+Now since Protected price was same for both the versions that's why it was not sent to billing for the second version.
+please patch it at billing side mapped it to Defect-2719023",,Update protected price to match the SQO price.Insert in cm9_driver_upd_param and run Job to syc prices,,, 
+"January 1, 2025",BVE_151_2246327 ,130406536,148 N AKERS ST_NULL_ENVIRONMENT CONTROL(OSite_641487_1) ,,,,"Quantity updated from 8 to 1 for Billing ID: 20785772 on 09-DEC-24, however, updated protected price was not sent to billing.So ideally CPQ amount should be correct. (44.95*1=44.95)","This is a migrated customer which was initially migrated with 8 Quantity of Device and accessories...
+on 01-OCT-24 for the 1st version rate change performed  in that unit price got changed from 0 to 44.95 and same updated in SQO,but when we check in OMS for the 0th version of this product we can see that only both unit price and protected price are not updated correctly at the time of rate change which can be because of align price API issues.
+after that user create amend on 15 OCT 24 in that user reduce quantity from 8 to 1 so correct price is $44.95 .
+Now since Protected price was same for both the versions that's why it was not sent to billing for the second version.
+please patch it at billing side mapped it to Defect-2719023",,Update protected price to match the SQO price.Insert in cm9_driver_upd_param and run Job to syc prices,,,"4/7 Anisha: Abhishek A. to double chekc the ticket mentioned, whether it was SNP issue or something at OSO.
+ 4/9 Prateek: SNP issue only not an OSO issue
+4/10: Biswajit to raise an SR for SNP for RCA purpose. It will be added in tracker for Open items"
+"January 1, 2025",BVE_411_3845181,131172021,"3995 N GEORGE STREET EXT_YORK LLC,ALLEGHEN(OSite_871154_1) ",,,,"Quantity updated from 1 to 7 on 18-DEC-24. Unit price is 59.7 in Billing. 
+59.7*7=417.9.
+In SQO user created a amend, and unit price was changed from 59.70 to 9.95, and also the quantity changed to 7, so price was changed to 69.65.
+It is scheduled for rate chnage on 01-JAN-25 to update unit price to 9.95, and the price will come in sync post that. ",,,Update protected price to match the SQO price.Insert in cm9_driver_upd_param and run Job to syc prices,,, 

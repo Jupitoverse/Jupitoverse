@@ -1,0 +1,131 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment (colleague will create their own)
+venv/
+ENV/
+env/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+logs/
+sr_analysis.log
+
+# ============================================================================
+# IMPORTANT: DATABASES AND VECTOR STORES ARE INCLUDED FOR COLLEAGUE ACCESS
+# These files are ESSENTIAL for the system to work:
+# - vector store/*.pkl (historical SR data, user feedback)
+# - vector store/*.db (Java mappings, SR tracking, people skills)
+# ============================================================================
+# We are NOT ignoring:
+# - vector store/*.pkl
+# - vector store/*.db
+# - people_skills.db
+# - sr_tracking.db
+
+# HOWEVER, we ignore backups and temp files:
+*.pkl.backup*
+*.db.backup*
+*.db-journal
+
+# Uploads (empty folder, users will upload their own)
+uploads/*.xlsx
+uploads/*.xls
+uploads/*.csv
+# Keep the folder structure
+!uploads/.gitkeep
+
+# Output Reports (generated, not needed in repo)
+output/reports/*.xlsx
+output/reports/*.xls
+# Keep the folder structure
+!output/reports/.gitkeep
+
+# Excel Files in ROOT (test files, too large)
+/*.xls
+/*.xlsx
+~$*.xlsx
+~$*.xls
+
+# Temporary Files
+*.tmp
+*.bak
+*.swp
+*.cache
+
+# OS Files
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Jupyter Notebooks Checkpoints
+.ipynb_checkpoints/
+
+# pytest
+.pytest_cache/
+
+# Coverage
+.coverage
+htmlcov/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Environments
+.env
+.env.local
+
+# Email/Azure AD Credentials - DO NOT COMMIT
+config/email_config.json
+o365_token.txt
+**/o365_token.txt
+
+# Test artifacts
+test_*.txt
+*_test.py
+*.test
+
+# Documentation build artifacts
+docs/_build/
+
+# Historical data files (too large, not needed in repo)
+past_data/
+
+# Prompt templates (local configuration)
+prompt/
+
+# Python cache (redundant but explicit)
+**/__pycache__/
+
+# Data folder - do not track
+data/

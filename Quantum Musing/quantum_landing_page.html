@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Quantum Computing - Transform Your Future</title>
+    <meta name="description" content="Learn Quantum Computing from scratch. Master qubits, quantum gates, and algorithms. Get certified and join the quantum revolution!">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #2d1b4e 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Background */
+        .quantum-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(138, 43, 226, 0.6);
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #00f5ff, #ff00ff, #00f5ff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient 3s linear infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            margin-bottom: 30px;
+            color: #b8b8ff;
+            max-width: 800px;
+        }
+
+        .cta-container {
+            margin: 40px 0;
+        }
+
+        .course-link {
+            display: inline-block;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .course-link:hover {
+            transform: scale(1.05);
+        }
+
+        .course-image {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(138, 43, 226, 0.6);
+            border: 3px solid #8a2be2;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .course-image:hover {
+            box-shadow: 0 30px 80px rgba(138, 43, 226, 0.8);
+            border-color: #00f5ff;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 18px 50px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ffffff;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            margin: 20px 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        .cta-button.secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        /* Stats Section */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #00f5ff;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: #b8b8ff;
+        }
+
+        /* Features Section */
+        .features {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            text-align: center;
+            margin-bottom: 60px;
+            background: linear-gradient(45deg, #00f5ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #8a2be2;
+        }
+
+        .feature-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #00f5ff;
+        }
+
+        .feature-description {
+            color: #b8b8ff;
+            line-height: 1.8;
+        }
+
+        /* Simulation Section */
+        .simulation-section {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .bloch-sphere-container {
+            width: 100%;
+            max-width: 500px;
+            height: 500px;
+            margin: 40px auto;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            border: 2px solid #8a2be2;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #blochCanvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .control-btn {
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        /* Curriculum Section */
+        .curriculum {
+            max-width: 1000px;
+            margin: 80px auto;
+            padding: 20px;
+        }
+
+        .curriculum-item {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #8a2be2;
+            transition: all 0.3s ease;
+        }
+
+        .curriculum-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-left-color: #00f5ff;
+            transform: translateX(10px);
+        }
+
+        .curriculum-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #00f5ff;
+            margin-bottom: 10px;
+        }
+
+        .curriculum-description {
+            color: #b8b8ff;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 20px;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            color: #b8b8ff;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .testimonial-author {
+            font-weight: 700;
+            color: #00f5ff;
+        }
+
+        .testimonial-role {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        /* Footer CTA */
+        .footer-cta {
+            text-align: center;
+            padding: 80px 20px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+        }
+
+        .footer-cta h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 30px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .course-image {
+                max-width: 100%;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .bloch-sphere-container {
+                height: 350px;
+            }
+        }
+
+        /* Pulse Animation */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-20px); }
+            60% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        .scroll-arrow {
+            font-size: 2rem;
+            color: #00f5ff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="quantum-bg" id="quantumBg"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Master Quantum Computing</h1>
+        <p class="hero-subtitle">
+            Unlock the power of quantum mechanics and revolutionize your career. 
+            Learn from industry experts and get certified in the technology of tomorrow.
+        </p>
+
+        <!-- Course Image with Link -->
+        <div class="cta-container">
+            <a href="#" class="course-link" id="courseLink" title="Enroll Now - Limited Seats Available!">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'%3E%3Cdefs%3E%3ClinearGradient id='grad1' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23667eea;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23764ba2;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='600' height='400' fill='url(%23grad1)'/%3E%3Ctext x='300' y='150' font-family='Arial, sans-serif' font-size='48' font-weight='bold' fill='white' text-anchor='middle'%3EQuantum Computing%3C/text%3E%3Ctext x='300' y='200' font-family='Arial, sans-serif' font-size='32' fill='%2300f5ff' text-anchor='middle'%3EMasterclass 2024%3C/text%3E%3Ctext x='300' y='260' font-family='Arial, sans-serif' font-size='24' fill='white' text-anchor='middle'%3E✓ 50+ Hours of Content%3C/text%3E%3Ctext x='300' y='295' font-family='Arial, sans-serif' font-size='24' fill='white' text-anchor='middle'%3E✓ Hands-on Simulations%3C/text%3E%3Ctext x='300' y='330' font-family='Arial, sans-serif' font-size='24' fill='white' text-anchor='middle'%3E✓ Industry Certificate%3C/text%3E%3Ctext x='300' y='370' font-family='Arial, sans-serif' font-size='20' font-weight='bold' fill='%23ffff00' text-anchor='middle'%3E🎯 CLICK TO ENROLL NOW 🎯%3C/text%3E%3C/svg%3E" 
+                     alt="Quantum Computing Masterclass - Enroll Now" 
+                     class="course-image pulse">
+            </a>
+        </div>
+
+        <div>
+            <a href="#features" class="cta-button">Explore Course</a>
+            <a href="#curriculum" class="cta-button secondary">View Curriculum</a>
+        </div>
+
+        <div class="scroll-indicator">
+            <div class="scroll-arrow">↓</div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stat-card">
+            <div class="stat-number">50+</div>
+            <div class="stat-label">Hours of Content</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">10+</div>
+            <div class="stat-label">Interactive Simulations</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">5000+</div>
+            <div class="stat-label">Students Enrolled</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">4.9★</div>
+            <div class="stat-label">Average Rating</div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <h2 class="section-title">Why Choose This Course?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎓</div>
+                <h3 class="feature-title">Expert Instructors</h3>
+                <p class="feature-description">Learn from PhD researchers and industry professionals with years of quantum computing experience.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💻</div>
+                <h3 class="feature-title">Hands-On Practice</h3>
+                <p class="feature-description">Build real quantum circuits using IBM Qiskit and run them on actual quantum computers.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🧪</div>
+                <h3 class="feature-title">Interactive Simulations</h3>
+                <p class="feature-description">Visualize quantum states with Bloch spheres, circuit builders, and algorithm demonstrations.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📜</div>
+                <h3 class="feature-title">Industry Certificate</h3>
+                <p class="feature-description">Earn a recognized certificate upon completion to boost your career prospects.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h3 class="feature-title">Career Support</h3>
+                <p class="feature-description">Get guidance on quantum computing careers and access to our exclusive job board.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">♾️</div>
+                <h3 class="feature-title">Lifetime Access</h3>
+                <p class="feature-description">Learn at your own pace with unlimited access to all course materials and updates.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Simulation Demo -->
+    <section class="simulation-section">
+        <h2 class="section-title">Experience Quantum Mechanics Live</h2>
+        <p class="hero-subtitle">Interact with a Bloch Sphere - The fundamental visualization of quantum states</p>
+        
+        <div class="bloch-sphere-container">
+            <canvas id="blochCanvas"></canvas>
+        </div>
+
+        <div class="controls">
+            <button class="control-btn" onclick="applyGate('X')">X Gate (Flip)</button>
+            <button class="control-btn" onclick="applyGate('H')">H Gate (Superposition)</button>
+            <button class="control-btn" onclick="applyGate('Z')">Z Gate (Phase)</button>
+            <button class="control-btn" onclick="resetState()">Reset to |0⟩</button>
+        </div>
+    </section>
+
+    <!-- Curriculum Section -->
+    <section class="curriculum" id="curriculum">
+        <h2 class="section-title">Complete Curriculum</h2>
+        
+        <div class="curriculum-item">
+            <div class="curriculum-title">📘 Chapter 0: Introduction to Quantum Computing</div>
+            <div class="curriculum-description">History, applications, and why quantum computing matters in today's world.</div>
+        </div>
+
+        <div class="curriculum-item">
+            <div class="curriculum-title">🔢 Chapter 1: Mathematical Foundations</div>
+            <div class="curriculum-description">Complex numbers, linear algebra, vectors, matrices, and probability theory.</div>
+        </div>
+
+        <div class="curriculum-item">
+            <div class="curriculum-title">⚛️ Chapter 2: Understanding Qubits</div>
+            <div class="curriculum-description">Quantum states, superposition, entanglement, measurement, and the Bloch sphere.</div>
+        </div>
+
+        <div class="curriculum-item">
+            <div class="curriculum-title">🚪 Chapter 3: Quantum Gates</div>
+            <div class="curriculum-description">Pauli gates, Hadamard, phase gates, CNOT, and multi-qubit operations.</div>
+        </div>
+
+        <div class="curriculum-item">
+            <div class="curriculum-title">🔌 Chapter 4: Quantum Circuits</div>
+            <div class="curriculum-description">Building circuits, Bell states, GHZ states, and quantum teleportation.</div>
+        </div>
+
+        <div class="curriculum-item">
+            <div class="curriculum-title">🧮 Chapter 5: Quantum Algorithms</div>
+            <div class="curriculum-description">Deutsch-Jozsa, Grover's search, Shor's factoring, QFT, VQE, and QAOA.</div>
+        </div>
+
+        <div class="curriculum-item">
+            <div class="curriculum-title">💻 Chapter 6: Programming with Qiskit</div>
+            <div class="curriculum-description">Setup, circuit creation, simulations, and running on real quantum hardware.</div>
+        </div>
+
+        <div class="curriculum-item">
+            <div class="curriculum-title">🧪 Interactive Simulations & Projects</div>
+            <div class="curriculum-description">10+ hands-on simulations and real-world quantum computing projects.</div>
+        </div>
+
+        <div class="curriculum-item">
+            <div class="curriculum-title">📝 Final Assessment & Certification</div>
+            <div class="curriculum-description">Comprehensive test covering all topics with instant certificate generation.</div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <h2 class="section-title">What Our Students Say</h2>
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-text">"This course transformed my understanding of quantum computing. The simulations made complex concepts crystal clear!"</p>
+                <div class="testimonial-author">Sarah Chen</div>
+                <div class="testimonial-role">Software Engineer, Google</div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"Best investment in my career. I landed a quantum research position within 3 months of completing this course."</p>
+                <div class="testimonial-author">Michael Rodriguez</div>
+                <div class="testimonial-role">Quantum Researcher, IBM</div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"The hands-on approach with Qiskit was incredible. I built my first quantum algorithm in just 2 weeks!"</p>
+                <div class="testimonial-author">Priya Sharma</div>
+                <div class="testimonial-role">PhD Student, MIT</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer CTA -->
+    <section class="footer-cta">
+        <h2>Ready to Start Your Quantum Journey?</h2>
+        <p class="hero-subtitle">Join thousands of students mastering the technology of tomorrow</p>
+        <a href="#" class="cta-button pulse" id="footerEnrollBtn">Enroll Now - Limited Time Offer!</a>
+        <p style="margin-top: 20px; color: #888;">💎 30-Day Money-Back Guarantee | 🎯 Lifetime Access | 📜 Certificate Included</p>
+    </section>
+
+    <script>
+        // Create animated background particles
+        function createParticles() {
+            const bg = document.getElementById('quantumBg');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                bg.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Bloch Sphere Simulation
+        const canvas = document.getElementById('blochCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Set canvas size
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            canvas.width = container.offsetWidth;
+            canvas.height = container.offsetHeight;
+            drawBlochSphere();
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Quantum state (theta, phi in spherical coordinates)
+        let theta = 0; // 0 = |0⟩ state
+        let phi = 0;
+
+        function drawBlochSphere() {
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = Math.min(canvas.width, canvas.height) * 0.35;
+
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw sphere outline
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            ctx.strokeStyle = 'rgba(138, 43, 226, 0.5)';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Draw axes
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.lineWidth = 1;
+            
+            // X axis
+            ctx.beginPath();
+            ctx.moveTo(centerX - radius, centerY);
+            ctx.lineTo(centerX + radius, centerY);
+            ctx.stroke();
+
+            // Y axis (ellipse for 3D effect)
+            ctx.beginPath();
+            ctx.ellipse(centerX, centerY, radius, radius * 0.3, 0, 0, 2 * Math.PI);
+            ctx.stroke();
+
+            // Z axis
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY - radius);
+            ctx.lineTo(centerX, centerY + radius);
+            ctx.stroke();
+
+            // Draw axis labels
+            ctx.fillStyle = '#00f5ff';
+            ctx.font = 'bold 16px Arial';
+            ctx.fillText('|0⟩', centerX - 10, centerY - radius - 10);
+            ctx.fillText('|1⟩', centerX - 10, centerY + radius + 25);
+            ctx.fillText('X', centerX + radius + 10, centerY + 5);
+            ctx.fillText('Y', centerX + 10, centerY - radius * 0.3 - 10);
+
+            // Calculate state vector position
+            const x = radius * Math.sin(theta) * Math.cos(phi);
+            const y = radius * Math.sin(theta) * Math.sin(phi) * 0.3; // 3D projection
+            const z = radius * Math.cos(theta);
+
+            // Draw state vector
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(centerX + x, centerY - z);
+            ctx.strokeStyle = '#ff00ff';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Draw state point
+            ctx.beginPath();
+            ctx.arc(centerX + x, centerY - z, 8, 0, 2 * Math.PI);
+            ctx.fillStyle = '#00f5ff';
+            ctx.fill();
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Display state probabilities
+            const prob0 = Math.cos(theta / 2) ** 2;
+            const prob1 = Math.sin(theta / 2) ** 2;
+            
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 14px Arial';
+            ctx.fillText(`P(|0⟩) = ${(prob0 * 100).toFixed(1)}%`, 20, 30);
+            ctx.fillText(`P(|1⟩) = ${(prob1 * 100).toFixed(1)}%`, 20, 50);
+        }
+
+        // Apply quantum gates
+        function applyGate(gate) {
+            switch(gate) {
+                case 'X': // Pauli-X (bit flip)
+                    theta = Math.PI - theta;
+                    break;
+                case 'H': // Hadamard (superposition)
+                    if (theta === 0) {
+                        theta = Math.PI / 2;
+                        phi = 0;
+                    } else if (theta === Math.PI) {
+                        theta = Math.PI / 2;
+                        phi = Math.PI;
+                    } else {
+                        theta = Math.PI / 2;
+                    }
+                    break;
+                case 'Z': // Pauli-Z (phase flip)
+                    phi = phi + Math.PI;
+                    break;
+            }
+            animateToState();
+        }
+
+        function resetState() {
+            theta = 0;
+            phi = 0;
+            animateToState();
+        }
+
+        // Smooth animation
+        let animationFrame;
+        function animateToState() {
+            if (animationFrame) cancelAnimationFrame(animationFrame);
+            
+            let frame = 0;
+            const animate = () => {
+                frame++;
+                drawBlochSphere();
+                if (frame < 30) {
+                    animationFrame = requestAnimationFrame(animate);
+                }
+            };
+            animate();
+        }
+
+        // Initial draw
+        drawBlochSphere();
+
+        // Auto-rotate demonstration
+        let autoRotate = true;
+        function autoRotateDemo() {
+            if (autoRotate) {
+                phi += 0.02;
+                drawBlochSphere();
+            }
+            requestAnimationFrame(autoRotateDemo);
+        }
+        autoRotateDemo();
+
+        // Stop auto-rotate when user interacts
+        document.querySelectorAll('.control-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                autoRotate = false;
+                setTimeout(() => autoRotate = true, 5000);
+            });
+        });
+
+        // Course link click handler (replace with your actual course URL)
+        document.getElementById('courseLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            // Replace this URL with your actual course URL
+            const courseURL = 'https://your-course-website.com/quantum-computing';
+            
+            // Optional: Add analytics tracking here
+            // gtag('event', 'click', { 'event_category': 'CTA', 'event_label': 'Course Enroll' });
+            
+            // Open course in new tab
+            window.open(courseURL, '_blank');
+        });
+
+        // Footer enroll button
+        document.getElementById('footerEnrollBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            const courseURL = 'https://your-course-website.com/quantum-computing';
+            window.open(courseURL, '_blank');
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+
+

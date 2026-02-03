@@ -1,0 +1,16 @@
+{
+  "llm": {
+    "type": "ollama_qwen",
+    "openai_keys": []
+  },
+  "embedding": "sentence_minilm",
+  "chunking": {
+    "splitter_id": "character",
+    "chunk_size": 512,
+    "chunk_overlap": 50
+  },
+  "project_id": "testing1",
+  "name": "Testing1",
+  "created_at": "2026-01-31T15:50:13.436227Z",
+  "archived": false
+}

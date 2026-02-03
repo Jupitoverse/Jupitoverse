@@ -1,0 +1,496 @@
+<!-- SQO API Console -->
+<div class="page">
+    <h1>⚡ SQO API Console</h1>
+    <p class="subtitle">Product Delivery & Billing Operations</p>
+
+    <div class="sqo-status-bar">
+        <div class="status-indicator" id="sqo-status">
+            <span class="status-dot"></span>
+            <span>Checking connection...</span>
+        </div>
+    </div>
+
+    <!-- API Cards - 5 in a row -->
+    <div class="sqo-api-grid">
+        <div class="sqo-api-card" onclick="SQOAPI.selectAPI('billing-manual')">
+            <div class="sqo-api-icon">💳</div>
+            <div class="sqo-api-name">Billing Manual</div>
+            <div class="sqo-api-desc">Execute billing request</div>
+        </div>
+        <div class="sqo-api-card" onclick="SQOAPI.selectAPI('submit-delivery')">
+            <div class="sqo-api-icon">📦</div>
+            <div class="sqo-api-name">Submit Delivery</div>
+            <div class="sqo-api-desc">Submit for delivery</div>
+        </div>
+        <div class="sqo-api-card" onclick="SQOAPI.selectAPI('set-product-status')">
+            <div class="sqo-api-icon">🔄</div>
+            <div class="sqo-api-name">Product Status</div>
+            <div class="sqo-api-desc">Update assignment</div>
+        </div>
+        <div class="sqo-api-card" onclick="SQOAPI.selectAPI('send-fulfillment')">
+            <div class="sqo-api-icon">✅</div>
+            <div class="sqo-api-name">Fulfillment</div>
+            <div class="sqo-api-desc">Send to fulfillment</div>
+        </div>
+        <div class="sqo-api-card" onclick="SQOAPI.selectAPI('quote-alignment')">
+            <div class="sqo-api-icon">📐</div>
+            <div class="sqo-api-name">Quote Align</div>
+            <div class="sqo-api-desc">Align quotes</div>
+        </div>
+    </div>
+
+    <!-- Form Section -->
+    <div class="sqo-form-container" id="sqo-form-section" style="display: none;">
+        <div class="sqo-form-header">
+            <h2 id="sqo-form-title">API Request</h2>
+            <button class="secondary-btn" onclick="SQOAPI.closeForm()">✕ Close</button>
+        </div>
+        
+        <!-- Billing Manual Call Form -->
+        <div class="sqo-form" id="form-billing-manual" style="display: none;">
+            <div class="form-group">
+                <label>Correlation ID</label>
+                <input type="text" id="billing-correlationId" placeholder="CID:{...}">
+            </div>
+            <div class="form-group">
+                <label>Resend</label>
+                <select id="billing-resend">
+                    <option value="false">False</option>
+                    <option value="true">True</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Products (JSON Array)</label>
+                <textarea id="billing-products" rows="10" placeholder='[
+  {
+    "productId": "IProductAgreementItemInstance_xxx",
+    "version": "1",
+    "billingDate": "2025-01-20T00:00:00Z",
+    "action": "CREATE",
+    "subAction": "CE"
+  }
+]'></textarea>
+            </div>
+        </div>
+
+        <!-- Submit to Delivery Form -->
+        <div class="sqo-form" id="form-submit-delivery" style="display: none;">
+            <div class="form-group">
+                <label>Correlation ID</label>
+                <input type="text" id="delivery-correlationId" placeholder="CID:{...}">
+            </div>
+            <div class="form-group">
+                <label>Framework Agreement ID</label>
+                <input type="text" id="delivery-faId" placeholder="IFrameworkAgreement_xxx">
+            </div>
+            <div class="form-group">
+                <label>Framework Agreement Version</label>
+                <input type="number" id="delivery-faVersion" value="1">
+            </div>
+            <div class="form-group">
+                <label>Product Agreement Items (JSON Array)</label>
+                <textarea id="delivery-items" rows="10" placeholder='[
+  {
+    "id": "IProductAgreementItemInstance_xxx",
+    "version": 1
+  }
+]'></textarea>
+            </div>
+        </div>
+
+        <!-- Set Product Status Form -->
+        <div class="sqo-form" id="form-set-product-status" style="display: none;">
+            <div class="form-group">
+                <label>Correlation ID</label>
+                <input type="text" id="status-correlationId" placeholder="CID:{...}">
+            </div>
+            <div class="form-group">
+                <label>Products (JSON Array)</label>
+                <textarea id="status-products" rows="10" placeholder='[
+  {
+    "productId": "IProductAgreementItemInstance_xxx",
+    "version": "1"
+  }
+]'></textarea>
+            </div>
+        </div>
+
+        <!-- Send to Fulfillment Form -->
+        <div class="sqo-form" id="form-send-fulfillment" style="display: none;">
+            <div class="form-group">
+                <label>Correlation ID</label>
+                <input type="text" id="fulfillment-correlationId" placeholder="CID:{...}">
+            </div>
+            <div class="form-group">
+                <label>Fulfillment Group ID</label>
+                <input type="text" id="fulfillment-groupId">
+            </div>
+            <div class="form-group">
+                <label>Fulfillment Group Action</label>
+                <select id="fulfillment-action">
+                    <option value="CREATE">CREATE</option>
+                    <option value="UPDATE">UPDATE</option>
+                    <option value="DELETE">DELETE</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Fulfillment Group Version</label>
+                <input type="text" id="fulfillment-version" value="1">
+            </div>
+            <div class="form-group">
+                <label>Products (JSON Array)</label>
+                <textarea id="fulfillment-products" rows="10" placeholder='[
+  {
+    "productId": "IProductAgreementItemInstance_xxx",
+    "action": "CREATE",
+    "version": "1",
+    "previousVersion": null,
+    "subAction": "NE"
+  }
+]'></textarea>
+            </div>
+        </div>
+
+        <!-- Quote Alignment Form -->
+        <div class="sqo-form" id="form-quote-alignment" style="display: none;">
+            <div class="form-group">
+                <label>Framework Agreement ID</label>
+                <input type="text" id="quote-faId" placeholder="IFrameworkAgreement_xxx">
+            </div>
+            <div class="form-group">
+                <label>Request Type</label>
+                <select id="quote-requestType">
+                    <option value="Quote">Quote</option>
+                    <option value="Order">Order</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="sqo-form-actions">
+            <button class="primary-btn" onclick="SQOAPI.executeRequest()">▶ Execute Request</button>
+            <button class="secondary-btn" onclick="SQOAPI.clearForm()">Clear</button>
+        </div>
+    </div>
+
+    <!-- Response Section -->
+    <div class="sqo-response-container" id="sqo-response-section" style="display: none;">
+        <div class="sqo-response-header">
+            <h2>Response</h2>
+            <div class="sqo-response-info">
+                <span class="sqo-status-badge" id="sqo-response-status"></span>
+                <span class="sqo-time-badge" id="sqo-response-time"></span>
+            </div>
+        </div>
+        <div class="sqo-toolbar">
+            <button class="secondary-btn" onclick="SQOAPI.searchInResponse()">🔍 Search</button>
+            <button class="secondary-btn" onclick="SQOAPI.expandAll()">➕ Expand All</button>
+            <button class="secondary-btn" onclick="SQOAPI.collapseAll()">➖ Collapse All</button>
+            <button class="secondary-btn" onclick="SQOAPI.copyResponse()">📋 Copy</button>
+            <button class="secondary-btn" onclick="SQOAPI.downloadResponse()">💾 Download</button>
+        </div>
+        <div class="sqo-search-bar" id="sqo-search-bar" style="display: none;">
+            <input type="text" id="sqo-search-input" placeholder="Search in JSON...">
+            <span id="sqo-search-count"></span>
+            <button class="secondary-btn" onclick="SQOAPI.findPrev()">◀</button>
+            <button class="secondary-btn" onclick="SQOAPI.findNext()">▶</button>
+            <button class="secondary-btn" onclick="SQOAPI.closeSearch()">✕</button>
+        </div>
+        <div class="sqo-json-viewer" id="sqo-json-viewer"></div>
+    </div>
+</div>
+
+<style>
+.sqo-status-bar {
+    margin-bottom: 24px;
+}
+
+.status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #fbbf24;
+}
+
+.status-dot.online { background: var(--success-color); }
+.status-dot.offline { background: var(--error-color); }
+
+/* 5 cards in single row */
+.sqo-api-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+.sqo-api-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sqo-api-card:hover {
+    border-color: var(--accent-primary);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px var(--shadow-color);
+}
+
+.sqo-api-card.active {
+    border-color: var(--accent-primary);
+    background: rgba(139, 92, 246, 0.1);
+    box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.sqo-api-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.sqo-api-name {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+}
+
+.sqo-api-desc {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.sqo-form-container {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.sqo-form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-primary);
+}
+
+.sqo-form-header h2 {
+    margin: 0;
+    border: none;
+    padding: 0;
+}
+
+.sqo-form .form-group input,
+.sqo-form .form-group select,
+.sqo-form .form-group textarea {
+    width: 100%;
+    padding: 12px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 1rem;
+}
+
+.sqo-form .form-group textarea {
+    font-family: 'Consolas', 'Monaco', monospace;
+    resize: vertical;
+}
+
+.sqo-form .form-group input:focus,
+.sqo-form .form-group select:focus,
+.sqo-form .form-group textarea:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
+
+.sqo-form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-primary);
+}
+
+.sqo-response-container {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.sqo-response-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.sqo-response-header h2 {
+    margin: 0;
+    border: none;
+    padding: 0;
+}
+
+.sqo-response-info {
+    display: flex;
+    gap: 12px;
+}
+
+.sqo-status-badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.sqo-status-badge.success {
+    background: rgba(45, 212, 191, 0.2);
+    color: var(--success-color);
+}
+
+.sqo-status-badge.error {
+    background: rgba(244, 63, 94, 0.2);
+    color: var(--error-color);
+}
+
+.sqo-time-badge {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    padding: 6px 0;
+}
+
+.sqo-toolbar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.sqo-search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding: 12px;
+    background: var(--bg-primary);
+    border-radius: 8px;
+}
+
+.sqo-search-bar input {
+    flex: 1;
+    padding: 8px 12px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 6px;
+    color: var(--text-primary);
+}
+
+#sqo-search-count {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    min-width: 80px;
+}
+
+.sqo-json-viewer {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    padding: 16px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    max-height: 500px;
+    overflow: auto;
+    color: var(--text-primary);
+}
+
+.sqo-json-viewer .json-key { color: var(--accent-secondary); }
+.sqo-json-viewer .json-string { color: #fbbf24; }
+.sqo-json-viewer .json-number { color: #60a5fa; }
+.sqo-json-viewer .json-boolean { color: #f472b6; }
+.sqo-json-viewer .json-null { color: var(--text-secondary); }
+
+.sqo-json-viewer .json-collapsible { cursor: pointer; }
+.sqo-json-viewer .json-collapsible::before {
+    content: '▼';
+    display: inline-block;
+    width: 16px;
+    font-size: 10px;
+    color: var(--text-secondary);
+}
+.sqo-json-viewer .json-collapsible.collapsed::before { transform: rotate(-90deg); }
+.sqo-json-viewer .json-collapsed { display: none; }
+.sqo-json-viewer .json-highlight { background: rgba(251, 191, 36, 0.3); }
+
+/* Responsive - stack on smaller screens */
+@media (max-width: 1200px) {
+    .sqo-api-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .sqo-api-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+</style>
+
+<script>
+// Initialize SQO status check when page loads
+(function() {
+    function initSQO() {
+        fetch('http://127.0.0.1:5001/api/sqo/status')
+            .then(r => r.json())
+            .then(() => {
+                const dot = document.querySelector('#sqo-status .status-dot');
+                const text = document.querySelector('#sqo-status span:last-child');
+                if (dot) dot.classList.add('online');
+                if (text) text.textContent = 'Connected';
+            })
+            .catch(() => {
+                const dot = document.querySelector('#sqo-status .status-dot');
+                const text = document.querySelector('#sqo-status span:last-child');
+                if (dot) dot.classList.add('offline');
+                if (text) text.textContent = 'Offline';
+            });
+    }
+    
+    // Run on page load
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initSQO);
+    } else {
+        setTimeout(initSQO, 100);
+    }
+    
+    // Also listen for pageLoaded event
+    document.addEventListener('pageLoaded', function(e) {
+        if (e.detail.pageId === 'sqo') {
+            setTimeout(initSQO, 100);
+        }
+    });
+})();
+</script>

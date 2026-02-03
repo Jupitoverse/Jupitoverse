@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asteroid & Comet Explorer | SpaceKit Simulation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            background: #000;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+        }
+
+        h1 {
+            font-size: 3em;
+            font-weight: 800;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(126, 34, 206, 0.8);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #cbd5e1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        #vis-container {
+            width: 100%;
+            height: 600px;
+            background: #000;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid rgba(126, 34, 206, 0.3);
+            position: relative;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .asteroid-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .asteroid-card {
+            background: linear-gradient(135deg, rgba(126, 34, 206, 0.2) 0%, rgba(30, 60, 114, 0.3) 100%);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(126, 34, 206, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .asteroid-card:hover {
+            transform: scale(1.05);
+            border-color: #fbbf24;
+            box-shadow: 0 8px 25px rgba(251, 191, 36, 0.3);
+        }
+
+        .asteroid-card h4 {
+            color: #fbbf24;
+            margin-bottom: 10px;
+        }
+
+        .asteroid-properties {
+            color: #cbd5e1;
+            font-size: 0.9em;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin: 5px 5px 5px 0;
+        }
+
+        .badge-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+
+        .badge-warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        .badge-info {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+
+        .badge-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-size: 1.5em;
+            z-index: 10;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(0, 0, 0, 0.5);
+            margin-top: 60px;
+            color: #94a3b8;
+        }
+
+        footer a {
+            color: #fbbf24;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🌌 Asteroid & Comet Explorer</h1>
+        <p class="subtitle">Interactive Solar System with Real NASA Data</p>
+    </header>
+
+    <div class="container">
+        <div id="vis-container">
+            <div class="loading" id="loading">
+                <p>Loading SpaceKit simulation...</p>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="control-btn" onclick="viz.start()">▶️ Play</button>
+            <button class="control-btn" onclick="viz.stop()">⏸️ Pause</button>
+            <button class="control-btn" onclick="speedUp()">⏩ Speed Up</button>
+            <button class="control-btn" onclick="slowDown()">⏪ Slow Down</button>
+            <button class="control-btn" onclick="resetView()">🔄 Reset</button>
+        </div>
+
+        <h2 style="text-align: center; color: #fbbf24; margin: 40px 0 20px 0;">🔍 Featured Asteroids & Comets</h2>
+        
+        <div class="asteroid-list" id="asteroidList">
+            <!-- Populated by JavaScript -->
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Asteroid & Comet Explorer | Data from NASA/JPL</p>
+        <p>Built with <a href="https://typpo.github.io/spacekit/">SpaceKit.js</a></p>
+    </footer>
+
+    <!-- Load Three.js first -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r98/three.min.js"></script>
+    <!-- Then SpaceKit -->
+    <script src="https://typpo.github.io/spacekit/build/spacekit.js"></script>
+
+    <script>
+        // Featured asteroids and comets data
+        const celestialObjects = [
+            {
+                name: "1 Ceres",
+                ephem: { a: 2.767, e: 0.0758, i: 10.59, om: 80.3, w: 73.6, ma: 352.2, epoch: 2458600.5 },
+                diameter: 939,
+                badges: ["Dwarf Planet", "Main Belt"],
+                description: "Largest object in the asteroid belt"
+            },
+            {
+                name: "4 Vesta",
+                ephem: { a: 2.362, e: 0.0887, i: 7.14, om: 103.9, w: 151.2, ma: 205.8, epoch: 2458600.5 },
+                diameter: 525,
+                badges: ["Main Belt", "Visited"],
+                description: "Second-largest asteroid, visited by Dawn"
+            },
+            {
+                name: "433 Eros",
+                ephem: { a: 1.458, e: 0.2229, i: 10.83, om: 304.4, w: 178.9, ma: 262.5, epoch: 2458600.5 },
+                diameter: 16.8,
+                badges: ["Near-Earth", "Visited"],
+                description: "First asteroid to be orbited by a spacecraft"
+            },
+            {
+                name: "99942 Apophis",
+                ephem: { a: 0.9224, e: 0.1911, i: 3.331, om: 204.4, w: 126.4, ma: 245.2, epoch: 2458600.5 },
+                diameter: 0.370,
+                badges: ["Near-Earth", "PHA", "2029 Flyby"],
+                description: "Will pass extremely close to Earth in 2029"
+            },
+            {
+                name: "101955 Bennu",
+                ephem: { a: 1.126, e: 0.2037, i: 6.035, om: 2.06, w: 66.22, ma: 102.7, epoch: 2458600.5 },
+                diameter: 0.492,
+                badges: ["Near-Earth", "Sample Return"],
+                description: "OSIRIS-REx sample return target"
+            },
+            {
+                name: "16 Psyche",
+                ephem: { a: 2.921, e: 0.1339, i: 3.095, om: 150.3, w: 228.0, ma: 93.7, epoch: 2458600.5 },
+                diameter: 226,
+                badges: ["Main Belt", "Metal-Rich"],
+                description: "Metallic asteroid, NASA mission target"
+            },
+            {
+                name: "243 Ida",
+                ephem: { a: 2.862, e: 0.0431, i: 1.137, om: 324.6, w: 109.3, ma: 159.1, epoch: 2458600.5 },
+                diameter: 31.4,
+                badges: ["Main Belt", "Has Moon"],
+                description: "First asteroid found with a moon (Dactyl)"
+            },
+            {
+                name: "162173 Ryugu",
+                ephem: { a: 1.190, e: 0.1902, i: 5.884, om: 251.6, w: 211.4, ma: 34.1, epoch: 2458600.5 },
+                diameter: 0.896,
+                badges: ["Near-Earth", "Sample Return"],
+                description: "Hayabusa2 sample return target"
+            }
+        ];
+
+        let viz;
+
+        // Wait for libraries to load
+        function checkLibraries() {
+            if (typeof THREE !== 'undefined' && typeof Spacekit !== 'undefined') {
+                console.log('✓ Libraries loaded');
+                initVisualization();
+            } else {
+                console.log('Waiting for libraries...');
+                setTimeout(checkLibraries, 100);
+            }
+        }
+
+        function initVisualization() {
+            try {
+                console.log('Initializing SpaceKit...');
+                
+                // Create the visualization
+                viz = new Spacekit.Simulation(document.getElementById('vis-container'), {
+                    basePath: 'https://typpo.github.io/spacekit/src',
+                    startDate: new Date(),
+                    maxNumParticles: 2048,
+                    jdPerSecond: 10,
+                    unitsPerAu: 50.0
+                });
+
+                console.log('✓ Simulation created');
+
+                // Hide loading message
+                document.getElementById('loading').style.display = 'none';
+
+                // Create background stars
+                viz.createStars();
+                console.log('✓ Stars created');
+
+                // Create sun
+                viz.createObject('sun', Spacekit.SpaceObjectPresets.SUN);
+                console.log('✓ Sun created');
+
+                // Add planets
+                viz.createObject('earth', Object.assign(Spacekit.SpaceObjectPresets.EARTH, { 
+                    labelText: 'Earth' 
+                }));
+                viz.createObject('mars', Spacekit.SpaceObjectPresets.MARS);
+                viz.createObject('jupiter', Spacekit.SpaceObjectPresets.JUPITER);
+                console.log('✓ Planets created');
+
+                // Add asteroids
+                celestialObjects.forEach((obj, idx) => {
+                    try {
+                        const spaceObj = viz.createObject(`asteroid-${idx}`, {
+                            ephem: new Spacekit.Ephem(obj.ephem, 'deg'),
+                            labelText: obj.name,
+                            particleSize: 50,
+                            theme: {
+                                color: obj.badges.includes('PHA') ? 0xff4444 : 
+                                       obj.badges.includes('Near-Earth') ? 0xff9944 : 0xcccccc
+                            }
+                        });
+                        console.log(`✓ Created: ${obj.name}`);
+                    } catch (e) {
+                        console.error(`Error creating ${obj.name}:`, e);
+                    }
+                });
+
+                console.log('✓✓✓ Visualization complete!');
+
+                // Start the simulation
+                viz.start();
+
+                // Populate asteroid cards
+                populateAsteroidCards();
+
+            } catch (error) {
+                console.error('Error initializing:', error);
+                document.getElementById('loading').innerHTML = 
+                    '<p style="color: #ff4444;">Error: ' + error.message + '</p>';
+            }
+        }
+
+        function speedUp() {
+            if (viz) {
+                viz.setJdPerSecond(viz.getJdPerSecond() * 2);
+            }
+        }
+
+        function slowDown() {
+            if (viz) {
+                viz.setJdPerSecond(viz.getJdPerSecond() / 2);
+            }
+        }
+
+        function resetView() {
+            if (viz) {
+                viz.setDate(new Date());
+                viz.setJdPerSecond(10);
+            }
+        }
+
+        function populateAsteroidCards() {
+            const list = document.getElementById('asteroidList');
+            
+            celestialObjects.forEach(obj => {
+                const card = document.createElement('div');
+                card.className = 'asteroid-card';
+                
+                const badges = obj.badges.map(badge => {
+                    let className = 'badge badge-info';
+                    if (badge.includes('PHA') || badge.includes('Hazardous')) className = 'badge badge-danger';
+                    else if (badge.includes('Near-Earth') || badge.includes('Flyby')) className = 'badge badge-warning';
+                    else if (badge.includes('Visited') || badge.includes('Sample')) className = 'badge badge-success';
+                    return `<span class="${className}">${badge}</span>`;
+                }).join('');
+                
+                card.innerHTML = `
+                    <h4>☄️ ${obj.name}</h4>
+                    <div>${badges}</div>
+                    <div class="asteroid-properties">
+                        <p><strong>Diameter:</strong> ${obj.diameter} km</p>
+                        <p><strong>Semi-major axis:</strong> ${obj.ephem.a} AU</p>
+                        <p><strong>Eccentricity:</strong> ${obj.ephem.e}</p>
+                        <p style="margin-top: 10px;">${obj.description}</p>
+                    </div>
+                `;
+                
+                list.appendChild(card);
+            });
+        }
+
+        // Start loading
+        console.log('Starting initialization...');
+        checkLibraries();
+    </script>
+</body>
+</html>
+

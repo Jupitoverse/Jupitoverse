@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Analyser - Team</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #1a1a1a; min-height: 100vh; padding-top: 70px; color: #ffffff; }
+        .container { max-width: 80%; margin: 0 auto; padding: 20px; }
+        
+        /* ========== NAVBAR STYLES ========== */
+        .navbar { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: #2d2d2d; border-bottom: 2px solid #ff6b35; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; z-index: 1000; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); }
+        .nav-brand { display: flex; align-items: center; gap: 10px; }
+        .nav-brand-icon { font-size: 1.5em; }
+        .nav-brand-text { font-size: 1.3em; font-weight: 700; background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .nav-links { display: flex; align-items: center; gap: 5px; }
+        .nav-link { color: #cccccc; text-decoration: none; padding: 10px 18px; border-radius: 8px; font-weight: 500; font-size: 0.95em; transition: all 0.3s; display: flex; align-items: center; gap: 6px; }
+        .nav-link:hover { color: #ffffff; background: #3d3d3d; }
+        .nav-link.active { color: #ff6b35; background: rgba(255, 107, 53, 0.15); border-bottom: 2px solid #ff6b35; }
+        .nav-actions { display: flex; align-items: center; gap: 15px; }
+        .nav-logout { background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%); color: white; text-decoration: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 0.9em; transition: all 0.3s; }
+        .nav-logout:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4); }
+        @media (max-width: 768px) { .navbar { padding: 0 15px; } .nav-brand-text { display: none; } .nav-link { padding: 8px 12px; font-size: 0.85em; } .nav-link span { display: none; } }
+        /* ========== END NAVBAR STYLES ========== */
+        
+        .header { background: #2d2d2d; padding: 25px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); margin-bottom: 25px; border: 2px solid #ff6b35; text-align: center; }
+        .header h1 { font-size: 2em; color: #ffffff; margin-bottom: 8px; }
+        .header p { color: #cccccc; font-size: 0.95em; }
+        
+        .stats-overview { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .stat-card { background: #2d2d2d; padding: 15px; border-radius: 10px; border: 2px solid #3d3d3d; text-align: center; transition: all 0.3s; }
+        .stat-card:hover { border-color: #ff6b35; transform: translateY(-3px); }
+        .stat-value { font-size: 1.8em; font-weight: 700; background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .stat-label { color: #cccccc; font-size: 0.8em; margin-top: 5px; }
+        
+        .search-filter { background: #2d2d2d; padding: 12px; border-radius: 10px; margin-bottom: 20px; border: 2px solid #3d3d3d; }
+        .search-filter input { width: 100%; padding: 10px 15px; background: #1a1a1a; border: 2px solid #3d3d3d; border-radius: 6px; color: #ffffff; font-size: 0.95em; }
+        .search-filter input:focus { outline: none; border-color: #ff6b35; }
+        .search-filter input::placeholder { color: #999999; }
+        
+        .members-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        @media (max-width: 1200px) { .members-list { grid-template-columns: 1fr; } }
+        
+        .member-card { background: #2d2d2d; border-radius: 12px; border: 2px solid #3d3d3d; overflow: hidden; transition: all 0.3s; }
+        .member-card:hover { border-color: #ff6b35; box-shadow: 0 5px 20px rgba(255, 107, 53, 0.2); }
+        
+        .member-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%); }
+        .member-name { font-size: 1.2em; font-weight: 600; color: #ffffff; }
+        
+        .member-body { padding: 15px 20px; }
+        
+        .edit-btn { background: #3d3d3d; color: #ffffff; border: 1px solid #ff6b35; padding: 5px 12px; border-radius: 6px; font-size: 0.8em; cursor: pointer; transition: all 0.3s; }
+        .edit-btn:hover { background: #4d4d4d; transform: scale(1.05); }
+        
+        .edit-form { display: none; margin-top: 12px; padding: 12px; background: #2d2d2d; border-radius: 8px; border: 1px solid #3d3d3d; }
+        .edit-form.show { display: block; }
+        .edit-form-row { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 10px; align-items: end; }
+        .form-group { display: flex; flex-direction: column; gap: 4px; }
+        .form-group label { font-size: 0.75em; color: #999; }
+        .form-group select, .form-group input { padding: 8px; background: #1a1a1a; border: 1px solid #3d3d3d; border-radius: 6px; color: #ffffff; font-size: 0.9em; }
+        .form-group select:focus, .form-group input:focus { border-color: #ff6b35; outline: none; }
+        
+        .save-btn { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .save-btn:hover { transform: translateY(-2px); box-shadow: 0 3px 10px rgba(16, 185, 129, 0.4); }
+        
+        /* Skills Section */
+        .skills-section { padding: 12px; background: #1a1a1a; border-radius: 8px; overflow: hidden; }
+        .skills-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .skills-title { color: #ff006e; font-weight: 600; font-size: 0.9em; }
+        
+        .skills-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; table-layout: fixed; }
+        .skills-table th { text-align: left; padding: 8px; font-size: 0.75em; color: #999; border-bottom: 1px solid #3d3d3d; }
+        .skills-table th:nth-child(1) { width: 20%; }
+        .skills-table th:nth-child(2) { width: 10%; }
+        .skills-table th:nth-child(3) { width: 50%; }
+        .skills-table th:nth-child(4) { width: 10%; }
+        .skills-table th:nth-child(5) { width: 10%; }
+        .skills-table td { padding: 8px; font-size: 0.85em; border-bottom: 1px solid #3d3d3d; word-wrap: break-word; overflow-wrap: break-word; }
+        .skills-table tr:last-child td { border-bottom: none; }
+        .skill-app { color: #ff6b35; font-weight: 600; }
+        .skill-level { color: #ffffff; }
+        .skill-specs { color: #999; font-size: 0.8em; word-wrap: break-word; overflow-wrap: break-word; white-space: normal; }
+        
+        .add-btn { background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%); color: white; border: none; padding: 6px 14px; border-radius: 6px; font-size: 0.8em; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .add-btn:hover { transform: translateY(-2px); box-shadow: 0 3px 10px rgba(255, 107, 53, 0.4); }
+        
+        .skill-form { display: none; margin-top: 12px; padding: 12px; background: #2d2d2d; border-radius: 8px; border: 1px solid #3d3d3d; }
+        .skill-form.show { display: block; }
+        .skill-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .skill-form-actions { display: flex; gap: 10px; }
+        
+        .remove-btn { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; display: none; }
+        .remove-btn.show { display: block; }
+        
+        .no-skills { color: #999; font-style: italic; font-size: 0.85em; padding: 10px 0; }
+        
+        .error-message { background: #ff006e; color: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
+        .loading { text-align: center; padding: 30px; color: #cccccc; }
+        
+        #messageBox { display: none; position: fixed; top: 20px; right: 20px; padding: 15px 25px; border-radius: 8px; z-index: 1000; font-weight: 600; }
+        
+        @media (max-width: 768px) {
+            .edit-form-row { grid-template-columns: 1fr; }
+            .skill-form-row { grid-template-columns: 1fr; }
+        }
+        
+        /* Add Member Button & Modal */
+        .add-member-btn {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .add-member-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4);
+        }
+        
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.show { display: flex; }
+        
+        .modal-content {
+            background: #2d2d2d;
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #ff6b35;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #3d3d3d;
+        }
+        
+        .modal-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .modal-close {
+            background: #3d3d3d;
+            border: none;
+            color: #fff;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .modal-close:hover { background: #ef4444; }
+        
+        .modal-form .form-group {
+            margin-bottom: 18px;
+        }
+        .modal-form .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #cccccc;
+            font-weight: 500;
+        }
+        .modal-form .form-group input,
+        .modal-form .form-group select {
+            width: 100%;
+            padding: 12px;
+            background: #1a1a1a;
+            border: 2px solid #3d3d3d;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 1em;
+        }
+        .modal-form .form-group input:focus,
+        .modal-form .form-group select:focus {
+            border-color: #ff6b35;
+            outline: none;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        .modal-actions button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-submit {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: none;
+            color: white;
+        }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 3px 15px rgba(16, 185, 129, 0.4); }
+        .btn-cancel {
+            background: #3d3d3d;
+            border: 2px solid #3d3d3d;
+            color: #ffffff;
+        }
+        .btn-cancel:hover { border-color: #ff6b35; }
+        
+        /* Delete Member Button */
+        .delete-member-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: all 0.3s;
+        }
+        .delete-member-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 3px 10px rgba(239, 68, 68, 0.4);
+        }
+        
+        .member-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="nav-brand-icon">🎫</span>
+            <span class="nav-brand-text">Ticket Analyser</span>
+        </div>
+        <div class="nav-links">
+            <a href="/" class="nav-link">🏠 <span>Home</span></a>
+            <a href="/user" class="nav-link">👤 <span>User</span></a>
+            <a href="/skill" class="nav-link active">👥 <span>Team</span></a>
+            <a href="/admin" class="nav-link">⚙️ <span>Admin</span></a>
+            <a href="/admin/today_upload" class="nav-link">📋 <span>Today</span></a>
+        </div>
+        <div class="nav-actions">
+            <a href="/admin/logout" class="nav-logout" onclick="return confirm('Are you sure you want to logout?')">🚪 Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% if error %}
+        <div class="error-message">⚠️ {{ error }}</div>
+        {% endif %}
+        
+        <!-- Add Member Button -->
+        <button class="add-member-btn" onclick="openAddMemberModal()">
+            ➕ Add New Member
+        </button>
+        
+        <div class="stats-overview">
+            <div class="stat-card">
+                <div class="stat-value" id="totalMembers">{{ total_members or 0 }}</div>
+                <div class="stat-label">Team Members</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalSkills">-</div>
+                <div class="stat-label">Total Skills</div>
+            </div>
+        </div>
+        
+        <div class="search-filter">
+            <input type="text" id="searchInput" placeholder="🔍 Search by name or skill..." onkeyup="filterMembers()">
+        </div>
+        
+        <div class="members-list" id="membersList">
+            <div class="loading">Loading team members...</div>
+        </div>
+    </div>
+    
+    <!-- Add Member Modal -->
+    <div class="modal-overlay" id="addMemberModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">➕ Add New Team Member</span>
+                <button class="modal-close" onclick="closeAddMemberModal()">✕</button>
+            </div>
+            <form class="modal-form" onsubmit="submitAddMember(event)">
+                <div class="form-group">
+                    <label>👤 Full Name *</label>
+                    <input type="text" id="newMemberName" placeholder="e.g., John Doe" required>
+                </div>
+                <div class="form-group">
+                    <label>🆔 Employee ID</label>
+                    <input type="text" id="newEmployeeId" placeholder="e.g., EMP001 (optional)">
+                </div>
+                <div class="form-group">
+                    <label>📱 Primary Application *</label>
+                    <select id="newApplication">
+                        <option value="SOM_MM">SOM_MM</option>
+                        <option value="SQO_MM">SQO_MM</option>
+                        <option value="BILLING_MM">BILLING_MM</option>
+                        <option value="NETWORK_MM">NETWORK_MM</option>
+                        <option value="BSS_MM">BSS_MM</option>
+                        <option value="OSS_MM">OSS_MM</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>⭐ Skill Level</label>
+                    <select id="newSkillLevel">
+                        <option value="1">1 - Beginner</option>
+                        <option value="2">2 - Learning</option>
+                        <option value="3" selected>3 - Intermediate</option>
+                        <option value="4">4 - Advanced</option>
+                        <option value="5">5 - Expert</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>🎯 Specializations</label>
+                    <input type="text" id="newSpecializations" placeholder="e.g., Provisioning, Config, API">
+                </div>
+                <div class="form-group">
+                    <label>📊 Max Load</label>
+                    <input type="number" id="newMaxLoad" min="1" max="50" value="10">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeAddMemberModal()">Cancel</button>
+                    <button type="submit" class="btn-submit">✅ Add Member</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Remove Member Confirmation Modal -->
+    <div class="modal-overlay" id="removeMemberModal">
+        <div class="modal-content" style="max-width: 420px;">
+            <div class="modal-header">
+                <span class="modal-title">⚠️ Confirm Removal</span>
+                <button class="modal-close" onclick="closeRemoveModal()">✕</button>
+            </div>
+            <div style="text-align: center; padding: 10px 0;">
+                <div style="font-size: 3em; margin-bottom: 15px;">🗑️</div>
+                <p style="color: #cccccc; margin-bottom: 15px;">You are about to permanently remove:</p>
+                <p style="font-size: 1.3em; font-weight: 600; color: #ff6b35; margin-bottom: 20px;" id="removeMemberName"></p>
+                <p style="color: #ef4444; font-size: 0.9em; margin-bottom: 20px;">This will delete all their skills, assignments, and availability records. This action cannot be undone!</p>
+                <div class="form-group" style="text-align: left;">
+                    <label style="color: #cccccc;">Type <span style="color: #ff6b35; font-weight: 700; font-family: monospace;">reMOve</span> to confirm:</label>
+                    <input type="text" id="removeConfirmInput" placeholder="Type reMOve here..." autocomplete="off" style="text-align: center; font-size: 1.1em; letter-spacing: 1px;">
+                </div>
+                <div class="modal-actions" style="margin-top: 20px;">
+                    <button type="button" class="btn-cancel" onclick="closeRemoveModal()">Cancel</button>
+                    <button type="button" class="btn-submit" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);" onclick="confirmRemoveMember()">🗑️ Remove Member</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="messageBox"></div>
+    
+    <script>
+        let teamData = [];
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTeamData();
+        });
+        
+        function showMessage(message, type) {
+            const msgBox = document.getElementById('messageBox');
+            msgBox.textContent = message;
+            msgBox.style.display = 'block';
+            msgBox.style.background = type === 'success' ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
+            msgBox.style.color = 'white';
+            setTimeout(() => { msgBox.style.display = 'none'; }, 4000);
+        }
+        
+        function loadTeamData() {
+            fetch('/api/get_people')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        teamData = data.people;
+                        renderMembers(teamData);
+                        updateStats(teamData);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading team data:', error);
+                    document.getElementById('membersList').innerHTML = '<div class="error-message">Error loading team data</div>';
+                });
+        }
+        
+        function updateStats(people) {
+            document.getElementById('totalMembers').textContent = people.length;
+            // Count total skills across all members
+            let totalSkills = 0;
+            people.forEach(p => {
+                if (p.skills) totalSkills += p.skills.length;
+            });
+            document.getElementById('totalSkills').textContent = totalSkills || '-';
+        }
+        
+        function renderMembers(people) {
+            const container = document.getElementById('membersList');
+            
+            if (!people || people.length === 0) {
+                container.innerHTML = '<div class="loading">No team members found.</div>';
+                return;
+            }
+            
+            let html = '';
+            people.forEach((person, index) => {
+                const safeId = person.name.replace(/[^a-zA-Z0-9]/g, '_');
+                
+                html += `
+                <div class="member-card" data-name="${person.name.toLowerCase()}">
+                    <div class="member-header">
+                        <div class="member-name">👤 ${person.name}</div>
+                        <div class="member-header-actions">
+                            <button class="delete-member-btn" onclick="openRemoveModal('${person.name}')">🗑️ Remove</button>
+                        </div>
+                    </div>
+                    <div class="member-body">
+                        <!-- Skills Section -->
+                        <div class="skills-section">
+                            <div class="skills-header">
+                                <span class="skills-title">🎯 SKILLS</span>
+                                <button class="add-btn" onclick="toggleSkillForm('${safeId}')">➕ Add Skill</button>
+                            </div>
+                            <div id="skillsTable_${safeId}">
+                                <div class="no-skills">Loading skills...</div>
+                            </div>
+                            <div class="skill-form" id="skillForm_${safeId}">
+                                <div class="skill-form-row">
+                                    <div class="form-group">
+                                        <label>Application</label>
+                                        <select id="skillApp_${safeId}">
+                                            <option value="SOM_MM">SOM_MM</option>
+                                            <option value="SQO_MM">SQO_MM</option>
+                                            <option value="BILLING_MM">BILLING_MM</option>
+                                            <option value="NETWORK_MM">NETWORK_MM</option>
+                                            <option value="BSS_MM">BSS_MM</option>
+                                            <option value="OSS_MM">OSS_MM</option>
+                                        </select>
+                            </div>
+                                    <div class="form-group">
+                                        <label>Skill Level</label>
+                                        <select id="skillLevel_${safeId}">
+                                            <option value="1">1 - Beginner</option>
+                                            <option value="2">2 - Learning</option>
+                                            <option value="3" selected>3 - Intermediate</option>
+                                            <option value="4">4 - Advanced</option>
+                                            <option value="5">5 - Expert</option>
+                                        </select>
+                            </div>
+                            </div>
+                                <div class="skill-form-row">
+                                    <div class="form-group">
+                                        <label>Specializations</label>
+                                        <input type="text" id="skillSpecs_${safeId}" placeholder="e.g., Provisioning, Config">
+                            </div>
+                                    <div class="form-group">
+                                        <label>Max Load</label>
+                                        <input type="number" id="skillLoad_${safeId}" min="1" max="50" value="10">
+                        </div>
+                    </div>
+                                <div class="skill-form-actions">
+                                    <button class="save-btn" onclick="saveSkill('${person.name}', '${safeId}')">💾 Save Skill</button>
+                                    <button class="remove-btn" id="removeBtn_${safeId}" onclick="removeSkill('${person.name}', '${safeId}')">🗑️ Remove</button>
+                </div>
+            </div>
+        </div>
+    </div>
+                </div>`;
+            });
+            
+            container.innerHTML = html;
+            
+            // Load skills for each member
+            people.forEach(person => {
+                const safeId = person.name.replace(/[^a-zA-Z0-9]/g, '_');
+                loadMemberSkills(person.name, safeId);
+            });
+        }
+        
+        function filterMembers() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            document.querySelectorAll('.member-card').forEach(card => {
+                const name = card.getAttribute('data-name');
+                const skillsText = card.textContent.toLowerCase();
+                card.style.display = (name.includes(search) || skillsText.includes(search)) ? 'block' : 'none';
+            });
+        }
+        
+        function toggleSkillForm(safeId) {
+            const form = document.getElementById('skillForm_' + safeId);
+            form.classList.toggle('show');
+            // Reset form when opening
+            if (form.classList.contains('show')) {
+                document.getElementById('skillApp_' + safeId).value = 'SOM_MM';
+                document.getElementById('skillLevel_' + safeId).value = '3';
+                document.getElementById('skillSpecs_' + safeId).value = '';
+                document.getElementById('skillLoad_' + safeId).value = '10';
+                document.getElementById('removeBtn_' + safeId).classList.remove('show');
+            }
+        }
+        
+        function loadMemberSkills(memberName, safeId) {
+            fetch(`/admin/get_member_skills?member_name=${encodeURIComponent(memberName)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        renderSkillsTable(data.skills, safeId, memberName);
+                    }
+                })
+                .catch(error => console.error('Error loading skills:', error));
+        }
+        
+        function renderSkillsTable(skills, safeId, memberName) {
+            const container = document.getElementById('skillsTable_' + safeId);
+            
+            if (!skills || skills.length === 0) {
+                container.innerHTML = '<div class="no-skills">No skills added yet. Click "Add Skill" to start.</div>';
+                return;
+            }
+            
+            let html = '<table class="skills-table"><thead><tr><th>Application</th><th>Level</th><th>Specializations</th><th>Load</th><th></th></tr></thead><tbody>';
+            skills.forEach(skill => {
+                html += `<tr>
+                    <td class="skill-app">${skill.application}</td>
+                    <td class="skill-level">${parseFloat(skill.skill_level).toFixed(2)}/5</td>
+                    <td class="skill-specs">${skill.specializations.join(', ') || '-'}</td>
+                    <td>${skill.max_load}</td>
+                    <td><button class="edit-btn" onclick="editSkill('${safeId}', '${skill.application}', ${skill.skill_level}, '${skill.specializations.join(', ')}', ${skill.max_load})">✏️</button></td>
+                </tr>`;
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+        
+        function editSkill(safeId, app, level, specs, load) {
+            document.getElementById('skillForm_' + safeId).classList.add('show');
+            document.getElementById('skillApp_' + safeId).value = app;
+            document.getElementById('skillLevel_' + safeId).value = level;
+            document.getElementById('skillSpecs_' + safeId).value = specs;
+            document.getElementById('skillLoad_' + safeId).value = load;
+            document.getElementById('removeBtn_' + safeId).classList.add('show');
+        }
+        
+        function saveSkill(memberName, safeId) {
+            const application = document.getElementById('skillApp_' + safeId).value;
+            const skillLevel = parseFloat(document.getElementById('skillLevel_' + safeId).value);
+            const specializations = document.getElementById('skillSpecs_' + safeId).value.split(',').map(s => s.trim()).filter(s => s);
+            const maxLoad = parseInt(document.getElementById('skillLoad_' + safeId).value);
+            
+            fetch('/admin/save_skill', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    member_name: memberName,
+                    application: application,
+                    skill_level: skillLevel,
+                    specializations: specializations,
+                    max_load: maxLoad
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage(`✅ Skill saved for ${memberName}`, 'success');
+                    loadMemberSkills(memberName, safeId);
+                    document.getElementById('skillForm_' + safeId).classList.remove('show');
+                } else {
+                    showMessage(`❌ ${data.error}`, 'error');
+                }
+            })
+            .catch(error => showMessage('❌ Error saving skill', 'error'));
+        }
+        
+        function removeSkill(memberName, safeId) {
+            const application = document.getElementById('skillApp_' + safeId).value;
+            if (!confirm(`Remove ${application} skill for ${memberName}?`)) return;
+            
+            fetch('/admin/remove_skill', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    member_name: memberName,
+                    application: application
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage(`✅ Skill removed`, 'success');
+                    loadMemberSkills(memberName, safeId);
+                    document.getElementById('skillForm_' + safeId).classList.remove('show');
+                } else {
+                    showMessage(`❌ ${data.error}`, 'error');
+                }
+            })
+            .catch(error => showMessage('❌ Error removing skill', 'error'));
+        }
+        
+        // ========== ADD MEMBER MODAL FUNCTIONS ==========
+        function openAddMemberModal() {
+            document.getElementById('addMemberModal').classList.add('show');
+            document.getElementById('newMemberName').focus();
+        }
+        
+        function closeAddMemberModal() {
+            document.getElementById('addMemberModal').classList.remove('show');
+            // Reset form
+            document.getElementById('newMemberName').value = '';
+            document.getElementById('newEmployeeId').value = '';
+            document.getElementById('newApplication').value = 'SOM_MM';
+            document.getElementById('newSkillLevel').value = '3';
+            document.getElementById('newSpecializations').value = '';
+            document.getElementById('newMaxLoad').value = '10';
+        }
+        
+        function submitAddMember(event) {
+            event.preventDefault();
+            
+            const memberName = document.getElementById('newMemberName').value.trim();
+            const employeeId = document.getElementById('newEmployeeId').value.trim();
+            const application = document.getElementById('newApplication').value;
+            const skillLevel = parseFloat(document.getElementById('newSkillLevel').value);
+            const specializations = document.getElementById('newSpecializations').value;
+            const maxLoad = parseInt(document.getElementById('newMaxLoad').value);
+            
+            if (!memberName) {
+                showMessage('❌ Please enter member name', 'error');
+                return;
+            }
+            
+            fetch('/admin/add_member', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    member_name: memberName,
+                    employee_id: employeeId,
+                    application: application,
+                    skill_level: skillLevel,
+                    specializations: specializations,
+                    max_load: maxLoad
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage(`✅ ${data.message}`, 'success');
+                    closeAddMemberModal();
+                    loadTeamData(); // Refresh the list
+                } else {
+                    showMessage(`❌ ${data.error}`, 'error');
+                }
+            })
+            .catch(error => {
+                showMessage(`❌ Error: ${error.message}`, 'error');
+            });
+        }
+        
+        // ========== REMOVE MEMBER FUNCTIONS ==========
+        let memberToRemove = null;
+        
+        function openRemoveModal(memberName) {
+            memberToRemove = memberName;
+            document.getElementById('removeMemberName').textContent = memberName;
+            document.getElementById('removeConfirmInput').value = '';
+            document.getElementById('removeMemberModal').classList.add('show');
+            document.getElementById('removeConfirmInput').focus();
+        }
+        
+        function closeRemoveModal() {
+            document.getElementById('removeMemberModal').classList.remove('show');
+            document.getElementById('removeConfirmInput').value = '';
+            memberToRemove = null;
+        }
+        
+        function confirmRemoveMember() {
+            const confirmText = document.getElementById('removeConfirmInput').value;
+            
+            if (confirmText !== 'reMOve') {
+                showMessage('❌ Please type "reMOve" exactly to confirm removal', 'error');
+                document.getElementById('removeConfirmInput').focus();
+                return;
+            }
+            
+            if (!memberToRemove) {
+                showMessage('❌ No member selected for removal', 'error');
+                return;
+            }
+            
+            fetch('/admin/delete_member', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ member_name: memberToRemove })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage(`✅ ${data.message}`, 'success');
+                    closeRemoveModal();
+                    loadTeamData(); // Refresh the list
+                } else {
+                    showMessage(`❌ ${data.error}`, 'error');
+                }
+            })
+            .catch(error => {
+                showMessage(`❌ Error: ${error.message}`, 'error');
+            });
+        }
+        
+        // Close modal when clicking outside
+        document.getElementById('addMemberModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAddMemberModal();
+            }
+        });
+        
+        document.getElementById('removeMemberModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeRemoveModal();
+            }
+        });
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAddMemberModal();
+                closeRemoveModal();
+            }
+        });
+        
+        // Allow Enter key to confirm removal when in the input field
+        document.getElementById('removeConfirmInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                confirmRemoveMember();
+            }
+        });
+    </script>
+</body>
+</html>

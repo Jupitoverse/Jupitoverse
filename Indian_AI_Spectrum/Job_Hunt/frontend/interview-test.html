@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Test - Job Hunt Portal</title>
+    <style>
+        :root {
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a2e;
+            --bg-card: #16213e;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --text-muted: #6b7280;
+            --accent-primary: #6366f1;
+            --border: #2d2d5a;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 40px;
+            min-height: 100vh;
+        }
+        h1 { margin-bottom: 20px; }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: var(--accent-primary);
+            color: white;
+        }
+        .btn-primary:hover { background: #4f46e5; }
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        .btn-error {
+            background: #ef4444;
+            color: white;
+        }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 0;
+            max-width: 900px;
+            width: 95%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        .modal-header h3 { font-size: 1.25rem; }
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 4px 8px;
+        }
+        .modal-close:hover { color: #ef4444; }
+        .modal-body { padding: 24px; }
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 16px 24px;
+            border-top: 1px solid var(--border);
+        }
+        
+        /* Form Styles */
+        .form-group { margin-bottom: 16px; }
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+        .mt-6 { margin-top: 24px; }
+        .mb-4 { margin-bottom: 16px; }
+        .text-muted { color: var(--text-muted); }
+        .text-sm { font-size: 0.875rem; }
+        .hidden { display: none !important; }
+        
+        /* Round Card */
+        .round-card {
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: var(--radius-md);
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+        }
+        .flex { display: flex; }
+        .justify-between { justify-content: space-between; }
+        .items-center { align-items: center; }
+        .btn-sm { padding: 6px 12px; font-size: 0.875rem; }
+        
+        /* Status display */
+        #status-display {
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: var(--radius-md);
+            margin-top: 20px;
+        }
+        
+        /* Interview List */
+        .interview-list { margin-top: 30px; }
+        .interview-card {
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: var(--radius-md);
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+        }
+        .interview-card h4 { color: var(--accent-primary); margin-bottom: 8px; }
+        .interview-card .details { color: var(--text-secondary); font-size: 0.9rem; }
+        
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 28px;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            transition: 0.3s;
+            border-radius: 28px;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 3px;
+            background-color: var(--text-muted);
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+        .toggle-switch input:checked + .toggle-slider {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-color: var(--accent-primary);
+        }
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(22px);
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 Interview Tracker - Test Page</h1>
+    <p style="color: var(--text-secondary); margin-bottom: 30px;">This is a standalone test page for the Interview Tracking feature.</p>
+    
+    <button class="btn btn-primary" onclick="openAddInterview()">+ Add Interview</button>
+    
+    <div id="status-display">
+        <strong>Status:</strong> <span id="status-text">Ready - Click "Add Interview" button above</span>
+    </div>
+    
+    <div class="interview-list" id="interview-list">
+        <h3 style="margin-bottom: 16px;">Your Interviews</h3>
+        <!-- Interviews will be loaded here -->
+    </div>
+
+    <!-- Add Interview Modal -->
+    <div class="modal-overlay" id="add-interview-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>📝 Add/Edit Interview</h3>
+                <button class="modal-close" onclick="closeAddInterview()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="interview-form">
+                    <!-- Basic Info -->
+                    <h4 class="mb-4">🏢 Company & Position</h4>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Company Name *</label>
+                            <input type="text" id="int-company" class="form-input" required placeholder="e.g., Amdocs, Google, TCS">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Position *</label>
+                            <input type="text" id="int-title" class="form-input" required placeholder="e.g., Senior Software Engineer">
+                        </div>
+                    </div>
+                    <div class="grid-3">
+                        <div class="form-group">
+                            <label class="form-label">Applied Date</label>
+                            <input type="date" id="int-applied-date" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Applied Via</label>
+                            <select id="int-applied-via" class="form-select">
+                                <option value="">Select</option>
+                                <option value="linkedin">LinkedIn</option>
+                                <option value="naukri">Naukri</option>
+                                <option value="company_website">Company Website</option>
+                                <option value="referral">Referral</option>
+                                <option value="recruiter">Recruiter</option>
+                                <option value="indeed">Indeed</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Job URL</label>
+                            <input type="url" id="int-url" class="form-input" placeholder="https://...">
+                        </div>
+                    </div>
+                    
+                    <!-- Overall Status -->
+                    <h4 class="mt-6 mb-4">📊 Overall Status</h4>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Current Stage</label>
+                            <select id="int-status" class="form-select" onchange="updateStatusUI()">
+                                <option value="applied">📤 Applied</option>
+                                <option value="screening">📞 Screening Call</option>
+                                <option value="in_progress">🔄 Interview In Progress</option>
+                                <option value="final_round">🎯 Final Round</option>
+                                <option value="offer">🎉 Offer Received</option>
+                                <option value="accepted">✅ Offer Accepted</option>
+                                <option value="rejected">❌ Rejected</option>
+                                <option value="declined">🚫 Declined</option>
+                                <option value="on_hold">⏸️ On Hold</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Expected CTC (₹ LPA)</label>
+                            <input type="number" id="int-expected-ctc" class="form-input" placeholder="e.g., 25">
+                        </div>
+                    </div>
+                    
+                    <!-- Offer Details (shown when status is offer/accepted) -->
+                    <div id="offer-details-section" class="hidden">
+                        <h4 class="mt-6 mb-4">🎉 Offer Details</h4>
+                        <div class="grid-3">
+                            <div class="form-group">
+                                <label class="form-label">Offered CTC (₹ LPA)</label>
+                                <input type="number" id="int-offered-ctc" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Offer Date</label>
+                                <input type="date" id="int-offer-date" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Deadline to Accept</label>
+                                <input type="date" id="int-offer-deadline" class="form-input">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Interview Rounds -->
+                    <h4 class="mt-6 mb-4">🎯 Interview Rounds</h4>
+                    <p class="text-muted text-sm mb-4">Add each interview round with details, questions asked, and outcome</p>
+                    
+                    <div id="interview-rounds-container">
+                        <!-- Rounds will be added here dynamically -->
+                    </div>
+                    
+                    <button type="button" class="btn btn-secondary" onclick="addInterviewRound()">+ Add Another Round</button>
+                    
+                    <!-- HR Contact -->
+                    <h4 class="mt-6 mb-4">📞 HR / Recruiter Contact</h4>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label">HR Name</label>
+                            <input type="text" id="int-hr-name" class="form-input" placeholder="Recruiter name">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">HR Email</label>
+                            <input type="email" id="int-hr-email" class="form-input" placeholder="recruiter@company.com">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">HR Phone</label>
+                        <input type="tel" id="int-hr-phone" class="form-input" placeholder="+91 98765 43210">
+                    </div>
+                    
+                    <!-- Privacy Settings -->
+                    <h4 class="mt-6 mb-4">🔒 Privacy Settings</h4>
+                    <div class="form-group">
+                        <label class="form-label" style="display: flex; align-items: center; gap: 12px;">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="int-is-public" onchange="togglePublicOptions()">
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <span>Share this interview experience publicly to help others</span>
+                        </label>
+                    </div>
+                    <div id="public-options" class="hidden" style="margin-left: 20px; padding: 16px; background: var(--bg-secondary); border-radius: var(--radius-md);">
+                        <div class="form-group">
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" id="int-anonymous">
+                                <span>Post anonymously (hide my name)</span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" id="int-share-questions" checked>
+                                <span>Share interview questions</span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" id="int-share-salary">
+                                <span>Share salary/CTC details</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Notes -->
+                    <h4 class="mt-6 mb-4">📝 Additional Notes</h4>
+                    <div class="form-group">
+                        <textarea id="int-notes" class="form-textarea" rows="3" placeholder="Any additional notes about this interview process..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeAddInterview()">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveInterview()">Save Interview</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interview Round Template -->
+    <template id="round-template">
+        <div class="round-card">
+            <div class="flex justify-between items-center mb-4">
+                <h5>Round <span class="round-number">1</span></h5>
+                <button type="button" class="btn btn-sm btn-error" onclick="removeRound(this)">× Remove</button>
+            </div>
+            <div class="grid-3">
+                <div class="form-group">
+                    <label class="form-label">Round Type *</label>
+                    <select class="form-select round-type">
+                        <option value="">Select Type</option>
+                        <option value="hr_screening">📞 HR Screening</option>
+                        <option value="technical">💻 Technical</option>
+                        <option value="coding">🧑‍💻 Coding/DSA</option>
+                        <option value="system_design">🏗️ System Design</option>
+                        <option value="lld">📐 LLD (Low Level Design)</option>
+                        <option value="hld">🏢 HLD (High Level Design)</option>
+                        <option value="behavioral">🗣️ Behavioral</option>
+                        <option value="managerial">👔 Managerial</option>
+                        <option value="bar_raiser">⭐ Bar Raiser</option>
+                        <option value="culture_fit">🤝 Culture Fit</option>
+                        <option value="case_study">📊 Case Study</option>
+                        <option value="assignment">📝 Take-home Assignment</option>
+                        <option value="final">🎯 Final Round</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Date & Time</label>
+                    <input type="datetime-local" class="form-input round-datetime">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Duration (mins)</label>
+                    <input type="number" class="form-input round-duration" placeholder="60">
+                </div>
+            </div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select class="form-select round-status">
+                        <option value="scheduled">📅 Scheduled</option>
+                        <option value="completed">✅ Completed</option>
+                        <option value="passed">✅ Passed</option>
+                        <option value="failed">❌ Failed</option>
+                        <option value="pending_feedback">⏳ Pending Feedback</option>
+                        <option value="cancelled">🚫 Cancelled</option>
+                        <option value="rescheduled">🔄 Rescheduled</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Interviewer Name</label>
+                    <input type="text" class="form-input round-interviewer" placeholder="e.g., John from Engineering">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Questions Asked</label>
+                <textarea class="form-textarea round-questions" rows="3" placeholder="List the questions asked..."></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Your Notes</label>
+                <textarea class="form-textarea round-notes" rows="2" placeholder="How did this round go?"></textarea>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        // Status tracking
+        function updateStatus(msg) {
+            document.getElementById('status-text').textContent = msg;
+            console.log('Status:', msg);
+        }
+        
+        updateStatus('Page loaded successfully! JavaScript is working.');
+        
+        // Interview functions
+        let currentRoundCount = 0;
+        
+        function openAddInterview() {
+            updateStatus('Opening Add Interview modal...');
+            const modal = document.getElementById('add-interview-modal');
+            if (!modal) {
+                updateStatus('ERROR: Modal element not found!');
+                return;
+            }
+            modal.classList.add('active');
+            currentRoundCount = 0;
+            document.getElementById('interview-rounds-container').innerHTML = '';
+            addInterviewRound(); // Add first round by default
+            updateStatus('Modal opened! Add your interview details.');
+        }
+        
+        function closeAddInterview() {
+            document.getElementById('add-interview-modal').classList.remove('active');
+            document.getElementById('interview-form').reset();
+            currentRoundCount = 0;
+            document.getElementById('interview-rounds-container').innerHTML = '';
+            updateStatus('Modal closed.');
+        }
+        
+        function addInterviewRound() {
+            currentRoundCount++;
+            const template = document.getElementById('round-template');
+            if (!template) {
+                updateStatus('ERROR: Round template not found!');
+                return;
+            }
+            const clone = template.content.cloneNode(true);
+            clone.querySelector('.round-number').textContent = currentRoundCount;
+            document.getElementById('interview-rounds-container').appendChild(clone);
+            updateStatus('Added round ' + currentRoundCount);
+        }
+        
+        function removeRound(btn) {
+            if (currentRoundCount <= 1) {
+                alert('At least one round is required');
+                return;
+            }
+            btn.closest('.round-card').remove();
+            currentRoundCount--;
+            // Renumber remaining rounds
+            document.querySelectorAll('#interview-rounds-container .round-number').forEach((el, idx) => {
+                el.textContent = idx + 1;
+            });
+            updateStatus('Removed round. Total rounds: ' + currentRoundCount);
+        }
+        
+        function updateStatusUI() {
+            const status = document.getElementById('int-status').value;
+            const offerSection = document.getElementById('offer-details-section');
+            if (status === 'offer' || status === 'accepted') {
+                offerSection.classList.remove('hidden');
+            } else {
+                offerSection.classList.add('hidden');
+            }
+        }
+        
+        function togglePublicOptions() {
+            const isPublic = document.getElementById('int-is-public').checked;
+            const options = document.getElementById('public-options');
+            if (isPublic) {
+                options.classList.remove('hidden');
+            } else {
+                options.classList.add('hidden');
+            }
+        }
+        
+        function saveInterview() {
+            // Validate required fields
+            const company = document.getElementById('int-company').value.trim();
+            const position = document.getElementById('int-title').value.trim();
+            
+            if (!company || !position) {
+                alert('Please fill in Company Name and Position');
+                return;
+            }
+            
+            // Collect rounds data
+            const rounds = [];
+            document.querySelectorAll('#interview-rounds-container .round-card').forEach((card, idx) => {
+                rounds.push({
+                    roundNumber: idx + 1,
+                    type: card.querySelector('.round-type').value,
+                    datetime: card.querySelector('.round-datetime').value,
+                    duration: card.querySelector('.round-duration').value,
+                    status: card.querySelector('.round-status').value,
+                    interviewer: card.querySelector('.round-interviewer').value,
+                    questions: card.querySelector('.round-questions').value,
+                    notes: card.querySelector('.round-notes').value
+                });
+            });
+            
+            // Create interview object
+            const interview = {
+                id: Date.now(),
+                company: company,
+                position: position,
+                appliedDate: document.getElementById('int-applied-date').value,
+                appliedVia: document.getElementById('int-applied-via').value,
+                jobUrl: document.getElementById('int-url').value,
+                status: document.getElementById('int-status').value,
+                expectedCtc: document.getElementById('int-expected-ctc').value,
+                offeredCtc: document.getElementById('int-offered-ctc').value,
+                offerDate: document.getElementById('int-offer-date').value,
+                offerDeadline: document.getElementById('int-offer-deadline').value,
+                hrName: document.getElementById('int-hr-name').value,
+                hrEmail: document.getElementById('int-hr-email').value,
+                hrPhone: document.getElementById('int-hr-phone').value,
+                isPublic: document.getElementById('int-is-public').checked,
+                isAnonymous: document.getElementById('int-anonymous').checked,
+                shareQuestions: document.getElementById('int-share-questions').checked,
+                shareSalary: document.getElementById('int-share-salary').checked,
+                notes: document.getElementById('int-notes').value,
+                rounds: rounds,
+                totalRounds: rounds.length,
+                createdAt: new Date().toISOString()
+            };
+            
+            // Save to localStorage
+            let interviews = JSON.parse(localStorage.getItem('interviews') || '[]');
+            interviews.push(interview);
+            localStorage.setItem('interviews', JSON.stringify(interviews));
+            
+            closeAddInterview();
+            loadInterviews();
+            updateStatus('Interview saved successfully! Company: ' + company);
+            alert('Interview saved successfully!');
+        }
+        
+        function loadInterviews() {
+            const interviews = JSON.parse(localStorage.getItem('interviews') || '[]');
+            const container = document.getElementById('interview-list');
+            
+            if (interviews.length === 0) {
+                container.innerHTML = '<h3 style="margin-bottom: 16px;">Your Interviews</h3><p style="color: var(--text-muted);">No interviews added yet. Click "Add Interview" to get started!</p>';
+                return;
+            }
+            
+            let html = '<h3 style="margin-bottom: 16px;">Your Interviews (' + interviews.length + ')</h3>';
+            
+            interviews.forEach((int, idx) => {
+                const statusEmoji = {
+                    'applied': '📤',
+                    'screening': '📞',
+                    'in_progress': '🔄',
+                    'final_round': '🎯',
+                    'offer': '🎉',
+                    'accepted': '✅',
+                    'rejected': '❌',
+                    'declined': '🚫',
+                    'on_hold': '⏸️'
+                };
+                
+                html += `
+                    <div class="interview-card">
+                        <div class="flex justify-between items-center">
+                            <h4>${int.company} - ${int.position}</h4>
+                            <button class="btn btn-sm btn-error" onclick="deleteInterview(${int.id})">Delete</button>
+                        </div>
+                        <div class="details">
+                            <p>Status: ${statusEmoji[int.status] || ''} ${int.status.replace('_', ' ').toUpperCase()}</p>
+                            <p>Rounds: ${int.totalRounds} | Applied: ${int.appliedDate || 'N/A'}</p>
+                            ${int.isPublic ? '<p style="color: var(--accent-primary);">🌐 Shared publicly</p>' : '<p>🔒 Private</p>'}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        function deleteInterview(id) {
+            if (!confirm('Are you sure you want to delete this interview?')) return;
+            let interviews = JSON.parse(localStorage.getItem('interviews') || '[]');
+            interviews = interviews.filter(i => i.id !== id);
+            localStorage.setItem('interviews', JSON.stringify(interviews));
+            loadInterviews();
+            updateStatus('Interview deleted.');
+        }
+        
+        // Close modal on overlay click
+        document.getElementById('add-interview-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeAddInterview();
+        });
+        
+        // Load interviews on page load
+        loadInterviews();
+    </script>
+</body>
+</html>

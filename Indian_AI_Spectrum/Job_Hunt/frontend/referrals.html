@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Referrals - AI Spectrum India</title>
+    <link rel="stylesheet" href="css/common.css">
+</head>
+<body>
+    <!-- Header injected by JS -->
+    <script src="js/header.js"></script>
+
+    <div class="container" style="padding-top: 2rem;">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>🔗 Referral System</h1>
+            <p>Get referred by employees at your dream company</p>
+        </div>
+
+        <!-- How it works -->
+        <div class="card" style="margin-bottom: 2rem; padding: 2rem;">
+            <h2 style="margin-bottom: 1.5rem;">📋 How Referrals Work</h2>
+            <div class="grid-4">
+                <div style="text-align: center; padding: 1rem;">
+                    <div style="width: 60px; height: 60px; background: var(--gradient-1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.5rem;">1</div>
+                    <h4>Post Request</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Share your profile and target company</p>
+                </div>
+                <div style="text-align: center; padding: 1rem;">
+                    <div style="width: 60px; height: 60px; background: var(--gradient-1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.5rem;">2</div>
+                    <h4>Get Noticed</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Company employees see your request</p>
+                </div>
+                <div style="text-align: center; padding: 1rem;">
+                    <div style="width: 60px; height: 60px; background: var(--gradient-1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.5rem;">3</div>
+                    <h4>Get Referred</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">An employee refers your application</p>
+                </div>
+                <div style="text-align: center; padding: 1rem;">
+                    <div style="width: 60px; height: 60px; background: var(--gradient-1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.5rem;">4</div>
+                    <h4>Interview</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Higher chance of getting shortlisted</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Request Referral Form -->
+        <div class="grid-2">
+            <div class="card" style="padding: 2rem;">
+                <h2 style="margin-bottom: 1.5rem;">📝 Request a Referral</h2>
+                <form id="referralForm">
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">Target Company *</label>
+                        <select id="targetCompany" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-primary);">
+                            <option value="">Select Company</option>
+                            <option value="Google">Google</option>
+                            <option value="Microsoft">Microsoft</option>
+                            <option value="Amazon">Amazon</option>
+                            <option value="Meta">Meta</option>
+                            <option value="Apple">Apple</option>
+                            <option value="Netflix">Netflix</option>
+                            <option value="Flipkart">Flipkart</option>
+                            <option value="Razorpay">Razorpay</option>
+                            <option value="Zomato">Zomato</option>
+                            <option value="Swiggy">Swiggy</option>
+                            <option value="CRED">CRED</option>
+                            <option value="PhonePe">PhonePe</option>
+                            <option value="Atlassian">Atlassian</option>
+                            <option value="Adobe">Adobe</option>
+                            <option value="Salesforce">Salesforce</option>
+                            <option value="Uber">Uber</option>
+                            <option value="LinkedIn">LinkedIn</option>
+                        </select>
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">Job Title / Role *</label>
+                        <input type="text" id="jobTitle" placeholder="e.g., Software Engineer, Data Scientist" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-primary);">
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">Job URL (if available)</label>
+                        <input type="url" id="jobUrl" placeholder="https://..." style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-primary);">
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">Years of Experience *</label>
+                        <select id="experience" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-primary);">
+                            <option value="0">Fresher (0-1 years)</option>
+                            <option value="2">2-3 years</option>
+                            <option value="4">4-6 years</option>
+                            <option value="7">7-10 years</option>
+                            <option value="10">10+ years</option>
+                        </select>
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">Key Skills *</label>
+                        <input type="text" id="skills" placeholder="e.g., Python, React, AWS, Machine Learning" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-primary);">
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">Current Company</label>
+                        <input type="text" id="currentCompany" placeholder="Your current employer" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-primary);">
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">LinkedIn Profile *</label>
+                        <input type="url" id="linkedin" placeholder="https://linkedin.com/in/yourprofile" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-primary);">
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">Message to Referrer</label>
+                        <textarea id="message" rows="3" placeholder="Brief intro about yourself and why you'd be a good fit..." style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-primary); resize: vertical;"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        Submit Referral Request
+                    </button>
+                </form>
+            </div>
+
+            <!-- Recent Referral Requests -->
+            <div>
+                <div class="card" style="padding: 2rem; margin-bottom: 1.5rem;">
+                    <h3 style="margin-bottom: 1rem;">🔥 Recent Referral Requests</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">
+                        These requests are visible to verified employees of each company
+                    </p>
+                    
+                    <div id="recentRequests">
+                        <!-- Sample requests - would be loaded from API -->
+                        <div style="padding: 1rem; background: var(--bg-tertiary); border-radius: 12px; margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                                <div>
+                                    <span class="tag primary">Google</span>
+                                    <span style="color: var(--text-primary); font-weight: 600; margin-left: 0.5rem;">Software Engineer</span>
+                                </div>
+                                <span class="tag success">Open</span>
+                            </div>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                                3 years exp • Python, Java, System Design
+                            </p>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Posted 2 hours ago</div>
+                        </div>
+                        
+                        <div style="padding: 1rem; background: var(--bg-tertiary); border-radius: 12px; margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                                <div>
+                                    <span class="tag primary">Microsoft</span>
+                                    <span style="color: var(--text-primary); font-weight: 600; margin-left: 0.5rem;">Data Scientist</span>
+                                </div>
+                                <span class="tag success">Open</span>
+                            </div>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                                4 years exp • Python, ML, TensorFlow
+                            </p>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Posted 5 hours ago</div>
+                        </div>
+                        
+                        <div style="padding: 1rem; background: var(--bg-tertiary); border-radius: 12px; margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                                <div>
+                                    <span class="tag primary">Flipkart</span>
+                                    <span style="color: var(--text-primary); font-weight: 600; margin-left: 0.5rem;">Backend Engineer</span>
+                                </div>
+                                <span class="tag warning">In Progress</span>
+                            </div>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                                2 years exp • Java, Spring Boot, Kafka
+                            </p>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Posted yesterday</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tips -->
+                <div class="card" style="padding: 1.5rem;">
+                    <h4 style="margin-bottom: 1rem;">💡 Tips for Getting Referred</h4>
+                    <ul style="color: var(--text-secondary); padding-left: 1.5rem; font-size: 0.9rem; line-height: 1.8;">
+                        <li>Keep your LinkedIn profile updated and professional</li>
+                        <li>Highlight relevant skills and projects</li>
+                        <li>Apply to jobs that match your experience level</li>
+                        <li>Be specific about the role you're targeting</li>
+                        <li>Prepare well for interviews before requesting</li>
+                        <li>Thank referrers regardless of outcome</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Company Employees Section -->
+        <div class="card" style="margin-top: 2rem; padding: 2rem;">
+            <h2 style="margin-bottom: 1rem;">👋 For Company Employees</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                If you work at a tech company, you can help job seekers by referring qualified candidates.
+                Most companies offer referral bonuses!
+            </p>
+            <div class="grid-3">
+                <div style="text-align: center; padding: 1.5rem; background: var(--bg-tertiary); border-radius: 12px;">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">💰</div>
+                    <h4>Earn Bonuses</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Get referral bonuses from ₹50K to ₹2L+</p>
+                </div>
+                <div style="text-align: center; padding: 1.5rem; background: var(--bg-tertiary); border-radius: 12px;">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">🤝</div>
+                    <h4>Help Others</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Make a difference in someone's career</p>
+                </div>
+                <div style="text-align: center; padding: 1.5rem; background: var(--bg-tertiary); border-radius: 12px;">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">⭐</div>
+                    <h4>Build Network</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Connect with talented professionals</p>
+                </div>
+            </div>
+            <div style="margin-top: 1.5rem; text-align: center;">
+                <button class="btn btn-primary" onclick="alert('Employee verification coming soon!')">
+                    Verify as Employee
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">🎯</div>
+                    Job Hunt Portal
+                </a>
+                <p>The ultimate job portal for Indian IT professionals.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Handle form submission
+        document.getElementById('referralForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const company = document.getElementById('targetCompany').value;
+            const jobTitle = document.getElementById('jobTitle').value;
+            const linkedin = document.getElementById('linkedin').value;
+            
+            if (!company || !jobTitle || !linkedin) {
+                alert('Please fill all required fields');
+                return;
+            }
+            
+            alert('🎉 Referral request submitted successfully!\n\nYour request will be visible to verified ' + company + ' employees.\n\n(Note: User authentication coming soon)');
+            
+            // Reset form
+            this.reset();
+        });
+    </script>
+</body>
+</html>
+
+
+

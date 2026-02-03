@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project – RAG Recipe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="project-detail-page">
+    <header class="app-header">
+        <nav class="header-nav">
+            <a href="/">Home</a>
+            <a href="/rag-recipe">RAG Recipe</a>
+            <a href="/add-project">Add Project</a>
+            <a href="#" id="project-name-link" class="active">Project</a>
+        </nav>
+    </header>
+    <main class="app-content">
+        <h1 id="project-title">Project</h1>
+        <p class="subtitle" id="project-subtitle">Chatbot, documents, Excel, monitoring.</p>
+
+        <div class="steps-tabs" role="tablist">
+            <button type="button" class="step-tab active" data-step="chat">Chatbot</button>
+            <button type="button" class="step-tab" data-step="documents">Documents</button>
+            <button type="button" class="step-tab" data-step="excel">Excel</button>
+            <button type="button" class="step-tab" data-step="monitoring">Monitoring</button>
+        </div>
+
+        <div class="step-panels">
+            <section id="panel-chat" class="step-panel active">
+                <h2>RAG Chatbot</h2>
+                <div class="chat-wrap">
+                    <div id="chat-messages" class="chat-messages"></div>
+                    <div class="chat-input-wrap">
+                        <textarea id="chat-input" rows="2" placeholder="Ask a question..."></textarea>
+                        <button type="button" id="chat-send" class="btn btn-primary">Send</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="panel-documents" class="step-panel">
+                <h2>Documents</h2>
+                <p class="subtitle">Upload PDF, DOCX, or TXT. Open or download any file from the list.</p>
+                <input type="file" id="doc-upload" multiple accept=".pdf,.docx,.txt" style="display:none" />
+                <button type="button" id="doc-upload-btn" class="btn btn-primary">Upload more</button>
+                <div id="doc-result"></div>
+                <h3>Files (open or download)</h3>
+                <ul id="doc-list" class="doc-file-list"></ul>
+            </section>
+
+            <section id="panel-excel" class="step-panel">
+                <h2>Excel</h2>
+                <p>Upload an Excel file. Each row is cleaned and sent as a prompt to the RAG pipeline. Results are shown below.</p>
+                <input type="file" id="excel-upload" accept=".xlsx,.xls" />
+                <button type="button" id="excel-upload-btn" class="btn btn-primary">Upload & Run</button>
+                <div id="excel-result"></div>
+                <h3>Row results (click a row to see full result)</h3>
+                <div id="excel-rows"></div>
+                <div id="excel-row-detail" class="row-detail" style="display:none;">
+                    <h4>Row detail</h4>
+                    <pre id="row-detail-content"></pre>
+                    <label>Feedback:</label>
+                    <input type="text" id="row-feedback" placeholder="Optional feedback" />
+                    <button type="button" id="row-save-feedback" class="btn">Save feedback</button>
+                    <button type="button" id="row-regenerate" class="btn">Regenerate</button>
+                    <button type="button" id="row-detail-close" class="btn">Close</button>
+                </div>
+            </section>
+
+            <section id="panel-monitoring" class="step-panel">
+                <h2>Monitoring</h2>
+                <div id="monitoring-stats" class="monitoring-stats">
+                    <p>Total calls: <strong id="m-total-calls">0</strong></p>
+                    <p>Total tokens (in/out): <strong id="m-total-tokens">0</strong></p>
+                    <p>Total cost (USD): <strong id="m-total-cost">0</strong></p>
+                    <p>Today calls: <strong id="m-today-calls">0</strong></p>
+                    <p>Today cost: <strong id="m-today-cost">0</strong></p>
+                    <p>Last call tokens: <strong id="m-last-tokens">0</strong></p>
+                    <p>Last call cost: <strong id="m-last-cost">0</strong></p>
+                </div>
+            </section>
+        </div>
+    </main>
+    <script>
+      window.RAG_RECIPE_PROJECT_ID = "{{ project_id }}";
+    </script>
+    <script src="/static/js/project_detail.js"></script>
+</body>
+</html>

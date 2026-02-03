@@ -1,0 +1,185 @@
+1.ONI Token>POST
+===================
+
+
+import requests
+import json
+
+url = "https://oso.orion.comcast.com/dop/security/rest/loginservice/login"
+
+payload = json.dumps({
+  "userID": "nap-admin-user",
+  "password": "Nap-admin-user1"
+})
+headers = {
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+
+
+
+2.From_Customer_id>POST>value
+=======================
+import requests
+import json
+
+url = "https://oni.orion.comcast.com/servo/api/service/findcrosscontext"
+
+payload = json.dumps({
+  "retrievalBehaviour": {
+    "limit": 1000,
+    "returnRelatedObjects": True,
+    "historyLevel": None,
+    "valid": True
+  },
+  "criteria": [
+    {
+      "properties": [
+        {
+          "name": "serviceCharacteristic.customerId",
+          "op": "eq",
+          "value": "130349369",
+          "valid": True
+        }
+      ]
+    }
+  ]
+})
+headers = {
+  'Content-Type': 'application/json',
+  'Authorization': 'Bearer PFVFTT5LPTxrZXk+LnN5c3RlbS5lbnYuZW5jcnlwdGlvbi4wO0M9MTc2ODgzMzg4NjM1NTtNPVh9Mm5JeXsweTZ1WFF4ZFZJeFNkc1NQWW1ZMGJ0U3h0eVh2VnFBV05MQjk3ZzVTdXR7aDlIVnowVkRkWlRDcnkwOzwvVUVNPg=='
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+
+3.From_externalServiceId > POST>
+=======================
+import requests
+import json
+
+url = "https://oni.orion.comcast.com/servo/api/service/findcrosscontext"
+
+payload = json.dumps({
+  "retrievalBehaviour": {
+    "limit": 1000,
+    "returnRelatedObjects": True,
+    "historyLevel": None,
+    "valid": True
+  },
+  "criteria": [
+    {
+      "properties": [
+        {
+          "name": "externalServiceId",
+          "op": "eq",
+          "value": "88EB2CED79CB4D44BAF83C0944D35689"
+        },
+        {
+          "name": "externalSystemId",
+          "op": "eq",
+          "value": "SOM"
+        }
+      ]
+    }
+  ]
+})
+headers = {
+  'Content-Type': 'application/json',
+  'Authorization': 'Bearer PFVFTT5LPTxrZXk+LnN5c3RlbS5lbnYuZW5jcnlwdGlvbi4wO0M9MTcyNjU1NjA1MTI3MDtNPVh9Mm5JeXsweTZ2MU8zRzdJY3ZBeXdhZmtpWXhScDhKUGtmRHNid1N6a1ZXfVBOT1RoWE4zSVpYb0U3d2NpaHYwOzwvVUVNPg=='
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+
+4.From_Product_ID
+=======================
+
+import requests
+import json
+
+url = "https://oni.orion.comcast.com/servo/api/service/findcrosscontext"
+
+payload = json.dumps({
+  "retrievalBehaviour": {
+    "limit": 1000,
+    "returnRelatedObjects": True,
+    "historyLevel": None,
+    "valid": True
+  },
+  "criteria": [
+    {
+      "properties": [
+        {
+          "name": "serviceCharacteristic.productInstanceId",
+          "op": "eq",
+          "value": "IProductAgreementItemInsatnce_1846478"
+        }
+      ]
+    }
+  ]
+})
+headers = {
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+
+
+5. From_Site_ID
+=======================
+import requests
+import json
+
+url = "https://oni.orion.comcast.com/servo/api/service/findcrosscontext"
+
+payload = json.dumps({
+  "retrievalBehaviour": {
+    "limit": 1000,
+    "returnRelatedObjects": True,
+    "historyLevel": None,
+    "valid": True
+  },
+  "criteria": [
+    {
+      "properties": [
+        {
+          "name": "serviceCharacteristic.productInstanceId",
+          "op": "eq",
+          "value": "IProductAgreementItemInsatnce_1846478"
+        }
+      ]
+    }
+  ]
+})
+headers = {
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+
+
+=======================
+
+
+=======================
+
+
+
+
+=======================
+
+
+=======================
+
+
+=======================

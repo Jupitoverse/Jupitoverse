@@ -1,0 +1,26 @@
+# RAG Pipeline Requirements - DeepSeek Coder V2 Lite Local Setup
+
+# Core LLM and AI Libraries
+torch>=2.0.0
+transformers>=4.35.0
+accelerate>=0.24.0
+sentencepiece>=0.1.99
+protobuf>=3.20.0
+
+# Database and Data Processing
+pandas>=2.0.0
+openpyxl>=3.1.0
+sqlite3  # Built-in with Python
+
+# Utilities
+tqdm>=4.65.0
+python-dotenv>=1.0.0
+colorama>=0.4.6
+
+# Optional: For better performance
+bitsandbytes>=0.41.0  # For 8-bit quantization
+einops>=0.7.0
+
+# Note: This setup is optimized for corporate environments with no internet restrictions
+# All models will be downloaded locally for offline usage
+

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jobs - AI Spectrum India</title>
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        .filters-bar{background:var(--bg-secondary);padding:20px 0;border-bottom:1px solid var(--border);position:sticky;top:70px;z-index:50}
+        .job-card{display:flex;justify-content:space-between;align-items:flex-start;padding:24px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;margin-bottom:16px;transition:all .2s}
+        .job-card:hover{border-color:var(--accent);transform:translateX(4px)}
+        .job-logo{width:56px;height:56px;background:var(--bg-secondary);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;color:var(--accent)}
+        .job-info{flex:1;margin-left:20px}
+        .job-info h3{margin-bottom:8px}
+        .job-meta{display:flex;gap:16px;color:var(--text-muted);font-size:.9rem;margin-bottom:12px}
+        .job-tags{display:flex;gap:8px;flex-wrap:wrap}
+        .job-actions{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+        .job-salary{font-size:1.1rem;font-weight:600;color:var(--accent-success)}
+        .job-posted{color:var(--text-muted);font-size:.85rem}
+    </style>
+</head>
+<body>
+    <!-- Header injected by JS -->
+    <script src="js/header.js"></script>
+    
+    <section class="page-hero">
+        <div class="container">
+            <h1>Find Your <span class="text-gradient">Dream Job</span></h1>
+            <p class="text-muted mt-2">Browse thousands of tech jobs from top companies</p>
+            <div class="flex gap-4 mt-6">
+                <div class="stat-box" style="background:var(--bg-card);padding:16px 24px;border-radius:var(--radius-md);border:1px solid var(--border)">
+                    <div style="font-size:1.5rem;font-weight:700;color:var(--accent-primary)" id="total-jobs">500+</div>
+                    <div class="text-muted text-sm">Active Jobs</div>
+                </div>
+                <div class="stat-box" style="background:var(--bg-card);padding:16px 24px;border-radius:var(--radius-md);border:1px solid var(--border)">
+                    <div style="font-size:1.5rem;font-weight:700;color:var(--success)">200+</div>
+                    <div class="text-muted text-sm">Remote Jobs</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="filters-bar">
+        <div class="container flex gap-4">
+            <input type="text" class="form-input" placeholder="Search jobs, companies..." style="max-width:400px" id="search">
+            <select class="form-select" style="width:150px" id="type-filter">
+                <option value="">All Types</option>
+                <option value="full_time">Full Time</option>
+                <option value="contract">Contract</option>
+                <option value="internship">Internship</option>
+            </select>
+            <select class="form-select" style="width:150px" id="location-filter">
+                <option value="">All Locations</option>
+                <option value="bangalore">Bangalore</option>
+                <option value="delhi">Delhi/NCR</option>
+                <option value="mumbai">Mumbai</option>
+                <option value="hyderabad">Hyderabad</option>
+                <option value="remote">Remote</option>
+            </select>
+            <select class="form-select" style="width:150px" id="exp-filter">
+                <option value="">Experience</option>
+                <option value="0-2">0-2 Years</option>
+                <option value="2-5">2-5 Years</option>
+                <option value="5-10">5-10 Years</option>
+                <option value="10+">10+ Years</option>
+            </select>
+        </div>
+    </div>
+
+    <section class="section" style="padding-top:32px">
+        <div class="container">
+            <div id="jobs-list">
+                <div class="job-card">
+                    <div class="flex">
+                        <div class="job-logo">G</div>
+                        <div class="job-info">
+                            <h3>Senior Software Engineer - Cloud</h3>
+                            <div class="job-meta">
+                                <span>Google</span><span>📍 Bangalore</span><span>💼 Full Time</span><span>⏰ 5-10 yrs</span>
+                            </div>
+                            <div class="job-tags">
+                                <span class="tag tag-primary">Python</span>
+                                <span class="tag">Kubernetes</span>
+                                <span class="tag">GCP</span>
+                                <span class="tag tag-success">Remote OK</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="job-actions">
+                        <div class="job-salary">₹45-65 LPA</div>
+                        <div class="job-posted">Posted 2 days ago</div>
+                        <a href="#" class="btn btn-primary btn-sm">Apply Now</a>
+                    </div>
+                </div>
+                <div class="job-card">
+                    <div class="flex">
+                        <div class="job-logo">M</div>
+                        <div class="job-info">
+                            <h3>Product Manager - Azure</h3>
+                            <div class="job-meta">
+                                <span>Microsoft</span><span>📍 Hyderabad</span><span>💼 Full Time</span><span>⏰ 3-7 yrs</span>
+                            </div>
+                            <div class="job-tags">
+                                <span class="tag tag-primary">Product</span>
+                                <span class="tag">Azure</span>
+                                <span class="tag">B2B</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="job-actions">
+                        <div class="job-salary">₹35-50 LPA</div>
+                        <div class="job-posted">Posted 3 days ago</div>
+                        <a href="#" class="btn btn-primary btn-sm">Apply Now</a>
+                    </div>
+                </div>
+                <div class="job-card">
+                    <div class="flex">
+                        <div class="job-logo">A</div>
+                        <div class="job-info">
+                            <h3>Data Scientist - ML Platform</h3>
+                            <div class="job-meta">
+                                <span>Amazon</span><span>📍 Bangalore</span><span>💼 Full Time</span><span>⏰ 2-5 yrs</span>
+                            </div>
+                            <div class="job-tags">
+                                <span class="tag tag-primary">ML</span>
+                                <span class="tag">Python</span>
+                                <span class="tag">AWS</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="job-actions">
+                        <div class="job-salary">₹30-45 LPA</div>
+                        <div class="job-posted">Posted 1 week ago</div>
+                        <a href="#" class="btn btn-primary btn-sm">Apply Now</a>
+                    </div>
+                </div>
+                <div class="job-card">
+                    <div class="flex">
+                        <div class="job-logo">F</div>
+                        <div class="job-info">
+                            <h3>Frontend Engineer - React</h3>
+                            <div class="job-meta">
+                                <span>Flipkart</span><span>📍 Bangalore</span><span>💼 Full Time</span><span>⏰ 1-3 yrs</span>
+                            </div>
+                            <div class="job-tags">
+                                <span class="tag tag-primary">React</span>
+                                <span class="tag">TypeScript</span>
+                                <span class="tag">NextJS</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="job-actions">
+                        <div class="job-salary">₹18-28 LPA</div>
+                        <div class="job-posted">Posted 5 days ago</div>
+                        <a href="#" class="btn btn-primary btn-sm">Apply Now</a>
+                    </div>
+                </div>
+                <div class="job-card">
+                    <div class="flex">
+                        <div class="job-logo">🌍</div>
+                        <div class="job-info">
+                            <h3>DevOps Engineer (Remote - Dubai)</h3>
+                            <div class="job-meta">
+                                <span>Careem</span><span>📍 Dubai (Remote)</span><span>💼 Full Time</span><span>⏰ 3-6 yrs</span>
+                            </div>
+                            <div class="job-tags">
+                                <span class="tag tag-primary">DevOps</span>
+                                <span class="tag">AWS</span>
+                                <span class="tag">Terraform</span>
+                                <span class="tag tag-success">Tax Free</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="job-actions">
+                        <div class="job-salary">AED 25-35K/mo</div>
+                        <div class="job-posted">Posted 2 days ago</div>
+                        <a href="#" class="btn btn-primary btn-sm">Apply Now</a>
+                    </div>
+                </div>
+            </div>
+            <div class="pagination mt-6">
+                <button class="pagination-btn">← Prev</button>
+                <button class="pagination-btn active">1</button>
+                <button class="pagination-btn">2</button>
+                <button class="pagination-btn">3</button>
+                <button class="pagination-btn">Next →</button>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/auth.js"></script>
+</body>
+</html>

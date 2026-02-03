@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Contacts Directory - AI Spectrum India</title>
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        .stat-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            min-width: 150px;
+        }
+        .stat-box .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .stat-box .label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+        .filters-section {
+            background: var(--bg-secondary);
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 70px;
+            z-index: 50;
+        }
+        .filters-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .filters-row .form-input {
+            flex: 1;
+            min-width: 200px;
+            max-width: 400px;
+        }
+        .filters-row .form-select {
+            width: 180px;
+        }
+        .results-info {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .contact-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            transition: all 0.2s;
+        }
+        .contact-card:hover {
+            border-color: var(--accent);
+            transform: translateX(4px);
+        }
+        .contact-info h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+        .contact-info p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .contact-info p strong {
+            color: var(--accent);
+        }
+        .contact-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .contact-email {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .contact-email.masked {
+            color: var(--text-muted);
+            cursor: help;
+        }
+        .upgrade-banner {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(0, 217, 255, 0.1));
+            border: 1px solid var(--accent-purple);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .upgrade-banner h3 {
+            margin-bottom: 0.5rem;
+        }
+        .upgrade-banner p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        .upgrade-banner .btn {
+            margin: 0 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header injected by JS -->
+    <script src="js/header.js"></script>
+
+    <main>
+        <!-- Page Hero -->
+        <section class="page-hero">
+            <div class="container">
+                <h1>🔥 HR Contacts <span class="highlight">Directory</span></h1>
+                <p>Direct access to 1800+ HR professionals at top tech companies. Get emails, LinkedIn profiles, and more.</p>
+            </div>
+        </section>
+
+        <!-- Stats -->
+        <div class="container">
+            <div class="stats-bar">
+                <div class="stat-box">
+                    <div class="value" id="total-count">1800+</div>
+                    <div class="label">HR Contacts</div>
+                </div>
+                <div class="stat-box">
+                    <div class="value" id="companies-count">500+</div>
+                    <div class="label">Companies</div>
+                </div>
+                <div class="stat-box">
+                    <div class="value" id="accessible-count">-</div>
+                    <div class="label">You Can Access</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <section class="filters-section">
+            <div class="container">
+                <div class="filters-row">
+                    <input type="text" id="search-input" class="form-input" placeholder="Search by name, company, or title...">
+                    <select id="company-filter" class="form-select">
+                        <option value="">All Companies</option>
+                    </select>
+                    <select id="seniority-filter" class="form-select">
+                        <option value="">All Seniority</option>
+                        <option value="C-Level">C-Level</option>
+                        <option value="VP">VP Level</option>
+                        <option value="Director/Head">Director/Head</option>
+                        <option value="Manager/Lead">Manager/Lead</option>
+                    </select>
+                    <span class="results-info" id="results-count">Loading...</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contacts List -->
+        <section style="padding: 2rem 0;">
+            <div class="container">
+                <!-- Upgrade Banner -->
+                <div id="upgrade-banner" class="upgrade-banner hidden">
+                    <h3>🔓 Unlock Full HR Contact Details</h3>
+                    <p>Free users see masked emails. Upgrade to access complete contact information!</p>
+                    <a href="signup.html?plan=premium" class="btn btn-secondary">Premium ₹499/mo</a>
+                    <a href="signup.html?plan=pro" class="btn btn-primary">Pro ₹999/mo</a>
+                </div>
+
+                <!-- Contacts -->
+                <div id="contacts-list">
+                    <div class="contact-card skeleton" style="height: 80px;"></div>
+                    <div class="contact-card skeleton" style="height: 80px;"></div>
+                    <div class="contact-card skeleton" style="height: 80px;"></div>
+                    <div class="contact-card skeleton" style="height: 80px;"></div>
+                    <div class="contact-card skeleton" style="height: 80px;"></div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination" id="pagination"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2024 AI Spectrum India. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const API_BASE = 'http://localhost:8000/api/v1';
+        let currentPage = 0;
+        const limit = 50;
+        let currentFilters = { search: '', company: '', seniority: '' };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStats();
+            loadCompanies();
+            loadContacts();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            document.getElementById('search-input').addEventListener('input', debounce(function() {
+                currentFilters.search = this.value;
+                currentPage = 0;
+                loadContacts();
+            }, 300));
+
+            document.getElementById('company-filter').addEventListener('change', function() {
+                currentFilters.company = this.value;
+                currentPage = 0;
+                loadContacts();
+            });
+
+            document.getElementById('seniority-filter').addEventListener('change', function() {
+                currentFilters.seniority = this.value;
+                currentPage = 0;
+                loadContacts();
+            });
+        }
+
+        async function loadStats() {
+            try {
+                const response = await fetch(`${API_BASE}/hr-contacts/stats`);
+                const data = await response.json();
+                
+                document.getElementById('total-count').textContent = data.total_contacts?.toLocaleString() || '1800+';
+                document.getElementById('accessible-count').textContent = data.accessible_count?.toLocaleString() || '-';
+                
+                // Show upgrade banner for guests/free users
+                if (data.your_subscription === 'guest' || data.your_subscription === 'free') {
+                    document.getElementById('upgrade-banner').classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Failed to load stats:', error);
+            }
+        }
+
+        async function loadCompanies() {
+            try {
+                const response = await fetch(`${API_BASE}/hr-contacts/companies?limit=200`);
+                const companies = await response.json();
+                
+                const select = document.getElementById('company-filter');
+                companies.forEach(c => {
+                    if (c.company && c.company !== '-') {
+                        const option = document.createElement('option');
+                        option.value = c.company;
+                        option.textContent = `${c.company} (${c.contact_count})`;
+                        select.appendChild(option);
+                    }
+                });
+            } catch (error) {
+                console.error('Failed to load companies:', error);
+            }
+        }
+
+        async function loadContacts() {
+            const container = document.getElementById('contacts-list');
+            
+            try {
+                const params = new URLSearchParams({
+                    skip: currentPage * limit,
+                    limit: limit
+                });
+                
+                if (currentFilters.search) params.append('search', currentFilters.search);
+                if (currentFilters.company) params.append('company', currentFilters.company);
+                if (currentFilters.seniority) params.append('title', currentFilters.seniority);
+                
+                const response = await fetch(`${API_BASE}/hr-contacts/?${params}`);
+                const data = await response.json();
+                
+                // Update count
+                document.getElementById('results-count').textContent = `${data.total.toLocaleString()} contacts found`;
+                
+                // Render contacts
+                container.innerHTML = '';
+                
+                if (data.contacts.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center" style="padding: 3rem;">
+                            <h3 class="text-muted">No contacts found</h3>
+                            <p class="text-muted">Try adjusting your filters</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                data.contacts.forEach(contact => {
+                    const emailHtml = data.can_see_full_details 
+                        ? `<a href="mailto:${contact.email}" class="contact-email">${contact.email}</a>`
+                        : `<span class="contact-email masked" title="Upgrade to see full email">${contact.email}</span>`;
+                    
+                    const linkedinHtml = contact.linkedin_url 
+                        ? `<a href="${contact.linkedin_url}" target="_blank" class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">LinkedIn</a>`
+                        : '';
+                    
+                    container.innerHTML += `
+                        <div class="contact-card">
+                            <div class="contact-info">
+                                <h4>${contact.name}</h4>
+                                <p>${contact.title || 'HR Professional'} at <strong>${contact.company_name}</strong></p>
+                            </div>
+                            <div class="contact-actions">
+                                ${contact.seniority_level ? `<span class="tag">${contact.seniority_level}</span>` : ''}
+                                ${emailHtml}
+                                ${linkedinHtml}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                // Render pagination
+                renderPagination(data.total);
+                
+            } catch (error) {
+                console.error('Failed to load contacts:', error);
+                container.innerHTML = `
+                    <div class="text-center" style="padding: 3rem; color: var(--accent-secondary);">
+                        <h3>Failed to load contacts</h3>
+                        <p>Please check if the backend server is running</p>
+                    </div>
+                `;
+            }
+        }
+
+        function renderPagination(total) {
+            const totalPages = Math.ceil(total / limit);
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+            
+            if (totalPages <= 1) return;
+            
+            // Previous
+            const prevBtn = document.createElement('button');
+            prevBtn.textContent = '← Prev';
+            prevBtn.disabled = currentPage === 0;
+            prevBtn.onclick = () => { currentPage--; loadContacts(); };
+            pagination.appendChild(prevBtn);
+            
+            // Page numbers
+            const startPage = Math.max(0, currentPage - 2);
+            const endPage = Math.min(totalPages - 1, currentPage + 2);
+            
+            for (let i = startPage; i <= endPage; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = i + 1;
+                btn.className = i === currentPage ? 'active' : '';
+                btn.onclick = () => { currentPage = i; loadContacts(); };
+                pagination.appendChild(btn);
+            }
+            
+            // Next
+            const nextBtn = document.createElement('button');
+            nextBtn.textContent = 'Next →';
+            nextBtn.disabled = currentPage >= totalPages - 1;
+            nextBtn.onclick = () => { currentPage++; loadContacts(); };
+            pagination.appendChild(nextBtn);
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+    </script>
+</body>
+</html>

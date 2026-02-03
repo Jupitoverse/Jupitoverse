@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Analyser - Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #1a1a1a;
+            min-height: 100vh;
+            padding-top: 70px;
+        }
+
+        /* ========== NAVBAR STYLES ========== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: #2d2d2d;
+            border-bottom: 2px solid #ff6b35;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .nav-brand-icon { font-size: 1.5em; }
+        .nav-brand-text {
+            font-size: 1.3em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .nav-link {
+            color: #cccccc;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.95em;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-link:hover { color: #ffffff; background: #3d3d3d; }
+        .nav-link.active {
+            color: #ff6b35;
+            background: rgba(255, 107, 53, 0.15);
+            border-bottom: 2px solid #ff6b35;
+        }
+        .nav-actions { display: flex; align-items: center; gap: 15px; }
+        .nav-logout {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%);
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+        .nav-logout:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4); }
+        @media (max-width: 768px) {
+            .navbar { padding: 0 15px; }
+            .nav-brand-text { display: none; }
+            .nav-link { padding: 8px 12px; font-size: 0.85em; }
+            .nav-link span { display: none; }
+        }
+        /* ========== END NAVBAR STYLES ========== */
+
+        .container {
+            max-width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: #2d2d2d;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+            text-align: center;
+            border: 2px solid #ff6b35;
+        }
+
+        .admin-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .header-content {
+            text-align: center;
+        }
+
+        .header-content h1 {
+            color: #ffffff;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header-content p {
+            color: #cccccc;
+            font-size: 1.1em;
+        }
+
+        .upload-section {
+            background: #2d2d2d;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+            border: 2px solid #ff006e;
+        }
+
+        .upload-area {
+            border: 3px dashed #ff6b35;
+            border-radius: 15px;
+            padding: 60px 20px;
+            text-align: center;
+            background: #3d3d3d;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-area:hover {
+            background: #4d4d4d;
+            border-color: #ff006e;
+        }
+
+        .upload-area.dragging {
+            background: #5d5d5d;
+            border-color: #ff006e;
+        }
+
+        .upload-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            color: #ff6b35;
+        }
+
+        .upload-text {
+            font-size: 1.3em;
+            color: #ff6b35;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .upload-hint {
+            color: #999;
+            font-size: 0.95em;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .file-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f5e9;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .file-info.show {
+            display: block;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .btn-upload {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%);
+            color: white;
+            margin-top: 20px;
+            width: 100%;
+            display: none;
+        }
+
+        .btn-upload.show {
+            display: block;
+        }
+
+        .btn-upload:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.5);
+        }
+
+        .btn-upload:disabled {
+            background: #555;
+            cursor: not-allowed;
+        }
+
+        .progress-section {
+            background: #2d2d2d;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+            display: none;
+            border: 2px solid #ff6b35;
+        }
+
+        .progress-section.show {
+            display: block;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 30px;
+            background: #1a1a1a;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #2575fc 0%, #3b82f6 100%);
+            width: 0%;
+            transition: width 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .progress-logs {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            border: 2px solid #3b82f6;
+        }
+
+        .log-entry {
+            padding: 8px 10px;
+            border-bottom: 1px solid #333;
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+
+        .log-success {
+            color: #4caf50;
+            font-weight: 600;
+        }
+
+        .log-error {
+            color: #f44336;
+            font-weight: 600;
+        }
+
+        .log-info {
+            color: #64b5f6;
+        }
+        
+        /* Custom scrollbar for logs */
+        .progress-logs::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        .progress-logs::-webkit-scrollbar-track {
+            background: #2a2a2a;
+            border-radius: 5px;
+        }
+        
+        .progress-logs::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 5px;
+        }
+        
+        .progress-logs::-webkit-scrollbar-thumb:hover {
+            background: #2563eb;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .stats-section {
+            background: #2d2d2d;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+            border: 2px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            padding: 20px;
+            background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: linear-gradient(135deg, #ff8854 0%, #ff1a8c 100%);
+            box-shadow: 0 5px 15px rgba(14, 165, 233, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="nav-brand-icon">🎫</span>
+            <span class="nav-brand-text">Ticket Analyser</span>
+        </div>
+        <div class="nav-links">
+            <a href="/" class="nav-link">🏠 <span>Home</span></a>
+            <a href="/user" class="nav-link">👤 <span>User</span></a>
+            <a href="/skill" class="nav-link">👥 <span>Team</span></a>
+            <a href="/admin" class="nav-link active">⚙️ <span>Admin</span></a>
+        </div>
+        <div class="nav-actions">
+            <a href="/admin/logout" class="nav-logout" onclick="return confirm('Are you sure you want to logout?')">🚪 Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Upload Section -->
+        <div class="upload-section">
+            <h2 style="color: #ffffff;">📁 Upload Excel File</h2>
+            <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+                <div class="upload-icon">📤</div>
+                <div class="upload-text">Click to select or drag & drop Excel file</div>
+                <div class="upload-hint">Supports .xlsx and .xls files (max 50MB)</div>
+            </div>
+            <input type="file" id="fileInput" accept=".xlsx,.xls" onchange="handleFileSelect(event)">
+            
+            <div id="fileInfo" class="file-info">
+                <strong>Selected file:</strong> <span id="fileName"></span> (<span id="fileSize"></span>)
+            </div>
+
+            <button id="uploadBtn" class="btn btn-upload" onclick="startUpload()">
+                🚀 Upload & Process
+            </button>
+        </div>
+
+        <!-- Message Area -->
+        <div id="messageArea" class="message"></div>
+
+        <!-- Progress Section -->
+        <div id="progressSection" class="progress-section">
+            <h2 id="progressTitle">⚙️ Processing...</h2>
+            <div class="progress-bar-container">
+                <div id="progressBar" class="progress-bar">0%</div>
+            </div>
+            <div class="progress-logs" id="progressLogs"></div>
+        </div>
+
+        <!-- Team Button Section -->
+        <div class="stats-section" style="margin-bottom: 30px;">
+            <h2 style="color: #ffffff;">👥 Team Management</h2>
+            <div style="margin: 20px 0;">
+                <button class="btn" style="background: linear-gradient(135deg, #ff6b35 0%, #ff006e 100%); color: white; padding: 12px 24px; border-radius: 8px;" onclick="window.location.href='http://localhost:5000/skill'">
+                    👥 Manage Team & Skills
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-section">
+            <h2 style="color: #ffffff;">📊 System Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value" id="totalHistorical">-</div>
+                    <div class="stat-label">Historical Records</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="lastUploadDate">-</div>
+                    <div class="stat-label">Last Upload</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="totalFeedback">-</div>
+                    <div class="stat-label">User Corrections</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedFile = null;
+
+        // Load stats on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStats();
+            loadSkillMembers();
+        });
+
+        // Drag and drop handlers
+        const uploadArea = document.getElementById('uploadArea');
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragging');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragging');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragging');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        }
+
+        function handleFile(file) {
+            // Check file type
+            if (!file.name.endsWith('.xlsx') && !file.name.endsWith('.xls')) {
+                showMessage('❌ Please select an Excel file (.xlsx or .xls)', 'error');
+                return;
+            }
+
+            // Check file size (50MB)
+            if (file.size > 50 * 1024 * 1024) {
+                showMessage('❌ File too large. Maximum size is 50MB', 'error');
+                return;
+            }
+
+            selectedFile = file;
+
+            // Show file info
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileSize').textContent = formatFileSize(file.size);
+            document.getElementById('fileInfo').classList.add('show');
+            document.getElementById('uploadBtn').classList.add('show');
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+
+        function startUpload() {
+            if (!selectedFile) {
+                showMessage('❌ Please select a file first', 'error');
+                return;
+            }
+
+            // Hide upload button
+            document.getElementById('uploadBtn').disabled = true;
+            document.getElementById('uploadBtn').textContent = '⏳ Processing...';
+
+            // Show progress section
+            document.getElementById('progressSection').classList.add('show');
+            document.getElementById('progressBar').style.width = '5%';
+            document.getElementById('progressBar').textContent = '5%';
+            addLog('📤 Uploading file...', 'info');
+
+            // Create form data
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+
+            // First, upload the file
+            fetch('/admin/upload_and_process', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // File uploaded successfully, now start streaming progress
+                    addLog('✓ File uploaded successfully', 'success');
+                    addLog('⚙️ Starting analysis and processing...', 'info');
+                    
+                    // Connect to Server-Sent Events stream
+                    const streamUrl = `/admin/process_stream/${data.upload_id}/${encodeURIComponent(data.filepath)}`;
+                    const eventSource = new EventSource(streamUrl);
+                    
+                    eventSource.onmessage = function(event) {
+                        const progress = JSON.parse(event.data);
+                        
+                        // Update progress bar
+                        if (progress.percent !== undefined && progress.percent !== null) {
+                            document.getElementById('progressBar').style.width = progress.percent + '%';
+                            document.getElementById('progressBar').textContent = progress.percent + '%';
+                            
+                            // Update progress title based on stage
+                            const titleElement = document.getElementById('progressTitle');
+                            if (progress.percent < 15) {
+                                titleElement.textContent = '📖 Reading Excel File...';
+                            } else if (progress.percent < 40) {
+                                titleElement.textContent = '🔍 Analyzing SRs...';
+                            } else if (progress.percent < 50) {
+                                titleElement.textContent = '📚 Loading Historical Data...';
+                            } else if (progress.percent < 70) {
+                                titleElement.textContent = '🔄 Merging to Database...';
+                            } else if (progress.percent < 90) {
+                                titleElement.textContent = '🧮 Rebuilding Vectors...';
+                            } else if (progress.percent < 100) {
+                                titleElement.textContent = '💾 Saving Results...';
+                            } else {
+                                titleElement.textContent = '✅ Complete!';
+                            }
+                        }
+                        
+                        // Add log entry
+                        if (progress.message) {
+                            let logType = 'info';
+                            if (progress.message.includes('[ERROR]')) {
+                                logType = 'error';
+                            } else if (progress.message.includes('[OK]') || progress.message.includes('✓') || progress.message.includes('[SUCCESS]')) {
+                                logType = 'success';
+                            }
+                            addLog(progress.message, logType);
+                        }
+                        
+                        // Check if processing is complete
+                        if (progress.complete) {
+                            eventSource.close();
+                            
+                            if (progress.success) {
+                                handleUploadSuccess(progress);
+                            } else {
+                                handleUploadError(progress.message || 'Processing failed');
+                            }
+                        }
+                    };
+                    
+                    eventSource.onerror = function(error) {
+                        console.error('EventSource error:', error);
+                        eventSource.close();
+                        handleUploadError('Connection error during processing');
+                    };
+                } else {
+                    handleUploadError(data.error || 'Upload failed');
+                }
+            })
+            .catch(error => {
+                handleUploadError(error.message);
+            });
+        }
+
+        function handleUploadSuccess(data) {
+            // Update progress (should already be at 100% from stream)
+            document.getElementById('progressBar').style.width = '100%';
+            document.getElementById('progressBar').textContent = '100%';
+
+            // Add final summary logs if not already added
+            if (data.analyzed_count !== undefined) {
+                addLog('', 'info'); // Empty line for spacing
+                addLog('📊 FINAL SUMMARY:', 'success');
+                addLog(`   ✓ Analyzed SRs: ${data.analyzed_count}`, 'success');
+                addLog(`   ✓ Total historical records: ${data.total_historical}`, 'success');
+                addLog(`   ✓ Output file: ${data.output_file}`, 'success');
+            }
+
+            // Show success message
+            const message = data.analyzed_count 
+                ? `✅ Success! Processed ${data.analyzed_count} SRs. Total records: ${data.total_historical}`
+                : '✅ Processing complete!';
+            showMessage(message, 'success');
+
+            // Reload stats
+            loadStats();
+
+            // Reset form after a delay
+            setTimeout(() => {
+                resetForm();
+            }, 5000);
+        }
+
+        function handleUploadError(error) {
+            addLog(`❌ Error: ${error}`, 'error');
+            showMessage(`❌ Upload failed: ${error}`, 'error');
+            document.getElementById('uploadBtn').disabled = false;
+            document.getElementById('uploadBtn').textContent = '🚀 Upload & Process';
+        }
+
+        function addLog(message, type = 'info') {
+            const logsDiv = document.getElementById('progressLogs');
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry log-${type}`;
+            
+            // Don't add timestamp if message already starts with timestamp-like pattern
+            if (message.match(/^\[\d{1,2}:\d{2}:\d{2}\]/)) {
+                logEntry.textContent = message;
+            } else {
+                logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            }
+            
+            logsDiv.appendChild(logEntry);
+            
+            // Auto-scroll to bottom with smooth animation
+            logsDiv.scrollTo({
+                top: logsDiv.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+
+        function showMessage(text, type) {
+            const messageArea = document.getElementById('messageArea');
+            messageArea.textContent = text;
+            messageArea.className = `message ${type} show`;
+            
+            setTimeout(() => {
+                messageArea.classList.remove('show');
+            }, 5000);
+        }
+
+        function resetForm() {
+            selectedFile = null;
+            document.getElementById('fileInput').value = '';
+            document.getElementById('fileInfo').classList.remove('show');
+            document.getElementById('uploadBtn').classList.remove('show');
+            document.getElementById('uploadBtn').disabled = false;
+            document.getElementById('uploadBtn').textContent = '🚀 Upload & Process';
+            document.getElementById('progressSection').classList.remove('show');
+            document.getElementById('progressBar').style.width = '0%';
+            document.getElementById('progressBar').textContent = '0%';
+            document.getElementById('progressTitle').textContent = '⚙️ Processing...';
+            document.getElementById('progressLogs').innerHTML = '';
+        }
+
+        function loadStats() {
+            fetch('/admin/stats')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('totalHistorical').textContent = data.total_historical.toLocaleString();
+                        document.getElementById('lastUploadDate').textContent = data.last_upload_date || '-';
+                        document.getElementById('totalFeedback').textContent = data.total_feedback || 0;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading stats:', error);
+                });
+        }
+
+    </script>
+</body>
+</html>
+

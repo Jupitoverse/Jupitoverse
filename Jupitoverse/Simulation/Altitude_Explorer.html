@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Altitude Explorer - Journey Through Earth's Atmosphere</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            background: linear-gradient(to top, 
+                #0a0a0a 0%,
+                #000000 20%,
+                #0d1b2a 40%,
+                #1b263b 50%,
+                #415a77 60%,
+                #778da9 70%,
+                #87ceeb 85%,
+                #b0d4f1 95%,
+                #e0f4ff 100%
+            );
+            color: white;
+            height: 1000000px; /* Represents ~1000km journey (extended to space) */
+        }
+
+        /* Fixed Stats Panel - Smaller & More Impressive */
+        .stats-panel {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, rgba(0, 20, 40, 0.95) 0%, rgba(0, 0, 0, 0.95) 100%);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(0, 212, 255, 0.4);
+            border-radius: 15px;
+            padding: 15px 20px;
+            min-width: 240px;
+            z-index: 1000;
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .stats-panel h2 {
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            color: #00d4ff;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+
+        .stat-item {
+            margin: 8px 0;
+            padding: 8px 10px;
+            background: rgba(0, 212, 255, 0.08);
+            border-radius: 8px;
+            border-left: 3px solid #00d4ff;
+        }
+
+        .stat-label {
+            font-size: 0.7em;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #00d4ff;
+            margin-top: 3px;
+            text-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
+        }
+
+        .survival-status {
+            margin-top: 12px;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.95em;
+            animation: pulse 2s infinite;
+        }
+
+        .survival-safe {
+            background: rgba(0, 255, 0, 0.2);
+            border: 2px solid #00ff00;
+            color: #00ff00;
+        }
+
+        .survival-danger {
+            background: rgba(255, 165, 0, 0.2);
+            border: 2px solid #ffa500;
+            color: #ffa500;
+        }
+
+        .survival-critical {
+            background: rgba(255, 0, 0, 0.2);
+            border: 2px solid #ff0000;
+            color: #ff0000;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Main Content Area */
+        .content-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Milestone Markers */
+        .milestone {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 800px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            opacity: 0;
+            transition: opacity 0.5s, transform 0.5s;
+        }
+
+        .milestone.visible {
+            opacity: 1;
+        }
+
+        .milestone-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+
+        .milestone-icon {
+            font-size: 4em;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .milestone-info h3 {
+            font-size: 2em;
+            color: #00d4ff;
+            margin-bottom: 5px;
+        }
+
+        .milestone-altitude {
+            font-size: 1.2em;
+            color: #ffa500;
+            font-weight: bold;
+        }
+
+        .milestone-description {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin: 15px 0;
+            color: #e0e0e0;
+        }
+
+        .milestone-fact {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 4px solid #00d4ff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-style: italic;
+        }
+
+        .milestone-fact strong {
+            color: #00d4ff;
+        }
+
+        .visitors-list {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .visitors-list h4 {
+            color: #ffa500;
+            margin-bottom: 10px;
+        }
+
+        .visitors-list li {
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .visitors-list li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #00d4ff;
+        }
+
+        /* Start Screen - Realistic Earth Surface */
+        .start-screen {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100vh;
+            background: linear-gradient(to top, 
+                #1a3a2e 0%,
+                #2c5f4a 15%,
+                #4a7c59 30%,
+                #6b9b7a 45%,
+                #87ceeb 70%,
+                #b0d4f1 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 500;
+            transition: opacity 0.3s ease-out;
+            overflow: hidden;
+        }
+
+        /* Realistic City Skyline */
+        .city-skyline {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 30%;
+            background: linear-gradient(to top, #1a1a2e 0%, #2a2a3e 50%, rgba(42, 42, 62, 0) 100%);
+            z-index: 501;
+        }
+
+        /* Buildings in skyline */
+        .skyline-building {
+            position: absolute;
+            bottom: 0;
+            background: linear-gradient(to top, #0a0a1a, #1a1a2a);
+            border-top: 2px solid rgba(255, 200, 100, 0.3);
+        }
+
+        /* Realistic Person Silhouette */
+        .person-silhouette {
+            position: absolute;
+            bottom: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 180px;
+            z-index: 510;
+        }
+
+        .person-head {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #2d4356 0%, #1a2633 100%);
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .person-body {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 60px;
+            background: linear-gradient(135deg, #3d5467 0%, #2a3a4a 100%);
+            border-radius: 5px;
+        }
+
+        .person-arm {
+            position: absolute;
+            top: 35px;
+            width: 35px;
+            height: 12px;
+            background: linear-gradient(135deg, #3d5467 0%, #2a3a4a 100%);
+            border-radius: 6px;
+        }
+
+        .person-arm.left {
+            left: -30px;
+            transform: rotate(20deg);
+        }
+
+        .person-arm.right {
+            right: -30px;
+            transform: rotate(-20deg);
+        }
+
+        .person-leg {
+            position: absolute;
+            bottom: 0;
+            width: 15px;
+            height: 90px;
+            background: linear-gradient(135deg, #2d4356 0%, #1a2633 100%);
+            border-radius: 8px;
+        }
+
+        .person-leg.left {
+            left: 22px;
+        }
+
+        .person-leg.right {
+            right: 22px;
+        }
+
+        .start-text {
+            position: relative;
+            z-index: 510;
+            text-align: center;
+            margin-top: -150px;
+        }
+
+        .start-text h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(45deg, #00d4ff, #ffa500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .start-text p {
+            font-size: 1.5em;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Atmosphere Layers Indicator */
+        .layer-indicator {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            z-index: 900;
+        }
+
+        .layer-indicator h3 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .layer-item {
+            margin: 10px 0;
+            padding: 8px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .layer-item.active {
+            background: rgba(0, 212, 255, 0.3);
+            border-left: 4px solid #00d4ff;
+            font-weight: bold;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .stats-panel {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+                min-width: auto;
+                padding: 15px;
+            }
+
+            .stats-panel h2 {
+                font-size: 1.2em;
+            }
+
+            .stat-value {
+                font-size: 1.2em;
+            }
+
+            .layer-indicator {
+                display: none;
+            }
+
+            .milestone {
+                width: 95%;
+                padding: 20px;
+            }
+
+            .milestone-icon {
+                font-size: 2.5em;
+            }
+
+            .milestone-info h3 {
+                font-size: 1.5em;
+            }
+
+            .start-text h1 {
+                font-size: 2em;
+            }
+
+            .start-text p {
+                font-size: 1.2em;
+            }
+
+            .character {
+                font-size: 3em;
+            }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 1001;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff, #ffa500);
+            width: 0%;
+            transition: width 0.1s;
+        }
+
+        /* Dynamic Background Visuals */
+        .visual-element {
+            position: fixed;
+            opacity: 0;
+            transition: opacity 0.5s, transform 0.5s;
+            pointer-events: none;
+            z-index: 600;
+        }
+
+        .visual-element.active {
+            opacity: 1;
+        }
+
+        /* Buildings and Ground Elements */
+        .building {
+            font-size: 3em;
+            bottom: 0;
+            animation: buildingPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes buildingPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Flying Objects */
+        .flying-object {
+            animation: fly 20s linear infinite;
+        }
+
+        @keyframes fly {
+            0% { left: -10%; }
+            100% { left: 110%; }
+        }
+
+        .bird {
+            font-size: 2em;
+            animation: bird-fly 15s linear infinite, flap 1s ease-in-out infinite;
+        }
+
+        @keyframes bird-fly {
+            0% { left: -5%; transform: translateY(0); }
+            25% { transform: translateY(-20px); }
+            50% { transform: translateY(0); }
+            75% { transform: translateY(20px); }
+            100% { left: 105%; transform: translateY(0); }
+        }
+
+        @keyframes flap {
+            0%, 100% { transform: scaleX(1); }
+            50% { transform: scaleX(1.1); }
+        }
+
+        /* Aircraft */
+        .aircraft {
+            font-size: 2.5em;
+            animation: aircraft-fly 25s linear infinite;
+        }
+
+        @keyframes aircraft-fly {
+            0% { left: -10%; }
+            100% { left: 110%; }
+        }
+
+        /* Clouds */
+        .cloud {
+            font-size: 4em;
+            animation: cloud-drift 40s linear infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes cloud-drift {
+            0% { left: -10%; }
+            100% { left: 110%; }
+        }
+
+        /* Balloons */
+        .balloon {
+            font-size: 2em;
+            animation: balloon-float 30s ease-in-out infinite;
+        }
+
+        @keyframes balloon-float {
+            0% { left: -5%; transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-30px) rotate(5deg); }
+            50% { left: 50%; transform: translateY(-50px) rotate(-5deg); }
+            75% { transform: translateY(-30px) rotate(5deg); }
+            100% { left: 105%; transform: translateY(0) rotate(0deg); }
+        }
+
+        /* Satellites and Space Objects */
+        .satellite {
+            font-size: 2em;
+            animation: orbit 50s linear infinite;
+        }
+
+        @keyframes orbit {
+            0% { left: -5%; top: 20%; }
+            25% { left: 30%; top: 10%; }
+            50% { left: 60%; top: 20%; }
+            75% { left: 90%; top: 10%; }
+            100% { left: 115%; top: 20%; }
+        }
+
+        /* Stars */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .stars.active {
+            opacity: 1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Shooting Stars */
+        .shooting-star {
+            position: fixed;
+            font-size: 1.5em;
+            animation: shoot 3s ease-out infinite;
+            opacity: 0;
+        }
+
+        @keyframes shoot {
+            0% { left: 100%; top: 10%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { left: -10%; top: 60%; opacity: 0; }
+        }
+
+        /* Mountains */
+        .mountain-range {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 300px;
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+            z-index: 550;
+        }
+
+        .mountain-range.active {
+            opacity: 1;
+        }
+
+        .mountain {
+            position: absolute;
+            bottom: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+        }
+
+        /* Atmosphere Glow Effects */
+        .atmosphere-glow {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 1s;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .atmosphere-glow.active {
+            opacity: 1;
+        }
+
+        /* Floating Info Cards */
+        .info-card {
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(0, 212, 255, 0.5);
+            border-radius: 15px;
+            padding: 15px 25px;
+            font-size: 1.1em;
+            color: #00d4ff;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+            z-index: 800;
+            max-width: 80%;
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.3);
+        }
+
+        .info-card.active {
+            opacity: 1;
+        }
+
+        .info-card strong {
+            color: #ffa500;
+            font-size: 1.2em;
+        }
+
+        /* Labeled Visual Elements */
+        .labeled-visual {
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+            z-index: 600;
+        }
+
+        .labeled-visual.active {
+            opacity: 1;
+        }
+
+        .labeled-visual .icon {
+            font-size: 2.5em;
+        }
+
+        .labeled-visual .label {
+            background: rgba(0, 0, 0, 0.8);
+            color: #00d4ff;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            white-space: nowrap;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        /* Specific aircraft types */
+        .cessna { animation: aircraft-fly 30s linear infinite; }
+        .boeing { animation: aircraft-fly 28s linear infinite; }
+        .fighter-jet { animation: jet-fly 15s linear infinite; }
+        .sr71 { animation: jet-fly 12s linear infinite; }
+        
+        @keyframes jet-fly {
+            0% { left: -10%; transform: rotate(-5deg); }
+            100% { left: 110%; transform: rotate(-5deg); }
+        }
+
+        /* Telescope Animation */
+        .telescope {
+            animation: scan 20s ease-in-out infinite;
+        }
+
+        @keyframes scan {
+            0%, 100% { transform: rotate(-10deg); }
+            50% { transform: rotate(10deg); }
+        }
+
+        /* Mobile adjustments for visuals */
+        @media (max-width: 768px) {
+            .building { font-size: 2em; }
+            .bird { font-size: 1.5em; }
+            .aircraft { font-size: 2em; }
+            .cloud { font-size: 3em; }
+            .balloon { font-size: 1.5em; }
+            .satellite { font-size: 1.5em; }
+            .info-card { font-size: 0.9em; padding: 12px 20px; }
+            .labeled-visual .icon { font-size: 2em; }
+            .labeled-visual .label { font-size: 0.75em; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Stars Layer -->
+    <div class="stars" id="starsLayer"></div>
+
+    <!-- Atmosphere Glow -->
+    <div class="atmosphere-glow" id="atmosphereGlow"></div>
+
+    <!-- Mountain Range -->
+    <div class="mountain-range" id="mountainRange"></div>
+
+    <!-- Dynamic Info Cards Container -->
+    <div id="infoCardsContainer"></div>
+
+    <!-- Labeled Visuals Container -->
+    <div id="labeledVisualsContainer"></div>
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Stats Panel -->
+    <div class="stats-panel">
+        <h2>📊 Current Status</h2>
+        <div class="stat-item">
+            <div class="stat-label">Altitude</div>
+            <div class="stat-value" id="altitude">0 m</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">Temperature</div>
+            <div class="stat-value" id="temperature">15°C</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">Oxygen Level</div>
+            <div class="stat-value" id="oxygen">20.9%</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">Air Pressure</div>
+            <div class="stat-value" id="pressure">101.3 kPa</div>
+        </div>
+        <div class="survival-status" id="survival">✅ Safe to Breathe</div>
+    </div>
+
+    <!-- Atmosphere Layer Indicator -->
+    <div class="layer-indicator">
+        <h3>🌍 Atmosphere Layers</h3>
+        <div class="layer-item" data-layer="ground">Ground Level</div>
+        <div class="layer-item" data-layer="troposphere">Troposphere</div>
+        <div class="layer-item" data-layer="stratosphere">Stratosphere</div>
+        <div class="layer-item" data-layer="mesosphere">Mesosphere</div>
+        <div class="layer-item" data-layer="thermosphere">Thermosphere</div>
+        <div class="layer-item" data-layer="exosphere">Exosphere</div>
+        <div class="layer-item" data-layer="space">Space</div>
+    </div>
+
+    <!-- Start Screen -->
+    <div class="start-screen">
+        <div class="city-skyline" id="citySkyline"></div>
+        <div class="start-text">
+            <h1>🚀 Altitude Explorer</h1>
+            <p>⬇️ Scroll Down to Ascend ⬇️</p>
+        </div>
+        <div class="person-silhouette">
+            <div class="person-head"></div>
+            <div class="person-body"></div>
+            <div class="person-arm left"></div>
+            <div class="person-arm right"></div>
+            <div class="person-leg left"></div>
+            <div class="person-leg right"></div>
+        </div>
+    </div>
+
+    <!-- Content Wrapper with Milestones -->
+    <div class="content-wrapper" id="contentWrapper">
+        <!-- Milestones will be added dynamically -->
+    </div>
+
+    <script>
+        // Comprehensive milestone data with scientifically accurate information
+        const milestones = [
+            {
+                altitude: 0,
+                name: "Sea Level",
+                icon: "🌊",
+                description: "Welcome to sea level! This is where our journey begins. The average elevation where the ocean surface would theoretically be in the absence of land.",
+                temperature: 15,
+                oxygen: 20.9,
+                pressure: 101.3,
+                survival: "safe",
+                fact: "Did you know? Sea level is rising at approximately 3.3mm per year due to climate change and thermal expansion of ocean water.",
+                visitors: ["Humans", "Most terrestrial life", "Ships and submarines"]
+            },
+            {
+                altitude: 8.8,
+                name: "World's Deepest Subway",
+                icon: "🚇",
+                description: "The Arsenalna station in Kyiv, Ukraine, is the world's deepest subway station at 105.5 meters below ground (but we're measuring elevation from sea level).",
+                temperature: 15,
+                oxygen: 20.9,
+                pressure: 101.3,
+                survival: "safe",
+                fact: "Arsenalna station is so deep that it takes almost 5 minutes to reach the platform via escalator!",
+                visitors: []
+            },
+            {
+                altitude: 100,
+                name: "Tall Buildings",
+                icon: "🏢",
+                description: "At this height, you're at the level of typical skyscrapers. Many major city buildings reach this altitude.",
+                temperature: 14,
+                oxygen: 20.9,
+                pressure: 100.1,
+                survival: "safe",
+                fact: "The 100m mark is a common threshold for defining a 'skyscraper' in architectural terms.",
+                visitors: ["Window washers", "Construction workers", "Urban climbers"]
+            },
+            {
+                altitude: 300,
+                name: "Eiffel Tower Height",
+                icon: "🗼",
+                description: "The iconic Eiffel Tower in Paris reaches 300 meters (including antennas). One of the most recognizable structures on Earth!",
+                temperature: 13,
+                oxygen: 20.8,
+                pressure: 97.5,
+                survival: "safe",
+                fact: "The Eiffel Tower can grow up to 15cm taller during summer due to thermal expansion of the iron!",
+                visitors: ["Tourists", "Maintenance crews", "Broadcast technicians"]
+            },
+            {
+                altitude: 500,
+                name: "Low-Flying Birds",
+                icon: "🕊️",
+                description: "Common birds like pigeons and sparrows typically fly at these altitudes during their daily activities.",
+                temperature: 12,
+                oxygen: 20.7,
+                pressure: 95.5,
+                survival: "safe",
+                fact: "Birds have a more efficient respiratory system than humans, with air sacs that allow for continuous oxygen flow.",
+                visitors: ["Pigeons", "Sparrows", "Crows", "Urban birds"]
+            },
+            {
+                altitude: 828,
+                name: "Burj Khalifa",
+                icon: "🏙️",
+                description: "The world's tallest building! Located in Dubai, UAE. At this height, the temperature can vary significantly from ground level.",
+                temperature: 11,
+                oxygen: 20.6,
+                pressure: 92.1,
+                survival: "safe",
+                fact: "The Burj Khalifa has 163 floors and took 6 years to build. It contains enough concrete to fill 15 Olympic swimming pools!",
+                visitors: ["Tourists", "Residents", "Window cleaners", "Maintenance crews"]
+            },
+            {
+                altitude: 1000,
+                name: "Radio Towers",
+                icon: "📡",
+                description: "Many radio and television transmission towers reach this height. The air is noticeably thinner here.",
+                temperature: 10,
+                oxygen: 20.5,
+                pressure: 89.9,
+                survival: "safe",
+                fact: "The KVLY-TV mast in North Dakota was once the tallest structure in the world at 628 meters!",
+                visitors: ["Broadcast engineers", "Tower climbers", "Maintenance technicians"]
+            },
+            {
+                altitude: 1500,
+                name: "Paragliding Zone",
+                icon: "🪂",
+                description: "Popular altitude for paragliding enthusiasts. The views are spectacular and thermals help gliders stay aloft.",
+                temperature: 8,
+                oxygen: 20.3,
+                pressure: 84.6,
+                survival: "safe",
+                fact: "Paragliders can stay in the air for hours by riding thermal currents - columns of rising warm air!",
+                visitors: ["Paragliders", "Hang gliders", "Base jumpers"]
+            },
+            {
+                altitude: 2000,
+                name: "Small Aircraft Cruising",
+                icon: "✈️",
+                description: "Small private planes and helicopters commonly fly at this altitude for short-distance travel.",
+                temperature: 6,
+                oxygen: 20.0,
+                pressure: 79.5,
+                survival: "safe",
+                fact: "At this altitude, pilots must be aware of 'density altitude' - the aircraft performs as if at a higher altitude in hot weather!",
+                visitors: ["Private pilots", "Helicopters", "Small aircraft", "Sightseeing tours"]
+            },
+            {
+                altitude: 2500,
+                name: "Typical Cloud Base",
+                icon: "☁️",
+                description: "This is where cumulus clouds often form. The condensation level where water vapor becomes visible.",
+                temperature: 5,
+                oxygen: 19.8,
+                pressure: 74.7,
+                survival: "safe",
+                fact: "A typical cumulus cloud weighs about the same as 100 elephants - around 500,000 kg!",
+                visitors: ["Clouds", "Commercial aircraft during ascent/descent"]
+            },
+            {
+                altitude: 4000,
+                name: "Hot Air Balloons",
+                icon: "🎈",
+                description: "Hot air balloons can reach these heights. The record for highest balloon flight is much higher though!",
+                temperature: 2,
+                oxygen: 19.2,
+                pressure: 61.7,
+                survival: "safe",
+                fact: "Hot air balloons work because heated air is less dense than cool air. A typical balloon contains over 2,800 cubic meters of air!",
+                visitors: ["Balloonists", "Tourist flights", "Weather balloons"]
+            },
+            {
+                altitude: 5000,
+                name: "Base Camp Altitude",
+                icon: "⛺",
+                description: "Many mountain expeditions have base camps around this height. The air has about 50% less oxygen than sea level.",
+                temperature: 0,
+                oxygen: 18.5,
+                pressure: 54.0,
+                survival: "danger",
+                fact: "At this altitude, water boils at only 83°C instead of 100°C due to lower air pressure!",
+                visitors: ["Mountaineers", "Sherpas", "Expedition teams"]
+            },
+            {
+                altitude: 6000,
+                name: "Eagles Soaring",
+                icon: "🦅",
+                description: "Eagles and vultures can soar at these heights while hunting. The Rüppell's vulture holds the record at 11,300m!",
+                temperature: -3,
+                oxygen: 17.8,
+                pressure: 47.2,
+                survival: "danger",
+                fact: "Birds have a unique respiratory system with air sacs that allows them to extract oxygen more efficiently than mammals!",
+                visitors: ["Rüppell's vultures", "Bar-headed geese", "Golden eagles"]
+            },
+            {
+                altitude: 7000,
+                name: "Jet Stream Level",
+                icon: "🌬️",
+                description: "Fast-flowing air currents that circle the Earth. These can reach speeds of over 400 km/h!",
+                temperature: -6,
+                oxygen: 17.0,
+                pressure: 41.1,
+                survival: "danger",
+                fact: "Pilots use jet streams to save fuel and time. A flight from New York to London can be an hour shorter than the return journey!",
+                visitors: ["Commercial aircraft", "Weather systems"]
+            },
+            {
+                altitude: 8000,
+                name: "Death Zone Begins",
+                icon: "⚠️",
+                description: "Above 8,000m is called the 'Death Zone' in mountaineering. The human body cannot acclimate to these altitudes.",
+                temperature: -9,
+                oxygen: 16.0,
+                pressure: 35.7,
+                survival: "critical",
+                fact: "In the Death Zone, the human body consumes oxygen faster than it can be replenished, leading to deterioration and death if exposure is prolonged!",
+                visitors: ["Elite mountaineers with oxygen", "Emergency rescuers"]
+            },
+            {
+                altitude: 8848,
+                name: "Mount Everest Summit",
+                icon: "🏔️",
+                description: "The highest point on Earth! At the top of the world, you're standing where the troposphere meets the stratosphere.",
+                temperature: -19,
+                oxygen: 13.5,
+                pressure: 33.7,
+                survival: "critical",
+                fact: "Over 6,500 people have summited Everest, but more than 300 have died trying. The summit is in the 'Death Zone' where humans cannot survive for long!",
+                visitors: ["Sir Edmund Hillary (1953)", "Tenzing Norgay (1953)", "Reinhold Messner (first without oxygen, 1978)", "Over 6,500 climbers to date"]
+            },
+            {
+                altitude: 10000,
+                name: "Commercial Aircraft Cruising",
+                icon: "✈️",
+                description: "Most commercial airliners cruise between 9,000-12,000m for optimal fuel efficiency and smooth flight.",
+                temperature: -50,
+                oxygen: 10.0,
+                pressure: 26.5,
+                survival: "critical",
+                fact: "Cabin pressure in aircraft is maintained at around 2,400m equivalent, which is why your ears pop during flight!",
+                visitors: ["Boeing 747", "Airbus A380", "All major airlines", "Millions of passengers daily"]
+            },
+            {
+                altitude: 12000,
+                name: "Troposphere-Stratosphere Boundary",
+                icon: "🌡️",
+                description: "Welcome to the tropopause! This is where temperature stops decreasing and starts increasing with altitude.",
+                temperature: -56,
+                oxygen: 8.0,
+                pressure: 19.4,
+                survival: "critical",
+                fact: "The tropopause acts as a 'lid' on weather - almost all weather phenomena occur below this altitude!",
+                visitors: ["Weather balloons", "High-altitude research aircraft"]
+            },
+            {
+                altitude: 13100,
+                name: "Highest Manned Balloon Flight (Project Manhigh)",
+                icon: "🎈",
+                description: "In 1957, Captain Joseph Kittinger reached 31,000m in a balloon, but early flights reached these altitudes.",
+                temperature: -56,
+                oxygen: 7.0,
+                pressure: 15.8,
+                survival: "critical",
+                fact: "At this altitude, the sky appears dark purple due to reduced atmospheric scattering of sunlight!",
+                visitors: ["Test pilots", "High-altitude balloonists", "Research missions"]
+            },
+            {
+                altitude: 15000,
+                name: "Stratosphere Flight",
+                icon: "🛩️",
+                description: "You're now in the stratosphere! Home to the ozone layer. Temperature begins to increase here due to ozone absorbing UV radiation.",
+                temperature: -50,
+                oxygen: 5.0,
+                pressure: 12.1,
+                survival: "critical",
+                fact: "The stratosphere is where the ozone layer protects us from harmful UV radiation. Without it, life on Earth would be impossible!",
+                visitors: ["SR-71 Blackbird", "U-2 spy planes", "Weather balloons"]
+            },
+            {
+                altitude: 20000,
+                name: "U-2 Spy Plane Altitude",
+                icon: "🛩️",
+                description: "The famous U-2 reconnaissance aircraft operates at these heights, above most fighter jets.",
+                temperature: -45,
+                oxygen: 3.0,
+                pressure: 5.5,
+                survival: "critical",
+                fact: "U-2 pilots wear full pressure suits similar to astronauts. At this altitude, your blood would boil without pressurization!",
+                visitors: ["U-2 Dragon Lady aircraft", "Military reconnaissance", "Atmospheric research"]
+            },
+            {
+                altitude: 25000,
+                name: "Armstrong Limit",
+                icon: "💧",
+                description: "Above 19,000m, water boils at body temperature. Without a pressure suit, your bodily fluids would start to boil!",
+                temperature: -40,
+                oxygen: 2.0,
+                pressure: 2.5,
+                survival: "critical",
+                fact: "Named after Harry Armstrong who studied high-altitude physiology. This is why astronauts and high-altitude pilots must wear pressure suits!",
+                visitors: ["Pressure-suited pilots only", "Research balloons", "Sounding rockets"]
+            },
+            {
+                altitude: 26000,
+                name: "SR-71 Blackbird Cruising",
+                icon: "✈️",
+                description: "The legendary SR-71 Blackbird, the world's fastest jet aircraft, cruised at these altitudes at over 3,500 km/h!",
+                temperature: -40,
+                oxygen: 1.5,
+                pressure: 2.3,
+                survival: "critical",
+                fact: "The SR-71 was so fast it could outrun missiles! It could fly from New York to London in less than 2 hours.",
+                visitors: ["SR-71 Blackbird (retired)", "Military test aircraft"]
+            },
+            {
+                altitude: 30000,
+                name: "Middle Stratosphere",
+                icon: "🌐",
+                description: "You're now at the peak altitude for weather balloons. The ozone layer is at its densest around 25-30km.",
+                temperature: -35,
+                oxygen: 1.0,
+                pressure: 1.2,
+                survival: "critical",
+                fact: "About 90% of the atmosphere's ozone is in the stratosphere. It absorbs 97-99% of the sun's harmful UV radiation!",
+                visitors: ["Weather balloons", "Ozone research instruments", "High-altitude balloons"]
+            },
+            {
+                altitude: 31333,
+                name: "Joseph Kittinger's Record Jump",
+                icon: "🪂",
+                description: "In 1960, Captain Joseph Kittinger jumped from a balloon at 31,333m, free-falling for 4 minutes and 36 seconds!",
+                temperature: -35,
+                oxygen: 0.8,
+                pressure: 1.0,
+                survival: "critical",
+                fact: "Kittinger reached a maximum speed of 988 km/h during his fall, nearly breaking the sound barrier! His record stood for 52 years.",
+                visitors: ["Captain Joseph Kittinger (1960)", "Project Excelsior"]
+            },
+            {
+                altitude: 39000,
+                name: "Felix Baumgartner's Jump",
+                icon: "🪂",
+                description: "In 2012, Felix Baumgartner jumped from 39,045m, breaking the sound barrier during freefall!",
+                temperature: -30,
+                oxygen: 0.5,
+                pressure: 0.5,
+                survival: "critical",
+                fact: "Baumgartner reached 1,357.6 km/h (Mach 1.25) during his descent, becoming the first human to break the sound barrier without vehicular power!",
+                visitors: ["Felix Baumgartner (2012)", "Red Bull Stratos mission"]
+            },
+            {
+                altitude: 50000,
+                name: "Stratosphere Boundary",
+                icon: "🌌",
+                description: "Approaching the stratopause - the boundary between the stratosphere and mesosphere.",
+                temperature: -15,
+                oxygen: 0.2,
+                pressure: 0.1,
+                survival: "critical",
+                fact: "At this altitude, the sky appears nearly black even during daytime. You can see the curvature of Earth clearly!",
+                visitors: ["Research rockets", "Experimental aircraft"]
+            },
+            {
+                altitude: 80000,
+                name: "Mesosphere",
+                icon: "🌠",
+                description: "Welcome to the mesosphere! This is where most meteors burn up, creating shooting stars.",
+                temperature: -90,
+                oxygen: 0.01,
+                pressure: 0.001,
+                survival: "critical",
+                fact: "The mesosphere is the coldest layer of the atmosphere. Temperatures can drop to -90°C, colder than anywhere on Earth's surface!",
+                visitors: ["Meteors", "Noctilucent clouds", "Sounding rockets"]
+            },
+            {
+                altitude: 85000,
+                name: "Noctilucent Clouds",
+                icon: "☁️",
+                description: "Rare, beautiful clouds that glow at night. They're the highest clouds in Earth's atmosphere!",
+                temperature: -100,
+                oxygen: 0.005,
+                pressure: 0.0005,
+                survival: "critical",
+                fact: "Noctilucent clouds are made of ice crystals and can only be seen just after sunset or before sunrise when they're illuminated by the sun from below the horizon!",
+                visitors: ["Ice crystal clouds", "Upper atmospheric research"]
+            },
+            {
+                altitude: 100000,
+                name: "Kármán Line - Edge of Space",
+                icon: "🚀",
+                description: "Welcome to space! The Kármán line at 100km is the internationally recognized boundary of space.",
+                temperature: -100,
+                oxygen: 0.001,
+                pressure: 0.00003,
+                survival: "critical",
+                fact: "Named after Theodore von Kármán who calculated that above this altitude, aircraft must travel faster than orbital velocity to gain aerodynamic lift!",
+                visitors: ["Astronauts", "Blue Origin", "Virgin Galactic", "Suborbital rockets"]
+            }
+        ];
+
+        // Global variables
+        let currentAltitude = 0;
+        const maxAltitude = 1000000; // Maximum altitude in meters (1000km - extended to deep space)
+        const scrollHeight = document.body.scrollHeight;
+
+        // Initialize milestones in DOM
+        function initializeMilestones() {
+            const wrapper = document.getElementById('contentWrapper');
+            milestones.forEach(milestone => {
+                const milestoneDiv = document.createElement('div');
+                milestoneDiv.className = 'milestone';
+                milestoneDiv.dataset.altitude = milestone.altitude;
+                
+                // Calculate position (inverted - bottom for high altitude, top for low)
+                const positionPercent = ((maxAltitude - milestone.altitude) / maxAltitude) * 100;
+                milestoneDiv.style.top = `${positionPercent}%`;
+                
+                let html = `
+                    <div class="milestone-header">
+                        <div class="milestone-icon">${milestone.icon}</div>
+                        <div class="milestone-info">
+                            <h3>${milestone.name}</h3>
+                            <div class="milestone-altitude">${milestone.altitude.toLocaleString()}m altitude</div>
+                        </div>
+                    </div>
+                    <div class="milestone-description">${milestone.description}</div>
+                    <div class="milestone-fact"><strong>💡 Fun Fact:</strong> ${milestone.fact}</div>
+                `;
+                
+                if (milestone.visitors && milestone.visitors.length > 0) {
+                    html += `
+                        <div class="visitors-list">
+                            <h4>🏅 Notable Visitors:</h4>
+                            <ul>
+                                ${milestone.visitors.map(v => `<li>${v}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `;
+                }
+                
+                milestoneDiv.innerHTML = html;
+                wrapper.appendChild(milestoneDiv);
+            });
+        }
+
+        // Update stats based on altitude
+        function updateStats(altitude) {
+            // Find the closest milestone for accurate data
+            let closestMilestone = milestones[0];
+            let minDiff = Math.abs(altitude - milestones[0].altitude);
+            
+            for (let i = 1; i < milestones.length; i++) {
+                const diff = Math.abs(altitude - milestones[i].altitude);
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    closestMilestone = milestones[i];
+                }
+            }
+            
+            // Interpolate values between milestones
+            const nextMilestoneIndex = milestones.findIndex(m => m.altitude > altitude);
+            if (nextMilestoneIndex > 0) {
+                const prevMilestone = milestones[nextMilestoneIndex - 1];
+                const nextMilestone = milestones[nextMilestoneIndex];
+                const ratio = (altitude - prevMilestone.altitude) / (nextMilestone.altitude - prevMilestone.altitude);
+                
+                closestMilestone = {
+                    temperature: prevMilestone.temperature + (nextMilestone.temperature - prevMilestone.temperature) * ratio,
+                    oxygen: prevMilestone.oxygen + (nextMilestone.oxygen - prevMilestone.oxygen) * ratio,
+                    pressure: prevMilestone.pressure + (nextMilestone.pressure - prevMilestone.pressure) * ratio,
+                    survival: altitude < 5000 ? 'safe' : altitude < 8000 ? 'danger' : 'critical'
+                };
+            }
+            
+            // Update display
+            document.getElementById('altitude').textContent = `${altitude.toLocaleString()} m`;
+            document.getElementById('temperature').textContent = `${closestMilestone.temperature.toFixed(1)}°C`;
+            document.getElementById('oxygen').textContent = `${closestMilestone.oxygen.toFixed(1)}%`;
+            document.getElementById('pressure').textContent = `${closestMilestone.pressure.toFixed(1)} kPa`;
+            
+            // Update survival status
+            const survivalEl = document.getElementById('survival');
+            survivalEl.className = 'survival-status survival-' + closestMilestone.survival;
+            
+            if (closestMilestone.survival === 'safe') {
+                survivalEl.innerHTML = '✅ Safe to Breathe';
+            } else if (closestMilestone.survival === 'danger') {
+                survivalEl.innerHTML = '⚠️ Oxygen Needed';
+            } else {
+                survivalEl.innerHTML = '☠️ Pressure Suit Required';
+            }
+            
+            // Update atmosphere layer
+            updateAtmosphereLayer(altitude);
+        }
+
+        // Update active atmosphere layer
+        function updateAtmosphereLayer(altitude) {
+            const layers = document.querySelectorAll('.layer-item');
+            layers.forEach(layer => layer.classList.remove('active'));
+            
+            if (altitude < 100) {
+                document.querySelector('[data-layer="ground"]').classList.add('active');
+            } else if (altitude < 12000) {
+                document.querySelector('[data-layer="troposphere"]').classList.add('active');
+            } else if (altitude < 50000) {
+                document.querySelector('[data-layer="stratosphere"]').classList.add('active');
+            } else if (altitude < 80000) {
+                document.querySelector('[data-layer="mesosphere"]').classList.add('active');
+            } else if (altitude < 100000) {
+                document.querySelector('[data-layer="thermosphere"]').classList.add('active');
+            } else {
+                document.querySelector('[data-layer="space"]').classList.add('active');
+            }
+        }
+
+        // Scientific Visual Data - Altitude-specific objects
+        const visualData = [
+            // Ground to Low Altitude (0-1000m)
+            { altitude: 100, minAlt: 0, maxAlt: 500, icon: '🏢', label: 'Skyscraper (~300m)', position: '20%', info: 'Tall buildings dominate city skylines' },
+            { altitude: 300, minAlt: 0, maxAlt: 800, icon: '🗼', label: 'Eiffel Tower (300m)', position: '50%', info: 'Iconic iron lattice tower in Paris' },
+            { altitude: 828, minAlt: 500, maxAlt: 1200, icon: '🏙️', label: 'Burj Khalifa (828m)', position: '70%', info: 'World\'s tallest building' },
+            
+            // Birds (500-6000m)
+            { altitude: 500, minAlt: 0, maxAlt: 1500, icon: '🕊️', label: 'Pigeons (0-500m)', position: '30%', info: 'Common urban birds' },
+            { altitude: 1000, minAlt: 500, maxAlt: 2000, icon: '🦅', label: 'Eagles (1000-2000m)', position: '60%', info: 'Predatory birds soaring' },
+            { altitude: 3000, minAlt: 2000, maxAlt: 5000, icon: '🦅', label: 'Golden Eagles (3000m)', position: '40%', info: 'High-altitude hunters' },
+            { altitude: 6000, minAlt: 4500, maxAlt: 7000, icon: '🦅', label: 'Rüppell\'s Vulture (6000m)', position: '55%', info: 'Highest flying bird recorded' },
+            
+            // Low Aircraft (1500-5000m)
+            { altitude: 1500, minAlt: 1000, maxAlt: 3000, icon: '🚁', label: 'Helicopters (1500m)', position: '25%', info: 'Emergency & transport helicopters' },
+            { altitude: 2000, minAlt: 1500, maxAlt: 3500, icon: '✈️', label: 'Cessna 172 (2000m)', position: '70%', info: 'Most popular training aircraft' },
+            { altitude: 3000, minAlt: 2000, maxAlt: 4500, icon: '🛩️', label: 'Private Jets (3000m)', position: '40%', info: 'Business aviation altitude' },
+            
+            // Clouds (2500-12000m)
+            { altitude: 2500, minAlt: 2000, maxAlt: 4000, icon: '☁️', label: 'Cumulus Clouds (2500m)', position: '35%', info: 'Fair weather clouds' },
+            { altitude: 5000, minAlt: 4000, maxAlt: 7000, icon: '☁️', label: 'Altocumulus (5000m)', position: '65%', info: 'Mid-altitude clouds' },
+            { altitude: 8000, minAlt: 7000, maxAlt: 10000, icon: '☁️', label: 'Cirrus Clouds (8000m)', position: '45%', info: 'High wispy clouds' },
+            
+            // Commercial Aviation (8000-13000m)
+            { altitude: 10000, minAlt: 9000, maxAlt: 12000, icon: '✈️', label: 'Boeing 747 (10,000m)', position: '30%', info: 'Cruising altitude 33,000 ft' },
+            { altitude: 11000, minAlt: 9500, maxAlt: 12500, icon: '✈️', label: 'Airbus A380 (11,000m)', position: '60%', info: 'World\'s largest passenger jet' },
+            { altitude: 12000, minAlt: 10000, maxAlt: 13500, icon: '✈️', label: 'Commercial Jets (12,000m)', position: '50%', info: 'Optimal fuel efficiency' },
+            
+            // Balloons (4000-40000m)
+            { altitude: 4000, minAlt: 3000, maxAlt: 6000, icon: '🎈', label: 'Hot Air Balloons (4000m)', position: '40%', info: 'Tourist & sport balloons' },
+            { altitude: 15000, minAlt: 12000, maxAlt: 20000, icon: '🎈', label: 'Weather Balloons (15,000m)', position: '55%', info: 'Atmospheric data collection' },
+            { altitude: 30000, minAlt: 25000, maxAlt: 35000, icon: '🎈', label: 'High-Altitude Balloons (30km)', position: '35%', info: 'Scientific research platforms' },
+            
+            // Military & Spy Planes (15000-26000m)
+            { altitude: 18000, minAlt: 15000, maxAlt: 21000, icon: '✈️', label: 'F-22 Raptor (18,000m)', position: '45%', info: 'Stealth fighter jet' },
+            { altitude: 20000, minAlt: 18000, maxAlt: 23000, icon: '🛩️', label: 'U-2 Dragon Lady (20,000m)', position: '65%', info: 'High-altitude reconnaissance' },
+            { altitude: 26000, minAlt: 24000, maxAlt: 28000, icon: '✈️', label: 'SR-71 Blackbird (26,000m)', position: '30%', info: 'Mach 3+ spy plane' },
+            
+            // Telescopes (Ground-based observatories appear as reference)
+            { altitude: 4200, minAlt: 3500, maxAlt: 5000, icon: '🔭', label: 'Mauna Kea Observatory (4,200m)', position: '75%', info: 'World\'s highest observatory' },
+            
+            // Satellites & Space (20000m+)
+            { altitude: 20200, minAlt: 18000, maxAlt: 25000, icon: '🛰️', label: 'GPS Satellites (20,200km orbit)', position: '50%', info: 'Navigation constellation' },
+            { altitude: 35786, minAlt: 30000, maxAlt: 40000, icon: '🛰️', label: 'Geostationary Satellites (35,786km)', position: '40%', info: 'Communications satellites' },
+            { altitude: 400000, minAlt: 350000, maxAlt: 450000, icon: '🛰️', label: 'ISS Orbit (~400km)', position: '60%', info: 'International Space Station' },
+            
+            // High Atmosphere (80000-100000m)
+            { altitude: 80000, minAlt: 75000, maxAlt: 85000, icon: '🌠', label: 'Meteors Burn (80,000m)', position: '45%', info: 'Shooting stars in mesosphere' },
+            { altitude: 85000, minAlt: 80000, maxAlt: 90000, icon: '☁️', label: 'Noctilucent Clouds (85km)', position: '35%', info: 'Highest clouds on Earth' },
+            { altitude: 100000, minAlt: 95000, maxAlt: 105000, icon: '🚀', label: 'Kármán Line (100km)', position: '50%', info: 'Official edge of space!' },
+            
+            // Low Earth Orbit (160-2000km)
+            { altitude: 160000, minAlt: 140000, maxAlt: 180000, icon: '🛸', label: 'LEO Start (160km)', position: '30%', info: 'Low Earth Orbit begins' },
+            { altitude: 408000, minAlt: 350000, maxAlt: 450000, icon: '🛰️', label: 'ISS (408km)', position: '55%', info: 'International Space Station orbit' },
+            { altitude: 550000, minAlt: 500000, maxAlt: 600000, icon: '🛰️', label: 'Starlink Satellites (550km)', position: '40%', info: 'SpaceX internet constellation' },
+            
+            // Beyond Earth Orbit (>2000km within our sim range)
+            { altitude: 600000, minAlt: 550000, maxAlt: 700000, icon: '🌍', label: 'Seeing Full Earth (600km)', position: '65%', info: 'Entire planet visible as sphere' },
+            { altitude: 800000, minAlt: 700000, maxAlt: 900000, icon: '🌌', label: 'Deep Space (800km)', position: '45%', info: 'Beyond most satellite orbits' },
+            { altitude: 1000000, minAlt: 900000, maxAlt: 1100000, icon: '🚀', label: '1000km - Journey Milestone!', position: '50%', info: 'You\'ve traveled 1000 kilometers!' }
+        ];
+
+        // Info Cards Data - One-liners for altitude ranges
+        const infoCards = [
+            { minAlt: 0, maxAlt: 100, text: '<strong>Sea Level:</strong> Where your journey begins! 🌊', top: '50%' },
+            { minAlt: 500, maxAlt: 1000, text: '<strong>Low Altitude:</strong> Birds & small aircraft share the sky', top: '50%' },
+            { minAlt: 2000, maxAlt: 3000, text: '<strong>Cloud Base:</strong> Water vapor condenses into visible clouds ☁️', top: '50%' },
+            { minAlt: 5000, maxAlt: 6000, text: '<strong>Death Zone Approaches:</strong> 50% less oxygen than sea level ⚠️', top: '50%' },
+            { minAlt: 8000, maxAlt: 9000, text: '<strong>Death Zone:</strong> Humans cannot survive long without oxygen! ☠️', top: '50%' },
+            { minAlt: 8848, maxAlt: 8900, text: '<strong>Mount Everest Summit:</strong> Roof of the World! 🏔️', top: '50%' },
+            { minAlt: 10000, maxAlt: 11000, text: '<strong>Commercial Flight:</strong> Where airliners cruise efficiently ✈️', top: '50%' },
+            { minAlt: 12000, maxAlt: 13000, text: '<strong>Tropopause:</strong> Temperature stops decreasing here 🌡️', top: '50%' },
+            { minAlt: 19000, maxAlt: 20000, text: '<strong>Armstrong Limit:</strong> Water boils at body temperature! 💧', top: '50%' },
+            { minAlt: 25000, maxAlt: 26000, text: '<strong>Ozone Layer:</strong> Protects us from harmful UV radiation ☀️', top: '50%' },
+            { minAlt: 31000, maxAlt: 32000, text: '<strong>Kittinger\'s Jump:</strong> 4 min 36 sec freefall (1960) 🪂', top: '50%' },
+            { minAlt: 39000, maxAlt: 40000, text: '<strong>Sound Barrier Broken:</strong> Felix Baumgartner 1,357 km/h! 💨', top: '50%' },
+            { minAlt: 50000, maxAlt: 51000, text: '<strong>Edge of Darkness:</strong> Sky appears black even at noon 🌌', top: '50%' },
+            { minAlt: 80000, maxAlt: 81000, text: '<strong>Mesosphere:</strong> Coldest part of atmosphere -90°C ❄️', top: '50%' },
+            { minAlt: 99000, maxAlt: 101000, text: '<strong>Welcome to Space!</strong> You\'ve reached the Kármán Line! 🚀', top: '50%' },
+            { minAlt: 150000, maxAlt: 170000, text: '<strong>Low Earth Orbit:</strong> Where satellites and spacecraft orbit 🛰️', top: '50%' },
+            { minAlt: 400000, maxAlt: 420000, text: '<strong>ISS Altitude:</strong> Astronauts live here! Speed: 27,600 km/h 👨‍🚀', top: '50%' },
+            { minAlt: 540000, maxAlt: 560000, text: '<strong>Starlink Constellation:</strong> Providing global internet coverage 📡', top: '50%' },
+            { minAlt: 700000, maxAlt: 800000, text: '<strong>Deep Space:</strong> Beyond most human activity 🌌', top: '50%' },
+            { minAlt: 990000, maxAlt: 1010000, text: '<strong>1000km Milestone!</strong> Congratulations, space explorer! 🎉', top: '50%' }
+        ];
+
+        // Visual Elements Storage
+        const visualElements = {
+            labeled: [],
+            infoCards: []
+        };
+
+        // Initialize City Skyline
+        function initializeCitySkyline() {
+            const skyline = document.getElementById('citySkyline');
+            const buildings = [
+                { left: '5%', width: '8%', height: '40%' },
+                { left: '15%', width: '6%', height: '55%' },
+                { left: '23%', width: '10%', height: '45%' },
+                { left: '35%', width: '7%', height: '60%' },
+                { left: '44%', width: '9%', height: '35%' },
+                { left: '55%', width: '8%', height: '50%' },
+                { left: '65%', width: '11%', height: '42%' },
+                { left: '78%', width: '7%', height: '58%' },
+                { left: '87%', width: '9%', height: '38%' }
+            ];
+            
+            buildings.forEach(b => {
+                const building = document.createElement('div');
+                building.className = 'skyline-building';
+                building.style.left = b.left;
+                building.style.width = b.width;
+                building.style.height = b.height;
+                skyline.appendChild(building);
+            });
+        }
+
+        // Initialize Stars Background
+        function initializeStars() {
+            const starsLayer = document.getElementById('starsLayer');
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.width = `${Math.random() * 3 + 1}px`;
+                star.style.height = star.style.width;
+                star.style.animationDelay = `${Math.random() * 3}s`;
+                starsLayer.appendChild(star);
+            }
+        }
+
+        // Create Mountain Range
+        function initializeMountains() {
+            const mountainRange = document.getElementById('mountainRange');
+            const mountains = [
+                { left: '10%', height: '250px', color: '#4a5568' },
+                { left: '25%', height: '200px', color: '#5a6878' },
+                { left: '40%', height: '280px', color: '#3a4558' },
+                { left: '60%', height: '220px', color: '#4a5568' },
+                { left: '75%', height: '260px', color: '#5a6878' },
+                { left: '90%', height: '190px', color: '#4a5568' }
+            ];
+
+            mountains.forEach(m => {
+                const mountain = document.createElement('div');
+                mountain.className = 'mountain';
+                mountain.style.left = m.left;
+                mountain.style.borderLeft = `${parseInt(m.height) / 2}px solid transparent`;
+                mountain.style.borderRight = `${parseInt(m.height) / 2}px solid transparent`;
+                mountain.style.borderBottom = `${m.height} solid ${m.color}`;
+                mountainRange.appendChild(mountain);
+            });
+            
+            // Make mountains visible immediately at ground level
+            mountainRange.classList.add('active');
+        }
+
+        // Create Labeled Visual Element
+        function createLabeledVisual(data) {
+            const container = document.createElement('div');
+            container.className = 'labeled-visual';
+            container.style.left = data.position;
+            container.style.top = '50%'; // Will be updated dynamically
+            container.dataset.minAlt = data.minAlt;
+            container.dataset.maxAlt = data.maxAlt;
+            container.dataset.altitude = data.altitude; // Target altitude
+            
+            const icon = document.createElement('div');
+            icon.className = 'icon';
+            icon.textContent = data.icon;
+            
+            const label = document.createElement('div');
+            label.className = 'label';
+            label.textContent = data.label;
+            
+            container.appendChild(icon);
+            container.appendChild(label);
+            container.title = data.info;
+            
+            document.getElementById('labeledVisualsContainer').appendChild(container);
+            return container;
+        }
+
+        // Create Info Card
+        function createInfoCard(data) {
+            const card = document.createElement('div');
+            card.className = 'info-card';
+            card.style.top = data.top;
+            card.innerHTML = data.text;
+            card.dataset.minAlt = data.minAlt;
+            card.dataset.maxAlt = data.maxAlt;
+            
+            document.getElementById('infoCardsContainer').appendChild(card);
+            return card;
+        }
+
+        // Initialize All Visual Elements
+        function initializeVisualElements() {
+            // Create labeled visuals from data
+            visualData.forEach(data => {
+                const element = createLabeledVisual(data);
+                visualElements.labeled.push(element);
+            });
+            
+            // Create info cards
+            infoCards.forEach(data => {
+                const card = createInfoCard(data);
+                visualElements.infoCards.push(card);
+            });
+            
+            console.log(`Initialized ${visualElements.labeled.length} labeled visuals and ${visualElements.infoCards.length} info cards`);
+        }
+
+        // Update Visuals Based on Altitude
+        function updateVisuals(altitude) {
+            // Hide start screen as we scroll up
+            const startScreen = document.querySelector('.start-screen');
+            if (altitude > 100) {
+                startScreen.style.opacity = '0';
+                startScreen.style.pointerEvents = 'none';
+            } else {
+                startScreen.style.opacity = `${1 - (altitude / 100)}`;
+            }
+            
+            // Mountains (visible at ground level to ~5000m)
+            const mountainRange = document.getElementById('mountainRange');
+            mountainRange.classList.toggle('active', altitude < 5000);
+
+            // Update labeled visuals - only show those closest to current altitude to prevent overlap
+            let visibleCount = 0;
+            const maxVisibleAtOnce = 3; // Maximum 3 visuals visible at once
+            
+            visualElements.labeled.forEach(element => {
+                const minAlt = parseInt(element.dataset.minAlt);
+                const maxAlt = parseInt(element.dataset.maxAlt);
+                const targetAlt = parseInt(element.dataset.altitude);
+                
+                // Check if within visibility range
+                const inRange = altitude >= minAlt && altitude <= maxAlt;
+                
+                // Calculate distance from current altitude to target
+                const distance = Math.abs(altitude - targetAlt);
+                const proximityScore = distance / 1000; // Normalize distance
+                
+                // Show only if in range and not too many visuals already visible
+                const shouldShow = inRange && visibleCount < maxVisibleAtOnce;
+                
+                if (shouldShow) {
+                    element.classList.add('active');
+                    // Position based on how close we are to the target altitude
+                    const offset = ((altitude - targetAlt) / (maxAlt - minAlt)) * 20; // ±20% movement
+                    element.style.top = `${50 + offset}%`;
+                    visibleCount++;
+                } else {
+                    element.classList.remove('active');
+                }
+            });
+
+            // Update info cards based on altitude ranges
+            visualElements.infoCards.forEach(card => {
+                const minAlt = parseInt(card.dataset.minAlt);
+                const maxAlt = parseInt(card.dataset.maxAlt);
+                const isVisible = altitude >= minAlt && altitude <= maxAlt;
+                card.classList.toggle('active', isVisible);
+            });
+
+            // Stars (visible above 50000m, fully visible at 80000m+)
+            const starsLayer = document.getElementById('starsLayer');
+            if (altitude >= 50000) {
+                const starOpacity = Math.min((altitude - 50000) / 30000, 1);
+                starsLayer.style.opacity = starOpacity;
+                starsLayer.classList.add('active');
+            } else {
+                starsLayer.classList.remove('active');
+            }
+
+            // Atmosphere Glow Effects
+            const atmosphereGlow = document.getElementById('atmosphereGlow');
+            if (altitude >= 30000 && altitude < 100000) {
+                const glowIntensity = (altitude - 30000) / 70000;
+                atmosphereGlow.style.background = `radial-gradient(ellipse at center, 
+                    rgba(0, 100, 255, ${glowIntensity * 0.3}) 0%, 
+                    transparent 70%)`;
+                atmosphereGlow.classList.add('active');
+            } else if (altitude >= 100000) {
+                atmosphereGlow.style.background = 'radial-gradient(ellipse at bottom, rgba(0, 50, 150, 0.4) 0%, transparent 50%)';
+                atmosphereGlow.classList.add('active');
+            } else {
+                atmosphereGlow.classList.remove('active');
+            }
+        }
+
+        // Handle scroll
+        function handleScroll() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollPercent = scrollTop / (document.body.scrollHeight - window.innerHeight);
+            
+            // Calculate current altitude (inverted - scrolling down increases altitude)
+            currentAltitude = Math.round(scrollPercent * maxAltitude);
+            
+            // Update progress bar
+            document.getElementById('progressBar').style.width = `${scrollPercent * 100}%`;
+            
+            // Update stats
+            updateStats(currentAltitude);
+            
+            // Update visuals
+            updateVisuals(currentAltitude);
+            
+            // Show/hide milestones based on visibility
+            const milestoneElements = document.querySelectorAll('.milestone');
+            milestoneElements.forEach(element => {
+                const rect = element.getBoundingClientRect();
+                const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+                
+                if (isVisible) {
+                    element.classList.add('visible');
+                } else {
+                    element.classList.remove('visible');
+                }
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeCitySkyline();
+            initializeMilestones();
+            initializeStars();
+            initializeMountains();
+            initializeVisualElements();
+            handleScroll();
+            
+            // Add scroll listener with throttling
+            let scrollTimeout;
+            window.addEventListener('scroll', () => {
+                if (scrollTimeout) {
+                    window.cancelAnimationFrame(scrollTimeout);
+                }
+                scrollTimeout = window.requestAnimationFrame(handleScroll);
+            });
+        });
+    </script>
+</body>
+</html>
+

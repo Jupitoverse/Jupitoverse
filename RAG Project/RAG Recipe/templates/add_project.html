@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Project – RAG Recipe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="add-project-page">
+    <header class="app-header">
+        <nav class="header-nav">
+            <a href="/">Home</a>
+            <a href="/rag-recipe">RAG Recipe</a>
+            <a href="/add-project" class="active">Add Project</a>
+        </nav>
+    </header>
+    <main class="app-content add-project-content">
+        <h1>Add RAG Project</h1>
+        <p class="subtitle">Create project, upload documents first, then configure LLM, embedding, chunking, and build.</p>
+
+        <div class="steps-tabs" role="tablist">
+            <button type="button" class="step-tab active" data-step="name">1. Name</button>
+            <button type="button" class="step-tab" data-step="documents" aria-disabled="true">2. Documents</button>
+            <button type="button" class="step-tab" data-step="llm">3. LLM</button>
+            <button type="button" class="step-tab" data-step="embedding">4. Embedding</button>
+            <button type="button" class="step-tab" data-step="chunking">5. Chunking</button>
+            <button type="button" class="step-tab" data-step="build">6. Build</button>
+        </div>
+
+        <div class="step-panels">
+            <!-- Step 1: Name & Create -->
+            <section id="panel-name" class="step-panel active" role="tabpanel">
+                <h2>Project name</h2>
+                <p class="subtitle">Create the project first so you can upload documents.</p>
+                <div class="create-form">
+                    <label>Project name (used for chatbot):</label>
+                    <input type="text" id="project-name" placeholder="e.g. Operations KB" />
+                    <button type="button" id="btn-create-project" class="btn btn-primary">Create project</button>
+                </div>
+                <div id="create-result"></div>
+                <p id="next-hint" style="display:none; margin-top:1rem; color: var(--text-secondary);">Next: go to <strong>Documents</strong> and upload all files for RAG.</p>
+            </section>
+
+            <!-- Step 2: Documents (upload first) -->
+            <section id="panel-documents" class="step-panel" role="tabpanel">
+                <h2>Upload documents</h2>
+                <p class="subtitle">Upload all PDF, DOCX, or TXT files that will be used in RAG. You can open or download them from the list.</p>
+                <div id="doc-no-project" class="pros-cons" style="display:none;">Create a project in step 1 first.</div>
+                <div id="doc-upload-wrap" style="display:none;">
+                    <div class="doc-upload-zone" id="doc-drop-zone">
+                        <input type="file" id="doc-upload-input" multiple accept=".pdf,.docx,.txt" style="display:none" />
+                        <p><strong>Drop files here</strong> or <button type="button" class="btn btn-secondary" id="doc-upload-browse">Browse</button></p>
+                        <p style="font-size:0.9rem; color: var(--text-secondary); margin-top:0.5rem;">PDF, DOCX, TXT</p>
+                    </div>
+                    <h3>Uploaded files (open or download)</h3>
+                    <ul id="doc-file-list" class="doc-file-list"></ul>
+                </div>
+            </section>
+
+            <!-- Step 3: LLM -->
+            <section id="panel-llm" class="step-panel" role="tabpanel">
+                <h2>LLM Model</h2>
+                <div class="option-select-wrap">
+                    <label>LLM:</label>
+                    <select id="llm-select" class="option-select">
+                        <option value="ollama_qwen">Ollama Qwen (Local)</option>
+                        <option value="openai">OpenAI (API)</option>
+                    </select>
+                </div>
+                <div id="llm-pros-cons" class="pros-cons"></div>
+                <div id="llm-openai-keys" class="openai-keys-panel" style="display:none;">
+                    <label>API keys (tag + key; one per line)</label>
+                    <textarea id="openai-keys-text" rows="4" placeholder="Company A: sk-..."></textarea>
+                    <p class="hint">When one key hits ~$5 limit, the next is used.</p>
+                </div>
+            </section>
+
+            <!-- Step 4: Embedding -->
+            <section id="panel-embedding" class="step-panel" role="tabpanel">
+                <h2>Embedding Model</h2>
+                <div class="option-select-wrap">
+                    <label>Embedding:</label>
+                    <select id="embedding-select" class="option-select"></select>
+                </div>
+                <div id="embedding-pros-cons" class="pros-cons"></div>
+            </section>
+
+            <!-- Step 5: Chunking -->
+            <section id="panel-chunking" class="step-panel" role="tabpanel">
+                <h2>Chunking</h2>
+                <div class="chunking-controls">
+                    <div class="option-select-wrap">
+                        <label>Splitter:</label>
+                        <select id="splitter-select" class="option-select"></select>
+                    </div>
+                    <div class="chunk-param">
+                        <label>Chunk Size:</label>
+                        <input type="number" id="chunk-size" value="35" min="20" max="2000" />
+                        <input type="range" id="chunk-size-slider" min="20" max="200" value="35" />
+                    </div>
+                    <div class="chunk-param">
+                        <label>Chunk Overlap:</label>
+                        <input type="number" id="chunk-overlap" value="4" min="0" max="500" />
+                        <input type="range" id="chunk-overlap-slider" min="0" max="50" value="4" />
+                    </div>
+                </div>
+                <div id="chunking-pros-cons" class="pros-cons"></div>
+                <div class="chunking-metrics" id="chunking-metrics">
+                    <span>Total Characters: <strong id="metric-total-chars">0</strong></span>
+                    <span>Number of chunks: <strong id="metric-num-chunks">0</strong></span>
+                    <span>Average chunk size: <strong id="metric-avg-chunk">0</strong></span>
+                </div>
+                <div class="sample-text-wrap">
+                    <label>Sample text:</label>
+                    <textarea id="sample-text" rows="2">This is the text I would like to chunk up. It is the example text for this exercise.</textarea>
+                </div>
+                <div class="chunk-preview-wrap">
+                    <label>Preview:</label>
+                    <div id="chunk-preview-text" class="chunk-preview-text"></div>
+                    <div id="chunk-preview-labels" class="chunk-preview-labels"></div>
+                </div>
+            </section>
+
+            <!-- Step 6: Build RAG -->
+            <section id="panel-build" class="step-panel" role="tabpanel">
+                <h2>Build RAG</h2>
+                <p class="subtitle">Ingest uploaded documents into the vector store and finish.</p>
+                <button type="button" id="btn-build-rag" class="btn btn-primary">Build RAG & finish</button>
+                <div id="build-result"></div>
+            </section>
+        </div>
+    </main>
+    <script src="/static/js/add_project.js"></script>
+</body>
+</html>

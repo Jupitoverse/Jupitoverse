@@ -1,0 +1,945 @@
+{
+  "info": {
+    "_postman_id": "eed7ff37-cf64-4ae1-b353-184e1dcfe618",
+    "name": "ONI APIs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "30554853"
+  },
+  "item": [
+    {
+      "name": "Token",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n\"userID\": \"nap-admin-user\",\r\n\"password\" : \"Nap-admin-user1\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://oso.orion.comcast.com/dop/security/rest/loginservice/login",
+          "protocol": "https",
+          "host": [
+            "oso",
+            "orion",
+            "comcast",
+            "com"
+          ],
+          "path": [
+            "dop",
+            "security",
+            "rest",
+            "loginservice",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Find_CustomerId",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "PFVFTT5LPTxrZXk+LnN5c3RlbS5lbnYuZW5jcnlwdGlvbi4wO0M9MTcyNjU1NTIwMDUzNTtNPVh9Mm5JeXsweTZzMDVjSEI3akZSU2ZFNXlOWjhhelBTVDhzYU5GYWRkMnJjbmcwfUxTbnNtRU9ObWhQT3MydHgwOzwvVUVNPg==",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"retrievalBehaviour\": {\r\n        \"limit\": 1000,\r\n        \"returnRelatedObjects\": true,\r\n        \"historyLevel\": null,\r\n        \"valid\": true\r\n    },\r\n    \"criteria\": [\r\n        {\r\n            \"properties\": [\r\n                {\r\n                    \"name\": \"serviceCharacteristic.customerId\",\r\n                    \"op\": \"eq\",\r\n                    \"value\": \"130349369\",\r\n                    \"valid\": true\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://oni.orion.comcast.com/servo/api/service/findcrosscontext",
+          "protocol": "https",
+          "host": [
+            "oni",
+            "orion",
+            "comcast",
+            "com"
+          ],
+          "path": [
+            "servo",
+            "api",
+            "service",
+            "findcrosscontext"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Find_externalServiceId",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "PFVFTT5LPTxrZXk+LnN5c3RlbS5lbnYuZW5jcnlwdGlvbi4wO0M9MTcyNjU1NjA1MTI3MDtNPVh9Mm5JeXsweTZ2MU8zRzdJY3ZBeXdhZmtpWXhScDhKUGtmRHNid1N6a1ZXfVBOT1RoWE4zSVpYb0U3d2NpaHYwOzwvVUVNPg==",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"retrievalBehaviour\": {\r\n        \"limit\": 1000,\r\n        \"returnRelatedObjects\": true,\r\n        \"historyLevel\": null,\r\n        \"valid\": true\r\n    },\r\n    \"criteria\": [\r\n        {\r\n            \"properties\": [\r\n                {\r\n                    \"name\": \"externalServiceId\",\r\n                    \"op\": \"eq\",\r\n                    \"value\": \"88EB2CED79CB4D44BAF83C0944D35689\"\r\n                },\r\n                {\r\n                    \"name\": \"externalSystemId\",\r\n                    \"op\": \"eq\",\r\n                    \"value\": \"SOM\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://oni.orion.comcast.com/servo/api/service/findcrosscontext",
+          "protocol": "https",
+          "host": [
+            "oni",
+            "orion",
+            "comcast",
+            "com"
+          ],
+          "path": [
+            "servo",
+            "api",
+            "service",
+            "findcrosscontext"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Find_externalServiceId",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"retrievalBehaviour\": {\r\n        \"limit\": 1000,\r\n        \"returnRelatedObjects\": true,\r\n        \"historyLevel\": null,\r\n        \"valid\": true\r\n    },\r\n    \"criteria\": [\r\n        {\r\n            \"properties\": [\r\n                {\r\n                    \"name\": \"externalServiceId\",\r\n                    \"op\": \"eq\",\r\n                    \"value\": \"03A43DC9FDE842F096FA835B4B8D548E\"\r\n                },\r\n                {\r\n                    \"name\": \"externalSystemId\",\r\n                    \"op\": \"eq\",\r\n                    \"value\": \"SOM\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://oni.orion.comcast.com/servo/api/service/findcrosscontext",
+              "protocol": "https",
+              "host": [
+                "oni",
+                "orion",
+                "comcast",
+                "com"
+              ],
+              "path": [
+                "servo",
+                "api",
+                "service",
+                "findcrosscontext"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Date",
+              "value": "Fri, 01 Nov 2024 10:24:08 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "Expires",
+              "value": "0"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "1 ; mode=block"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"results\": {\n        \"ids\": [\n            \"a81a4c15-e7f7-4cc0-8620-9675c9b072f2\"\n        ],\n        \"services\": [\n            {\n                \"name\": \"03A43DC9FDE842F096FA835B4B8D548E:SOM\",\n                \"serviceType\": \"Ethernet\",\n                \"externalServiceId\": \"03A43DC9FDE842F096FA835B4B8D548E\",\n                \"externalSystemId\": \"SOM\",\n                \"category\": \"TAS\",\n                \"serviceSpecification\": {\n                    \"id\": \"3d662844-46cb-47eb-a74c-9fcb2a9a2b3b\",\n                    \"name\": \"r_p2p_block\",\n                    \"version\": \"29.0\",\n                    \"href\": \"https://master/tmf-api/serviceSpecification/3d662844-46cb-47eb-a74c-9fcb2a9a2b3b\"\n                },\n                \"serviceCharacteristic\": [\n                    {\n                        \"name\": \"marketType\",\n                        \"valueType\": \"integer\",\n                        \"value\": 590001\n                    },\n                    {\n                        \"name\": \"servicePartType\",\n                        \"valueType\": \"string\",\n                        \"value\": \"TAS\"\n                    },\n                    {\n                        \"name\": \"IP_Version\",\n                        \"valueType\": \"string\",\n                        \"value\": \"IPv6\"\n                    },\n                    {\n                        \"name\": \"isBestowed\",\n                        \"valueType\": \"string\",\n                        \"value\": \"0\"\n                    },\n                    {\n                        \"name\": \"managedServiceTypeName\",\n                        \"valueType\": \"string\",\n                        \"value\": \"Ethernet\"\n                    },\n                    {\n                        \"name\": \"offeringId\",\n                        \"valueType\": \"string\",\n                        \"value\": \"Static_IP\"\n                    },\n                    {\n                        \"name\": \"serviceSpecName\",\n                        \"valueType\": \"string\",\n                        \"value\": \"r_p2p_block\"\n                    },\n                    {\n                        \"name\": \"customerId\",\n                        \"valueType\": \"string\",\n                        \"value\": \"130396588\"\n                    },\n                    {\n                        \"name\": \"serviceType\",\n                        \"valueType\": \"string\",\n                        \"value\": \"r_p2p_block\"\n                    },\n                    {\n                        \"name\": \"productInstanceId\",\n                        \"valueType\": \"string\",\n                        \"value\": \"178166865\"\n                    },\n                    {\n                        \"name\": \"outputIpBlock\",\n                        \"valueType\": \"string\",\n                        \"value\": \"2001:559:84f5::2e8/126\"\n                    },\n                    {\n                        \"name\": \"customerName\",\n                        \"valueType\": \"string\",\n                        \"value\": \"Smile Doctors LLC\"\n                    }\n                ],\n                \"resourceReference\": [],\n                \"place\": [],\n                \"relatedParty\": [\n                    {\n                        \"id\": \"130396588\",\n                        \"name\": \"Smile Doctors LLC\"\n                    }\n                ],\n                \"id\": \"a81a4c15-e7f7-4cc0-8620-9675c9b072f2\",\n                \"href\": \"https://master/servo/api/plan/pending/service/a81a4c15-e7f7-4cc0-8620-9675c9b072f2\",\n                \"createdDate\": \"2022-09-29T13:49:03.134Z\",\n                \"lastModifiedDate\": \"2024-10-31T05:56:23.598Z\",\n                \"versionCreationDate\": \"2024-10-31T05:56:23.598Z\",\n                \"versionName\": \"03A43DC9FDE842F096FA835B4B8D548E:SOM - Pending Changes\",\n                \"patchVersion\": 1,\n                \"targetState\": \"active\",\n                \"currentService\": {\n                    \"name\": \"03A43DC9FDE842F096FA835B4B8D548E:SOM\",\n                    \"serviceType\": \"Ethernet\",\n                    \"externalServiceId\": \"03A43DC9FDE842F096FA835B4B8D548E\",\n                    \"externalSystemId\": \"SOM\",\n                    \"category\": \"TAS\",\n                    \"state\": \"active\",\n                    \"serviceSpecification\": {\n                        \"id\": \"3d662844-46cb-47eb-a74c-9fcb2a9a2b3b\",\n                        \"name\": \"r_p2p_block\",\n                        \"version\": \"29.0\",\n                        \"href\": \"https://master/tmf-api/serviceSpecification/3d662844-46cb-47eb-a74c-9fcb2a9a2b3b\"\n                    },\n                    \"serviceCharacteristic\": [\n                        {\n                            \"name\": \"marketType\",\n                            \"valueType\": \"integer\",\n                            \"value\": 590001\n                        },\n                        {\n                            \"name\": \"servicePartType\",\n                            \"valueType\": \"string\",\n                            \"value\": \"TAS\"\n                        },\n                        {\n                            \"name\": \"IP_Version\",\n                            \"valueType\": \"string\",\n                            \"value\": \"IPv6\"\n                        },\n                        {\n                            \"name\": \"isBestowed\",\n                            \"valueType\": \"string\",\n                            \"value\": \"0\"\n                        },\n                        {\n                            \"name\": \"managedServiceTypeName\",\n                            \"valueType\": \"string\",\n                            \"value\": \"Ethernet\"\n                        },\n                        {\n                            \"name\": \"offeringId\",\n                            \"valueType\": \"string\",\n                            \"value\": \"Static_IP\"\n                        },\n                        {\n                            \"name\": \"serviceSpecName\",\n                            \"valueType\": \"string\",\n                            \"value\": \"r_p2p_block\"\n                        },\n                        {\n                            \"name\": \"customerId\",\n                            \"valueType\": \"string\",\n                            \"value\": \"130396588\"\n                        },\n                        {\n                            \"name\": \"serviceType\",\n                            \"valueType\": \"string\",\n                            \"value\": \"r_p2p_block\"\n                        },\n                        {\n                            \"name\": \"productInstanceId\",\n                            \"valueType\": \"string\",\n                            \"value\": \"178166865\"\n                        },\n                        {\n                            \"name\": \"outputIpBlock\",\n                            \"valueType\": \"string\",\n                            \"value\": \"2001:559:800c:1900::7448/126\"\n                        },\n                        {\n                            \"name\": \"customerName\",\n                            \"valueType\": \"string\",\n                            \"value\": \"Smile Doctors LLC\"\n                        }\n                    ],\n                    \"resourceReference\": [],\n                    \"place\": [],\n                    \"relatedParty\": [\n                        {\n                            \"id\": \"130396588\",\n                            \"name\": \"Smile Doctors LLC\"\n                        }\n                    ],\n                    \"id\": \"a81a4c15-e7f7-4cc0-8620-9675c9b072f2\",\n                    \"href\": \"https://master/servo/api/service/a81a4c15-e7f7-4cc0-8620-9675c9b072f2\",\n                    \"createdDate\": \"2022-09-29T13:49:03.134Z\",\n                    \"activatedDate\": \"2022-10-21T08:42:51.517Z\",\n                    \"lastModifiedDate\": \"2023-07-11T16:40:05.276Z\",\n                    \"versionActivationDate\": \"2023-07-11T16:40:05.276Z\",\n                    \"versionName\": \"03A43DC9FDE842F096FA835B4B8D548E:SOM - 2 - Current\",\n                    \"version\": 2,\n                    \"context\": {\n                        \"temporal\": \"current\"\n                    },\n                    \"@type\": \"r_p2p_block\",\n                    \"@baseType\": \"RFS\",\n                    \"serviceRelationship\": [\n                        {\n                            \"relationshipType\": \"parent\",\n                            \"service\": {\n                                \"externalServiceId\": \"66F926F85368452A9603F1E1B7D8108F\",\n                                \"externalSystemId\": \"SOM\",\n                                \"id\": \"3ec99645-db47-4d49-9ed4-9eb6726489d7\",\n                                \"href\": \"https://master/servo/api/service/3ec99645-db47-4d49-9ed4-9eb6726489d7\",\n                                \"@type\": \"org.openecomp.service.CStaticRouting\"\n                            }\n                        }\n                    ],\n                    \"@class\": \"RFS\"\n                },\n                \"context\": {\n                    \"temporal\": \"future\"\n                },\n                \"@type\": \"r_p2p_block\",\n                \"@baseType\": \"RFS\",\n                \"serviceRelationship\": [\n                    {\n                        \"relationshipType\": \"parent\",\n                        \"service\": {\n                            \"externalServiceId\": \"66F926F85368452A9603F1E1B7D8108F\",\n                            \"externalSystemId\": \"SOM\",\n                            \"id\": \"3ec99645-db47-4d49-9ed4-9eb6726489d7\",\n                            \"href\": \"https://master/servo/api/plan/pending/service/3ec99645-db47-4d49-9ed4-9eb6726489d7\",\n                            \"@type\": \"org.openecomp.service.CStaticRouting\"\n                        }\n                    }\n                ],\n                \"@class\": \"RFS\"\n            },\n            {\n                \"name\": \"66F926F85368452A9603F1E1B7D8108F:SOM\",\n                \"serviceType\": \"Ethernet\",\n                \"externalServiceId\": \"66F926F85368452A9603F1E1B7D8108F\",\n                \"externalSystemId\": \"SOM\",\n                \"category\": \"CFS\",\n                \"state\": \"active\",\n                \"serviceSpecification\": {\n                    \"id\": \"a56269e4-3c19-404e-bbf4-5b9646b3c933\",\n                    \"name\": \"c_Static_Routing\",\n                    \"version\": \"29.0\",\n                    \"href\": \"https://master/tmf-api/serviceSpecification/a56269e4-3c19-404e-bbf4-5b9646b3c933\"\n                },\n                \"serviceCharacteristic\": [\n                    {\n                        \"name\": \"IP_Version\",\n                        \"valueType\": \"string\",\n                        \"value\": \"IPv6\"\n                    },\n                    {\n                        \"name\": \"managedServiceTypeName\",\n                        \"valueType\": \"string\",\n                        \"value\": \"Ethernet\"\n                    },\n                    {\n                        \"name\": \"offeringId\",\n                        \"valueType\": \"string\",\n                        \"value\": \"Static_IP\"\n                    },\n                    {\n                        \"name\": \"Service_Type\",\n                        \"valueType\": \"string\",\n                        \"value\": \"EDI\"\n                    },\n                    {\n                        \"name\": \"serviceSpecName\",\n                        \"valueType\": \"string\",\n                        \"value\": \"c_Static_Routing\"\n                    },\n                    {\n                        \"name\": \"marketType\",\n                        \"valueType\": \"integer\",\n                        \"value\": 590001\n                    },\n                    {\n                        \"name\": \"Solution_ID\",\n                        \"valueType\": \"string\",\n                        \"value\": \"1169646816\"\n                    },\n                    {\n                        \"name\": \"servicePartType\",\n                        \"valueType\": \"string\",\n                        \"value\": \"CFS\"\n                    },\n                    {\n                        \"name\": \"Service_ID\",\n                        \"valueType\": \"string\",\n                        \"value\": \"EVCE2442845\"\n                    },\n                    {\n                        \"name\": \"isBestowed\",\n                        \"valueType\": \"string\",\n                        \"value\": \"0\"\n                    },\n                    {\n                        \"name\": \"Block_Type\",\n                        \"valueType\": \"string\",\n                        \"value\": \"P2P\"\n                    },\n                    {\n                        \"name\": \"customerId\",\n                        \"valueType\": \"string\",\n                        \"value\": \"130396588\"\n                    },\n                    {\n                        \"name\": \"serviceType\",\n                        \"valueType\": \"string\",\n                        \"value\": \"c_Static_Routing\"\n                    },\n                    {\n                        \"name\": \"productInstanceId\",\n                        \"valueType\": \"string\",\n                        \"value\": \"178166865\"\n                    },\n                    {\n                        \"name\": \"Static_IP_Provider\",\n                        \"valueType\": \"string\",\n                        \"value\": \"Comcast\"\n                    },\n                    {\n                        \"name\": \"Static_IP_Quantity\",\n                        \"valueType\": \"string\",\n                        \"value\": \"/126\"\n                    },\n                    {\n                        \"name\": \"customerName\",\n                        \"valueType\": \"string\",\n                        \"value\": \"Smile Doctors LLC\"\n                    }\n                ],\n                \"resourceReference\": [],\n                \"place\": [],\n                \"relatedParty\": [\n                    {\n                        \"id\": \"130396588\",\n                        \"name\": \"Smile Doctors LLC\"\n                    }\n                ],\n                \"id\": \"3ec99645-db47-4d49-9ed4-9eb6726489d7\",\n                \"href\": \"https://master/servo/api/plan/pending/service/3ec99645-db47-4d49-9ed4-9eb6726489d7\",\n                \"createdDate\": \"2022-09-29T13:49:03.126Z\",\n                \"activatedDate\": \"2023-07-11T16:40:05.276Z\",\n                \"lastModifiedDate\": \"2023-07-11T16:40:05.276Z\",\n                \"versionActivationDate\": \"2023-07-11T16:40:05.276Z\",\n                \"versionName\": \"66F926F85368452A9603F1E1B7D8108F:SOM - 1 - Current\",\n                \"version\": 1,\n                \"context\": {\n                    \"temporal\": \"current\"\n                },\n                \"@type\": \"org.openecomp.service.CStaticRouting\",\n                \"@baseType\": \"nap.nodes.service.CFS\",\n                \"serviceRelationship\": [\n                    {\n                        \"relationshipType\": \"parent\",\n                        \"service\": {\n                            \"externalServiceId\": \"6FDA104C38054A65ADD217226C9BE4DA\",\n                            \"externalSystemId\": \"SOM\",\n                            \"id\": \"f53b24ad-f7f3-4b1a-b07a-0790b6880eab\",\n                            \"href\": \"https://master/servo/api/plan/pending/service/f53b24ad-f7f3-4b1a-b07a-0790b6880eab\",\n                            \"@type\": \"org.openecomp.service.CEvcEndpoint\"\n                        }\n                    },\n                    {\n                        \"relationshipType\": \"child\",\n                        \"service\": {\n                            \"externalServiceId\": \"6D203D08472E499092D693887763356A\",\n                            \"externalSystemId\": \"SOM\",\n                            \"id\": \"d9f434bc-b280-45a9-874a-3f955a7bffbf\",\n                            \"href\": \"https://master/servo/api/plan/pending/service/d9f434bc-b280-45a9-874a-3f955a7bffbf\",\n                            \"@type\": \"org.openecomp.service.RCustomerBrought\"\n                        }\n                    },\n                    {\n                        \"relationshipType\": \"child\",\n                        \"service\": {\n                            \"externalServiceId\": \"D0A638C327BB45DD90CB26E013BF0462\",\n                            \"externalSystemId\": \"SOM\",\n                            \"id\": \"10145325-57af-4630-8cb1-147aadcdb367\",\n                            \"href\": \"https://master/servo/api/plan/pending/service/10145325-57af-4630-8cb1-147aadcdb367\",\n                            \"@type\": \"org.openecomp.service.RAnycast\"\n                        }\n                    },\n                    {\n                        \"relationshipType\": \"child\",\n                        \"service\": {\n                            \"externalServiceId\": \"70FCF5821E89436C9B700D5F1FEA4456\",\n                            \"externalSystemId\": \"SOM\",\n                            \"id\": \"3f1d3850-b121-49a0-a43f-382bff83b9a0\",\n                            \"href\": \"https://master/servo/api/plan/pending/service/3f1d3850-b121-49a0-a43f-382bff83b9a0\",\n                            \"@type\": \"org.openecomp.service.RCustomerComcast\"\n                        }\n                    },\n                    {\n                        \"relationshipType\": \"child\",\n                        \"service\": {\n                            \"externalServiceId\": \"03A43DC9FDE842F096FA835B4B8D548E\",\n                            \"externalSystemId\": \"SOM\",\n                            \"id\": \"a81a4c15-e7f7-4cc0-8620-9675c9b072f2\",\n                            \"href\": \"https://master/servo/api/plan/pending/service/a81a4c15-e7f7-4cc0-8620-9675c9b072f2\",\n                            \"@type\": \"r_p2p_block\",\n                            \"@class\": \"RFS\"\n                        }\n                    }\n                ]\n            }\n        ]\n    },\n    \"resultsInformation\": {\n        \"limitExceeded\": false\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Find_externalServiceId- in current",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "PFVFTT5LPTxrZXk+LnN5c3RlbS5lbnYuZW5jcnlwdGlvbi4wO0M9MTcyNjU1NjA1MTI3MDtNPVh9Mm5JeXsweTZ2MU8zRzdJY3ZBeXdhZmtpWXhScDhKUGtmRHNid1N6a1ZXfVBOT1RoWE4zSVpYb0U3d2NpaHYwOzwvVUVNPg==",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"retrievalBehaviour\": {\r\n        \"limit\": 1000,\r\n        \"returnRelatedObjects\": true,\r\n        \"historyLevel\": null,\r\n        \"valid\": true\r\n    },\r\n    \"criteria\": [\r\n        {\r\n            \"properties\": [\r\n                {\r\n                    \"name\": \"externalServiceId\",\r\n                    \"op\": \"eq\",\r\n                    \"value\": \"88EB2CED79CB4D44BAF83C0944D35689\"\r\n                },\r\n                {\r\n                    \"name\": \"externalSystemId\",\r\n                    \"op\": \"eq\",\r\n                    \"value\": \"SOM\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://oni.orion.comcast.com/servo/api/service/findcrosscontext",
+          "protocol": "https",
+          "host": [
+            "oni",
+            "orion",
+            "comcast",
+            "com"
+          ],
+          "path": [
+            "servo",
+            "api",
+            "service",
+            "findcrosscontext"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Find_externalServiceId",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"retrievalBehaviour\": {\r\n        \"limit\": 1000,\r\n        \"returnRelatedObjects\": true,\r\n        \"historyLevel\": null,\r\n        \"valid\": true\r\n    },\r\n    \"criteria\": [\r\n        {\r\n            \"properties\": [\r\n                {\r\n                    \"name\": \"externalServiceId\",\r\n                    \"op\": \"eq\",\r\n                    \"value\": \"03A43DC9FDE842F096FA835B4B8D548E\"\r\n                },\r\n                {\r\n                    \"name\": \"externalSystemId\",\r\n                    \"op\": \"eq\",\r\n                    \"value\": \"SOM\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://oni.orion.comcast.com/servo/api/service/findcrosscontext",
+              "protocol": "https",
+              "host": [
+                "oni",
+                "orion",
+                "comcast",
+                "com"
+              ],
+              "path": [
+                "servo",
+                "api",
+                "service",
+                "findcrosscontext"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Date",
+              "value": "Fri, 01 Nov 2024 10:24:08 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "Expires",
+              "value": "0"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "1 ; mode=block"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"results\": {\n        \"ids\": [\n            \"a81a4c15-e7f7-4cc0-8620-9675c9b072f2\"\n        ],\n        \"services\": [\n            {\n                \"name\": \"03A43DC9FDE842F096FA835B4B8D548E:SOM\",\n                \"serviceType\": \"Ethernet\",\n                \"externalServiceId\": \"03A43DC9FDE842F096FA835B4B8D548E\",\n                \"externalSystemId\": \"SOM\",\n                \"category\": \"TAS\",\n                \"serviceSpecification\": {\n                    \"id\": \"3d662844-46cb-47eb-a74c-9fcb2a9a2b3b\",\n                    \"name\": \"r_p2p_block\",\n                    \"version\": \"29.0\",\n                    \"href\": \"https://master/tmf-api/serviceSpecification/3d662844-46cb-47eb-a74c-9fcb2a9a2b3b\"\n                },\n                \"serviceCharacteristic\": [\n                    {\n                        \"name\": \"marketType\",\n                        \"valueType\": \"integer\",\n                        \"value\": 590001\n                    },\n                    {\n                        \"name\": \"servicePartType\",\n                        \"valueType\": \"string\",\n                        \"value\": \"TAS\"\n                    },\n                    {\n                        \"name\": \"IP_Version\",\n                        \"valueType\": \"string\",\n                        \"value\": \"IPv6\"\n                    },\n                    {\n                        \"name\": \"isBestowed\",\n                        \"valueType\": \"string\",\n                        \"value\": \"0\"\n                    },\n                    {\n                        \"name\": \"managedServiceTypeName\",\n                        \"valueType\": \"string\",\n                        \"value\": \"Ethernet\"\n                    },\n                    {\n                        \"name\": \"offeringId\",\n                        \"valueType\": \"string\",\n                        \"value\": \"Static_IP\"\n                    },\n                    {\n                        \"name\": \"serviceSpecName\",\n                        \"valueType\": \"string\",\n                        \"value\": \"r_p2p_block\"\n                    },\n                    {\n                        \"name\": \"customerId\",\n                        \"valueType\": \"string\",\n                        \"value\": \"130396588\"\n                    },\n                    {\n                        \"name\": \"serviceType\",\n                        \"valueType\": \"string\",\n                        \"value\": \"r_p2p_block\"\n                    },\n                    {\n                        \"name\": \"productInstanceId\",\n                        \"valueType\": \"string\",\n                        \"value\": \"178166865\"\n                    },\n                    {\n                        \"name\": \"outputIpBlock\",\n                        \"valueType\": \"string\",\n                        \"value\": \"2001:559:84f5::2e8/126\"\n                    },\n                    {\n                        \"name\": \"customerName\",\n                        \"valueType\": \"string\",\n                        \"value\": \"Smile Doctors LLC\"\n                    }\n                ],\n                \"resourceReference\": [],\n                \"place\": [],\n                \"relatedParty\": [\n                    {\n                        \"id\": \"130396588\",\n                        \"name\": \"Smile Doctors LLC\"\n                    }\n                ],\n                \"id\": \"a81a4c15-e7f7-4cc0-8620-9675c9b072f2\",\n                \"href\": \"https://master/servo/api/plan/pending/service/a81a4c15-e7f7-4cc0-8620-9675c9b072f2\",\n                \"createdDate\": \"2022-09-29T13:49:03.134Z\",\n                \"lastModifiedDate\": \"2024-10-31T05:56:23.598Z\",\n                \"versionCreationDate\": \"2024-10-31T05:56:23.598Z\",\n                \"versionName\": \"03A43DC9FDE842F096FA835B4B8D548E:SOM - Pending Changes\",\n                \"patchVersion\": 1,\n                \"targetState\": \"active\",\n                \"currentService\": {\n                    \"name\": \"03A43DC9FDE842F096FA835B4B8D548E:SOM\",\n                    \"serviceType\": \"Ethernet\",\n                    \"externalServiceId\": \"03A43DC9FDE842F096FA835B4B8D548E\",\n                    \"externalSystemId\": \"SOM\",\n                    \"category\": \"TAS\",\n                    \"state\": \"active\",\n                    \"serviceSpecification\": {\n                        \"id\": \"3d662844-46cb-47eb-a74c-9fcb2a9a2b3b\",\n                        \"name\": \"r_p2p_block\",\n                        \"version\": \"29.0\",\n                        \"href\": \"https://master/tmf-api/serviceSpecification/3d662844-46cb-47eb-a74c-9fcb2a9a2b3b\"\n                    },\n                    \"serviceCharacteristic\": [\n                        {\n                            \"name\": \"marketType\",\n                            \"valueType\": \"integer\",\n                            \"value\": 590001\n                        },\n                        {\n                            \"name\": \"servicePartType\",\n                            \"valueType\": \"string\",\n                            \"value\": \"TAS\"\n                        },\n                        {\n                            \"name\": \"IP_Version\",\n                            \"valueType\": \"string\",\n                            \"value\": \"IPv6\"\n                        },\n                        {\n                            \"name\": \"isBestowed\",\n                            \"valueType\": \"string\",\n                            \"value\": \"0\"\n                        },\n                        {\n                            \"name\": \"managedServiceTypeName\",\n                            \"valueType\": \"string\",\n                            \"value\": \"Ethernet\"\n                        },\n                        {\n                            \"name\": \"offeringId\",\n                            \"valueType\": \"string\",\n                            \"value\": \"Static_IP\"\n                        },\n                        {\n                            \"name\": \"serviceSpecName\",\n                            \"valueType\": \"string\",\n                            \"value\": \"r_p2p_block\"\n                        },\n                        {\n                            \"name\": \"customerId\",\n                            \"valueType\": \"string\",\n                            \"value\": \"130396588\"\n                        },\n                        {\n                            \"name\": \"serviceType\",\n                            \"valueType\": \"string\",\n                            \"value\": \"r_p2p_block\"\n                        },\n                        {\n                            \"name\": \"productInstanceId\",\n                            \"valueType\": \"string\",\n                            \"value\": \"178166865\"\n                        },\n                        {\n                            \"name\": \"outputIpBlock\",\n                            \"valueType\": \"string\",\n                            \"value\": \"2001:559:800c:1900::7448/126\"\n                        },\n                        {\n                            \"name\": \"customerName\",\n                            \"valueType\": \"string\",\n                            \"value\": \"Smile Doctors LLC\"\n                        }\n                    ],\n                    \"resourceReference\": [],\n                    \"place\": [],\n                    \"relatedParty\": [\n                        {\n                            \"id\": \"130396588\",\n                            \"name\": \"Smile Doctors LLC\"\n                        }\n                    ],\n                    \"id\": \"a81a4c15-e7f7-4cc0-8620-9675c9b072f2\",\n                    \"href\": \"https://master/servo/api/service/a81a4c15-e7f7-4cc0-8620-9675c9b072f2\",\n                    \"createdDate\": \"2022-09-29T13:49:03.134Z\",\n                    \"activatedDate\": \"2022-10-21T08:42:51.517Z\",\n                    \"lastModifiedDate\": \"2023-07-11T16:40:05.276Z\",\n                    \"versionActivationDate\": \"2023-07-11T16:40:05.276Z\",\n                    \"versionName\": \"03A43DC9FDE842F096FA835B4B8D548E:SOM - 2 - Current\",\n                    \"version\": 2,\n                    \"context\": {\n                        \"temporal\": \"current\"\n                    },\n                    \"@type\": \"r_p2p_block\",\n                    \"@baseType\": \"RFS\",\n                    \"serviceRelationship\": [\n                        {\n                            \"relationshipType\": \"parent\",\n                            \"service\": {\n                                \"externalServiceId\": \"66F926F85368452A9603F1E1B7D8108F\",\n                                \"externalSystemId\": \"SOM\",\n                                \"id\": \"3ec99645-db47-4d49-9ed4-9eb6726489d7\",\n                                \"href\": \"https://master/servo/api/service/3ec99645-db47-4d49-9ed4-9eb6726489d7\",\n                                \"@type\": \"org.openecomp.service.CStaticRouting\"\n                            }\n                        }\n                    ],\n                    \"@class\": \"RFS\"\n                },\n                \"context\": {\n                    \"temporal\": \"future\"\n                },\n                \"@type\": \"r_p2p_block\",\n                \"@baseType\": \"RFS\",\n                \"serviceRelationship\": [\n                    {\n                        \"relationshipType\": \"parent\",\n                        \"service\": {\n                            \"externalServiceId\": \"66F926F85368452A9603F1E1B7D8108F\",\n                            \"externalSystemId\": \"SOM\",\n                            \"id\": \"3ec99645-db47-4d49-9ed4-9eb6726489d7\",\n                            \"href\": \"https://master/servo/api/plan/pending/service/3ec99645-db47-4d49-9ed4-9eb6726489d7\",\n                            \"@type\": \"org.openecomp.service.CStaticRouting\"\n                        }\n                    }\n                ],\n                \"@class\": \"RFS\"\n            },\n            {\n                \"name\": \"66F926F85368452A9603F1E1B7D8108F:SOM\",\n                \"serviceType\": \"Ethernet\",\n                \"externalServiceId\": \"66F926F85368452A9603F1E1B7D8108F\",\n                \"externalSystemId\": \"SOM\",\n                \"category\": \"CFS\",\n                \"state\": \"active\",\n                \"serviceSpecification\": {\n                    \"id\": \"a56269e4-3c19-404e-bbf4-5b9646b3c933\",\n                    \"name\": \"c_Static_Routing\",\n                    \"version\": \"29.0\",\n                    \"href\": \"https://master/tmf-api/serviceSpecification/a56269e4-3c19-404e-bbf4-5b9646b3c933\"\n                },\n                \"serviceCharacteristic\": [\n                    {\n                        \"name\": \"IP_Version\",\n                        \"valueType\": \"string\",\n                        \"value\": \"IPv6\"\n                    },\n                    {\n                        \"name\": \"managedServiceTypeName\",\n                        \"valueType\": \"string\",\n                        \"value\": \"Ethernet\"\n                    },\n                    {\n                        \"name\": \"offeringId\",\n                        \"valueType\": \"string\",\n                        \"value\": \"Static_IP\"\n                    },\n                    {\n                        \"name\": \"Service_Type\",\n                        \"valueType\": \"string\",\n                        \"value\": \"EDI\"\n                    },\n                    {\n                        \"name\": \"serviceSpecName\",\n                        \"valueType\": \"string\",\n                        \"value\": \"c_Static_Routing\"\n                    },\n                    {\n                        \"name\": \"marketType\",\n                        \"valueType\": \"integer\",\n                        \"value\": 590001\n                    },\n                    {\n                        \"name\": \"Solution_ID\",\n                        \"valueType\": \"string\",\n                        \"value\": \"1169646816\"\n                    },\n                    {\n                        \"name\": \"servicePartType\",\n                        \"valueType\": \"string\",\n                        \"value\": \"CFS\"\n                    },\n                    {\n                        \"name\": \"Service_ID\",\n                        \"valueType\": \"string\",\n                        \"value\": \"EVCE2442845\"\n                    },\n                    {\n                        \"name\": \"isBestowed\",\n                        \"valueType\": \"string\",\n                        \"value\": \"0\"\n                    },\n                    {\n                        \"name\": \"Block_Type\",\n                        \"valueType\": \"string\",\n                        \"value\": \"P2P\"\n                    },\n                    {\n                        \"name\": \"customerId\",\n                        \"valueType\": \"string\",\n                        \"value\": \"130396588\"\n                    },\n                    {\n                        \"name\": \"serviceType\",\n                        \"valueType\": \"string\",\n                        \"value\": \"c_Static_Routing\"\n                    },\n                    {\n                        \"name\": \"productInstanceId\",\n                        \"valueType\": \"string\",\n                        \"value\": \"178166865\"\n                    },\n                    {\n                        \"name\": \"Static_IP_Provider\",\n                        \"valueType\": \"string\",\n                        \"value\": \"Comcast\"\n                    },\n                    {\n                        \"name\": \"Static_IP_Quantity\",\n                        \"valueType\": \"string\",\n                        \"value\": \"/126\"\n                    },\n                    {\n                        \"name\": \"customerName\",\n                        \"valueType\": \"string\",\n                        \"value\": \"Smile Doctors LLC\"\n                    }\n                ],\n                \"resourceReference\": [],\n                \"place\": [],\n                \"relatedParty\": [\n                    {\n                        \"id\": \"130396588\",\n                        \"name\": \"Smile Doctors LLC\"\n                    }\n                ],\n                \"id\": \"3ec99645-db47-4d49-9ed4-9eb6726489d7\",\n                \"href\": \"https://master/servo/api/plan/pending/service/3ec99645-db47-4d49-9ed4-9eb6726489d7\",\n                \"createdDate\": \"2022-09-29T13:49:03.126Z\",\n                \"activatedDate\": \"2023-07-11T16:40:05.276Z\",\n                \"lastModifiedDate\": \"2023-07-11T16:40:05.276Z\",\n                \"versionActivationDate\": \"2023-07-11T16:40:05.276Z\",\n                \"versionName\": \"66F926F85368452A9603F1E1B7D8108F:SOM - 1 - Current\",\n                \"version\": 1,\n                \"context\": {\n                    \"temporal\": \"current\"\n                },\n                \"@type\": \"org.openecomp.service.CStaticRouting\",\n                \"@baseType\": \"nap.nodes.service.CFS\",\n                \"serviceRelationship\": [\n                    {\n                        \"relationshipType\": \"parent\",\n                        \"service\": {\n                            \"externalServiceId\": \"6FDA104C38054A65ADD217226C9BE4DA\",\n                            \"externalSystemId\": \"SOM\",\n                            \"id\": \"f53b24ad-f7f3-4b1a-b07a-0790b6880eab\",\n                            \"href\": \"https://master/servo/api/plan/pending/service/f53b24ad-f7f3-4b1a-b07a-0790b6880eab\",\n                            \"@type\": \"org.openecomp.service.CEvcEndpoint\"\n                        }\n                    },\n                    {\n                        \"relationshipType\": \"child\",\n                        \"service\": {\n                            \"externalServiceId\": \"6D203D08472E499092D693887763356A\",\n                            \"externalSystemId\": \"SOM\",\n                            \"id\": \"d9f434bc-b280-45a9-874a-3f955a7bffbf\",\n                            \"href\": \"https://master/servo/api/plan/pending/service/d9f434bc-b280-45a9-874a-3f955a7bffbf\",\n                            \"@type\": \"org.openecomp.service.RCustomerBrought\"\n                        }\n                    },\n                    {\n                        \"relationshipType\": \"child\",\n                        \"service\": {\n                            \"externalServiceId\": \"D0A638C327BB45DD90CB26E013BF0462\",\n                            \"externalSystemId\": \"SOM\",\n                            \"id\": \"10145325-57af-4630-8cb1-147aadcdb367\",\n                            \"href\": \"https://master/servo/api/plan/pending/service/10145325-57af-4630-8cb1-147aadcdb367\",\n                            \"@type\": \"org.openecomp.service.RAnycast\"\n                        }\n                    },\n                    {\n                        \"relationshipType\": \"child\",\n                        \"service\": {\n                            \"externalServiceId\": \"70FCF5821E89436C9B700D5F1FEA4456\",\n                            \"externalSystemId\": \"SOM\",\n                            \"id\": \"3f1d3850-b121-49a0-a43f-382bff83b9a0\",\n                            \"href\": \"https://master/servo/api/plan/pending/service/3f1d3850-b121-49a0-a43f-382bff83b9a0\",\n                            \"@type\": \"org.openecomp.service.RCustomerComcast\"\n                        }\n                    },\n                    {\n                        \"relationshipType\": \"child\",\n                        \"service\": {\n                            \"externalServiceId\": \"03A43DC9FDE842F096FA835B4B8D548E\",\n                            \"externalSystemId\": \"SOM\",\n                            \"id\": \"a81a4c15-e7f7-4cc0-8620-9675c9b072f2\",\n                            \"href\": \"https://master/servo/api/plan/pending/service/a81a4c15-e7f7-4cc0-8620-9675c9b072f2\",\n                            \"@type\": \"r_p2p_block\",\n                            \"@class\": \"RFS\"\n                        }\n                    }\n                ]\n            }\n        ]\n    },\n    \"resultsInformation\": {\n        \"limitExceeded\": false\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Find_ProductID",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"retrievalBehaviour\": {\r\n        \"limit\": 1000,\r\n        \"returnRelatedObjects\": true,\r\n        \"historyLevel\": null,\r\n        \"valid\": true\r\n    },\r\n    \"criteria\": [\r\n        {\r\n            \"properties\": [\r\n                {\r\n                    \"name\": \"serviceCharacteristic.productInstanceId\",\r\n                    \"op\": \"eq\",\r\n                    \"value\": \"IProductAgreementItemInsatnce_1846478\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://oni.orion.comcast.com/servo/api/service/findcrosscontext",
+          "protocol": "https",
+          "host": [
+            "oni",
+            "orion",
+            "comcast",
+            "com"
+          ],
+          "path": [
+            "servo",
+            "api",
+            "service",
+            "findcrosscontext"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Find_ProductID Copy",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"retrievalBehaviour\": {\r\n        \"limit\": 1000,\r\n        \"returnRelatedObjects\": true,\r\n        \"historyLevel\": null,\r\n        \"valid\": true\r\n    },\r\n    \"criteria\": [\r\n        {\r\n            \"properties\": [\r\n                {\r\n                    \"name\": \"serviceCharacteristic.productInstanceId\",\r\n                    \"op\": \"eq\",\r\n                    \"value\": \"IProductAgreementItemInsatnce_1846478\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://oni.orion.comcast.com/servo/api/service/findcrosscontext",
+          "protocol": "https",
+          "host": [
+            "oni",
+            "orion",
+            "comcast",
+            "com"
+          ],
+          "path": [
+            "servo",
+            "api",
+            "service",
+            "findcrosscontext"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Find_SiteID",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"retrievalBehaviour\": {\r\n        \"limit\": 1000,\r\n        \"returnRelatedObjects\": true,\r\n        \"historyLevel\": null,\r\n        \"valid\": true\r\n    },\r\n    \"criteria\": [\r\n        {\r\n            \"properties\": [\r\n                {\r\n                    \"name\": \"serviceCharacteristic.productInstanceId\",\r\n                    \"op\": \"eq\",\r\n                    \"value\": \"IProductAgreementItemInsatnce_1846478\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://oni.orion.comcast.com/servo/api/service/findcrosscontext",
+          "protocol": "https",
+          "host": [
+            "oni",
+            "orion",
+            "comcast",
+            "com"
+          ],
+          "path": [
+            "servo",
+            "api",
+            "service",
+            "findcrosscontext"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get from CID",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "PFVFTT5LPTxrZXk+LnN5c3RlbS5lbnYuZW5jcnlwdGlvbi4wO0M9MTY5NTEyNDg5OTk5ODtNPVh9Mm5JeXsweTZzWGV2aUxxRGxHQ2dNWFBNUm9QTUxBeVQ0NlZvdUdCM200QW80c3drR1p5V0xTRXBMQnZpOH0wOzwvVUVNPg==",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://oni.orion.comcast.com/tmf-api/serviceInventoryManagement/v1/service?serviceCharacteristic.name=customerId&serviceCharacteristic.value=130349369",
+          "protocol": "https",
+          "host": [
+            "oni",
+            "orion",
+            "comcast",
+            "com"
+          ],
+          "path": [
+            "tmf-api",
+            "serviceInventoryManagement",
+            "v1",
+            "service"
+          ],
+          "query": [
+            {
+              "key": "serviceCharacteristic.name",
+              "value": "customerId"
+            },
+            {
+              "key": "serviceCharacteristic.value",
+              "value": "130349369"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Clips SLD Api",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "PFVFTT5LPTxrZXk+LnN5c3RlbS5lbnYuZW5jcnlwdGlvbi4wO0M9MTY5NTEyNDg5OTk5ODtNPVh9Mm5JeXsweTZzWGV2aUxxRGxHQ2dNWFBNUm9QTUxBeVQ0NlZvdUdCM200QW80c3drR1p5V0xTRXBMQnZpOH0wOzwvVUVNPg==",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://oni.orion.comcast.com/tmf-api/serviceInventoryManagement/v1/service?serviceCharacteristic.name=customerId&serviceCharacteristic.value=130349369",
+          "protocol": "https",
+          "host": [
+            "oni",
+            "orion",
+            "comcast",
+            "com"
+          ],
+          "path": [
+            "tmf-api",
+            "serviceInventoryManagement",
+            "v1",
+            "service"
+          ],
+          "query": [
+            {
+              "key": "serviceCharacteristic.name",
+              "value": "customerId"
+            },
+            {
+              "key": "serviceCharacteristic.value",
+              "value": "130349369"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get from USM ServiceId",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "PFVFTT5LPTxrZXk+LnN5c3RlbS5lbnYuZW5jcnlwdGlvbi4wO0M9MTY5NTEyNDg5OTk5ODtNPVh9Mm5JeXsweTZzWGV2aUxxRGxHQ2dNWFBNUm9QTUxBeVQ0NlZvdUdCM200QW80c3drR1p5V0xTRXBMQnZpOH0wOzwvVUVNPg==",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://oni.orion.comcast.com/tmf-api/serviceInventoryManagement/v1/service?name=USM Service_2603018",
+          "protocol": "https",
+          "host": [
+            "oni",
+            "orion",
+            "comcast",
+            "com"
+          ],
+          "path": [
+            "tmf-api",
+            "serviceInventoryManagement",
+            "v1",
+            "service"
+          ],
+          "query": [
+            {
+              "key": "name",
+              "value": "USM Service_2603018"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get from Id",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "PFVFTT5LPTxrZXk+LnN5c3RlbS5lbnYuZW5jcnlwdGlvbi4wO0M9MTY5NTEyNDg5OTk5ODtNPVh9Mm5JeXsweTZzWGV2aUxxRGxHQ2dNWFBNUm9QTUxBeVQ0NlZvdUdCM200QW80c3drR1p5V0xTRXBMQnZpOH0wOzwvVUVNPg==",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://oni.orion.comcast.com/tmf-api/serviceInventoryManagement/v1/service/e59468ae-82bf-4120-879a-356b568bf25d",
+          "protocol": "https",
+          "host": [
+            "oni",
+            "orion",
+            "comcast",
+            "com"
+          ],
+          "path": [
+            "tmf-api",
+            "serviceInventoryManagement",
+            "v1",
+            "service",
+            "e59468ae-82bf-4120-879a-356b568bf25d"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "API to CREATE Service",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "PFVFTT5LPTxrZXk+LnN5c3RlbS5lbnYuZW5jcnlwdGlvbi4wO0M9MTY5NTEyNDg5OTk5ODtNPVh9Mm5JeXsweTZzWGV2aUxxRGxHQ2dNWFBNUm9QTUxBeVQ0NlZvdUdCM200QW80c3drR1p5V0xTRXBMQnZpOH0wOzwvVUVNPg==",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "[\r\n  {\r\n    \"op\": \"create\",\r\n    \"path\": \"/service\",\r\n    \"value\": {\r\n\r\n                \"name\": \"0C70C9A3365E4C15B7A8DAE6A29BD678:SOM\",\r\n                \"serviceType\": \"MEF_Services\",\r\n                \"externalServiceId\": \"0C70C9A3365E4C15B7A8DAE6A29BD678\",\r\n                \"externalSystemId\": \"SOM\",\r\n                \"category\": \"TAS\",\r\n                \"state\": \"active\",\r\n                \"serviceSpecification\": {\r\n                    \"name\": \"r_modify_serv_topology\"\r\n                },\r\n                \"serviceCharacteristic\": [\r\n                    {\r\n                \"name\": \"managedServiceTypeName\",\r\n               \"valueType\": \"string\",\r\n                \"value\": \"Ethernet\"\r\n            },\r\n            {\r\n                \"name\": \"offeringId\",\r\n                \"valueType\": \"string\",\r\n                \"value\": \"Equipment\"\r\n            },\r\n\r\n            {\r\n                \"name\": \"serviceSpecName\",\r\n                \"valueType\": \"string\",\r\n                \"value\": \"r_modify_serv_topology\"\r\n            },\r\n\r\n            {\r\n                \"name\": \"marketType\",\r\n                \"valueType\": \"integer\",\r\n               \"value\": 590001\r\n            },\r\n\r\n            {\r\n                \"name\": \"servicePartType\",\r\n                \"valueType\": \"string\",\r\n                \"value\": \"TAS\"\r\n            },\r\n            {\r\n                \"name\": \"isBestowed\",\r\n                \"valueType\": \"string\",\r\n                \"value\": \"0\"\r\n            },\r\n\r\n            {\r\n                \"name\": \"customerId\",\r\n                \"valueType\": \"string\",\r\n                \"value\": \"130329089\"\r\n            },\r\n            {\r\n                \"name\": \"serviceType\",\r\n                \"valueType\": \"string\",\r\n                \"value\": \"r_modify_serv_topology\"\r\n            },\r\n            {\r\n                \"name\": \"productInstanceId\",\r\n                \"valueType\": \"string\",\r\n                \"value\": \"IProductAgreementItemInstance_1780093\"\r\n            },\r\n            {\r\n                \"name\": \"customerName\",\r\n                \"valueType\": \"string\",\r\n                \"value\": \"New Home Media\"\r\n            }\r\n\r\n                ],\r\n                \"resourceReference\": [],\r\n                \"place\": [],\r\n                \"relatedParty\": [],\r\n                \"serviceRelationship\": [{\r\n                    \"relationshipType\": \"parent\",\r\n                    \"service\": {\r\n                        \"externalServiceId\": \"403537EC0077438C8168935D737DDFC8\",\r\n                        \"externalSystemId\": \"SOM\"\r\n                    }\r\n                }]\r\n    }\r\n  }\r\n]",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://oni.orion.comcast.com/servo/api/serviceManagement/bulk",
+          "protocol": "https",
+          "host": [
+            "oni",
+            "orion",
+            "comcast",
+            "com"
+          ],
+          "path": [
+            "servo",
+            "api",
+            "serviceManagement",
+            "bulk"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "API to CREATE Service Copy",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "PFVFTT5LPTxrZXk+LnN5c3RlbS5lbnYuZW5jcnlwdGlvbi4wO0M9MTY5NTEyNDg5OTk5ODtNPVh9Mm5JeXsweTZzWGV2aUxxRGxHQ2dNWFBNUm9QTUxBeVQ0NlZvdUdCM200QW80c3drR1p5V0xTRXBMQnZpOH0wOzwvVUVNPg==",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "[\r\n  {\r\n    \"op\": \"create\",\r\n    \"path\": \"/service\",\r\n    \"value\": {\r\n\r\n                \"name\": \"0C70C9A3365E4C15B7A8DAE6A29BD678:SOM\",\r\n                \"serviceType\": \"MEF_Services\",\r\n                \"externalServiceId\": \"0C70C9A3365E4C15B7A8DAE6A29BD678\",\r\n                \"externalSystemId\": \"SOM\",\r\n                \"category\": \"TAS\",\r\n                \"state\": \"active\",\r\n                \"serviceSpecification\": {\r\n                    \"name\": \"r_modify_serv_topology\"\r\n                },\r\n                \"serviceCharacteristic\": [\r\n                    {\r\n                \"name\": \"managedServiceTypeName\",\r\n               \"valueType\": \"string\",\r\n                \"value\": \"Ethernet\"\r\n            },\r\n            {\r\n                \"name\": \"offeringId\",\r\n                \"valueType\": \"string\",\r\n                \"value\": \"Equipment\"\r\n            },\r\n\r\n            {\r\n                \"name\": \"serviceSpecName\",\r\n                \"valueType\": \"string\",\r\n                \"value\": \"r_modify_serv_topology\"\r\n            },\r\n\r\n            {\r\n                \"name\": \"marketType\",\r\n                \"valueType\": \"integer\",\r\n               \"value\": 590001\r\n            },\r\n\r\n            {\r\n                \"name\": \"servicePartType\",\r\n                \"valueType\": \"string\",\r\n                \"value\": \"TAS\"\r\n            },\r\n            {\r\n                \"name\": \"isBestowed\",\r\n                \"valueType\": \"string\",\r\n                \"value\": \"0\"\r\n            },\r\n\r\n            {\r\n                \"name\": \"customerId\",\r\n                \"valueType\": \"string\",\r\n                \"value\": \"130329089\"\r\n            },\r\n            {\r\n                \"name\": \"serviceType\",\r\n                \"valueType\": \"string\",\r\n                \"value\": \"r_modify_serv_topology\"\r\n            },\r\n            {\r\n                \"name\": \"productInstanceId\",\r\n                \"valueType\": \"string\",\r\n                \"value\": \"IProductAgreementItemInstance_1780093\"\r\n            },\r\n            {\r\n                \"name\": \"customerName\",\r\n                \"valueType\": \"string\",\r\n                \"value\": \"New Home Media\"\r\n            }\r\n\r\n                ],\r\n                \"resourceReference\": [],\r\n                \"place\": [],\r\n                \"relatedParty\": [],\r\n                \"serviceRelationship\": [{\r\n                    \"relationshipType\": \"parent\",\r\n                    \"service\": {\r\n                        \"externalServiceId\": \"403537EC0077438C8168935D737DDFC8\",\r\n                        \"externalSystemId\": \"SOM\"\r\n                    }\r\n                }]\r\n    }\r\n  }\r\n]",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://oni.orion.comcast.com/servo/api/serviceManagement/bulk",
+          "protocol": "https",
+          "host": [
+            "oni",
+            "orion",
+            "comcast",
+            "com"
+          ],
+          "path": [
+            "servo",
+            "api",
+            "serviceManagement",
+            "bulk"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Modify Service",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {
+          "content-type": true
+        }
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "PFVFTT5LPTxrZXk+LnN5c3RlbS5lbnYuZW5jcnlwdGlvbi4wO0M9MTcwMTc4MTA4MTgyMDtNPVh9Mm5JeXsweTZ2aVRpVEVtT2xmVW13UmNPcms4YmpZcDZQdE9Gck9hWEtUMTNIeFBTNzhCYkJJcFdQSUlkZXEwOzwvVUVNPg==",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json-patch+json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "[\r\n    {\r\n        \"op\": \"replace\",\r\n        \"path\": \"/plan/pending/service?externalSystemId=SOM&externalServiceId=115_16042021_MIG_0898359124\",\r\n        \"value\": {\r\n            \"serviceCharacteristic\": [\r\n                    {\r\n                        \"name\": \"IP_Version\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"IPv4\"\r\n                    },\r\n                    {\r\n                        \"name\": \"managedServiceTypeName\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"Ethernet\"\r\n                    },\r\n                    {\r\n                        \"name\": \"offeringId\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"Static_IP\"\r\n                    },\r\n                    {\r\n                        \"name\": \"serviceSpecName\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"r_p2p_block\"\r\n                    },\r\n                    {\r\n                        \"name\": \"marketType\",\r\n                        \"valueType\": \"integer\",\r\n                        \"value\": 590001\r\n                    },\r\n                    {\r\n                        \"name\": \"servicePartType\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"TAS\"\r\n                    },\r\n                    {\r\n                        \"name\": \"service_spec_version\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"1\"\r\n                    },\r\n                    {\r\n                        \"name\": \"service_spec_id\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"r_p2p_block\"\r\n                    },\r\n                    {\r\n                        \"name\": \"customerId\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"130325769\"\r\n                    },\r\n                    {\r\n                        \"name\": \"serviceType\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"r_p2p_block\"\r\n                    },\r\n                    {\r\n                        \"name\": \"productInstanceId\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"146800989\"\r\n                    },\r\n                    {\r\n                        \"name\": \"outputIpBlock\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"23.71.58.32/30\"\r\n                    },\r\n                    {\r\n                        \"name\": \"customerName\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"P J K Food Service Corporation\"\r\n                    }\r\n                ]\r\n        }\r\n    }\r\n]",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://oni.orion.comcast.com/servo/api/serviceManagement/bulk",
+          "protocol": "https",
+          "host": [
+            "oni",
+            "orion",
+            "comcast",
+            "com"
+          ],
+          "path": [
+            "servo",
+            "api",
+            "serviceManagement",
+            "bulk"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Modify Service-2",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {
+          "content-type": true
+        }
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "PFVFTT5LPTxrZXk+LnN5c3RlbS5lbnYuZW5jcnlwdGlvbi4wO0M9MTcwMTc4MTA4MTgyMDtNPVh9Mm5JeXsweTZ2aVRpVEVtT2xmVW13UmNPcms4YmpZcDZQdE9Gck9hWEtUMTNIeFBTNzhCYkJJcFdQSUlkZXEwOzwvVUVNPg==",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json-patch+json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "[\r\n    {\r\n        \"op\": \"replace\",\r\n        \"path\": \"/plan/pending/service?externalSystemId=SOM&externalServiceId=115_16042021_MIG_0898359124\",\r\n        \"value\": {\r\n            \"serviceCharacteristic\": [\r\n                    {\r\n                        \"name\": \"IP_Version\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"IPv4\"\r\n                    },\r\n                    {\r\n                        \"name\": \"managedServiceTypeName\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"Ethernet\"\r\n                    },\r\n                    {\r\n                        \"name\": \"offeringId\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"Static_IP\"\r\n                    },\r\n                    {\r\n                        \"name\": \"serviceSpecName\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"r_p2p_block\"\r\n                    },\r\n                    {\r\n                        \"name\": \"marketType\",\r\n                        \"valueType\": \"integer\",\r\n                        \"value\": 590001\r\n                    },\r\n                    {\r\n                        \"name\": \"servicePartType\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"TAS\"\r\n                    },\r\n                    {\r\n                        \"name\": \"service_spec_version\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"1\"\r\n                    },\r\n                    {\r\n                        \"name\": \"service_spec_id\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"r_p2p_block\"\r\n                    },\r\n                    {\r\n                        \"name\": \"customerId\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"130325769\"\r\n                    },\r\n                    {\r\n                        \"name\": \"serviceType\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"r_p2p_block\"\r\n                    },\r\n                    {\r\n                        \"name\": \"productInstanceId\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"146800989\"\r\n                    },\r\n                    {\r\n                        \"name\": \"outputIpBlock\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"23.71.58.32/30\"\r\n                    },\r\n                    {\r\n                        \"name\": \"customerName\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"P J K Food Service Corporation\"\r\n                    }\r\n                ]\r\n        }\r\n    }\r\n]",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://oni.orion.comcast.com/servo/api/serviceManagement/bulk",
+          "protocol": "https",
+          "host": [
+            "oni",
+            "orion",
+            "comcast",
+            "com"
+          ],
+          "path": [
+            "servo",
+            "api",
+            "serviceManagement",
+            "bulk"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "API to cancel SERVICE",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "PFVFTT5LPTxrZXk+LnN5c3RlbS5lbnYuZW5jcnlwdGlvbi4wO0M9MTY5NTEyNDg5OTk5ODtNPVh9Mm5JeXsweTZzWGV2aUxxRGxHQ2dNWFBNUm9QTUxBeVQ0NlZvdUdCM200QW80c3drR1p5V0xTRXBMQnZpOH0wOzwvVUVNPg==",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "[\r\n  {\r\n    \"op\": \"replace\",\r\n    \"path\": \"/plan/pending/service?externalSystemId=SOM&externalServiceId=D019D4DA53A140459F396002395AC041\",\r\n    \"value\": {\r\n       \"serviceCharacteristic\": [  \r\n                    {\r\n                        \"name\": \"marketType\",\r\n                        \"valueType\": \"integer\",\r\n                        \"value\": 590001\r\n                    },\r\n                    {\r\n                        \"name\": \"servicePartType\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"TAS\"\r\n                    },\r\n                    {\r\n                        \"name\": \"IP_Version\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"IPv4\"\r\n                    },\r\n                    {\r\n                        \"name\": \"isBestowed\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"0\"\r\n                    },\r\n                    {\r\n                        \"name\": \"managedServiceTypeName\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"Ethernet\"\r\n                    },\r\n                    {\r\n                        \"name\": \"evcId\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"70.VLXP.048107..CBCL..\"\r\n                    },\r\n                    {\r\n                        \"name\": \"offeringId\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"Static_IP\"\r\n                    },\r\n                    {\r\n                        \"name\": \"serviceSpecName\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"r_p2p_block\"\r\n                    },\r\n                    {\r\n                        \"name\": \"customerId\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"130273162\"\r\n                    },\r\n                    {\r\n                        \"name\": \"serviceType\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"r_p2p_block\"\r\n                    },\r\n                    {\r\n\r\n                        \"name\": \"outputIpBlock\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"50.233.198.160/29\"\r\n                    },\r\n                    {\r\n                        \"name\": \"productInstanceId\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"138722585\"\r\n                    },\r\n                    {\r\n                        \"name\": \"customerName\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"The Reserve\"\r\n                    }\r\n                ]\r\n    }\r\n  },\r\n\r\n  {\r\n    \"op\": \"replace\",\r\n    \"path\": \"/plan/pending/service?externalSystemId=SOM&externalServiceId=703D2D68B25C4F60851D1BCCD6E232D5\",\r\n    \"value\": {\r\n       \"serviceCharacteristic\": [\r\n                    {\r\n                        \"name\": \"marketType\",\r\n                        \"valueType\": \"integer\",\r\n                        \"value\": 590001\r\n                    },\r\n                    {\r\n                        \"name\": \"servicePartType\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"TAS\"\r\n                    },\r\n                    {\r\n                        \"name\": \"isBestowed\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"0\"\r\n                    },\r\n                    {\r\n                        \"name\": \"managedServiceTypeName\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"Ethernet\"\r\n                    },\r\n                    {\r\n                        \"name\": \"evcId\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"70.VLXP.048107..CBCL..\"\r\n                    },\r\n                    {\r\n                        \"name\": \"offeringId\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"Static_IP\"\r\n                    },\r\n                    {\r\n                        \"name\": \"serviceSpecName\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"r_customer_comcast\"\r\n                    },\r\n                    {\r\n                        \"name\": \"customerId\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"130273162\"\r\n                    },\r\n                    {\r\n                        \"name\": \"serviceType\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"r_customer_comcast\"\r\n                    },\r\n                    {\r\n\r\n                        \"name\": \"outputIpBlock\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"50.227.33.0/29\"\r\n                    },\r\n                    {\r\n                        \"name\": \"productInstanceId\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"138722585\"\r\n                    },\r\n                    {\r\n                        \"name\": \"customerName\",\r\n                        \"valueType\": \"string\",\r\n                        \"value\": \"The Reserve\"\r\n                    }\r\n                ]\r\n    }\r\n  }\r\n]",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://oni.orion.comcast.com/servo/api/serviceManagement/bulk",
+          "protocol": "https",
+          "host": [
+            "oni",
+            "orion",
+            "comcast",
+            "com"
+          ],
+          "path": [
+            "servo",
+            "api",
+            "serviceManagement",
+            "bulk"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Apply Service",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "PFVFTT5LPTxrZXk+LnN5c3RlbS5lbnYuZW5jcnlwdGlvbi4wO0M9MTY5NTEyNDg5OTk5ODtNPVh9Mm5JeXsweTZzWGV2aUxxRGxHQ2dNWFBNUm9QTUxBeVQ0NlZvdUdCM200QW80c3drR1p5V0xTRXBMQnZpOH0wOzwvVUVNPg==",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "[\r\n     {\r\n        \"op\": \"apply\",\r\n        \"path\": \"/plan/pending/service?externalSystemId=SOM&externalServiceId=FD78F59DF0D0421FBC4A5DC5400B49C2\"\r\n    }    \r\n]",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://oni.orion.comcast.com/servo/api/serviceManagement/bulk",
+          "protocol": "https",
+          "host": [
+            "oni",
+            "orion",
+            "comcast",
+            "com"
+          ],
+          "path": [
+            "servo",
+            "api",
+            "serviceManagement",
+            "bulk"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "API to apply SERVICE (cancel/active) Copy",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {
+          "content-type": true
+        }
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "PFVFTT5LPTxrZXk+LnN5c3RlbS5lbnYuZW5jcnlwdGlvbi4wO0M9MTc0MDEyMTM3ODg3MztNPVh9Mm5JeXsweTZ2emt1NXt1dnhiMHBPY3dnSFBzZTM2e3BNU2hqWDZSQVd1NnBXcFgyaTg5WTI5cWNEVUlGVXcwOzwvVUVNPg==",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json\n",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "[\r\n     {\r\n        \"op\": \"apply\",\r\n        \"path\": \"/plan/pending/service?externalSystemId=SOM&externalServiceId=0194E97510A97C64BC3901C0DD6217F0\"\r\n    }    \r\n]",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://oni.orion.comcast.com/servo/api/serviceManagement/bulk",
+          "protocol": "https",
+          "host": [
+            "oni",
+            "orion",
+            "comcast",
+            "com"
+          ],
+          "path": [
+            "servo",
+            "api",
+            "serviceManagement",
+            "bulk"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

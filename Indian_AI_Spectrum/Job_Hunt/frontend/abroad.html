@@ -1,0 +1,1912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Migration Guide for Indian IT Professionals - AI Spectrum India</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gradient-gold: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            --gradient-ocean: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-emerald: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            --gradient-sunset: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --gradient-night: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0f;
+            color: #e4e4e7;
+            min-height: 100vh;
+        }
+
+        /* Stunning Hero Section */
+        .hero-section {
+            position: relative;
+            padding: 8rem 0 6rem;
+            overflow: hidden;
+            background: linear-gradient(180deg, rgba(15, 12, 41, 0.95) 0%, rgba(10, 10, 15, 1) 100%);
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 217, 255, 0.15) 0%, transparent 70%);
+            top: -200px;
+            left: -100px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, transparent 70%);
+            bottom: -150px;
+            right: -100px;
+            animation: float 25s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(120deg); }
+            66% { transform: translate(-20px, 20px) rotate(240deg); }
+        }
+
+        /* Animated Globe */
+        .globe-container {
+            position: absolute;
+            right: 10%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 400px;
+            height: 400px;
+            opacity: 0.15;
+        }
+
+        .globe {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: 
+                linear-gradient(45deg, transparent 40%, rgba(0, 217, 255, 0.3) 50%, transparent 60%),
+                radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1), transparent 50%);
+            border: 2px solid rgba(0, 217, 255, 0.2);
+            animation: rotateGlobe 30s linear infinite;
+            position: relative;
+        }
+
+        .globe::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 35px,
+                    rgba(0, 217, 255, 0.1) 35px,
+                    rgba(0, 217, 255, 0.1) 36px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 35px,
+                    rgba(0, 217, 255, 0.1) 35px,
+                    rgba(0, 217, 255, 0.1) 36px
+                );
+        }
+
+        @keyframes rotateGlobe {
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 0 2rem;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 217, 255, 0.1);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: #00d9ff;
+            margin-bottom: 1.5rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 217, 255, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(0, 217, 255, 0); }
+        }
+
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #a8a8a8 50%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-title .highlight {
+            background: linear-gradient(135deg, #00d9ff 0%, #a855f7 50%, #00ff88 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: #9ca3af;
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.6;
+        }
+
+        /* Hero Stats */
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: block;
+        }
+
+        .hero-stat-label {
+            font-size: 0.9rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Search & Filter Section */
+        .search-section {
+            background: rgba(15, 15, 20, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 70px;
+            z-index: 50;
+        }
+
+        .search-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.875rem 1rem 0.875rem 3rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #00d9ff;
+            box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1);
+        }
+
+        .search-box::before {
+            content: '🔍';
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1rem;
+        }
+
+        .filter-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tag {
+            padding: 0.6rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            color: #9ca3af;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-tag:hover {
+            border-color: #00d9ff;
+            color: #fff;
+        }
+
+        .filter-tag.active {
+            background: rgba(0, 217, 255, 0.15);
+            border-color: #00d9ff;
+            color: #00d9ff;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Countries Grid */
+        .countries-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Country Card - Premium Design */
+        .country-card {
+            background: linear-gradient(145deg, rgba(20, 20, 30, 0.9), rgba(15, 15, 22, 0.95));
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 1.75rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .country-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--card-gradient, var(--gradient-1));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .country-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.02) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .country-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(0, 217, 255, 0.3);
+            box-shadow: 
+                0 20px 60px rgba(0, 217, 255, 0.15),
+                0 0 0 1px rgba(0, 217, 255, 0.1);
+        }
+
+        .country-card:hover::before { opacity: 1; }
+        .country-card:hover::after { opacity: 1; }
+
+        .country-card.selected {
+            border-color: #00d9ff;
+            background: linear-gradient(145deg, rgba(0, 217, 255, 0.08), rgba(15, 15, 22, 0.98));
+        }
+
+        .country-card.selected::before { opacity: 1; }
+
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .country-flag {
+            font-size: 3.5rem;
+            line-height: 1;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        .country-info {
+            flex: 1;
+        }
+
+        .country-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.35rem;
+        }
+
+        .country-tagline {
+            color: #6b7280;
+            font-size: 0.85rem;
+        }
+
+        .popularity-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--gradient-gold);
+            color: #000;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .card-highlights {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.25rem;
+        }
+
+        .highlight-chip {
+            padding: 0.4rem 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: #9ca3af;
+        }
+
+        .highlight-chip.green { background: rgba(0, 255, 136, 0.12); color: #00ff88; }
+        .highlight-chip.blue { background: rgba(0, 217, 255, 0.12); color: #00d9ff; }
+        .highlight-chip.purple { background: rgba(168, 85, 247, 0.12); color: #a855f7; }
+        .highlight-chip.orange { background: rgba(255, 165, 0, 0.12); color: #ffa500; }
+
+        .card-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .card-stat {
+            text-align: center;
+        }
+
+        .card-stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #00d9ff;
+            margin-bottom: 0.2rem;
+        }
+
+        .card-stat-label {
+            font-size: 0.7rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Detail Panel - Full Width */
+        .detail-panel {
+            display: none;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .detail-panel.active {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .detail-container {
+            background: linear-gradient(145deg, rgba(20, 20, 30, 0.95), rgba(10, 10, 18, 0.98));
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 32px;
+            overflow: hidden;
+        }
+
+        /* Detail Header */
+        .detail-header {
+            padding: 2.5rem;
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.08) 0%, rgba(168, 85, 247, 0.05) 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .detail-title {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .detail-flag {
+            font-size: 4rem;
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
+        }
+
+        .detail-info h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-info p {
+            color: #9ca3af;
+            font-size: 1rem;
+        }
+
+        .close-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 59, 48, 0.2);
+            border-color: rgba(255, 59, 48, 0.5);
+        }
+
+        /* Detail Quick Stats */
+        .quick-stats {
+            display: flex;
+            gap: 2rem;
+            padding: 1.5rem 2.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            flex-wrap: wrap;
+        }
+
+        .quick-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .quick-stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(0, 217, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .quick-stat-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .quick-stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            color: #fff;
+            font-size: 1.1rem;
+        }
+
+        .quick-stat-label {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        /* Detail Tabs */
+        .detail-tabs {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1.5rem 2.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .detail-tabs::-webkit-scrollbar { display: none; }
+
+        .detail-tab {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            color: #9ca3af;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .detail-tab:hover {
+            border-color: rgba(0, 217, 255, 0.5);
+            color: #fff;
+        }
+
+        .detail-tab.active {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), rgba(168, 85, 247, 0.1));
+            border-color: #00d9ff;
+            color: #00d9ff;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            padding: 2.5rem;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Info Sections */
+        .info-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title .icon {
+            font-size: 1.5rem;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 1.25rem;
+            transition: all 0.2s;
+        }
+
+        .info-item:hover {
+            border-color: rgba(0, 217, 255, 0.3);
+            background: rgba(0, 217, 255, 0.03);
+        }
+
+        .info-item-label {
+            font-size: 0.8rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-item-value {
+            font-size: 1.1rem;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        /* Expense Table */
+        .expense-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .expense-table th,
+        .expense-table td {
+            padding: 1rem 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .expense-table th {
+            background: rgba(0, 217, 255, 0.08);
+            color: #00d9ff;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .expense-table td {
+            color: #e4e4e7;
+        }
+
+        .expense-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .expense-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Step List */
+        .step-list {
+            position: relative;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 1.25rem;
+            padding-bottom: 2rem;
+            position: relative;
+        }
+
+        .step-item:last-child { padding-bottom: 0; }
+
+        .step-item::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 44px;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, rgba(0, 217, 255, 0.5), rgba(0, 217, 255, 0.1));
+        }
+
+        .step-item:last-child::before { display: none; }
+
+        .step-number {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00d9ff, #a855f7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #000;
+            flex-shrink: 0;
+            font-size: 1rem;
+        }
+
+        .step-content {
+            flex: 1;
+            padding-top: 0.25rem;
+        }
+
+        .step-content h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-content p {
+            color: #9ca3af;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .step-duration {
+            display: inline-block;
+            margin-top: 0.5rem;
+            padding: 0.3rem 0.75rem;
+            background: rgba(0, 255, 136, 0.1);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: #00ff88;
+        }
+
+        /* App Grid */
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .app-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 1rem;
+            transition: all 0.2s;
+        }
+
+        .app-card:hover {
+            border-color: rgba(0, 217, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .app-category {
+            font-size: 0.7rem;
+            color: #00d9ff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .app-name {
+            color: #fff;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        /* Company Grid */
+        .company-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .company-chip {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 25px;
+            color: #e4e4e7;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .company-chip:hover {
+            border-color: #00d9ff;
+            background: rgba(0, 217, 255, 0.1);
+        }
+
+        /* Pros/Cons */
+        .pros-cons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .pros-card, .cons-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .pros-card {
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+
+        .cons-card {
+            border: 1px solid rgba(255, 59, 48, 0.2);
+        }
+
+        .pros-card h4, .cons-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pros-card h4 { color: #00ff88; }
+        .cons-card h4 { color: #ff3b30; }
+
+        .pros-card ul, .cons-card ul {
+            list-style: none;
+        }
+
+        .pros-card li, .cons-card li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: #9ca3af;
+        }
+
+        .pros-card li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #00ff88;
+        }
+
+        .cons-card li::before {
+            content: '✗';
+            position: absolute;
+            left: 0;
+            color: #ff3b30;
+        }
+
+        /* Footer */
+        .site-footer {
+            background: rgba(0, 0, 0, 0.5);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-text {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.25rem; }
+            .hero-stats { gap: 1.5rem; }
+            .hero-stat-value { font-size: 2rem; }
+            .globe-container { display: none; }
+            .countries-grid { grid-template-columns: 1fr; }
+            .detail-header { padding: 1.5rem; }
+            .detail-tabs { padding: 1rem 1.5rem; }
+            .tab-content { padding: 1.5rem; }
+            .quick-stats { padding: 1rem 1.5rem; }
+        }
+    </style>
+</head>
+<body data-page="abroad">
+    <script src="js/header.js"></script>
+    
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-bg">
+            <div class="globe-container">
+                <div class="globe"></div>
+            </div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>✨</span>
+                <span>Complete Migration Guide for Indian IT Professionals</span>
+            </div>
+            <h1 class="hero-title">
+                Your Gateway to <span class="highlight">Global Careers</span>
+            </h1>
+            <p class="hero-subtitle">
+                Comprehensive step-by-step guides for 27+ countries with visa processes, expenses, salaries, job portals, 
+                essential apps, and insider tips from Indians who've made the move.
+            </p>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="hero-stat-value" id="country-count">27+</span>
+                    <span class="hero-stat-label">Countries</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">50L+</span>
+                    <span class="hero-stat-label">Indians Abroad</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">₹30-150L</span>
+                    <span class="hero-stat-label">Avg Salary Range</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">1500+</span>
+                    <span class="hero-stat-label">Companies Hiring</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search & Filter -->
+    <section class="search-section">
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" id="country-search" placeholder="Search countries, cities, or keywords...">
+            </div>
+            <div class="filter-tags">
+                <span class="filter-tag active" data-filter="all">All</span>
+                <span class="filter-tag" data-filter="popular">🔥 Popular</span>
+                <span class="filter-tag" data-filter="tax-free">💰 Tax-Free</span>
+                <span class="filter-tag" data-filter="pr-friendly">🏠 PR Friendly</span>
+                <span class="filter-tag" data-filter="europe">🇪🇺 Europe</span>
+                <span class="filter-tag" data-filter="gulf">🏜️ Gulf</span>
+                <span class="filter-tag" data-filter="apac">🌏 Asia Pacific</span>
+                <span class="filter-tag" data-filter="americas">🌎 Americas</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Countries Grid -->
+        <div class="countries-grid" id="countries-grid">
+            <!-- Cards will be dynamically generated -->
+        </div>
+
+        <!-- Detail Panel (opens when clicking a country) -->
+        <div class="detail-panel" id="detail-panel">
+            <div class="detail-container">
+                <div class="detail-header">
+                    <div class="detail-title">
+                        <span class="detail-flag" id="detail-flag">🇺🇸</span>
+                        <div class="detail-info">
+                            <h1 id="detail-name">United States</h1>
+                            <p id="detail-tagline">Tech hub of the world</p>
+                        </div>
+                    </div>
+                    <button class="close-btn" onclick="closeDetail()">×</button>
+                </div>
+
+                <div class="quick-stats" id="quick-stats">
+                    <!-- Quick stats generated dynamically -->
+                </div>
+
+                <div class="detail-tabs" id="detail-tabs">
+                    <button class="detail-tab active" data-tab="overview">📋 Overview</button>
+                    <button class="detail-tab" data-tab="expenses">💰 Expenses</button>
+                    <button class="detail-tab" data-tab="salary">📊 Salary</button>
+                    <button class="detail-tab" data-tab="visa">🎫 Visa Process</button>
+                    <button class="detail-tab" data-tab="cities">🏙️ Cities</button>
+                    <button class="detail-tab" data-tab="companies">🏢 Companies</button>
+                    <button class="detail-tab" data-tab="portals">🌐 Portals</button>
+                    <button class="detail-tab" data-tab="agencies">👔 Agencies</button>
+                    <button class="detail-tab" data-tab="emails">📧 HR Emails</button>
+                    <button class="detail-tab" data-tab="lifestyle">🏠 Lifestyle</button>
+                    <button class="detail-tab" data-tab="tips">💡 Pro Tips</button>
+                </div>
+
+                <div id="tab-contents">
+                    <!-- Tab content generated dynamically -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p class="footer-text">© 2025 AI Spectrum India. Empowering Indian IT professionals to go global. 🚀</p>
+    </footer>
+
+    <!-- Load Data Files -->
+    <script src="js/abroad-data.js"></script>
+    <script src="js/abroad-data-enhanced.js"></script>
+    <script src="js/abroad-data-enhanced-2.js"></script>
+    <script src="js/abroad-data-enhanced-3.js"></script>
+    <script src="js/abroad-data-enhanced-4.js"></script>
+    <script src="js/abroad-data-enhanced-5.js"></script>
+
+    <script>
+        // Merge all country data
+        let ALL_COUNTRIES = {};
+        
+        // Deep merge function to properly combine country data
+        function deepMerge(target, source) {
+            for (const key in source) {
+                if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+                    if (!target[key]) target[key] = {};
+                    deepMerge(target[key], source[key]);
+                } else {
+                    target[key] = source[key];
+                }
+            }
+            return target;
+        }
+        
+        function mergeCountryData(baseData, enhancedData) {
+            for (const countryCode in enhancedData) {
+                if (!baseData[countryCode]) {
+                    baseData[countryCode] = enhancedData[countryCode];
+                } else {
+                    // Deep merge to preserve flat fields while adding nested data
+                    deepMerge(baseData[countryCode], enhancedData[countryCode]);
+                }
+            }
+        }
+        
+        function loadAllCountries() {
+            console.log('=== Loading Country Data ===');
+            
+            // Load base data from COMPREHENSIVE_COUNTRY_DATA (flat structure)
+            if (window.COMPREHENSIVE_COUNTRY_DATA) {
+                for (const code in window.COMPREHENSIVE_COUNTRY_DATA) {
+                    ALL_COUNTRIES[code] = { ...window.COMPREHENSIVE_COUNTRY_DATA[code] };
+                }
+                console.log('Loaded COMPREHENSIVE_COUNTRY_DATA:', Object.keys(ALL_COUNTRIES).length, 'countries');
+            }
+            
+            // Merge enhanced data (preserves existing fields)
+            if (window.ENHANCED_COUNTRY_DATA_1) mergeCountryData(ALL_COUNTRIES, window.ENHANCED_COUNTRY_DATA_1);
+            if (window.ENHANCED_COUNTRY_DATA_2) mergeCountryData(ALL_COUNTRIES, window.ENHANCED_COUNTRY_DATA_2);
+            if (window.ENHANCED_COUNTRY_DATA_3) mergeCountryData(ALL_COUNTRIES, window.ENHANCED_COUNTRY_DATA_3);
+            if (window.ENHANCED_COUNTRY_DATA_4) mergeCountryData(ALL_COUNTRIES, window.ENHANCED_COUNTRY_DATA_4);
+            if (window.ENHANCED_COUNTRY_DATA_5) mergeCountryData(ALL_COUNTRIES, window.ENHANCED_COUNTRY_DATA_5);
+            
+            console.log(`Total countries loaded: ${Object.keys(ALL_COUNTRIES).length}`);
+            console.log('UAE data keys:', Object.keys(ALL_COUNTRIES['UAE'] || {}));
+            console.log('UAE pros:', ALL_COUNTRIES['UAE']?.pros);
+            console.log('UAE agencies:', ALL_COUNTRIES['UAE']?.agencies);
+        }
+
+        // Country metadata for cards
+        const COUNTRY_META = {
+            'UAE': { flag: '🇦🇪', tagline: 'Tax-free tech hub in Middle East', region: 'gulf', popular: true, taxFree: true, gradient: 'linear-gradient(135deg, #f6d365, #fda085)' },
+            'USA': { flag: '🇺🇸', tagline: 'Tech capital of the world', region: 'americas', popular: true, prFriendly: true, gradient: 'linear-gradient(135deg, #667eea, #764ba2)' },
+            'UK': { flag: '🇬🇧', tagline: 'Historical tech powerhouse', region: 'europe', popular: true, prFriendly: true, gradient: 'linear-gradient(135deg, #11998e, #38ef7d)' },
+            'Canada': { flag: '🇨🇦', tagline: 'Most immigrant-friendly nation', region: 'americas', popular: true, prFriendly: true, gradient: 'linear-gradient(135deg, #ff416c, #ff4b2b)' },
+            'Germany': { flag: '🇩🇪', tagline: 'Europe\'s economic powerhouse', region: 'europe', popular: true, prFriendly: true, gradient: 'linear-gradient(135deg, #12c2e9, #c471ed)' },
+            'Australia': { flag: '🇦🇺', tagline: 'Land of opportunities', region: 'apac', popular: true, prFriendly: true, gradient: 'linear-gradient(135deg, #f093fb, #f5576c)' },
+            'Singapore': { flag: '🇸🇬', tagline: 'Asia\'s financial hub', region: 'apac', popular: true, gradient: 'linear-gradient(135deg, #4facfe, #00f2fe)' },
+            'Netherlands': { flag: '🇳🇱', tagline: 'Startup paradise of Europe', region: 'europe', prFriendly: true, gradient: 'linear-gradient(135deg, #fa709a, #fee140)' },
+            'Ireland': { flag: '🇮🇪', tagline: 'European tech gateway', region: 'europe', popular: true, gradient: 'linear-gradient(135deg, #a8edea, #fed6e3)' },
+            'Japan': { flag: '🇯🇵', tagline: 'Innovation meets tradition', region: 'apac', gradient: 'linear-gradient(135deg, #ff9a9e, #fecfef)' },
+            'New Zealand': { flag: '🇳🇿', tagline: 'Work-life balance heaven', region: 'apac', prFriendly: true, gradient: 'linear-gradient(135deg, #43e97b, #38f9d7)' },
+            'Sweden': { flag: '🇸🇪', tagline: 'Innovation hub of Nordics', region: 'europe', prFriendly: true, gradient: 'linear-gradient(135deg, #667eea, #764ba2)' },
+            'Switzerland': { flag: '🇨🇭', tagline: 'Highest salaries in Europe', region: 'europe', gradient: 'linear-gradient(135deg, #f6d365, #fda085)' },
+            'Qatar': { flag: '🇶🇦', tagline: 'Richest country per capita', region: 'gulf', taxFree: true, gradient: 'linear-gradient(135deg, #c471f5, #fa71cd)' },
+            'Saudi Arabia': { flag: '🇸🇦', tagline: 'Vision 2030 opportunities', region: 'gulf', taxFree: true, gradient: 'linear-gradient(135deg, #11998e, #38ef7d)' },
+            'France': { flag: '🇫🇷', tagline: 'Heart of European tech', region: 'europe', prFriendly: true, gradient: 'linear-gradient(135deg, #667eea, #764ba2)' },
+            'Norway': { flag: '🇳🇴', tagline: 'Highest quality of life', region: 'europe', gradient: 'linear-gradient(135deg, #ff416c, #ff4b2b)' },
+            'Denmark': { flag: '🇩🇰', tagline: 'Happiest country to work', region: 'europe', gradient: 'linear-gradient(135deg, #fa709a, #fee140)' },
+            'Finland': { flag: '🇫🇮', tagline: 'Best education & startups', region: 'europe', gradient: 'linear-gradient(135deg, #4facfe, #00f2fe)' },
+            'Belgium': { flag: '🇧🇪', tagline: 'EU headquarters hub', region: 'europe', gradient: 'linear-gradient(135deg, #f093fb, #f5576c)' },
+            'Austria': { flag: '🇦🇹', tagline: 'Central European gem', region: 'europe', gradient: 'linear-gradient(135deg, #ff9a9e, #fecfef)' },
+            'Poland': { flag: '🇵🇱', tagline: 'Emerging tech destination', region: 'europe', gradient: 'linear-gradient(135deg, #a8edea, #fed6e3)' },
+            'Czech Republic': { flag: '🇨🇿', tagline: 'Affordable European tech', region: 'europe', gradient: 'linear-gradient(135deg, #667eea, #764ba2)' },
+            'Malaysia': { flag: '🇲🇾', tagline: 'Gateway to Southeast Asia', region: 'apac', gradient: 'linear-gradient(135deg, #11998e, #38ef7d)' },
+            'Thailand': { flag: '🇹🇭', tagline: 'Digital nomad paradise', region: 'apac', gradient: 'linear-gradient(135deg, #fa709a, #fee140)' },
+            'Hong Kong': { flag: '🇭🇰', tagline: 'Asia\'s world city', region: 'apac', taxFree: true, gradient: 'linear-gradient(135deg, #f6d365, #fda085)' },
+            'South Korea': { flag: '🇰🇷', tagline: 'Tech innovation leader', region: 'apac', gradient: 'linear-gradient(135deg, #4facfe, #00f2fe)' },
+        };
+
+        let selectedCountry = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAllCountries();
+            renderCountryCards();
+            setupEventListeners();
+            updateStats();
+        });
+
+        function updateStats() {
+            const countEl = document.getElementById('country-count');
+            if (countEl) {
+                countEl.textContent = Object.keys(COUNTRY_META).length + '+';
+            }
+        }
+
+        function renderCountryCards(filter = 'all') {
+            const grid = document.getElementById('countries-grid');
+            grid.innerHTML = '';
+
+            const searchTerm = document.getElementById('country-search')?.value?.toLowerCase() || '';
+
+            Object.entries(COUNTRY_META).forEach(([code, meta]) => {
+                // Apply filters
+                if (filter !== 'all') {
+                    if (filter === 'popular' && !meta.popular) return;
+                    if (filter === 'tax-free' && !meta.taxFree) return;
+                    if (filter === 'pr-friendly' && !meta.prFriendly) return;
+                    if (filter === 'europe' && meta.region !== 'europe') return;
+                    if (filter === 'gulf' && meta.region !== 'gulf') return;
+                    if (filter === 'apac' && meta.region !== 'apac') return;
+                    if (filter === 'americas' && meta.region !== 'americas') return;
+                }
+
+                // Apply search
+                if (searchTerm && !code.toLowerCase().includes(searchTerm) && 
+                    !meta.tagline.toLowerCase().includes(searchTerm)) return;
+
+                const countryData = ALL_COUNTRIES[code] || {};
+                const basicInfo = countryData.basic_info || {};
+
+                const card = document.createElement('div');
+                card.className = `country-card ${selectedCountry === code ? 'selected' : ''}`;
+                card.style.setProperty('--card-gradient', meta.gradient);
+                card.onclick = () => showCountryDetail(code);
+
+                card.innerHTML = `
+                    ${meta.popular ? '<div class="popularity-badge">🔥 Popular</div>' : ''}
+                    <div class="card-header">
+                        <span class="country-flag">${meta.flag}</span>
+                        <div class="country-info">
+                            <div class="country-name">${code === 'UAE' ? 'UAE / Dubai' : code}</div>
+                            <div class="country-tagline">${meta.tagline}</div>
+                        </div>
+                    </div>
+                    <div class="card-highlights">
+                        ${meta.taxFree ? '<span class="highlight-chip green">💰 Tax-Free</span>' : ''}
+                        ${meta.prFriendly ? '<span class="highlight-chip blue">🏠 PR Path</span>' : ''}
+                        ${basicInfo.visa_processing ? `<span class="highlight-chip purple">⏱️ ${basicInfo.visa_processing}</span>` : ''}
+                    </div>
+                    <div class="card-stats">
+                        <div class="card-stat">
+                            <div class="card-stat-value">${basicInfo.indian_population || 'N/A'}</div>
+                            <div class="card-stat-label">Indians</div>
+                        </div>
+                        <div class="card-stat">
+                            <div class="card-stat-value">${basicInfo.avg_salary || 'High'}</div>
+                            <div class="card-stat-label">Avg Salary</div>
+                        </div>
+                        <div class="card-stat">
+                            <div class="card-stat-value">${basicInfo.tax_rate || 'Varies'}</div>
+                            <div class="card-stat-label">Tax Rate</div>
+                        </div>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        function showCountryDetail(code) {
+            console.log('=== showCountryDetail called ===');
+            console.log('Country code:', code);
+            console.log('ALL_COUNTRIES keys:', Object.keys(ALL_COUNTRIES));
+            console.log('ALL_COUNTRIES[code]:', ALL_COUNTRIES[code]);
+            
+            selectedCountry = code;
+            const meta = COUNTRY_META[code];
+            const data = ALL_COUNTRIES[code] || {};
+            
+            console.log('Data being used:', data);
+            console.log('Data.pros:', data.pros);
+            console.log('Data.agencies:', data.agencies);
+
+            // Update cards
+            document.querySelectorAll('.country-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            if (event && event.currentTarget) event.currentTarget.classList.add('selected');
+
+            // Update detail panel
+            document.getElementById('detail-flag').textContent = meta.flag;
+            document.getElementById('detail-name').textContent = code === 'UAE' ? 'UAE / Dubai' : code;
+            document.getElementById('detail-tagline').textContent = meta.tagline;
+
+            // Generate quick stats (support both flat and nested structure)
+            const basicInfo = data.basic_info || {};
+            document.getElementById('quick-stats').innerHTML = `
+                <div class="quick-stat">
+                    <div class="quick-stat-icon">👥</div>
+                    <div class="quick-stat-text">
+                        <span class="quick-stat-value">${data.indian_population || basicInfo.indian_population || 'N/A'}</span>
+                        <span class="quick-stat-label">Indians Living</span>
+                    </div>
+                </div>
+                <div class="quick-stat">
+                    <div class="quick-stat-icon">💱</div>
+                    <div class="quick-stat-text">
+                        <span class="quick-stat-value">${data.currency || basicInfo.currency || 'N/A'}</span>
+                        <span class="quick-stat-label">Currency</span>
+                    </div>
+                </div>
+                <div class="quick-stat">
+                    <div class="quick-stat-icon">🕐</div>
+                    <div class="quick-stat-text">
+                        <span class="quick-stat-value">${data.timezone || basicInfo.timezone || 'N/A'}</span>
+                        <span class="quick-stat-label">Timezone</span>
+                    </div>
+                </div>
+                <div class="quick-stat">
+                    <div class="quick-stat-icon">✈️</div>
+                    <div class="quick-stat-text">
+                        <span class="quick-stat-value">${data.flight_time || basicInfo.flight_time || 'N/A'}</span>
+                        <span class="quick-stat-label">Flight Time</span>
+                    </div>
+                </div>
+                <div class="quick-stat">
+                    <div class="quick-stat-icon">📋</div>
+                    <div class="quick-stat-text">
+                        <span class="quick-stat-value">${data.visa_processing || basicInfo.visa_processing || 'N/A'}</span>
+                        <span class="quick-stat-label">Visa Processing</span>
+                    </div>
+                </div>
+                <div class="quick-stat">
+                    <div class="quick-stat-icon">💵</div>
+                    <div class="quick-stat-text">
+                        <span class="quick-stat-value">${data.tax_rate || basicInfo.tax_rate || 'N/A'}</span>
+                        <span class="quick-stat-label">Tax Rate</span>
+                    </div>
+                </div>
+            `;
+
+            // Generate tab contents
+            generateTabContents(code, data);
+
+            // Show panel
+            const panel = document.getElementById('detail-panel');
+            panel.classList.add('active');
+            panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Reset to overview tab
+            document.querySelectorAll('.detail-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector('.detail-tab[data-tab="overview"]').classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('tab-overview')?.classList.add('active');
+        }
+
+        function generateTabContents(code, data) {
+            const container = document.getElementById('tab-contents');
+            console.log('=== generateTabContents ===');
+            console.log('Code:', code);
+            console.log('Data keys:', Object.keys(data));
+            
+            // Support BOTH flat structure (COMPREHENSIVE_COUNTRY_DATA) AND nested (ENHANCED)
+            const basicInfo = data.basic_info || {};
+            
+            // Flat fields from COMPREHENSIVE_COUNTRY_DATA
+            const indianPop = data.indian_population || basicInfo.indian_population || 'N/A';
+            const currency = data.currency || basicInfo.currency || 'N/A';
+            const language = data.language || basicInfo.language || 'N/A';
+            const weather = data.weather || basicInfo.weather || 'N/A';
+            const taxRate = data.tax_rate || basicInfo.tax_rate || 'N/A';
+            const visaCost = data.visa_cost || basicInfo.visa_cost || 'N/A';
+            const visaProcessing = data.visa_processing || basicInfo.visa_processing || 'N/A';
+            const timezone = data.timezone || basicInfo.timezone || 'N/A';
+            const flightTime = data.flight_time || basicInfo.flight_time || 'N/A';
+            
+            // Arrays - check both flat and nested
+            const whyMigrate = data.why_indians_migrate || [];
+            const steps = data.step_by_step_migration || [];
+            const apps = data.essential_apps || {};
+            const websites = data.essential_websites || {};
+            const companies = data.top_hiring_companies || {};
+            const simInfo = data.sim_cards || [];
+            const housingInfo = data.housing_tips || [];
+            const cvFormat = data.cv_format || {};
+            const emailTemplates = data.email_templates || [];
+            
+            // Flat arrays from COMPREHENSIVE
+            const expenses = data.expenses || {};
+            const salary = data.salaries || data.salary_info || {};
+            const visa = data.visas || data.visa_types || [];
+            const lifestyle = data.lifestyle || {};
+            const recruiterEmails = data.recruiter_emails || [];
+            const companiesRelocation = data.companies_with_relocation || [];
+            const pros = data.pros || [];
+            const cons = data.cons || [];
+            const bestCities = data.best_cities || [];
+            const savingsPot = data.savings_potential || {};
+            const taxes = data.taxes || {};
+            const agencies = data.agencies || [];
+            const portals = data.portals || [];
+            const tips = data.tips || [];
+            const interview = data.interview || [];
+            const network = data.network || [];
+            const initial = data.initial || {};
+            
+            console.log('Loaded - pros:', pros.length, 'agencies:', agencies.length, 'tips:', tips.length);
+
+            container.innerHTML = `
+                <!-- Overview Tab -->
+                <div class="tab-content active" id="tab-overview">
+                    <div class="info-section">
+                        <h3 class="section-title"><span class="icon">📋</span> Basic Information</h3>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-item-label">Indian Population</div>
+                                <div class="info-item-value">${indianPop}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-label">Currency</div>
+                                <div class="info-item-value">${currency}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-label">Language</div>
+                                <div class="info-item-value">${language}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-label">Weather</div>
+                                <div class="info-item-value">${weather}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-label">Timezone</div>
+                                <div class="info-item-value">${timezone}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-label">Flight Time</div>
+                                <div class="info-item-value">${flightTime}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-label">Tax Rate</div>
+                                <div class="info-item-value">${taxRate}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-label">Visa Cost</div>
+                                <div class="info-item-value">${visaCost}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-label">Visa Processing</div>
+                                <div class="info-item-value">${visaProcessing}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    ${whyMigrate.length > 0 ? `
+                    <div class="info-section">
+                        <h3 class="section-title"><span class="icon">✨</span> Why Indians Choose ${code}</h3>
+                        <div class="info-grid">
+                            ${whyMigrate.slice(0, 8).map(reason => `
+                                <div class="info-item">
+                                    <div class="info-item-value" style="font-size: 0.95rem;">✓ ${reason}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    ` : ''}
+
+                    <div class="info-section">
+                        <h3 class="section-title"><span class="icon">⚖️</span> Pros & Cons</h3>
+                        <div class="pros-cons">
+                            <div class="pros-card">
+                                <h4>✅ Advantages</h4>
+                                <ul>
+                                    ${(pros.length > 0 ? pros : ['High salaries', 'Good work-life balance', 'Career growth']).map(p => `<li>${p}</li>`).join('')}
+                                </ul>
+                            </div>
+                            <div class="cons-card">
+                                <h4>❌ Challenges</h4>
+                                <ul>
+                                    ${(cons.length > 0 ? cons : ['High cost of living', 'Work visa requirements', 'Weather adjustment']).map(c => `<li>${c}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Expenses Tab -->
+                <div class="tab-content" id="tab-expenses">
+                    <div class="info-section">
+                        <h3 class="section-title"><span class="icon">💰</span> Monthly Expenses Breakdown</h3>
+                        ${Object.keys(expenses).length > 0 ? `
+                        <table class="expense-table">
+                            <thead><tr><th>Category</th><th>👤 Single</th><th>👨‍👩‍👧 Family</th></tr></thead>
+                            <tbody>
+                                ${Object.entries(expenses).map(([k,v]) => `
+                                    <tr ${k === 'total' ? 'style="background:rgba(0,217,255,0.1);font-weight:bold"' : ''}>
+                                        <td>${formatLabel(k)}</td>
+                                        <td>${typeof v === 'object' ? v.s : v}</td>
+                                        <td>${typeof v === 'object' ? v.f : v}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>` : `
+                        <p style="color:#9ca3af">Expense data not available for this country</p>`}
+                    </div>
+                    
+                    ${Object.keys(initial).length > 0 ? `
+                    <div class="info-section">
+                        <h3 class="section-title"><span class="icon">🎯</span> Initial Setup Costs</h3>
+                        <div class="info-grid">
+                            ${Object.entries(initial).map(([k,v]) => `
+                                <div class="info-item" ${k === 'total' ? 'style="border:1px solid #00d9ff"' : ''}>
+                                    <div class="info-item-label">${formatLabel(k)}</div>
+                                    <div class="info-item-value">${v}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>` : ''}
+                    
+                    ${Object.keys(savingsPot).length > 0 ? `
+                    <div class="info-section">
+                        <h3 class="section-title"><span class="icon">🏦</span> Savings Potential (Annual)</h3>
+                        <div class="info-grid">
+                            ${Object.entries(savingsPot).map(([k,v]) => `
+                                <div class="info-item">
+                                    <div class="info-item-label">${formatLabel(k)} Level</div>
+                                    <div class="info-item-value">${v}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>` : ''}
+                    
+                    ${Object.keys(taxes).length > 0 ? `
+                    <div class="info-section">
+                        <h3 class="section-title"><span class="icon">📊</span> Tax Breakdown</h3>
+                        <div class="info-grid">
+                            ${Object.entries(taxes).map(([k,v]) => `
+                                <div class="info-item">
+                                    <div class="info-item-label">${formatLabel(k)}</div>
+                                    <div class="info-item-value">${v}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>` : ''}
+                </div>
+
+                <!-- Salary Tab -->
+                <div class="tab-content" id="tab-salary">
+                    <div class="info-section">
+                        <h3 class="section-title"><span class="icon">📊</span> IT Salary Ranges (Annual)</h3>
+                        ${Object.keys(salary).length > 0 ? `
+                        <table class="expense-table">
+                            <thead><tr><th>Role / Experience</th><th>Salary (Local + INR)</th></tr></thead>
+                            <tbody>
+                                ${Object.entries(salary).map(([role, sal]) => `
+                                    <tr><td>${role}</td><td>${sal}</td></tr>
+                                `).join('')}
+                            </tbody>
+                        </table>` : `
+                        <p style="color:#9ca3af">Salary data not available</p>`}
+                    </div>
+                </div>
+
+                <!-- Visa Tab -->
+                <div class="tab-content" id="tab-visa">
+                    <div class="info-section">
+                        <h3 class="section-title"><span class="icon">🎫</span> Visa Types for IT Professionals</h3>
+                        ${visa.length > 0 ? `
+                            <div class="info-grid" style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));">
+                                ${visa.map(v => `
+                                    <div class="info-item" style="padding:1.25rem;">
+                                        <div class="info-item-label" style="font-size:1rem;margin-bottom:0.5rem">${v.n || v.name || v.type || 'Work Visa'}</div>
+                                        <div class="info-item-value" style="margin-bottom:0.5rem">${v.d || v.description || v.details || ''}</div>
+                                        ${v.t ? `<div style="color:#00ff88;font-size:0.85rem">⏱️ Processing: ${v.t}</div>` : ''}
+                                        ${v.r ? `<div style="color:#9ca3af;font-size:0.8rem;margin-top:0.5rem"><strong>Requirements:</strong> ${Array.isArray(v.r) ? v.r.join(', ') : v.r}</div>` : ''}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : `
+                            <p style="color:#9ca3af">Visa information not available</p>
+                        `}
+                    </div>
+                    
+                    <div class="info-section">
+                        <h3 class="section-title"><span class="icon">📄</span> Required Documents</h3>
+                        <div class="info-grid">
+                            <div class="info-item"><div class="info-item-value">✓ Valid Passport (6+ months validity)</div></div>
+                            <div class="info-item"><div class="info-item-value">✓ Educational Certificates (Attested)</div></div>
+                            <div class="info-item"><div class="info-item-value">✓ Work Experience Letters</div></div>
+                            <div class="info-item"><div class="info-item-value">✓ Job Offer Letter</div></div>
+                            <div class="info-item"><div class="info-item-value">✓ Police Clearance Certificate (PCC)</div></div>
+                            <div class="info-item"><div class="info-item-value">✓ Medical Certificate</div></div>
+                            <div class="info-item"><div class="info-item-value">✓ Passport-size Photos</div></div>
+                            <div class="info-item"><div class="info-item-value">✓ Bank Statements (Proof of funds)</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Migration Steps Tab -->
+                <div class="tab-content" id="tab-migration">
+                    <div class="info-section">
+                        <h3 class="section-title"><span class="icon">🚀</span> Step-by-Step Migration Process</h3>
+                        <div class="step-list">
+                            ${steps.length > 0 ? steps.map((step, i) => `
+                                <div class="step-item">
+                                    <div class="step-number">${i + 1}</div>
+                                    <div class="step-content">
+                                        <h4>${step.title}</h4>
+                                        <p>${step.details}</p>
+                                        ${step.duration ? `<span class="step-duration">⏱️ ${step.duration}</span>` : ''}
+                                    </div>
+                                </div>
+                            `).join('') : `
+                                <div class="step-item">
+                                    <div class="step-number">1</div>
+                                    <div class="step-content">
+                                        <h4>Get a Job Offer</h4>
+                                        <p>Apply through LinkedIn, company websites, and job portals. Target companies that sponsor visas.</p>
+                                        <span class="step-duration">⏱️ 1-3 months</span>
+                                    </div>
+                                </div>
+                                <div class="step-item">
+                                    <div class="step-number">2</div>
+                                    <div class="step-content">
+                                        <h4>Document Preparation</h4>
+                                        <p>Get all documents attested, apostilled, and translated if required.</p>
+                                        <span class="step-duration">⏱️ 2-4 weeks</span>
+                                    </div>
+                                </div>
+                                <div class="step-item">
+                                    <div class="step-number">3</div>
+                                    <div class="step-content">
+                                        <h4>Visa Application</h4>
+                                        <p>Apply for work visa with employer sponsorship and required documents.</p>
+                                        <span class="step-duration">⏱️ 2-8 weeks</span>
+                                    </div>
+                                </div>
+                                <div class="step-item">
+                                    <div class="step-number">4</div>
+                                    <div class="step-content">
+                                        <h4>Travel & Settle</h4>
+                                        <p>Book flights, find accommodation, open bank account, get local SIM.</p>
+                                        <span class="step-duration">⏱️ 1-2 weeks</span>
+                                    </div>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Apps Tab -->
+                <div class="tab-content" id="tab-apps">
+                    ${Object.keys(apps).length > 0 ? Object.entries(apps).map(([category, appList]) => `
+                        <div class="info-section">
+                            <h3 class="section-title"><span class="icon">📱</span> ${formatLabel(category)}</h3>
+                            <div class="app-grid">
+                                ${appList.map(app => `
+                                    <div class="app-card">
+                                        <div class="app-category">${category}</div>
+                                        <div class="app-name">${app}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('') : `
+                        <div class="info-section">
+                            <h3 class="section-title"><span class="icon">📱</span> Essential Apps</h3>
+                            <div class="app-grid">
+                                <div class="app-card"><div class="app-category">Banking</div><div class="app-name">Local Bank App</div></div>
+                                <div class="app-card"><div class="app-category">Transport</div><div class="app-name">Uber / Local Taxi</div></div>
+                                <div class="app-card"><div class="app-category">Food</div><div class="app-name">Food Delivery Apps</div></div>
+                                <div class="app-card"><div class="app-category">Maps</div><div class="app-name">Google Maps</div></div>
+                                <div class="app-card"><div class="app-category">Communication</div><div class="app-name">WhatsApp</div></div>
+                                <div class="app-card"><div class="app-category">Payment</div><div class="app-name">Local Payment App</div></div>
+                            </div>
+                        </div>
+                    `}
+                    
+                    ${Object.keys(websites).length > 0 ? `
+                        <div class="info-section">
+                            <h3 class="section-title"><span class="icon">🌐</span> Essential Websites</h3>
+                            ${Object.entries(websites).map(([category, siteList]) => `
+                                <div style="margin-bottom: 1rem;">
+                                    <h4 style="color: #00d9ff; font-size: 0.9rem; margin-bottom: 0.75rem;">${formatLabel(category)}</h4>
+                                    <div class="company-grid">
+                                        ${siteList.map(site => `<span class="company-chip">${site}</span>`).join('')}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+
+                <!-- Companies Tab -->
+                <div class="tab-content" id="tab-companies">
+                    ${Object.keys(companies).length > 0 ? Object.entries(companies).map(([category, companyList]) => `
+                        <div class="info-section">
+                            <h3 class="section-title"><span class="icon">🏢</span> ${formatLabel(category)}</h3>
+                            <div class="company-grid">
+                                ${companyList.map(company => `<span class="company-chip">${company}</span>`).join('')}
+                            </div>
+                        </div>
+                    `).join('') : `
+                        <div class="info-section">
+                            <h3 class="section-title"><span class="icon">🏢</span> Top Companies Hiring</h3>
+                            <div class="company-grid">
+                                <span class="company-chip">Google</span>
+                                <span class="company-chip">Microsoft</span>
+                                <span class="company-chip">Amazon</span>
+                                <span class="company-chip">Meta</span>
+                                <span class="company-chip">Apple</span>
+                                <span class="company-chip">TCS</span>
+                                <span class="company-chip">Infosys</span>
+                                <span class="company-chip">Wipro</span>
+                                <span class="company-chip">Accenture</span>
+                                <span class="company-chip">Cognizant</span>
+                            </div>
+                        </div>
+                    `}
+                </div>
+
+                <!-- Cities Tab -->
+                <div class="tab-content" id="tab-cities">
+                    <div class="info-section">
+                        <h3 class="section-title"><span class="icon">🏙️</span> Best Cities for IT Professionals</h3>
+                        ${bestCities.length > 0 ? `
+                            <div class="info-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
+                                ${bestCities.map(c => `
+                                    <div class="info-item" style="background:linear-gradient(135deg,rgba(168,85,247,0.1),rgba(168,85,247,0.02));border:1px solid rgba(168,85,247,0.3);padding:1.25rem">
+                                        <div class="info-item-label" style="color:#a855f7;font-size:1rem">📍 ${c.name}</div>
+                                        <div class="info-item-value">${c.why}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : `<p style="color:#9ca3af">City information not available</p>`}
+                    </div>
+                </div>
+
+                <!-- Lifestyle Tab -->
+                <div class="tab-content" id="tab-lifestyle">
+                    <div class="info-section">
+                        <h3 class="section-title"><span class="icon">🏠</span> Living & Work Culture</h3>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-item-label">Work Hours</div>
+                                <div class="info-item-value">${lifestyle.work_hours || 'Standard 9-5'}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-label">Weekend</div>
+                                <div class="info-item-value">${lifestyle.weekend || 'Sat-Sun'}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-label">Dress Code</div>
+                                <div class="info-item-value">${lifestyle.dress_code || 'Business casual'}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-label">Social Life</div>
+                                <div class="info-item-value">${lifestyle.social_life || 'Active expat community'}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-label">Indian Community</div>
+                                <div class="info-item-value">${lifestyle.indian_community || 'Present in major cities'}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-label">Indian Food</div>
+                                <div class="info-item-value">${lifestyle.food || lifestyle.indian_food || 'Available'}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Portals Tab -->
+                <div class="tab-content" id="tab-portals">
+                    <div class="info-section">
+                        <h3 class="section-title"><span class="icon">🌐</span> Top Job Portals & Websites</h3>
+                        ${portals.length > 0 ? `
+                            <div class="info-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
+                                ${portals.map(p => `
+                                    <a href="${p.u}" target="_blank" class="info-item" style="text-decoration:none;transition:all 0.2s;cursor:pointer">
+                                        <div class="info-item-label" style="color:#00d9ff">🔗 ${p.n}</div>
+                                        <div class="info-item-value" style="font-size:0.85rem">${p.d}</div>
+                                    </a>
+                                `).join('')}
+                            </div>
+                        ` : `<p style="color:#9ca3af">Portal information not available</p>`}
+                    </div>
+                    
+                    ${network.length > 0 ? `
+                    <div class="info-section">
+                        <h3 class="section-title"><span class="icon">🤝</span> Networking Communities</h3>
+                        <div class="company-grid">
+                            ${network.map(n => `<span class="company-chip">${n}</span>`).join('')}
+                        </div>
+                    </div>` : ''}
+                </div>
+
+                <!-- Agencies Tab -->
+                <div class="tab-content" id="tab-agencies">
+                    <div class="info-section">
+                        <h3 class="section-title"><span class="icon">👔</span> Top Authorized Recruitment Agencies</h3>
+                        ${agencies.length > 0 ? `
+                            <div class="info-grid" style="grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));">
+                                ${agencies.map(a => `
+                                    <div class="info-item" style="padding:1.25rem">
+                                        <div class="info-item-label" style="font-size:1rem;display:flex;align-items:center;gap:0.5rem">
+                                            ${a.n} ${a.verified ? '<span style="color:#00ff88;font-size:0.8rem">✅ Verified</span>' : ''}
+                                        </div>
+                                        <div class="info-item-value" style="color:#00d9ff;font-size:0.85rem;margin:0.25rem 0">${a.s}</div>
+                                        <div style="color:#6b7280;font-size:0.8rem">${a.w}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : `<p style="color:#9ca3af">Agency information not available</p>`}
+                    </div>
+                </div>
+
+                <!-- HR Emails Tab -->
+                <div class="tab-content" id="tab-emails">
+                    ${recruiterEmails.length > 0 ? `
+                    <div class="info-section">
+                        <h3 class="section-title"><span class="icon">📧</span> Recruiter Email List (${recruiterEmails.length} contacts)</h3>
+                        <p class="text-muted mb-4">Direct email addresses of recruiters. Send professional emails with your resume.</p>
+                        <div class="info-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
+                            ${recruiterEmails.map(e => `
+                                <div class="info-item" style="padding:0.75rem">
+                                    <a href="mailto:${e}" style="color:#00d9ff;text-decoration:none">📧 ${e}</a>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="info-section mt-6">
+                            <h4 style="color:#00ff88;margin-bottom:1rem">💡 Email Tips</h4>
+                            <ul style="list-style:none;padding:0">
+                                <li style="padding:0.5rem 0;color:#9ca3af">✓ Use professional subject line: "Application for [Role] - [Your Name]"</li>
+                                <li style="padding:0.5rem 0;color:#9ca3af">✓ Keep email brief - 3-4 paragraphs max</li>
+                                <li style="padding:0.5rem 0;color:#9ca3af">✓ Attach resume in PDF format</li>
+                                <li style="padding:0.5rem 0;color:#9ca3af">✓ Mention your visa status/willingness to relocate</li>
+                                <li style="padding:0.5rem 0;color:#9ca3af">✓ Follow up after 1 week if no response</li>
+                            </ul>
+                        </div>
+                    </div>
+                    ` : `<p style="color:#9ca3af;text-align:center;padding:48px">Recruiter email list not available for this country</p>`}
+                </div>
+
+                <!-- Companies with Relocation Tab -->
+                <div class="tab-content" id="tab-companies">
+                    ${companiesRelocation.length > 0 ? `
+                    <div class="info-section">
+                        <h3 class="section-title"><span class="icon">🏢</span> Companies with Relocation Support (${companiesRelocation.length} companies)</h3>
+                        <p class="text-muted mb-4">These companies actively hire internationals and often provide relocation assistance.</p>
+                        <div class="info-grid" style="grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));">
+                            ${companiesRelocation.map(c => `
+                                <div class="info-item" style="padding:1rem;${c.relocation === true ? 'border:1px solid rgba(0,255,136,0.3)' : ''}">
+                                    <div class="info-item-label" style="font-size:1rem;display:flex;align-items:center;gap:0.5rem">
+                                        🏢 ${c.n}
+                                        ${c.relocation === true ? '<span style="color:#00ff88;font-size:0.75rem">✅ Relocation</span>' : '<span style="color:#f59e0b;font-size:0.75rem">🔄 Sometimes</span>'}
+                                    </div>
+                                    <div class="info-item-value" style="color:#00d9ff;font-size:0.85rem">${c.s}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    ` : Object.keys(companies).length > 0 ? `
+                    <div class="info-section">
+                        <h3 class="section-title"><span class="icon">🏢</span> Top Hiring Companies</h3>
+                        ${Object.entries(companies).map(([category, companyList]) => `
+                            <div style="margin-bottom:1.5rem">
+                                <h4 style="color:#00d9ff;font-size:0.9rem;margin-bottom:0.75rem">${formatLabel(category)}</h4>
+                                <div class="company-grid">
+                                    ${companyList.map(company => `<span class="company-chip">${company}</span>`).join('')}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    ` : `<p style="color:#9ca3af;text-align:center;padding:48px">Company information not available</p>`}
+                </div>
+
+                <!-- Tips Tab -->
+                <div class="tab-content" id="tab-tips">
+                    <div class="info-section">
+                        <h3 class="section-title"><span class="icon">💡</span> Pro Tips from Indians in ${code}</h3>
+                        ${tips.length > 0 ? `
+                        <div class="info-grid" style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));">
+                            ${tips.map((t, i) => `
+                                <div class="info-item">
+                                    <div class="info-item-value">${['🎯','💰','📱','🏠','📄','💳','👥','📞','🎓','🤝','🏦','✈️'][i%12]} ${t}</div>
+                                </div>
+                            `).join('')}
+                        </div>` : `
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-item-value">🎯 Start job search 3-6 months before planned move</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-value">💰 Save at least 3-6 months of expenses before moving</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-value">📱 Join Indian community groups on WhatsApp/Facebook</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-value">🏠 Stay in temporary housing first, then find permanent</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-value">📄 Keep all documents digitally backed up</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-value">🎓 Get skills certified (AWS, Azure, GCP) before applying</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-value">💳 Get an international credit card before leaving India</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-value">📞 Set up international calling/roaming before travel</div>
+                            </div>
+                        </div>`}
+                    </div>
+                    
+                    ${interview.length > 0 ? `
+                    <div class="info-section">
+                        <h3 class="section-title"><span class="icon">🎤</span> Interview Tips</h3>
+                        <div class="info-grid">
+                            ${interview.map((t, i) => `
+                                <div class="info-item">
+                                    <div class="info-item-value">${i+1}. ${t}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>` : ''}
+                </div>
+            `;
+        }
+
+        function formatLabel(str) {
+            return str.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        }
+
+        function closeDetail() {
+            document.getElementById('detail-panel').classList.remove('active');
+            selectedCountry = null;
+            document.querySelectorAll('.country-card').forEach(card => card.classList.remove('selected'));
+        }
+
+        function setupEventListeners() {
+            // Tab switching
+            document.getElementById('detail-tabs').addEventListener('click', (e) => {
+                if (e.target.classList.contains('detail-tab')) {
+                    const tab = e.target.dataset.tab;
+                    
+                    document.querySelectorAll('.detail-tab').forEach(t => t.classList.remove('active'));
+                    e.target.classList.add('active');
+                    
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    document.getElementById(`tab-${tab}`)?.classList.add('active');
+                }
+            });
+
+            // Filter tags
+            document.querySelectorAll('.filter-tag').forEach(tag => {
+                tag.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+                    tag.classList.add('active');
+                    renderCountryCards(tag.dataset.filter);
+                });
+            });
+
+            // Search
+            document.getElementById('country-search').addEventListener('input', debounce(() => {
+                const activeFilter = document.querySelector('.filter-tag.active')?.dataset.filter || 'all';
+                renderCountryCards(activeFilter);
+            }, 300));
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+    </script>
+</body>
+</html>

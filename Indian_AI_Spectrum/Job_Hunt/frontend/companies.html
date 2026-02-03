@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Companies Directory - AI Spectrum India</title>
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        .stat-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem 1.75rem;
+            text-align: center;
+            min-width: 110px;
+        }
+        .stat-box .value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .stat-box .label {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+        .filters-section {
+            background: var(--bg-secondary);
+            padding: 1.25rem 0;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 70px;
+            z-index: 50;
+        }
+        .filters-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .filters-row .form-input {
+            flex: 1;
+            min-width: 200px;
+            max-width: 280px;
+        }
+        .filters-row .form-select {
+            width: 150px;
+        }
+        .filter-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .filter-checkbox input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent);
+        }
+        .companies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.25rem;
+        }
+        .company-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.25s;
+            position: relative;
+            overflow: hidden;
+        }
+        .company-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 217, 255, 0.15);
+        }
+        .company-header {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .company-logo {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #000;
+            flex-shrink: 0;
+        }
+        .company-title {
+            flex: 1;
+        }
+        .company-name {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .verified-badge {
+            background: var(--accent-success);
+            color: #000;
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .company-tagline {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        .company-meta {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin: 1rem 0;
+            padding: 1rem 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+        }
+        .meta-item .icon {
+            font-size: 1rem;
+        }
+        .meta-item .label {
+            color: var(--text-muted);
+        }
+        .meta-item .value {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        .company-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        .company-ratings {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .rating-item {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        .rating-item .score {
+            color: var(--accent-warning);
+            font-weight: 600;
+        }
+        .company-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+        .company-actions a {
+            flex: 1;
+            text-align: center;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .btn-careers {
+            background: var(--gradient-1);
+            color: #000;
+        }
+        .btn-careers:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 217, 255, 0.3);
+        }
+        .btn-linkedin {
+            background: rgba(10, 102, 194, 0.2);
+            color: #0a66c2;
+            border: 1px solid rgba(10, 102, 194, 0.3);
+        }
+        .btn-linkedin:hover {
+            background: rgba(10, 102, 194, 0.3);
+        }
+        .btn-glassdoor {
+            background: rgba(0, 170, 100, 0.15);
+            color: #00aa64;
+            border: 1px solid rgba(0, 170, 100, 0.3);
+        }
+        .btn-glassdoor:hover {
+            background: rgba(0, 170, 100, 0.25);
+        }
+        .hiring-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--accent-success);
+            color: #000;
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .indian-cities {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.75rem;
+        }
+        .city-tag {
+            background: rgba(0, 217, 255, 0.1);
+            color: var(--accent);
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+        .salary-range {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--accent-success);
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            text-align: center;
+            margin-top: 0.75rem;
+        }
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+    </style>
+</head>
+<body>
+    <script src="js/header.js"></script>
+    <script src="js/companies-data.js"></script>
+    <script src="js/companies-data-2.js"></script>
+    <script src="js/companies-data-3.js"></script>
+    <script src="js/companies-data-extended.js"></script>
+    <script src="js/companies-data-extended-2.js"></script>
+    <script src="js/companies-data-extended-3.js"></script>
+    <script src="js/companies-data-extended-4.js"></script>
+    <script src="js/companies-data-extended-5.js"></script>
+    <script src="js/companies-data-extended-6.js"></script>
+    <script src="js/companies-data-extended-7.js"></script>
+    <script src="js/companies-data-extended-8.js"></script>
+    <script src="js/companies-data-extended-9.js"></script>
+    <script src="js/companies-data-extended-10.js"></script>
+    <script src="js/companies-data-extended-11.js"></script>
+    <script src="js/companies-data-extended-12.js"></script>
+    <script src="js/companies-data-extended-13.js"></script>
+    <script src="js/companies-data-extended-14.js"></script>
+    <script src="js/companies-data-extended-15.js"></script>
+    <script src="js/companies-data-extended-16.js"></script>
+
+    <main>
+        <section class="page-hero">
+            <div class="container">
+                <h1>🏢 Company <span class="highlight">Directory</span></h1>
+                <p>Explore 1490+ top tech companies across India & 50+ countries with salaries, locations, interview tips & direct career links</p>
+            </div>
+        </section>
+
+        <div class="container">
+            <div class="stats-bar">
+                <div class="stat-box">
+                    <div class="value" id="total-companies">200+</div>
+                    <div class="label">Companies</div>
+                </div>
+                <div class="stat-box">
+                    <div class="value" id="product-count">150+</div>
+                    <div class="label">Product Based</div>
+                </div>
+                <div class="stat-box">
+                    <div class="value" id="service-count">50+</div>
+                    <div class="label">Service Based</div>
+                </div>
+                <div class="stat-box">
+                    <div class="value" id="hiring-count">100+</div>
+                    <div class="label">Actively Hiring</div>
+                </div>
+                <div class="stat-box">
+                    <div class="value" id="remote-count">70+</div>
+                    <div class="label">Remote Friendly</div>
+                </div>
+            </div>
+        </div>
+
+        <section class="filters-section">
+            <div class="container">
+                <div class="filters-row">
+                    <input type="text" id="search-input" class="form-input" placeholder="Search companies, industry...">
+                    <select id="type-filter" class="form-select">
+                        <option value="">All Types</option>
+                        <option value="PRODUCT">Product Based</option>
+                        <option value="SERVICE">Service Based</option>
+                        <option value="STARTUP">Startup</option>
+                        <option value="CONSULTING">Consulting</option>
+                        <option value="GOVERNMENT">Government</option>
+                    </select>
+                    <select id="category-filter" class="form-select">
+                        <option value="">All Categories</option>
+                        <option value="FAANG">FAANG/MAANG</option>
+                        <option value="BIG_TECH">Big Tech</option>
+                        <option value="INDIAN_UNICORN">Indian Unicorn</option>
+                        <option value="UNICORN">Global Unicorn</option>
+                        <option value="IT_SERVICES">IT Services</option>
+                        <option value="CONSULTING">Consulting</option>
+                        <option value="FINANCE">BFSI/Banking</option>
+                        <option value="PHARMA">Healthcare/Pharma</option>
+                        <option value="AUTOMOTIVE">Automotive/EV</option>
+                        <option value="AEROSPACE">Aerospace/Defense</option>
+                        <option value="TELECOM">Telecom</option>
+                        <option value="SPACE">Space Tech</option>
+                        <option value="RETAIL">Retail</option>
+                        <option value="EDTECH">Ed-Tech</option>
+                        <option value="STARTUP">Startup</option>
+                        <option value="AVIATION">Aviation</option>
+                    </select>
+                    <select id="city-filter" class="form-select">
+                        <option value="">All India Cities</option>
+                        <option value="Bangalore">Bangalore</option>
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Delhi NCR">Delhi NCR</option>
+                        <option value="Gurgaon">Gurgaon/Gurugram</option>
+                        <option value="Noida">Noida</option>
+                        <option value="Hyderabad">Hyderabad</option>
+                        <option value="Chennai">Chennai</option>
+                        <option value="Pune">Pune</option>
+                        <option value="Kolkata">Kolkata</option>
+                        <option value="Ahmedabad">Ahmedabad</option>
+                        <option value="Jaipur">Jaipur</option>
+                        <option value="Coimbatore">Coimbatore</option>
+                        <option value="Kochi">Kochi</option>
+                        <option value="Chandigarh">Chandigarh</option>
+                        <option value="Lucknow">Lucknow</option>
+                        <option value="Bhubaneswar">Bhubaneswar</option>
+                        <option value="Indore">Indore</option>
+                        <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                    </select>
+                    <select id="country-filter" class="form-select">
+                        <option value="">All Countries (HQ)</option>
+                        <option value="USA">USA</option>
+                        <option value="UK">UK</option>
+                        <option value="Germany">Germany</option>
+                        <option value="India">India</option>
+                        <option value="Singapore">Singapore</option>
+                        <option value="UAE">UAE</option>
+                        <option value="Canada">Canada</option>
+                        <option value="Australia">Australia</option>
+                        <option value="Japan">Japan</option>
+                        <option value="Netherlands">Netherlands</option>
+                        <option value="France">France</option>
+                        <option value="Switzerland">Switzerland</option>
+                        <option value="Sweden">Sweden</option>
+                        <option value="Ireland">Ireland</option>
+                        <option value="Finland">Finland</option>
+                        <option value="China">China</option>
+                    </select>
+                </div>
+                <div class="filters-row" style="margin-top: 0.75rem;">
+                    <label class="filter-checkbox">
+                        <input type="checkbox" id="remote-filter"> Remote Only
+                    </label>
+                    <label class="filter-checkbox">
+                        <input type="checkbox" id="india-filter"> India Office
+                    </label>
+                    <label class="filter-checkbox">
+                        <input type="checkbox" id="hiring-filter"> Hiring Now
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <section style="padding: 2rem 0;">
+            <div class="container">
+                <div class="companies-grid" id="companies-grid">
+                    <div class="company-card skeleton" style="height: 350px;"></div>
+                    <div class="company-card skeleton" style="height: 350px;"></div>
+                    <div class="company-card skeleton" style="height: 350px;"></div>
+                    <div class="company-card skeleton" style="height: 350px;"></div>
+                    <div class="company-card skeleton" style="height: 350px;"></div>
+                    <div class="company-card skeleton" style="height: 350px;"></div>
+                </div>
+                
+                <div class="pagination" id="pagination"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2024 AI Spectrum India. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const API_BASE = 'http://localhost:8000/api/v1';
+        let currentPage = 0;
+        const limit = 24;
+        let currentFilters = {};
+        let ALL_COMPANIES = [];
+
+        // Merge all company databases
+        function loadAllCompanies() {
+            ALL_COMPANIES = [];
+            // Original company databases
+            if (window.COMPANIES_DATABASE) ALL_COMPANIES.push(...window.COMPANIES_DATABASE);
+            if (window.COMPANIES_DATABASE_2) ALL_COMPANIES.push(...window.COMPANIES_DATABASE_2);
+            if (window.COMPANIES_DATABASE_3) ALL_COMPANIES.push(...window.COMPANIES_DATABASE_3);
+            // Extended company databases (1000+ companies total)
+            if (window.COMPANIES_EXTENDED_1) ALL_COMPANIES.push(...window.COMPANIES_EXTENDED_1);
+            if (window.COMPANIES_EXTENDED_2) ALL_COMPANIES.push(...window.COMPANIES_EXTENDED_2);
+            if (window.COMPANIES_EXTENDED_3) ALL_COMPANIES.push(...window.COMPANIES_EXTENDED_3);
+            if (window.COMPANIES_EXTENDED_4) ALL_COMPANIES.push(...window.COMPANIES_EXTENDED_4);
+            if (window.COMPANIES_EXTENDED_5) ALL_COMPANIES.push(...window.COMPANIES_EXTENDED_5);
+            if (window.COMPANIES_EXTENDED_6) ALL_COMPANIES.push(...window.COMPANIES_EXTENDED_6);
+            if (window.COMPANIES_EXTENDED_7) ALL_COMPANIES.push(...window.COMPANIES_EXTENDED_7);
+            if (window.COMPANIES_EXTENDED_8) ALL_COMPANIES.push(...window.COMPANIES_EXTENDED_8);
+            if (window.COMPANIES_DATABASE_EXTENDED_9) ALL_COMPANIES.push(...window.COMPANIES_DATABASE_EXTENDED_9);
+            if (window.COMPANIES_DATABASE_EXTENDED_10) ALL_COMPANIES.push(...window.COMPANIES_DATABASE_EXTENDED_10);
+            if (window.COMPANIES_DATABASE_EXTENDED_11) ALL_COMPANIES.push(...window.COMPANIES_DATABASE_EXTENDED_11);
+            if (window.COMPANIES_DATABASE_EXTENDED_12) ALL_COMPANIES.push(...window.COMPANIES_DATABASE_EXTENDED_12);
+            if (window.COMPANIES_DATABASE_EXTENDED_13) ALL_COMPANIES.push(...window.COMPANIES_DATABASE_EXTENDED_13);
+            if (window.COMPANIES_EXTENDED_14) ALL_COMPANIES.push(...window.COMPANIES_EXTENDED_14);
+            if (window.COMPANIES_EXTENDED_15) ALL_COMPANIES.push(...window.COMPANIES_EXTENDED_15);
+            if (window.COMPANIES_EXTENDED_16) ALL_COMPANIES.push(...window.COMPANIES_EXTENDED_16);
+            
+            // Remove duplicates by company name
+            const seen = new Set();
+            ALL_COMPANIES = ALL_COMPANIES.filter(c => {
+                if (seen.has(c.name.toLowerCase())) return false;
+                seen.add(c.name.toLowerCase());
+                return true;
+            });
+            
+            console.log(`Loaded ${ALL_COMPANIES.length} companies from frontend data`);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAllCompanies();
+            loadStats();
+            loadCompanies();
+            setupFilters();
+        });
+
+        function setupFilters() {
+            document.getElementById('search-input').addEventListener('input', debounce(function() {
+                currentFilters.search = this.value.toLowerCase();
+                currentPage = 0;
+                loadCompanies();
+            }, 300));
+
+            ['type-filter', 'category-filter', 'city-filter', 'country-filter'].forEach(id => {
+                document.getElementById(id).addEventListener('change', function() {
+                    currentFilters[id.replace('-filter', '')] = this.value;
+                    currentPage = 0;
+                    loadCompanies();
+                });
+            });
+
+            ['remote-filter', 'india-filter', 'hiring-filter'].forEach(id => {
+                document.getElementById(id).addEventListener('change', function() {
+                    currentFilters[id.replace('-filter', '')] = this.checked;
+                    currentPage = 0;
+                    loadCompanies();
+                });
+            });
+        }
+
+        function loadStats() {
+            const total = ALL_COMPANIES.length;
+            const product = ALL_COMPANIES.filter(c => c.type === 'PRODUCT').length;
+            const service = ALL_COMPANIES.filter(c => c.type === 'SERVICE').length;
+            const hiring = ALL_COMPANIES.filter(c => c.hiring).length;
+            const remote = ALL_COMPANIES.filter(c => c.remote).length;
+            
+            document.getElementById('total-companies').textContent = total + '+';
+            document.getElementById('product-count').textContent = product + '+';
+            document.getElementById('service-count').textContent = service + '+';
+            document.getElementById('hiring-count').textContent = hiring + '+';
+            document.getElementById('remote-count').textContent = remote + '+';
+        }
+
+        function loadCompanies() {
+            const grid = document.getElementById('companies-grid');
+            
+            // Filter companies based on current filters
+            let filtered = [...ALL_COMPANIES];
+            
+            if (currentFilters.search) {
+                const q = currentFilters.search;
+                filtered = filtered.filter(c => 
+                    c.name.toLowerCase().includes(q) ||
+                    (c.desc && c.desc.toLowerCase().includes(q)) ||
+                    (c.category && c.category.toLowerCase().includes(q)) ||
+                    (c.tech && c.tech.some(t => t.toLowerCase().includes(q)))
+                );
+            }
+            
+            if (currentFilters.type) {
+                filtered = filtered.filter(c => c.type === currentFilters.type);
+            }
+            
+            if (currentFilters.category) {
+                filtered = filtered.filter(c => c.category === currentFilters.category);
+            }
+            
+            if (currentFilters.remote) {
+                filtered = filtered.filter(c => c.remote);
+            }
+            
+            if (currentFilters.india) {
+                filtered = filtered.filter(c => c.india && c.india.length > 0);
+            }
+            
+            if (currentFilters.hiring) {
+                filtered = filtered.filter(c => c.hiring);
+            }
+            
+            // Filter by Indian city
+            if (currentFilters.city) {
+                filtered = filtered.filter(c => 
+                    c.india && c.india.some(city => 
+                        city.toLowerCase().includes(currentFilters.city.toLowerCase()) ||
+                        currentFilters.city.toLowerCase().includes(city.toLowerCase())
+                    )
+                );
+            }
+            
+            // Filter by HQ country or countries with presence
+            if (currentFilters.country) {
+                filtered = filtered.filter(c => {
+                    // Check HQ country
+                    if (c.hq && c.hq.toUpperCase() === currentFilters.country.toUpperCase()) return true;
+                    // Check countries array if available
+                    if (c.countries && c.countries.some(country => 
+                        country.toUpperCase() === currentFilters.country.toUpperCase()
+                    )) return true;
+                    return false;
+                });
+            }
+            
+            // Sort by hiring status and name
+            filtered.sort((a, b) => {
+                if (a.hiring !== b.hiring) return b.hiring ? 1 : -1;
+                return a.name.localeCompare(b.name);
+            });
+            
+            // Paginate
+            const start = currentPage * limit;
+            const paginated = filtered.slice(start, start + limit);
+            
+            grid.innerHTML = '';
+            
+            if (paginated.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-results">
+                        <h3 class="text-muted">No companies found</h3>
+                        <p class="text-muted">Try adjusting your filters</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            paginated.forEach(company => {
+                const logoLetter = company.name.charAt(0).toUpperCase();
+                const location = company.hq || 'Global';
+                const indianCities = company.india || [];
+                    
+                grid.innerHTML += `
+                    <div class="company-card">
+                        ${company.hiring ? '<div class="hiring-badge">🔥 Hiring</div>' : ''}
+                        
+                        <div class="company-header">
+                            <div class="company-logo">${logoLetter}</div>
+                            <div class="company-title">
+                                <div class="company-name">${company.name}</div>
+                                <div class="company-tagline">${company.desc ? truncate(company.desc, 50) : 'Technology'}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="company-tags">
+                            <span class="tag tag-primary">${formatType(company.type)}</span>
+                            ${company.category ? `<span class="tag">${formatCategory(company.category)}</span>` : ''}
+                            ${company.remote ? '<span class="tag tag-success">🌐 Remote</span>' : ''}
+                            ${indianCities.length > 0 ? '<span class="tag tag-warning">🇮🇳 India</span>' : ''}
+                        </div>
+                        
+                        <div class="company-meta">
+                            <div class="meta-item">
+                                <span class="icon">📍</span>
+                                <span class="value">${location}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="icon">👥</span>
+                                <span class="value">${company.employees || 'N/A'}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="icon">📅</span>
+                                <span class="value">${company.founded ? 'Est. ' + company.founded : 'N/A'}</span>
+                            </div>
+                        </div>
+                        
+                        ${company.tech ? `
+                            <div style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.75rem;">
+                                ${company.tech.slice(0, 5).map(t => `<span style="background: var(--bg-secondary); color: var(--text-muted); padding: 2px 8px; border-radius: 4px; font-size: 0.7rem;">${t}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                        
+                        ${company.culture || company.wlb || company.interview ? `
+                            <div class="company-ratings">
+                                ${company.culture ? `<div class="rating-item">🏆 Culture: <span class="score">${company.culture}/5</span></div>` : ''}
+                                ${company.wlb ? `<div class="rating-item">⚖️ WLB: <span class="score">${company.wlb}/5</span></div>` : ''}
+                                ${company.interview ? `<div class="rating-item">🎯 Interview: <span class="score">${company.interview}/5</span></div>` : ''}
+                            </div>
+                        ` : ''}
+                        
+                        ${company.salary ? `
+                            <div class="salary-range">
+                                💰 Salary Range: ${company.salary}
+                            </div>
+                        ` : ''}
+                        
+                        ${indianCities.length > 0 ? `
+                            <div class="indian-cities">
+                                ${indianCities.slice(0, 4).map(city => `<span class="city-tag">📍 ${city}</span>`).join('')}
+                                ${indianCities.length > 4 ? `<span class="city-tag">+${indianCities.length - 4} more</span>` : ''}
+                            </div>
+                        ` : ''}
+                        
+                        ${company.countries && company.countries.length > 0 ? `
+                            <div style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.5rem;">
+                                <span style="color: var(--text-muted); font-size: 0.75rem; margin-right: 0.25rem;">🌍 Presence:</span>
+                                ${company.countries.slice(0, 5).map(c => `<span style="background: rgba(139, 92, 246, 0.1); color: var(--accent-purple); padding: 2px 6px; border-radius: 4px; font-size: 0.7rem;">${c}</span>`).join('')}
+                                ${company.countries.length > 5 ? `<span style="background: rgba(139, 92, 246, 0.1); color: var(--accent-purple); padding: 2px 6px; border-radius: 4px; font-size: 0.7rem;">+${company.countries.length - 5}</span>` : ''}
+                            </div>
+                        ` : ''}
+                        
+                        <div class="company-actions">
+                            ${company.careers ? `<a href="${company.careers}" target="_blank" class="btn-careers">🚀 Careers</a>` : ''}
+                            ${company.linkedin ? `<a href="${company.linkedin}" target="_blank" class="btn-linkedin">LinkedIn</a>` : ''}
+                            ${company.glassdoor ? `<a href="${company.glassdoor}" target="_blank" class="btn-glassdoor">Glassdoor</a>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            renderPagination(filtered.length);
+        }
+
+        function renderPagination(total) {
+            const totalPages = Math.ceil(total / limit);
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+            
+            if (totalPages <= 1) return;
+            
+            const prevBtn = document.createElement('button');
+            prevBtn.textContent = '← Prev';
+            prevBtn.disabled = currentPage === 0;
+            prevBtn.onclick = () => { currentPage--; loadCompanies(); window.scrollTo(0, 400); };
+            pagination.appendChild(prevBtn);
+            
+            const startPage = Math.max(0, currentPage - 2);
+            const endPage = Math.min(totalPages - 1, currentPage + 2);
+            
+            for (let i = startPage; i <= endPage; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = i + 1;
+                btn.className = i === currentPage ? 'active' : '';
+                btn.onclick = () => { currentPage = i; loadCompanies(); window.scrollTo(0, 400); };
+                pagination.appendChild(btn);
+            }
+            
+            const nextBtn = document.createElement('button');
+            nextBtn.textContent = 'Next →';
+            nextBtn.disabled = currentPage >= totalPages - 1;
+            nextBtn.onclick = () => { currentPage++; loadCompanies(); window.scrollTo(0, 400); };
+            pagination.appendChild(nextBtn);
+        }
+
+        function parseJSON(value) {
+            if (!value) return [];
+            if (typeof value === 'string') {
+                try { return JSON.parse(value); } catch { return []; }
+            }
+            return Array.isArray(value) ? value : [];
+        }
+
+        function formatType(type) {
+            const types = { 'PRODUCT': 'Product', 'SERVICE': 'Service', 'STARTUP': 'Startup', 'CONSULTING': 'Consulting' };
+            return types[type?.toUpperCase()] || type || 'Tech';
+        }
+
+        function formatCategory(cat) {
+            const cats = { 
+                'FAANG': 'FAANG 🌟', 
+                'BIG_TECH': 'Big Tech 💻', 
+                'UNICORN': 'Unicorn 🦄', 
+                'INDIAN_UNICORN': 'Indian Unicorn 🇮🇳', 
+                'MNC': 'MNC', 
+                'IT_SERVICES': 'IT Services 💼', 
+                'INDIAN_IT': 'Indian IT',
+                'CONSULTING': 'Consulting 📊',
+                'BFSI': 'BFSI 🏦',
+                'FINANCE': 'Finance 💰',
+                'PHARMA': 'Pharma 💊',
+                'HEALTHCARE': 'Healthcare 🏥',
+                'AUTOMOTIVE': 'Automotive 🚗',
+                'AEROSPACE': 'Aerospace 🛩️',
+                'TELECOM': 'Telecom 📡',
+                'MANUFACTURING': 'Manufacturing 🏭',
+                'FMCG': 'FMCG 🛒',
+                'ENERGY': 'Energy ⚡',
+                'MEDIA': 'Media 🎬',
+                'GAMING': 'Gaming 🎮',
+                'RETAIL': 'Retail 🛍️',
+                'TRAVEL': 'Travel ✈️',
+                'REAL_ESTATE': 'Real Estate 🏠',
+                'EDTECH': 'EdTech 📚',
+                'SAAS': 'SaaS ☁️',
+                'LOGISTICS': 'Logistics 🚛',
+                'AGRITECH': 'AgriTech 🌾',
+                'ENTERPRISE': 'Enterprise 🏢',
+                'STARTUP': 'Startup ⚡',
+                'INDIAN_STARTUP': 'Indian Startup 🇮🇳',
+                'PRODUCT': 'Product'
+            };
+            return cats[cat?.toUpperCase()] || cat || '';
+        }
+
+        function formatSalary(salary) {
+            if (!salary) return 'N/A';
+            // Handle string with quotes
+            const cleanSalary = String(salary).replace(/['"]/g, '');
+            const num = parseInt(cleanSalary);
+            if (isNaN(num)) return 'N/A';
+            // Convert to lakhs (1 lakh = 100000)
+            if (num >= 100000) return (num / 100000).toFixed(0);
+            return String(num);
+        }
+
+        function truncate(str, len) {
+            if (!str) return '';
+            return str.length > len ? str.substring(0, len) + '...' : str;
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+    </script>
+</body>
+</html>

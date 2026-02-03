@@ -1,0 +1,525 @@
+<div class="page" id="welcome-kit-page">
+    <h1>👋 Welcome Kit - Access Needed for New Joiner</h1>
+    <p class="subtitle">Essential applications and access requirements for new team members</p>
+
+    <!-- Applications Section -->
+    <div class="welcome-section">
+        <h2>📱 Applications</h2>
+        <div class="applications-grid">
+            <div class="app-card">
+                <div class="app-icon">📊</div>
+                <div class="app-name">UTS</div>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">💻</div>
+                <div class="app-name">Comcast AVD</div>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">🐙</div>
+                <div class="app-name">Octane</div>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">🪣</div>
+                <div class="app-name">Bit bucket</div>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">👥</div>
+                <div class="app-name">Group Manager: DLs</div>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">✏️</div>
+                <div class="app-name">Cursor</div>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">⚙️</div>
+                <div class="app-name">OSO Code setup</div>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">📈</div>
+                <div class="app-name">Comcast Dashboard</div>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">📖</div>
+                <div class="app-name">Read DB Access</div>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">✍️</div>
+                <div class="app-name">Write DB Access</div>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">🧼</div>
+                <div class="app-name">SOAP Setup</div>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">📮</div>
+                <div class="app-name">Postman Setup</div>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">🐿️</div>
+                <div class="app-name">Prodsafe Squirrel Setup</div>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">📊</div>
+                <div class="app-name">Power BI - SR Dashboard</div>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">📋</div>
+                <div class="app-name">Jira</div>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">🔧</div>
+                <div class="app-name">Jenkins Lower</div>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">🚀</div>
+                <div class="app-name">Jenkins Prod</div>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">☁️</div>
+                <div class="app-name">AWS Console</div>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">🚂</div>
+                <div class="app-name">AutoBahn Jump (ssh)</div>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">🔐</div>
+                <div class="app-name">AWS consul (k8s)-OSO prod</div>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">🔐</div>
+                <div class="app-name">AWS consul (k8s)-ONI prod</div>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">🧪</div>
+                <div class="app-name">AWS consul (k8s)-OSO preprod</div>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">🧪</div>
+                <div class="app-name">AWS consul (k8s)-ONI preprod</div>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">📱</div>
+                <div class="app-name">AppD</div>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">📱</div>
+                <div class="app-name">AppD- lower</div>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">🎯</div>
+                <div class="app-name">SQO</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DB Credentials Section -->
+    <div class="welcome-section">
+        <h2>🗄️ DB Credentials</h2>
+        <div class="db-credentials-container">
+            <div class="db-table-wrapper">
+                <table class="db-table">
+                    <thead>
+                        <tr>
+                            <th>Environment</th>
+                            <th>Database Type</th>
+                            <th>DB Hosts (NLB)</th>
+                            <th>DB Name</th>
+                            <th>User</th>
+                            <th>Port</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="env-badge env-crt1">CRT1</span></td>
+                            <td>Postgre</td>
+                            <td>crt1oss-postgres.cw24qov3aole.us-east-2.rds.amazonaws.com (10.140.57.241)</td>
+                            <td>crt1ossdb</td>
+                            <td>ossdb01db</td>
+                            <td>6432</td>
+                        </tr>
+                        <tr>
+                            <td><span class="env-badge env-e2e">E2E1</span></td>
+                            <td>Postgre</td>
+                            <td>OSS-E2E1-OSO-POSTGRE-NLB-9c0865c7373a4d6a.elb.us-east-2.amazonaws.com</td>
+                            <td>e2e1ossdb</td>
+                            <td>ossdb01db</td>
+                            <td>6432</td>
+                        </tr>
+                        <tr>
+                            <td><span class="env-badge env-e2e">E2E2</span></td>
+                            <td>Postgre</td>
+                            <td>OSS-E2E2-OSO-NLB-14d8925ca2991091.elb.us-east-2.amazonaws.com</td>
+                            <td>e2e2ossdb</td>
+                            <td>ossdb01db</td>
+                            <td>6432</td>
+                        </tr>
+                        <tr>
+                            <td><span class="env-badge env-trn">TRN1</span></td>
+                            <td>Postgre</td>
+                            <td>OSS-TRN1-OSO-PGRDS1-NLB-23e81c7fde3695ab.elb.us-east-2.amazonaws.com</td>
+                            <td>paasdb</td>
+                            <td>ossdb01db</td>
+                            <td>30432</td>
+                        </tr>
+                        <tr>
+                            <td><span class="env-badge env-plab">PLAB</span></td>
+                            <td>Postgre</td>
+                            <td>OSS-PLAB-OSO-PGRDS1-NLB-69310b53d5cc4332.elb.us-east-2.amazonaws.com</td>
+                            <td>plabossdb</td>
+                            <td>ossdb01db</td>
+                            <td>6432</td>
+                        </tr>
+                        <tr>
+                            <td><span class="env-badge env-plab">PLAB Read</span></td>
+                            <td>Postgre</td>
+                            <td>OSS-PLAB-OSO-PGRDSREAD-NLB-4b7d6405a91a6441.elb.us-east-2.amazonaws.com</td>
+                            <td>plabossdb</td>
+                            <td>ossdb01db</td>
+                            <td>6432</td>
+                        </tr>
+                        <tr>
+                            <td><span class="env-badge env-preprod">PREPROD</span></td>
+                            <td>Postgre</td>
+                            <td>OSS-PREPROD-OSO-PGRDS-NLB-bb21296f25d1651b.elb.us-east-2.amazonaws.com</td>
+                            <td>preprodossdb</td>
+                            <td>ossdb01db</td>
+                            <td>6432</td>
+                        </tr>
+                        <tr>
+                            <td><span class="env-badge env-prod">PROD</span></td>
+                            <td>Postgre</td>
+                            <td>OSS-PROD1-PGRDS-NLB-1fe6faf4eb2c6ea3.elb.us-east-2.amazonaws.com</td>
+                            <td>prodossdb</td>
+                            <td>ossdb01db</td>
+                            <td>6432</td>
+                        </tr>
+                        <tr>
+                            <td><span class="env-badge env-prod">PROD Read</span></td>
+                            <td>Postgre</td>
+                            <td>OSS-PROD1-PGRDSREAD-NLB-2f2634b21611100b6.elb.us-east-2.amazonaws.com</td>
+                            <td>prodossdb</td>
+                            <td>ossdb01db</td>
+                            <td>6432</td>
+                        </tr>
+                        <tr>
+                            <td><span class="env-badge env-dr">DR</span></td>
+                            <td>Postgre</td>
+                            <td>dross-postgres.cy6c1wwf3ag2.us-west-2.rds.amazonaws.com (10.142.97.78)</td>
+                            <td>drossdb</td>
+                            <td>ossdb01db</td>
+                            <td>6432</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="password-note">
+                <div class="note-icon">⚠️</div>
+                <div class="note-content">
+                    <strong>Note:</strong> For password, reach out to your team
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Abbreviations Section -->
+    <div class="welcome-section">
+        <h2>🔤 Abbreviations & Terms</h2>
+        <div class="abbreviations-search">
+            <input type="text" id="abbr-search" class="filter-input" placeholder="🔍 Search abbreviations..." oninput="filterAbbreviations()">
+        </div>
+        <div id="abbreviations-list" class="abbreviations-grid">
+            <!-- Abbreviations will be loaded dynamically -->
+        </div>
+    </div>
+</div>
+
+<style>
+.welcome-section {
+    margin-bottom: 50px;
+}
+
+.welcome-section h2 {
+    color: #8b5cf6;
+    font-size: 1.8em;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+}
+
+/* Applications Grid */
+.applications-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.app-card {
+    background: rgba(30, 30, 45, 0.6);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 12px;
+    padding: 25px 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.app-card:hover {
+    border-color: #8b5cf6;
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+    transform: translateY(-5px);
+}
+
+.app-icon {
+    font-size: 2.5em;
+    margin-bottom: 15px;
+}
+
+.app-name {
+    color: #c4b5fd;
+    font-weight: 600;
+    font-size: 1.05em;
+    line-height: 1.4;
+}
+
+/* DB Credentials Table */
+.db-credentials-container {
+    background: rgba(30, 30, 45, 0.6);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 12px;
+    padding: 30px;
+}
+
+.db-table-wrapper {
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+.db-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+}
+
+.db-table thead {
+    background: rgba(139, 92, 246, 0.2);
+}
+
+.db-table th {
+    padding: 15px 12px;
+    text-align: left;
+    color: #8b5cf6;
+    font-weight: 700;
+    border-bottom: 2px solid rgba(139, 92, 246, 0.5);
+}
+
+.db-table td {
+    padding: 12px;
+    color: #c4b5fd;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+}
+
+.db-table tbody tr:hover {
+    background: rgba(139, 92, 246, 0.1);
+}
+
+/* Environment Badges */
+.env-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.9em;
+}
+
+.env-crt1 {
+    background: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.5);
+}
+
+.env-e2e {
+    background: rgba(16, 185, 129, 0.2);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.5);
+}
+
+.env-trn {
+    background: rgba(245, 158, 11, 0.2);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.5);
+}
+
+.env-plab {
+    background: rgba(168, 85, 247, 0.2);
+    color: #a78bfa;
+    border: 1px solid rgba(168, 85, 247, 0.5);
+}
+
+.env-preprod {
+    background: rgba(236, 72, 153, 0.2);
+    color: #f472b6;
+    border: 1px solid rgba(236, 72, 153, 0.5);
+}
+
+.env-prod {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.5);
+}
+
+.env-dr {
+    background: rgba(107, 114, 128, 0.2);
+    color: #9ca3af;
+    border: 1px solid rgba(107, 114, 128, 0.5);
+}
+
+/* Password Note */
+.password-note {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    background: rgba(245, 158, 11, 0.1);
+    border: 2px solid rgba(245, 158, 11, 0.3);
+    border-radius: 8px;
+}
+
+.note-icon {
+    font-size: 2em;
+}
+
+.note-content {
+    color: #fbbf24;
+    line-height: 1.6;
+}
+
+.note-content strong {
+    color: #fcd34d;
+}
+
+/* Responsive Design */
+/* Abbreviations Section */
+.abbreviations-search {
+    margin-bottom: 20px;
+}
+
+.abbreviations-search .filter-input {
+    width: 100%;
+    max-width: 600px;
+    padding: 15px 20px;
+    font-size: 1.1em;
+    background: rgba(30, 30, 45, 0.6);
+    border: 2px solid rgba(139, 92, 246, 0.3);
+    border-radius: 10px;
+    color: #c4b5fd;
+}
+
+.abbreviations-search .filter-input:focus {
+    border-color: #8b5cf6;
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+}
+
+.abbreviations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 15px;
+}
+
+.abbr-card {
+    background: rgba(30, 30, 45, 0.6);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 8px;
+    padding: 15px 20px;
+    transition: all 0.3s ease;
+}
+
+.abbr-card:hover {
+    border-color: #8b5cf6;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2);
+    transform: translateX(5px);
+}
+
+.abbr-term {
+    color: #8b5cf6;
+    font-weight: 700;
+    font-size: 1.1em;
+    margin-bottom: 8px;
+}
+
+.abbr-definition {
+    color: #c4b5fd;
+    font-size: 0.9em;
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+    .applications-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+    
+    .app-card {
+        padding: 20px 15px;
+    }
+    
+    .app-icon {
+        font-size: 2em;
+    }
+    
+    .db-table {
+        font-size: 0.8em;
+    }
+    
+    .db-table th,
+    .db-table td {
+        padding: 8px;
+    }
+
+    .abbreviations-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<script>
+// Load abbreviations when page loads
+document.addEventListener('pageLoaded', function(e) {
+    if (e.detail.pageId === 'welcome-kit') {
+        loadAbbreviations();
+    }
+});
+
+function loadAbbreviations() {
+    if (typeof abbreviations === 'undefined') {
+        console.error('Abbreviations data not loaded');
+        return;
+    }
+
+    const container = document.getElementById('abbreviations-list');
+    container.innerHTML = abbreviations.map(abbr => `
+        <div class="abbr-card">
+            <div class="abbr-term">${abbr.term}</div>
+            <div class="abbr-definition">${abbr.definition}</div>
+        </div>
+    `).join('');
+}
+
+function filterAbbreviations() {
+    const searchTerm = document.getElementById('abbr-search').value.toLowerCase();
+    const cards = document.querySelectorAll('.abbr-card');
+    
+    cards.forEach(card => {
+        const term = card.querySelector('.abbr-term').textContent.toLowerCase();
+        const definition = card.querySelector('.abbr-definition').textContent.toLowerCase();
+        
+        if (term.includes(searchTerm) || definition.includes(searchTerm)) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+</script>
+
+

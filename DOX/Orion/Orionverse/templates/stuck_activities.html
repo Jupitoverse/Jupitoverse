@@ -1,0 +1,322 @@
+<div class="page">
+    <h1>⏳ Stuck Activities</h1>
+    <p class="subtitle">Monitor and resolve stuck activities from Orion Outage Report</p>
+
+    <!-- Sheet Selector -->
+    <div class="sheet-selector-section">
+        <h2>📄 Select Report Sheet</h2>
+        <div class="sheet-tabs" id="sheet-tabs">
+            <div class="loading">Loading sheets...</div>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="sa-search-engine" style="margin-top: 20px;">
+        <div class="sa-filter-group primary" style="flex: 2;">
+            <input type="text" id="activity-search" class="filter-input" placeholder="🔍 Search across all columns..." oninput="filterActivities()">
+        </div>
+        <button class="primary-btn" onclick="refreshActivities()">
+            🔄 Refresh
+        </button>
+        <button class="secondary-btn" onclick="exportActivities()">
+            📊 Export Current Sheet
+        </button>
+    </div>
+
+    <!-- Summary Stats -->
+    <div class="stats-row" style="margin-top: 20px;">
+        <div class="stat-card">
+            <div class="stat-icon">📋</div>
+            <div class="stat-info">
+                <h3 id="total-activities">-</h3>
+                <p>Total Activities</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-info">
+                <h3 id="current-sheet-name">-</h3>
+                <p>Current Sheet</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🔢</div>
+            <div class="stat-info">
+                <h3 id="filtered-count">-</h3>
+                <p>Showing</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Table -->
+    <div class="sa-result-section" style="margin-top: 30px;">
+        <div class="result-header">
+            <h3 id="sheet-title">Stuck Activities Data</h3>
+        </div>
+        <div class="table-container">
+            <div id="activities-table-wrapper">
+                <table id="activities-table" class="data-table">
+                    <thead id="activities-thead">
+                        <tr>
+                            <th>Loading...</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activities-tbody">
+                        <tr>
+                            <td colspan="10" class="no-data">Loading data from Orion Outage Report...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.sheet-selector-section {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 20px;
+}
+.sheet-tabs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+.sheet-tab {
+    padding: 10px 20px;
+    background: rgba(139, 92, 246, 0.1);
+    border: 2px solid rgba(139, 92, 246, 0.3);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 600;
+}
+.sheet-tab:hover {
+    background: rgba(139, 92, 246, 0.2);
+    color: var(--text-primary);
+}
+.sheet-tab.active {
+    background: var(--accent-gradient);
+    border-color: var(--accent-primary);
+    color: white;
+    box-shadow: 0 4px 15px var(--accent-glow);
+}
+.sheet-tab .sheet-count {
+    display: block;
+    font-size: 0.85em;
+    opacity: 0.8;
+}
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+.stat-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.stat-icon {
+    font-size: 3rem;
+}
+.stat-info h3 {
+    font-size: 2rem;
+    margin: 0;
+    color: var(--accent-primary);
+}
+.stat-info p {
+    margin: 0;
+    color: var(--text-secondary);
+}
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.data-table th {
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--accent-primary);
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+.data-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-primary);
+    color: var(--text-primary);
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.data-table tbody tr:hover {
+    background: rgba(139, 92, 246, 0.05);
+}
+.no-data {
+    text-align: center;
+    padding: 40px !important;
+    color: var(--text-secondary);
+}
+.loading {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 20px;
+}
+</style>
+
+<script>
+let activitiesData = {};
+let currentSheet = '';
+let currentSheetData = [];
+let filteredData = [];
+
+document.addEventListener('pageLoaded', function(e) {
+    if (e.detail.pageId === 'stuck-activities') {
+        loadStuckActivitiesData();
+    }
+});
+
+async function loadStuckActivitiesData() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/excel/stuck-activities-data`);
+        const result = await response.json();
+        
+        if (result.success) {
+            activitiesData = result.sheets;
+            renderSheetTabs(result.sheet_names);
+            
+            // Load first sheet by default
+            if (result.sheet_names.length > 0) {
+                switchSheet(result.sheet_names[0]);
+            }
+        } else {
+            alert('Error loading stuck activities data: ' + result.error);
+        }
+    } catch (error) {
+        console.error('Error loading data:', error);
+        document.getElementById('activities-tbody').innerHTML = 
+            '<tr><td colspan="10" class="no-data">Error loading data. Please check if the Excel file exists.</td></tr>';
+    }
+}
+
+function renderSheetTabs(sheetNames) {
+    const container = document.getElementById('sheet-tabs');
+    container.innerHTML = sheetNames.map(name => `
+        <div class="sheet-tab" onclick="switchSheet('${name}')">
+            <span>${name}</span>
+            <span class="sheet-count">${activitiesData[name].row_count} rows</span>
+        </div>
+    `).join('');
+}
+
+function switchSheet(sheetName) {
+    currentSheet = sheetName;
+    currentSheetData = activitiesData[sheetName].data;
+    filteredData = currentSheetData;
+    
+    // Update active tab
+    document.querySelectorAll('.sheet-tab').forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.textContent.includes(sheetName)) {
+            tab.classList.add('active');
+        }
+    });
+    
+    renderActivitiesTable();
+    updateStats();
+}
+
+function renderActivitiesTable() {
+    const thead = document.getElementById('activities-thead');
+    const tbody = document.getElementById('activities-tbody');
+    const title = document.getElementById('sheet-title');
+    
+    if (filteredData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" class="no-data">No data available in this sheet</td></tr>';
+        return;
+    }
+    
+    // Get columns from first row
+    const columns = Object.keys(filteredData[0]);
+    
+    // Update title
+    title.textContent = `${currentSheet} - ${filteredData.length} records`;
+    
+    // Render table headers
+    thead.innerHTML = '<tr>' + columns.map(col => `<th>${col}</th>`).join('') + '</tr>';
+    
+    // Render table rows
+    tbody.innerHTML = filteredData.map(row => {
+        const cells = columns.map(col => {
+            let value = row[col];
+            if (value === null || value === undefined) value = '';
+            value = String(value);
+            return `<td title="${value}">${value.substring(0, 100)}${value.length > 100 ? '...' : ''}</td>`;
+        }).join('');
+        return `<tr>${cells}</tr>`;
+    }).join('');
+}
+
+function updateStats() {
+    document.getElementById('total-activities').textContent = currentSheetData.length;
+    document.getElementById('current-sheet-name').textContent = currentSheet;
+    document.getElementById('filtered-count').textContent = filteredData.length;
+}
+
+function filterActivities() {
+    const searchTerm = document.getElementById('activity-search').value.toLowerCase();
+    
+    if (!searchTerm) {
+        filteredData = currentSheetData;
+    } else {
+        filteredData = currentSheetData.filter(row => {
+            const rowStr = Object.values(row).join(' ').toLowerCase();
+            return rowStr.includes(searchTerm);
+        });
+    }
+    
+    renderActivitiesTable();
+    updateStats();
+}
+
+function refreshActivities() {
+    loadStuckActivitiesData();
+}
+
+function exportActivities() {
+    if (filteredData.length === 0) {
+        alert('No data to export');
+        return;
+    }
+    
+    const columns = Object.keys(filteredData[0]);
+    const csvContent = [
+        columns.join(','),
+        ...filteredData.map(row => 
+            columns.map(col => {
+                const value = row[col] || '';
+                return `"${String(value).replace(/"/g, '""')}"`;
+            }).join(',')
+        )
+    ].join('\n');
+    
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${currentSheet}_export_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+}
+</script>

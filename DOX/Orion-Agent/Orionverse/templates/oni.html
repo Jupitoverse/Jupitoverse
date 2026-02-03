@@ -1,0 +1,428 @@
+<!-- ONI API Console -->
+<div class="page">
+    <h1>🔮 ONI API Console</h1>
+    <p class="subtitle">Service Discovery & Cross-Context Search</p>
+
+    <div class="oni-status-bar">
+        <div class="status-indicator" id="oni-status">
+            <span class="status-dot"></span>
+            <span>Checking connection...</span>
+        </div>
+    </div>
+
+    <!-- API Cards - 5 in a row -->
+    <div class="oni-api-grid">
+        <div class="oni-api-card" onclick="ONIAPI.selectAPI('find-by-customer-id')">
+            <div class="oni-api-icon">👤</div>
+            <div class="oni-api-name">Customer ID</div>
+            <div class="oni-api-desc">Search by customer</div>
+        </div>
+        <div class="oni-api-card" onclick="ONIAPI.selectAPI('find-by-external-service-id')">
+            <div class="oni-api-icon">🔗</div>
+            <div class="oni-api-name">External Service</div>
+            <div class="oni-api-desc">Search by service ID</div>
+        </div>
+        <div class="oni-api-card" onclick="ONIAPI.selectAPI('find-by-product-id')">
+            <div class="oni-api-icon">📦</div>
+            <div class="oni-api-name">Product ID</div>
+            <div class="oni-api-desc">Search by product</div>
+        </div>
+        <div class="oni-api-card" onclick="ONIAPI.selectAPI('find-by-site-id')">
+            <div class="oni-api-icon">📍</div>
+            <div class="oni-api-name">Site ID</div>
+            <div class="oni-api-desc">Search by site</div>
+        </div>
+        <div class="oni-api-card" onclick="ONIAPI.selectAPI('custom-query')">
+            <div class="oni-api-icon">⚙️</div>
+            <div class="oni-api-name">Custom Query</div>
+            <div class="oni-api-desc">Build custom search</div>
+        </div>
+    </div>
+
+    <!-- Form Section -->
+    <div class="oni-form-container" id="oni-form-section" style="display: none;">
+        <div class="oni-form-header">
+            <h2 id="oni-form-title">API Request</h2>
+            <button class="secondary-btn" onclick="ONIAPI.closeForm()">✕ Close</button>
+        </div>
+        
+        <!-- Find by Customer ID Form -->
+        <div class="oni-form" id="form-find-by-customer-id" style="display: none;">
+            <div class="form-group">
+                <label>Customer ID</label>
+                <input type="text" id="oni-customerId" placeholder="e.g., 130349369">
+            </div>
+            <div class="oni-hint">💡 Search for all services associated with a specific customer</div>
+        </div>
+
+        <!-- Find by External Service ID Form -->
+        <div class="oni-form" id="form-find-by-external-service-id" style="display: none;">
+            <div class="form-group">
+                <label>External Service ID</label>
+                <input type="text" id="oni-externalServiceId" placeholder="e.g., 88EB2CED79CB4D44BAF83C0944D35689">
+            </div>
+            <div class="form-group">
+                <label>External System ID</label>
+                <select id="oni-externalSystemId">
+                    <option value="SOM">SOM</option>
+                    <option value="ONI">ONI</option>
+                    <option value="SQO">SQO</option>
+                    <option value="OSO">OSO</option>
+                </select>
+            </div>
+            <div class="oni-hint">💡 Search using the external service identifier and system</div>
+        </div>
+
+        <!-- Find by Product ID Form -->
+        <div class="oni-form" id="form-find-by-product-id" style="display: none;">
+            <div class="form-group">
+                <label>Product Instance ID</label>
+                <input type="text" id="oni-productId" placeholder="e.g., IProductAgreementItemInstance_1846478">
+            </div>
+            <div class="oni-hint">💡 Search for services linked to a specific product instance</div>
+        </div>
+
+        <!-- Find by Site ID Form -->
+        <div class="oni-form" id="form-find-by-site-id" style="display: none;">
+            <div class="form-group">
+                <label>Site ID</label>
+                <input type="text" id="oni-siteId" placeholder="Enter Site ID">
+            </div>
+            <div class="oni-hint">💡 Search for all services at a specific site location</div>
+        </div>
+
+        <!-- Custom Query Form -->
+        <div class="oni-form" id="form-custom-query" style="display: none;">
+            <div class="form-group">
+                <label>Query Properties (JSON Array)</label>
+                <textarea id="oni-customProperties" rows="10" placeholder='[
+  {
+    "name": "serviceCharacteristic.customerId",
+    "op": "eq",
+    "value": "your_value_here",
+    "valid": true
+  }
+]'></textarea>
+            </div>
+            <div class="oni-hint">💡 Build custom criteria with property name, operator (eq, ne, like), and value</div>
+        </div>
+
+        <div class="oni-form-actions">
+            <button class="primary-btn" onclick="ONIAPI.executeRequest()">▶ Execute Search</button>
+            <button class="secondary-btn" onclick="ONIAPI.clearForm()">Clear</button>
+        </div>
+    </div>
+
+    <!-- Response Section -->
+    <div class="oni-response-container" id="oni-response-section" style="display: none;">
+        <div class="oni-response-header">
+            <h2>Response</h2>
+            <div class="oni-response-info">
+                <span class="oni-status-badge" id="oni-response-status"></span>
+                <span class="oni-time-badge" id="oni-response-time"></span>
+                <span class="oni-count-badge" id="oni-response-count"></span>
+            </div>
+        </div>
+        <div class="oni-toolbar">
+            <button class="secondary-btn" onclick="ONIAPI.searchInResponse()">🔍 Search</button>
+            <button class="secondary-btn" onclick="ONIAPI.expandAll()">➕ Expand All</button>
+            <button class="secondary-btn" onclick="ONIAPI.collapseAll()">➖ Collapse All</button>
+            <button class="secondary-btn" onclick="ONIAPI.copyResponse()">📋 Copy</button>
+            <button class="secondary-btn" onclick="ONIAPI.downloadResponse()">💾 Download</button>
+        </div>
+        <div class="oni-search-bar" id="oni-search-bar" style="display: none;">
+            <input type="text" id="oni-search-input" placeholder="Search in JSON...">
+            <span id="oni-search-count"></span>
+            <button class="secondary-btn" onclick="ONIAPI.findPrev()">◀</button>
+            <button class="secondary-btn" onclick="ONIAPI.findNext()">▶</button>
+            <button class="secondary-btn" onclick="ONIAPI.closeSearch()">✕</button>
+        </div>
+        <div class="oni-json-viewer" id="oni-json-viewer"></div>
+    </div>
+</div>
+
+<style>
+.oni-status-bar {
+    margin-bottom: 24px;
+}
+
+/* 5 cards in single row */
+.oni-api-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+.oni-api-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.oni-api-card:hover {
+    border-color: var(--accent-primary);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px var(--shadow-color);
+}
+
+.oni-api-card.active {
+    border-color: var(--accent-primary);
+    background: rgba(139, 92, 246, 0.1);
+    box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.oni-api-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.oni-api-name {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+}
+
+.oni-api-desc {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.oni-form-container {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.oni-form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-primary);
+}
+
+.oni-form-header h2 {
+    margin: 0;
+    border: none;
+    padding: 0;
+}
+
+.oni-form .form-group input,
+.oni-form .form-group select,
+.oni-form .form-group textarea {
+    width: 100%;
+    padding: 12px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 1rem;
+}
+
+.oni-form .form-group textarea {
+    font-family: 'Consolas', 'Monaco', monospace;
+    resize: vertical;
+}
+
+.oni-form .form-group input:focus,
+.oni-form .form-group select:focus,
+.oni-form .form-group textarea:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
+
+.oni-hint {
+    padding: 12px 16px;
+    background: rgba(139, 92, 246, 0.1);
+    border-left: 3px solid var(--accent-primary);
+    border-radius: 0 8px 8px 0;
+    margin-top: 16px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.oni-form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-primary);
+}
+
+.oni-response-container {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.oni-response-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.oni-response-header h2 {
+    margin: 0;
+    border: none;
+    padding: 0;
+}
+
+.oni-response-info {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.oni-status-badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.oni-status-badge.success {
+    background: rgba(45, 212, 191, 0.2);
+    color: var(--success-color);
+}
+
+.oni-status-badge.error {
+    background: rgba(244, 63, 94, 0.2);
+    color: var(--error-color);
+}
+
+.oni-time-badge, .oni-count-badge {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.oni-toolbar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.oni-search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding: 12px;
+    background: var(--bg-primary);
+    border-radius: 8px;
+}
+
+.oni-search-bar input {
+    flex: 1;
+    padding: 8px 12px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 6px;
+    color: var(--text-primary);
+}
+
+#oni-search-count {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    min-width: 80px;
+}
+
+.oni-json-viewer {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    padding: 16px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    max-height: 500px;
+    overflow: auto;
+    color: var(--text-primary);
+}
+
+.oni-json-viewer .json-key { color: var(--accent-secondary); }
+.oni-json-viewer .json-string { color: #fbbf24; }
+.oni-json-viewer .json-number { color: #60a5fa; }
+.oni-json-viewer .json-boolean { color: #f472b6; }
+.oni-json-viewer .json-null { color: var(--text-secondary); }
+
+.oni-json-viewer .json-collapsible { cursor: pointer; }
+.oni-json-viewer .json-collapsible::before {
+    content: '▼';
+    display: inline-block;
+    width: 16px;
+    font-size: 10px;
+    color: var(--text-secondary);
+}
+.oni-json-viewer .json-collapsible.collapsed::before { transform: rotate(-90deg); }
+.oni-json-viewer .json-collapsed { display: none; }
+.oni-json-viewer .json-highlight { background: rgba(251, 191, 36, 0.3); }
+
+/* Responsive - stack on smaller screens */
+@media (max-width: 1200px) {
+    .oni-api-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .oni-api-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+</style>
+
+<script>
+// Initialize ONI status check when page loads
+(function() {
+    function initONI() {
+        fetch('http://127.0.0.1:5001/api/oni/status')
+            .then(r => r.json())
+            .then(() => {
+                const dot = document.querySelector('#oni-status .status-dot');
+                const text = document.querySelector('#oni-status span:last-child');
+                if (dot) dot.classList.add('online');
+                if (text) text.textContent = 'Connected';
+            })
+            .catch(() => {
+                const dot = document.querySelector('#oni-status .status-dot');
+                const text = document.querySelector('#oni-status span:last-child');
+                if (dot) dot.classList.add('offline');
+                if (text) text.textContent = 'Offline';
+            });
+    }
+    
+    // Run on page load
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initONI);
+    } else {
+        setTimeout(initONI, 100);
+    }
+    
+    // Also listen for pageLoaded event
+    document.addEventListener('pageLoaded', function(e) {
+        if (e.detail.pageId === 'oni') {
+            setTimeout(initONI, 100);
+        }
+    });
+})();
+</script>
