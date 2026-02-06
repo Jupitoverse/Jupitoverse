@@ -33,3 +33,21 @@ Output: `Phase1_Data_Annotation_Platform.pptx` (created in this folder).
 - `requirements.txt` — Python dependency (python-pptx).
 - `run_generate_ppt.bat` — Windows: run to install deps and generate PPT.
 - `Phase1_Data_Annotation_Platform.pptx` — Generated after running the script above.
+
+---
+
+## Final Proposal (Smart Factory — Technical)
+
+**Final deck** based on teammate’s proposal, with deeper technical content (tech stack, infra, architecture, database). Timeline, resources, and profiles are unchanged.
+
+| Item | File |
+|------|------|
+| **Final PPT** | `Data_Annotation_Smart_Factory_Proposal_Final.pptx` |
+| **Generator script** | `python generate_final_proposal_ppt.py` |
+| **Mermaid diagrams** | `Data_Annotation_Smart_Factory_Proposal_Mermaid.md` (architecture, workflow, DB, timeline, security) |
+
+To regenerate the final PPT:
+
+```bash
+python generate_final_proposal_ppt.py
+```
