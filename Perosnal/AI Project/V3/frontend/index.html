@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Annotation Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div id="login-wrap" class="login-wrap">
+    <div class="login-bg">
+      <div class="login-bg-gradient"></div>
+      <div class="login-bg-grid"></div>
+      <div class="login-bg-glow"></div>
+    </div>
+    <div class="login-card">
+      <div class="login-card-inner">
+        <div class="login-logo">
+          <span class="login-logo-icon">◇</span>
+          <span>Annotation Platform</span>
+        </div>
+        <h1 class="login-title">Welcome back</h1>
+        <p class="login-subtitle">Sign in to access the platform</p>
+        <div id="login-error" class="login-error"></div>
+        <form id="login-form" class="login-form">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="abhi@demo.com" required autocomplete="email">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="••••••••" required autocomplete="current-password">
+          <button type="submit" class="login-btn">
+            <span>Sign in</span>
+          </button>
+        </form>
+        <p class="login-demo-hint">
+          <strong>Admin:</strong> abhi@demo.com / admin123 &nbsp;|&nbsp;
+          <strong>Demo:</strong> ops@demo.com, rater@demo.com, reviewer@demo.com / demo
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div id="app-shell" class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <span class="sidebar-logo-icon">◇</span>
+        <span>Annotation</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" data-view="dashboard" class="nav-link">
+          <span class="nav-icon">▣</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" data-view="workflows" class="nav-link">
+          <span class="nav-icon">⟷</span>
+          <span>Workflows</span>
+        </a>
+        <a href="#" data-view="tasks" class="nav-link">
+          <span class="nav-icon">☑</span>
+          <span>Tasks</span>
+        </a>
+        <a href="#" data-view="rater" class="nav-link">
+          <span class="nav-icon">☰</span>
+          <span>My Queue</span>
+        </a>
+        <a href="#" data-view="reviewer" class="nav-link">
+          <span class="nav-icon">✓</span>
+          <span>Review Queue</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <span class="user-info-label">Signed in as</span>
+          <strong id="user-email">—</strong>
+          <span class="user-role-badge" id="user-role">—</span>
+        </div>
+        <button type="button" class="logout-btn" id="logout-btn">Log out</button>
+      </div>
+    </aside>
+    <main class="main-content">
+      <div id="view-dashboard" class="view" style="display:none">
+        <h2 class="page-title">Dashboard</h2>
+        <p class="page-desc">Workspaces, projects, batches, and task overview.</p>
+        <div id="dashboard-workspaces" class="section"></div>
+        <div id="dashboard-projects" class="section"></div>
+        <div id="dashboard-batches" class="section"></div>
+        <div id="dashboard-tasks" class="section"></div>
+      </div>
+      <div id="view-workflows" class="view" style="display:none">
+        <h2 class="page-title">Workflows</h2>
+        <p class="page-desc">Define workflow graphs: add nodes (form, review, API, DB, manual) and connect them.</p>
+        <div class="section">
+          <button type="button" class="btn btn-primary" id="workflow-add-btn">Add workflow</button>
+          <div id="workflow-list" class="section"></div>
+          <div id="workflow-detail" class="section" style="display:none">
+            <h4 id="workflow-detail-title"></h4>
+            <div id="workflow-nodes-edges"></div>
+            <button type="button" class="btn btn-secondary" id="workflow-detail-back">Back to list</button>
+          </div>
+        </div>
+      </div>
+      <div id="view-tasks" class="view" style="display:none">
+        <h2 class="page-title">Tasks</h2>
+        <p class="page-desc">All tasks in one view. Filter by status, workflow; sort by date or status.</p>
+        <div class="section">
+          <div class="task-filters">
+            <label>Status</label>
+            <select id="tasks-filter-status">
+              <option value="">All</option>
+              <option value="pending">pending</option>
+              <option value="claimed">claimed</option>
+              <option value="in_review">in_review</option>
+              <option value="done">done</option>
+            </select>
+            <label>Sort</label>
+            <select id="tasks-sort">
+              <option value="created_at">Date (newest last)</option>
+              <option value="created_at_desc">Date (newest first)</option>
+              <option value="status">Status</option>
+              <option value="id">ID</option>
+            </select>
+            <button type="button" class="btn btn-primary" id="tasks-apply-filters">Apply</button>
+          </div>
+          <div id="tasks-table-wrap" class="section"></div>
+        </div>
+      </div>
+      <div id="view-rater" class="view" style="display:none">
+        <h2 class="page-title">My Queue</h2>
+        <p class="page-desc">Claim a task, annotate, and submit for review.</p>
+        <button type="button" class="btn btn-primary" id="claim-next-btn">Get next task</button>
+        <div id="rater-my-tasks" class="section"></div>
+        <div id="rater-current-task" class="section" style="display:none"></div>
+      </div>
+      <div id="view-reviewer" class="view" style="display:none">
+        <h2 class="page-title">Review Queue</h2>
+        <p class="page-desc">Tasks waiting for your review.</p>
+        <div id="reviewer-tasks" class="section"></div>
+        <div id="reviewer-current-task" class="section" style="display:none"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+================================================================================
+                    DATA ANNOTATION PLATFORM
+              PROPOSAL & APPROACH — SHAREABLE BRIEF
+================================================================================
+
+  Prepared for stakeholder alignment and scope confirmation.
+  Two implementation approaches | Timeline & team | Open questions to clarify
+  before we begin — so we deliver in the best possible way and align with
+  your needs from day one.
+
+--------------------------------------------------------------------------------
+1. TWO APPROACHES WE CAN FOLLOW
+--------------------------------------------------------------------------------
+
+  We can deliver the platform in one of two ways. Both satisfy the PRD; the
+  choice depends on whether you want assistive AI in the workflow or a
+  fully deterministic, rule-based system first.
+
+  ┌─────────────────────────────────────────────────────────────────────────┐
+  │ APPROACH A — Deterministic (No AI/LLM)                                   │
+  ├─────────────────────────────────────────────────────────────────────────┤
+  │ • Full Workspace → Project → Batch → Task → Annotation hierarchy         │
+  │ • Multi-stage pipelines (L1, L2, Review, Hold, Archive) + status engine │
+  │ • FIFO queueing with deterministic claim locking (no double-claim)      │
+  │ • Manual + rule-based assignment (by rater level, project)               │
+  │ • Quality: programmatic linters, benchmark (gold) tasks, consensus (N   │
+  │   annotations per task with rule-based aggregation)                     │
+  │ • Ops/Rater/Reviewer/Customer portals; bulk upload, export, tagging     │
+  │ • Auth: login + RBAC; Phase 2: Okta SSO (OAuth2)                        │
+  │ • No external AI APIs — zero per-token cost, simpler operations          │
+  └─────────────────────────────────────────────────────────────────────────┘
+
+  ┌─────────────────────────────────────────────────────────────────────────┐
+  │ APPROACH B — With LLM (Assistive only)                                   │
+  ├─────────────────────────────────────────────────────────────────────────┤
+  │ • Everything in Approach A, plus optional AI-assisted features:         │
+  │   - Suggested labels / pre-fill in task UI                                │
+  │   - Instruction generation for projects/batches                         │
+  │   - Optional semantic consistency linter                                │
+  │   - Benchmark gold-set proposals; export summaries                      │
+  │ • Integration: OpenAI API (e.g. GPT 4.1) or Azure OpenAI                │
+  │ • LLM never on critical path (claim, assignment, export stay rule-based)│
+  │ • Feature flags per project; usage and cost logged                      │
+  └─────────────────────────────────────────────────────────────────────────┘
+
+  Recommendation: Start with Approach A to get a production-ready platform
+  fast; add Approach B features incrementally where they clearly add value.
+  One codebase and one data model support both — no second system to maintain.
+
+--------------------------------------------------------------------------------
+2. WHY THIS ALIGNS WITH YOUR NEEDS
+--------------------------------------------------------------------------------
+
+  • Single platform for all personas (Ops, Rater, Reviewer, Customer) and
+    all workflows in the PRD — no fragmented tools or manual handoffs.
+
+  • Phased delivery so you see working value early (Phase 1 MVP), then
+    production-grade operations (Phase 2), with optional enhancements (Phase 3)
+    only if you need them. Scope stays predictable.
+
+  • We follow the PRD’s in-scope / out-of-scope and Customer vs Internal
+    boundaries strictly. That keeps the build focused and avoids rework.
+
+  • Discovery questions below are asked so we design once: right users, right
+    load, right integrations, and right constraints. Answering them upfront
+    is how we align our approach with your reality and close the deal on a
+    solid foundation.
+
+--------------------------------------------------------------------------------
+3. TIMELINE & TEAM — 5–6 MONTHS, 3–4 PEOPLE
+--------------------------------------------------------------------------------
+
+  The platform’s scope — hierarchy, pipelines, queueing, quality mechanisms,
+  multiple portals, auth, audit, and (optionally) LLM integration — justifies
+  a structured delivery with a small, focused team.
+
+  Assumption: 3–4 people (e.g. backend, frontend, DevOps/QA, tech lead or
+  product/BA). Calendar: 5–6 months to production-ready (Phase 1 + Phase 2
+  complete; Phase 3 only if in scope).
+
+  Phase 1 — MVP (8–10 weeks)
+    End-to-end flow: workspace/project/batch/task CRUD, FIFO queue, claim
+    lock, annotate → review → done. Ops, Rater, Reviewer UIs. Baseline auth
+    and logging. Storage and pipeline state machine in place.
+
+  Phase 2 — Operational (8–10 weeks)
+    Consensus, benchmarks, linters, Ops tooling (bulk upload, export,
+    reset/archive, tagging), time tracking, full audit, Okta SSO,
+    multi-project isolation, Customer dashboard.
+
+  Phase 3 — Optional (per SOW)
+    Autosave, advanced assignment, pre/post-processing, prelabels (Approach B),
+    and similar enhancements.
+
+  Buffer & UAT (2–4 weeks)
+    Integration, performance checks, security review, UAT, go-live prep.
+
+  Total: 5–6 months with 3–4 people for Phase 1 + Phase 2 + buffer. Phase 3
+  adds time only if we include it in the SOW.
+
+--------------------------------------------------------------------------------
+4. OPEN QUESTIONS — TO CLARIFY BEFORE WE START
+--------------------------------------------------------------------------------
+
+  Answering these helps us tailor the solution, size infrastructure, and
+  align integrations so we deliver in the best possible way. No commitment
+  beyond sharing what you know today; we can refine as we go.
+
+  ─── Users & roles ───
+
+  • Who are the main user types (Ops, Rater, Reviewer, Customer Admin, etc.)?
+    Any other roles or personas we should design for from day one?
+
+  • Who creates workspaces, projects, and batches — only internal Ops, or do
+    customers need any self-serve (even limited)? This drives access design.
+
+  • How do raters and reviewers get access today (invite link, SSO, external
+    workforce platform)? Do you need rater/reviewer impersonation for support
+    in the first release?
+
+  ─── Load & traffic ───
+
+  • What is the expected task volume per day (order of magnitude)?
+    And how many concurrent raters/reviewers at normal vs peak times?
+    This drives queue design, DB sizing, and whether we need Redis for locking.
+
+  • Are there seasonal or campaign-driven spikes we should plan for?
+
+  ─── Cloud, location & compliance ───
+
+  • Which cloud and region are mandated (e.g. AWS us-east-1, Azure West Europe)?
+    Any data residency or compliance requirements (e.g. GDPR, PII handling)?
+
+  • Is there an existing CI/CD or deployment pipeline we must plug into
+    (e.g. GitHub Actions, Jenkins, ArgoCD)?
+
+  ─── Third-party API integration ───
+
+  • Which systems must READ data from this application (e.g. BI, customer
+    dashboards, data warehouses, internal ticketing)? So we expose the right
+    APIs or export formats from the start.
+
+  • Which systems must WRITE or UPDATE data into this application (e.g.
+    customer submitting tasks via API, HR pushing user list, workforce
+    platform sending assignments)? So we design ingestion, idempotency, and
+    validation correctly.
+
+  • Is there an existing identity provider (Okta or other) we must integrate
+    with? Any constraints like SCIM or Just-in-Time provisioning?
+
+  • Where should completed annotations and exports go (same platform only,
+    S3/Blob path, customer API callback, webhook)? Any required format or
+    delivery SLA?
+
+  ─── Data constraints ───
+
+  • What task content types must we support in the first release (text only,
+    image, audio, video, HTML)? Any file type or format restrictions?
+
+  • Are there file size limits per task or per batch we must enforce (e.g.
+    max asset size, max batch size)? This affects storage and upload/export
+    design.
+
+  • Are there existing golden/benchmark datasets or quality rules we must
+    support from day one? Who defines the response schema (labels, options,
+    free-text) per project — Ops only, or also customers/templates?
+
+  ─── Approach & scope ───
+
+  • Do you prefer to start with Approach A only, or Approach A with a defined
+    set of Approach B (LLM) features in a later phase?
+
+  • Any must-have integrations or SLAs we should capture in the SOW before
+    kickoff?
+
+--------------------------------------------------------------------------------
+5. NEXT STEPS
+--------------------------------------------------------------------------------
+
+  1. Align on approach: A only, or A then B with a defined LLM feature set.
+  2. Share answers (or “TBD”) for the open questions above so we can refine
+     scope and design.
+  3. Confirm timeline and team: 5–6 months, 3–4 people, Phase 1 + Phase 2;
+     Phase 3 only if in SOW.
+  4. Kick off Phase 1 with a single repo, shared backlog, and regular demos.
+
+  We’re structured to deliver this in the best possible way — with clear
+  phases, one codebase, and discovery upfront so the solution fits your
+  users, load, and integrations from the start.
+
+================================================================================
+  Document reference: Based on Data Annotation Platform PRD Addendum v2.0
+  and Presentation_Data_Annotation_Platform.md. A live demo (V3 folder) is
+  available to show the core flow.
+================================================================================
